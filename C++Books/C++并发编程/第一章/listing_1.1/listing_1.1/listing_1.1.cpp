@@ -9,6 +9,7 @@ void hello()
 
 int main()
 {
+    cout << _MSVC_LANG << endl;
     std::thread t(hello);
     t.join();
 }
