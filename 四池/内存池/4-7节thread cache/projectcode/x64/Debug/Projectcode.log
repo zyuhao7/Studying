@@ -1,0 +1,3 @@
+﻿  Unittest.cpp
+D:\soft\项目\内存池\4-7节thread cache\projectcode\Common.h(100,1): warning C4334: “<<”: 32 位移位的结果被隐式转换为 64 位(是否希望进行 64 位移位?)
+  Projectcode.vcxproj -> D:\soft\项目\内存池\4-7节thread cache\projectcode\x64\Debug\Projectcode.exe
