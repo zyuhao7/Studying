@@ -3,18 +3,76 @@
 #include<queue>
 #include<mutex>
 #include<atomic>
+#include <iostream>
 #include<condition_variable>
 #include<memory>
 #include <functional>
 #ifndef THREAD_POOL_H
 #define THREAD_POOL_H
 
+// any类型: 可以接受任意数据的类型.
+class Any
+{
+public:
+	// 只负责接受任意其他类型数据. 
+	template<typename T> // T int Derive<int>
+	Any(T data)
+		:base_(std::make_unique<Derive<T>>(data))
+	{}
+
+	Any() = default;
+	~Any() = default;
+	Any(const Any&) = delete;
+	Any& operator=(const Any&) = delete;
+	Any(Any&&) = default;
+	Any& operator=(Any&&) = default;
+
+	// 提取Any对象存储的 data 数据.
+	template<typename T>
+	T cast_()
+	{
+		// 有 base_, 找到所指向的	 Derive 对象, 从里面取出 data数据.
+		// 基类 ptr => 派生类 ptr  RTTI  
+		Derive<T>* pd = dynamic_cast<Derive<T>* >(base_.get());
+		if (pd == nullptr)
+		{
+			throw "type is unmatch !";
+		}
+		return pd->data_;
+	}
+
+private:
+	// 基类类型.
+	class Base {
+	public:
+		~Base() = default;
+	};
+
+	// 派生类类型
+	template<typename T>
+	class Derive : public Base
+	{
+	public:
+		Derive(T data)
+			: data_(data)
+		{}
+
+	private:
+		T data_;
+	};
+
+private:
+	// 定义一个基类的指针.
+	std::unique_ptr<Base> base_;
+};
+
+
 //任务抽象类
 class Task
 {
 public:
 	// 用户自定义任务类型,从 Task继承, 重写 run 方法, 实现自定义任务处理.	
-	virtual void run() = 0;
+	virtual Any run() = 0;
 };
 
 // 线程池支持的模式.
