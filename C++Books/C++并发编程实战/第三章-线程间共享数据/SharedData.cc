@@ -224,6 +224,74 @@ public:
     //     swap(lhs.some_detail, rhs.some_detail);
     // }
 };
+
+class some_big_object
+{
+};
+
+void swap(some_big_object &lhs, some_big_object &rhs);
+
+class X
+{
+private:
+    some_big_object some_detail;
+    std::mutex m;
+
+public:
+    X(some_big_object const &sd)
+        : some_detail(sd) {}
+
+    friend void swap(X &lhs, X &rhs)
+    {
+        if (&lhs == &rhs)
+            return;
+        std::unique_lock<std::mutex> lock_a(lhs.m, std::defer_lock); // 1
+
+        std::unique_lock<std::mutex> lock_b(rhs.m, std::defer_lock); // 1
+                                                                     // 留下未上锁的互斥量 std::defer_lock
+        std::lock(lock_a, lock_b);                                   // 2 互斥量在这里上锁
+        swap(lhs.some_detail, rhs.some_detail);
+    }
+};
+
+class my_class
+{
+};
+
+my_class &get_my_class_instance()
+{
+    static my_class instance; // 线程安全的初始化过程
+    return instance;
+}
+
+#include <map>
+#include <string>
+#include <mutex>
+#include <shared_mutex>
+class dns_entry
+{
+};
+
+class dns_cache
+{
+    std::map<std::string, dns_entry> entries;
+    mutable std::shared_mutex entry_mutex;
+
+public:
+    dns_entry find_entry(std::string const &domain) const
+    {
+        std::shared_lock<std::shared_mutex> lk(entry_mutex); // 1
+        std::map<std::string, dns_entry>::const_iterator const it =
+            entries.find(domain);
+        return (it == entries.end()) ? dns_entry() : it->second;
+    }
+    void update_or_add_entry(std::string const &domain,
+                             dns_entry const &dns_details)
+    {
+        std::lock_guard<std::shared_mutex> lk(entry_mutex); // 2
+        entries[domain] = dns_details;
+    }
+};
 #endif
 
 int main()

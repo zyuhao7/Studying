@@ -242,3 +242,92 @@ public:
 };
 # C++17对这种情况提供了支持, std::scoped_lock<>  是一种新的RAII模板类型,与 std::lock_guard<> 的功能相同，这个新类型能接受不定数量的互斥量类型作为模板参数，以及相应的互斥量(数量和类型)作为构造参数。互斥量支持构造时上锁，与 std::lock 的用法相同，解锁在析构中进行。
 ```
+
+```C++
+// 交换操作中 std::lock() 和 std::unique_lock 的使用
+
+class some_big_object
+{
+};
+
+void swap(some_big_object &lhs, some_big_object &rhs);
+class X
+{
+private:
+    some_big_object some_detail;
+    std::mutex m;
+
+public:
+    X(some_big_object const &sd)
+        : some_detail(sd) {}
+        
+    friend void swap(X &lhs, X &rhs)
+    {
+        if (&lhs == &rhs)
+            return;
+        std::unique_lock<std::mutex> lock_a(lhs.m, std::defer_lock); // 1
+
+        std::unique_lock<std::mutex> lock_b(rhs.m, std::defer_lock); // 1
+                                                                     // 留下未上锁的互斥量 std::defer_lock
+        std::lock(lock_a, lock_b);                                   // 2 互斥量在这里上锁
+        swap(lhs.some_detail, rhs.some_detail);
+    }
+};
+```
+
+```c++
+// std::call_once 的替代方案
+class my_class
+{
+};
+
+my_class &get_my_class_instance()
+{
+    static my_class instance; // 线程安全的初始化过程
+    return instance;
+}
+
+```
+
+```C++
+/*              std::shared_mutex 的共享锁
+  唯一的限制：当有线程拥有共享锁时，尝试获取独占锁的线程会被阻塞，直到所有其他线程放弃锁。当任一线程拥有一个独占锁时，其他线程就无法获得共享锁或独占锁，直到第一个线程放弃其拥有的锁。
+*/
+
+//           std::shared_mutex 对数据结构进行保护
+#include <map>
+#include <string>
+#include <mutex>
+#include <shared_mutex>
+class dns_entry
+{
+};
+
+class dns_cache
+{
+    std::map<std::string, dns_entry> entries;
+    mutable std::shared_mutex entry_mutex;
+
+public:
+    dns_entry find_entry(std::string const &domain) const
+    {
+        std::shared_lock<std::shared_mutex> lk(entry_mutex); // 1
+        std::map<std::string, dns_entry>::const_iterator const it =
+            entries.find(domain);
+        return (it == entries.end()) ? dns_entry() : it->second;
+    }
+    void update_or_add_entry(std::string const &domain,
+                             dns_entry const &dns_details)
+    {
+        std::lock_guard<std::shared_mutex> lk(entry_mutex); // 2
+        entries[domain] = dns_details;
+    }
+};
+```
+
+```bash
+#                           总结
+ 本章讨论了当线程间的共享数据发生恶性条件竞争时，将会带来多么严重的灾难。还讨论了如何使用 std::mutex 和如何避免这些问题。虽然C++标准库提供了一些工具来避免这些问题，但互斥量并不是灵丹妙药，也还有自己的问题(比如：死锁)。还见识了一些用于避免死锁的技术，之后了解了锁的所有权转移，以及围绕如何选取适当粒度锁产生的问题。最后，在具体情况下讨论了其他数据保护的方案，例如: std::call_once() 和 std::shared_mutex.
+还有一个方面没有涉及，那就是等待其他线程作为输入的情况。我们的线程安全栈，仅是在栈为空时，抛出一个异常，所以当一个线程要等待其他线程向栈压入一个值时(这是线程安全栈的主要用途之一)，它需要多次尝试去弹出一个值，当捕获抛出的异常时，再次进行尝试。这种消耗资源的检查，没有任何意义。并且，不断的检查会影响系统中其他线程的运行，这反而会妨碍程序的运行。我们需要一些方法让一个线程等待其他线程完成任务，但在等待过程中不占用CPU。
+
+```
