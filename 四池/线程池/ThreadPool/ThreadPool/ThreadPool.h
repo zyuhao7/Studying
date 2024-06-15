@@ -7,6 +7,7 @@
 #include<condition_variable>
 #include<memory>
 #include <functional>
+#include<typeinfo>
 #ifndef THREAD_POOL_H
 #define THREAD_POOL_H
 
@@ -45,7 +46,7 @@ private:
 	// 基类类型.
 	class Base {
 	public:
-		~Base() = default;
+		virtual ~Base() = default;
 	};
 
 	// 派生类类型
@@ -57,7 +58,6 @@ private:
 			: data_(data)
 		{}
 
-	private:
 		T data_;
 	};
 
@@ -66,13 +66,56 @@ private:
 	std::unique_ptr<Base> base_;
 };
 
+// 信号量类型.
+class Semaphore
+{
+public:	
+	Semaphore(int limit = 0)
+		:resLimit_(limit)
+	{}
 
+	~Semaphore() = default;
+
+	// 获取一个信号量资源.
+	void wait()
+	{
+		std::unique_lock<std::mutex> lock(mtx_);
+		// 等待信号量有资源, 没有资源就阻塞着...
+		cond_.wait(lock, [&]() -> bool {
+			return resLimit_ > 0;
+			});
+		resLimit_--;
+	}
+
+	// 增加一个信号量资源.
+	void post()
+	{
+		std::unique_lock<std::mutex> lock(mtx_);
+		resLimit_++;
+		cond_.notify_all();
+	}
+
+private:
+	int resLimit_;
+	std::mutex mtx_;
+	std::condition_variable cond_;
+};
+
+class Result;
 //任务抽象类
 class Task
 {
 public:
+	Task();
+	~Task() = default;
+
+	void exec();
+	void setResult(Result* res);
 	// 用户自定义任务类型,从 Task继承, 重写 run 方法, 实现自定义任务处理.	
 	virtual Any run() = 0;
+
+private:
+	Result* result_;
 };
 
 // 线程池支持的模式.
@@ -80,6 +123,28 @@ enum class PoolMode
 {
 	MODE_FIXED,  // 固定数量的线程
 	MODE_CACHED, // 动态增长的线程
+};
+
+// 实现接收提交到线程池的 task 任务执行完成后的返回值类型 Result.
+class Result
+{
+public:
+	Result(std::shared_ptr<Task> task, bool isValid = true);
+	~Result() = default;
+
+
+	// 问题1:
+	void setVal(Any any);
+
+	// 问题2:
+	Any get();
+
+
+private:
+	Any any_;       // 存储任务的返回值.
+	Semaphore sem_; // 线程通信信号.
+	std::shared_ptr<Task> task_; // 指向对应获取返回值的任务对象.
+	std::atomic_bool isVaild_;   // 返回值是否有效.
 };
 
 
@@ -115,7 +180,7 @@ public:
 	void setTaskQueMaxThreshHold(int threshhold);
 
 	// 给线程池提供任务.
-	void submitTask(std::shared_ptr<Task> sp);
+	Result submitTask(std::shared_ptr<Task> sp);
 
 	// 开启线程池.
 	void start(int initThreadNum = 4);

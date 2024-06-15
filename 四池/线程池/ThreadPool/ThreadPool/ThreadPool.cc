@@ -31,7 +31,7 @@ void ThreadPool::setTaskQueMaxThreshHold(int threshold)
 }
 
 // 给线程池提供任务. 用户生产任务.
-void ThreadPool::submitTask(std::shared_ptr<Task> sp)
+Result ThreadPool::submitTask(std::shared_ptr<Task> sp)
 {
 	// 获取锁.
 	std::unique_lock<std::mutex> lock(taskQueMtx_);
@@ -43,7 +43,7 @@ void ThreadPool::submitTask(std::shared_ptr<Task> sp)
 	{
 		// 如果 notFull_ 等待两秒, 条件依然没有满足.
 		std::cerr << "task queue is full, submit task fail." << std::endl;
-		return;
+		return Result(sp, false);
 	}
 
 	// 如果有空余, 把任务放入任务队列.
@@ -52,6 +52,9 @@ void ThreadPool::submitTask(std::shared_ptr<Task> sp)
 
 	// 因为放了任务, 任务队列肯定不为空, 在 notEmpty_ 上进行通知.
 	notEmpty_.notify_all();
+	
+	// 返回任务的 Result 对象.
+	return Result(sp);
 }
 
 // 开启线程池.
@@ -110,7 +113,8 @@ void ThreadPool::threadFunc()
 
 		if (task != nullptr)
 		{
-			task->run();
+			//task->run(); // 执行任务; 把任务的返回值通过 setVal 给到 Result.
+			task->exec();
 		}
 	}
 }
@@ -131,3 +135,50 @@ void Thread::start()
 	std::thread t(func_);
 	t.detach();		//设置分离线程.
 }
+
+
+////////////////////// Task 方法实现 ///////////////////////////////////////
+
+Task::Task()
+	:result_(nullptr)
+{}
+
+void Task::exec()
+{
+	if(result_ != nullptr)
+		result_->setVal(run()); //多态调用.
+}
+
+void Task::setResult(Result* res)
+{
+	result_ = res;
+}
+
+////////////////////// Result方法实现 ///////////////////////////////////////
+
+Result::Result(std::shared_ptr<Task> task, bool isValid)
+	: task_(task)
+	,isVaild_(isValid)
+{
+	task_->setResult(this);
+}
+
+
+void Result::setVal(Any any)
+{
+	//存储 task 的返回值. 
+	this->any_ = std::move(any);
+	sem_.post();
+}
+
+
+Any Result::get() // 用户调用的.
+{
+	if (!isVaild_)
+	{
+		return "";
+	}
+	sem_.wait(); // task 任务如果没有执行完, 这里会阻塞用户的线程.
+	return std::move(any_);
+}
+
