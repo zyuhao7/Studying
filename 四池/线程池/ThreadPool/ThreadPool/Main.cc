@@ -39,33 +39,40 @@ private:
 
 int main()
 {
-	ThreadPool pool;
-	pool.start(4);
+	// 线程池退出, 如何将线程资源回收?
+	{
+		ThreadPool pool;
+		pool.setMode(PoolMode::MODE_CACHED);
+		pool.start(4);
 
-	clock_t begin = clock();
-	Result res1 = pool.submitTask(std::make_shared<MyTask>(1,100000000));
-	Result res2 = pool.submitTask(std::make_shared<MyTask>(100000001, 200000000));
-	Result res3 = pool.submitTask(std::make_shared<MyTask>(200000001, 300000000));
+		clock_t begin = clock();
+		Result res1 = pool.submitTask(std::make_shared<MyTask>(1,100000000));
+		Result res2 = pool.submitTask(std::make_shared<MyTask>(100000001, 200000000));
+		Result res3 = pool.submitTask(std::make_shared<MyTask>(200000001, 300000000));
+		pool.submitTask(std::make_shared<MyTask>(200000001, 300000000));
+		pool.submitTask(std::make_shared<MyTask>(200000001, 300000000));
+		pool.submitTask(std::make_shared<MyTask>(200000001, 300000000));
 
+		ULL  sum1 = res1.get().cast_<ULL>();
+		ULL  sum2 = res2.get().cast_<ULL>();
+		ULL  sum3 = res3.get().cast_<ULL>();
+		clock_t end = clock();
 
-	ULL  sum1 = res1.get().cast_<ULL>();
-	ULL  sum2 = res2.get().cast_<ULL>();
-	ULL  sum3 = res3.get().cast_<ULL>();
+		cout << sum1 + sum2 + sum3 << endl;
 
-	cout << sum1 + sum2 + sum3 << endl;
-	clock_t end = clock();
-	cout << end - begin <<" ms " << endl;
-
-
-
-	clock_t begin2 = clock();
-	ULL  s = 0;
-	for (int i = 1; i <= 300000000;++i) s += i;
-	cout << s << endl;
-	clock_t end2 = clock();
-	cout << end2 - begin2 << " ms " << endl;
+		cout << end - begin <<" ms " << endl;
 
 
+
+		clock_t begin2 = clock();
+		ULL  s = 0;
+		for (int i = 1; i <= 300000000;++i) s += i;
+		cout << s << endl;
+		clock_t end2 = clock();
+		cout << end2 - begin2 << " ms " << endl;
+	}
+
+	getchar();
 
 	//pool.submitTask(std::make_shared<MyTask>());
 	//pool.submitTask(std::make_shared<MyTask>());
