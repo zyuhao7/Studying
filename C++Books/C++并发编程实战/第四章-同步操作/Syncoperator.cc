@@ -6,6 +6,9 @@
 #include <queue>
 #include <future>
 #include <vector>
+#include <functional>
+#include <chrono>
+
 using namespace std;
 
 #if 0
@@ -407,8 +410,222 @@ void process_connections(connection_set &connections)
         }
     }
 }
+
+
+
+void do_something()
+{
+    unsigned long long s = 0;
+    for (int i = 0; i < 10000000; ++i)
+    {
+        s += i;
+    }
+    std::cout << s << endl;
+};
+
+#include <condition_variable>
+#include <mutex>
+#include <chrono>
+
+std::condition_variable cv;
+
+bool done;
+
+std::mutex m;
+
+bool wait_loop()
+{
+    auto const timeout = std::chrono::steady_clock::now() +
+                         std::chrono::milliseconds(500);
+    std::unique_lock<std::mutex> lk(m);
+    while (!done)
+    {
+        if (cv.wait_until(lk, timeout) == std::cv_status::timeout)
+            break;
+    }
+    return done;
+}
+
+template <typename F, typename A>
+std::future<std::result_of<F(A &&)>::type>
+spawn_task(F &&f, A &&a)
+{
+    typedef std::result_of<F(A &&)>::type result_type;
+ std::packaged_task<result_type(A&&)> task(std::move(f)));
+ std::future<result_type> res(task.get_future());
+ std::thread t(std::move(task), std::move(a));
+ t.detach();
+ return res;
+}
+
+struct card_inserted
+{
+    std::string account;
+};
+
+class atm
+{
+    messaging::receiver incoming;
+    messaging::sender bank;
+    messaging::sender interface_hardware;
+    void (atm::*state)();
+
+    std::string account;
+    std::string pin;
+
+    void waiting_for_card() // 1
+    {
+        interface_hardware.send(display_enter_card()); // 2
+        incoming.wait().                               // 3
+            handle<card_inserted>(
+                [&](card_inserted const &msg) // 4
+                {
+                    account = msg.account;
+                    pin = "";
+                    interface_hardware.send(display_enter_pin());
+                    state = &atm::getting_pin;
+                });
+    }
+    void getting_pin();
+
+public:
+    void run() // 5
+    {
+        state = &atm::waiting_for_card; // 6
+        try
+        {
+            for (;;)
+            {
+                (this->*state)(); // 7
+            }
+        }
+        catch (messaging::close_queue const &)
+        {
+        }
+    }
+};
+
+void atm::getting_pin()
+{
+    incoming.wait()
+        .handle<digit_pressed>( // 1
+            [&](digit_pressed const &msg)
+            {
+                unsigned const pin_length = 4;
+                pin += msg.digit;
+                if (pin.length() == pin_length)
+                {
+                    bank.send(verify_pin(account, pin, incoming));
+                    state = &atm::verifying_pin;
+                }
+            })
+        .handle<clear_last_pressed>( // 2
+            [&](clear_last_pressed const &msg)
+            {
+                if (!pin.empty())
+                {
+                    pin.resize(pin.length() - 1);
+                }
+            })
+        .handle<cancel_pressed>( // 3
+            [&](cancel_pressed const &msg)
+            {
+                state = &atm::done_processing;
+            });
+}
+
+template <typename Func>
+std::experimental::future<decltype(std::declval<Func>()())>
+spawn_async(Func &&func)
+{
+    std::experimental::promise<decltype(std::declval<Func>()())> p;
+    auto res = p.get_future();
+    std::thread t(
+        [p = std::move(p), f = std::decay_t<Func>(func)]() mutable
+        {
+            try
+            {
+                p.set_value_at_thread_exit(f());
+            }
+            catch (...)
+            {
+                p.set_exception_at_thread_exit(std::current_exception());
+            }
+        });
+    t.detach();
+    return res;
+}
+
+void process_login(std::string const &username, std::string const &password)
+{
+    try
+    {
+        user_id const id = backend.authenticate_user(username, password);
+        user_data const info_to_display = backend.request_current_info(id);
+        update_display(info_to_display);
+    }
+    catch (std::exception &e)
+    {
+        display_error(e);
+    }
+}
+
+std::future<void> process_login(std::string const &username, std::string const &password)
+{
+    return std::async(std::launch::async, [=]()
+                      { 
+        try{ 
+            user_id consst id = backend.authenticate_user(username, password); 
+            user_data const info_to_display = 
+            backend.request_current_info(id); 
+            update_display(info_to_display); 
+        } 
+        catch(std::exception& e){ 
+        display_error(e); 
+ } });
+}
+
+std::experimental::future<void> process_login(std::string const &username, std::string const &password)
+{
+    return spawn_async([=]()
+                       { return backend.authenticate_user(username, password); })
+        .then([](std::experimental::future<user_id> id)
+              { return backend.request_current_info(id.get()); })
+        .then([](std::experimental::future<user_data> info_to_display)
+              { 
+    try
+    { 
+    update_display(info_to_display.get()); 
+    } 
+    catch(std::exception& e){ 
+    display_error(e); 
+    } });
+}
+
+std::experimental::future<void> process_login(std::string const &username, std::string const &password)
+{
+    return backend.async_authenticate_user(username, password).then([](std::experimental::future<user_id> id)
+                                                                    { return backend.async_request_current_info(id.get()); })
+        .then([](std::experimental::future<user_data> info_to_display)
+              { 
+                try{ 
+                update_display(info_to_display.get()); 
+                } 
+                catch(std::exception& e){ 
+                display_error(e); 
+                } });
+}
 #endif
+
 
 int main()
 {
+
+    // auto start = std::chrono::high_resolution_clock::now();
+    // do_something();
+    // auto stop = std::chrono::high_resolution_clock::now();
+
+    // std::cout << "do_something() took " << std::chrono::duration<double, std::chrono::seconds>(stop - start).count()
+    //           << "seconds" << std::endl;
+    return 0;
 }

@@ -448,7 +448,233 @@ void process_connections(connection_set &connections)
     }
 }
 
+```
+
+```c++
+// 限时等待
+// 处理持续时间的变量以 _for 作为后缀,处理绝对时间的变量以 _until 作为后缀。
+
+// 代码4.11 等待条件变量满足条件——有超时功能
+#include <condition_variable>
+#include <mutex>
+#include <chrono>
+
+std::condition_variable cv;
+
+bool done;
+
+std::mutex m;
+
+bool wait_loop()
+{
+    auto const timeout = std::chrono::steady_clock::now() +
+                         std::chrono::milliseconds(500);
+    std::unique_lock<std::mutex> lk(m);
+    while (!done)
+    {
+        if (cv.wait_until(lk, timeout) == std::cv_status::timeout)
+            break;
+    }
+    return done;
+}
 
 ```
 
+```c++
+// 4.3.4 使用超时
+// 使用超时的最简单方式，就是对特定线程添加延迟处理。当线程无所事事时，就不会占用其他线程的处理时间.
 
+```
+
+```c++
+// 4.4 简化代码
+//  spawn_task的简单实现
+template <typename F, typename A>
+std::future<std::result_of<F(A &&)>::type>
+spawn_task(F &&f, A &&a)
+{
+    typedef std::result_of<F(A &&)>::type result_type;
+ std::packaged_task<result_type(A&&)> task(std::move(f)));
+ std::future<result_type> res(task.get_future());
+ std::thread t(std::move(task), std::move(a));
+ t.detach();
+ return res;
+}
+```
+
+```c++
+// 代码4.15 ATM逻辑类的简单实现
+struct card_inserted
+{
+    std::string account;
+};
+
+class atm
+{
+    messaging::receiver incoming;
+    messaging::sender bank;
+    messaging::sender interface_hardware;
+    void (atm::*state)();
+
+    std::string account;
+    std::string pin;
+
+    void waiting_for_card() // 1
+    {
+        interface_hardware.send(display_enter_card()); // 2
+        incoming.wait().                               // 3
+            handle<card_inserted>(
+                [&](card_inserted const &msg) // 4
+                {
+                    account = msg.account;
+                    pin = "";
+                    interface_hardware.send(display_enter_pin());
+                    state = &atm::getting_pin;
+                });
+    }
+    void getting_pin();
+
+public:
+    void run() // 5
+    {
+        state = &atm::waiting_for_card; // 6
+        try
+        {
+            for (;;)
+            {
+                (this->*state)(); // 7
+            }
+        }
+        catch (messaging::close_queue const &)
+        {
+        }
+    }
+};
+
+/*
+ 这种程序设计的方式被称为参与者模式(Actor model)——在系统中有很多独立的(运行在一个独立的线程上)参与者，这些参与者会互相发送信息，去执行手头上的任务，并且不会共享状态，除非是通过信息直接传入的。
+*/
+
+// 代码4.16 简单ATM实现中的getting_pin状态函数
+void atm::getting_pin()
+{
+    incoming.wait()
+        .handle<digit_pressed>( // 1
+            [&](digit_pressed const &msg)
+            {
+                unsigned const pin_length = 4;
+                pin += msg.digit;
+                if (pin.length() == pin_length)
+                {
+                    bank.send(verify_pin(account, pin, incoming));
+                    state = &atm::verifying_pin;
+                }
+            })
+        .handle<clear_last_pressed>( // 2
+            [&](clear_last_pressed const &msg)
+            {
+                if (!pin.empty())
+                {
+                    pin.resize(pin.length() - 1);
+                }
+            })
+        .handle<cancel_pressed>( // 3
+            [&](cancel_pressed const &msg)
+            {
+                state = &atm::done_processing;
+            });
+}
+
+```
+
+```c++
+// 代码4.17 使用并发技术扩展规范中的特性，实现与 std::async 等价的功能
+template <typename Func>
+std::experimental::future<decltype(std::declval<Func>()())>
+spawn_async(Func &&func)
+{
+    std::experimental::promise<decltype(std::declval<Func>()())> p;
+    auto res = p.get_future();
+    std::thread t(
+        [p = std::move(p), f = std::decay_t<Func>(func)]() mutable
+        {
+            try
+            {
+                p.set_value_at_thread_exit(f());
+            }
+            catch (...)
+            {
+                p.set_exception_at_thread_exit(std::current_exception());
+            }
+        });
+    t.detach();
+    return res;
+}
+```
+
+```c++
+// 4.4.4 持续性连接
+// 代码4.18 处理用户登录——同步方式
+void process_login(std::string const &username, std::string const &password)
+{
+    try
+    {
+        user_id const id = backend.authenticate_user(username, password);
+        user_data const info_to_display = backend.request_current_info(id);
+        update_display(info_to_display);
+    }
+    catch (std::exception &e)
+    {
+        display_error(e);
+    }
+}
+
+// 代码4.19 处理用户登录——异步方式
+std::future<void> process_login(std::string const &username, std::string const &password)
+{
+    return std::async(std::launch::async, [=]()
+                      { 
+        try{ 
+            user_id consst id = backend.authenticate_user(username, password); 
+            user_data const info_to_display = 
+            backend.request_current_info(id); 
+            update_display(info_to_display); 
+        } 
+        catch(std::exception& e){ 
+        display_error(e); 
+ } });
+}
+
+// 码4.20 处理用户登录——持续性方式
+std::experimental::future<void> process_login(std::string const &username, std::string const &password)
+{
+    return spawn_async([=]()
+                       { return backend.authenticate_user(username, password); })
+        .then([](std::experimental::future<user_id> id)
+              { return backend.request_current_info(id.get()); })
+        .then([](std::experimental::future<user_data> info_to_display){ 
+            try{ 
+            update_display(info_to_display.get()); 
+            } 
+    
+            catch(std::exception& e){ 
+            display_error(e); 
+            } });
+    }
+
+// 代码4.21 处理用户登录——全异步操作
+std::experimental::future<void> process_login(std::string const &username, std::string const &password)
+{
+    return backend.async_authenticate_user(username, password).then([](std::experimental::future<user_id> id)
+                                                                    { return backend.async_request_current_info(id.get()); })
+        .then([](std::experimental::future<user_data> info_to_display)
+              { 
+                try{ 
+                update_display(info_to_display.get()); 
+                } 
+                catch(std::exception& e){ 
+                display_error(e); 
+                } });
+}
+
+```
