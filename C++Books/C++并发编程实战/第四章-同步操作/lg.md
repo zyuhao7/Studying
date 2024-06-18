@@ -678,3 +678,122 @@ std::experimental::future<void> process_login(std::string const &username, std::
 }
 
 ```
+
+```c++
+// std::experimental::latch：基础的锁存器类型
+//构造 std::experimental::latch 时，将计数器的值作为构造函数的唯一参数。当等待的事件发生，就会调用锁存器count_down成员函数。当计数器为0时，锁存器状态变为就绪。可以调用wait成员函数对锁存器进行阻塞，直到等待的锁存器处于就绪状态。如果需要对锁存器是否就绪的状态进行检查，可调用is_ready成员函数。想要减少计数器1并阻塞直至0，则可以调用count_down_and_wait成员函数
+
+// 代码4.25 使用 std::experimental::latch 等待所有事件
+void foo()
+{
+    unsigned const thread_count = ...;
+    latch done(thread_count); // 1
+    my_data data[thread_count];
+    std::vector<std::future<void>> threads;
+    for (unsigned i = 0; i < thread_count; ++i)
+        threads.push_back(std::async(std::launch::async, [&, i] { // 2 通过引用的方式对除了i之外的所有内容进行捕获
+            data[i] = make_data(i);
+            done.count_down(); // 3
+            do_more_stuff();   // 4
+        }));
+    done.wait();                      // 5
+    process_data(data, thread_count); // 6
+} // 7
+
+```
+
+
+```c++
+// std::experimental::barrier：简单的栅栏
+//并发技术扩展规范提供了两种栅栏机制， <experimental/barrier> 头文件中，分别为： std::experimental::barrier 和 std::experimental::flex_barrier
+
+// 当每个线程完成其处理任务时，都会到达栅栏处，并且通过调用栅栏对象的arrive_and_wait成员函数，等待小组的其他线程.
+
+//代码4.26 std::experimental::barrier 的用法
+result_chunk process(data_chunk);
+
+std::vector<data_chunk> divide_into_chunks(data_block data, unsigned num_threads);
+
+void process_data(data_source &source, data_sink &sink)
+{
+    unsigned const concurrency = std::thread::hardware_concurrency();
+    unsigned const num_threads = (concurrency > 0) ? concurrency : 2;
+
+    std::experimental::barrier sync(num_threads);
+    std::vector<joining_thread> threads(num_threads);
+
+    std::vector<data_chunk> chunks;
+    result_block result;
+
+    for (unsigned i = 0; i < num_threads; ++i)
+    {
+        threads[i] = joining_thread([&, i]
+                                    { 
+ while (!source.done()) { // 6 
+    if (!i) { // 1 
+    data_block current_block = 
+         source.get_next_data_block(); 
+    chunks = divide_into_chunks( 
+    current_block, num_threads); 
+    } 
+    sync.arrive_and_wait(); // 2 
+    result.set_chunk(i, num_threads, process(chunks[i])); // 3 
+    sync.arrive_and_wait(); // 4 
+    if (!i) { // 5 
+    sink.write_data(std::move(result)); 
+    } 
+    } });
+    }
+} // 7
+
+
+```
+
+```c++
+// 4.27 使用 std::experimental::flex_barrier 管理串行部分
+   void process_data(data_source &source, data_sink &sink)
+{
+    unsigned const concurrency = std::thread::hardware_concurrency();
+    unsigned const num_threads = (concurrency > 0) ? concurrency : 2;
+
+    std::vector<data_chunk> chunks;
+
+    auto split_source = [&] { // 1
+        if (!source.done())
+        {
+            data_block current_block = source.get_next_data_block();
+            chunks = divide_into_chunks(current_block, num_threads);
+        }
+    };
+
+    split_source(); // 2
+
+    result_block result;
+
+    std::experimental::flex_barrier sync(num_threads, [&] { // 3
+        sink.write_data(std::move(result));
+        split_source(); // 4
+        return -1;      // 5
+    });
+    std::vector<joining_thread> threads(num_threads);
+
+    for (unsigned i = 0; i < num_threads; ++i)
+    {
+        threads[i] = joining_thread([&, i]
+                                    { 
+    while (!source.done()) { // 6 
+    result.set_chunk(i, num_threads, process(chunks[i])); 
+    sync.arrive_and_wait(); // 7 
+    } });
+    }
+} 
+
+```
+
+```c++
+// 本章总结
+// 同步操作对于用并发编程来说是很重要的一部分.如果没有同步，线程基本上就是独立的，因其任务之间的相关性，才可作为一个整体直接执行.
+// 本章讨论了各式各样的同步操作，有条件变量、future、promise、打包任务、锁存器和栅栏
+// 替代同步的解决方案：函数式编程，完全独立执行的函数，不会受到外部环境的影响，以及消息传递模式，以消息子系统为中介，向线程异步的发送消息和持续性方式，其指定了操作的后续任务，并由系统负责调度
+
+```

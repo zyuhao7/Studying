@@ -617,6 +617,102 @@ std::experimental::future<void> process_login(std::string const &username, std::
 }
 #endif
 
+#if 0
+void foo()
+{
+    unsigned const thread_count = ...;
+    latch done(thread_count); // 1
+    my_data data[thread_count];
+    std::vector<std::future<void>> threads;
+    for (unsigned i = 0; i < thread_count; ++i)
+        threads.push_back(std::async(std::launch::async, [&, i] { // 2
+            data[i] = make_data(i);
+            done.count_down(); // 3
+            do_more_stuff();   // 4
+        }));
+    done.wait();                      // 5
+    process_data(data, thread_count); // 6
+} // 7
+
+#endif
+
+#if 0
+result_chunk process(data_chunk);
+
+std::vector<data_chunk> divide_into_chunks(data_block data, unsigned num_threads);
+
+void process_data(data_source &source, data_sink &sink)
+{
+    unsigned const concurrency = std::thread::hardware_concurrency();
+    unsigned const num_threads = (concurrency > 0) ? concurrency : 2;
+
+    std::experimental::barrier sync(num_threads);
+    std::vector<joining_thread> threads(num_threads);
+
+    std::vector<data_chunk> chunks;
+    result_block result;
+
+    for (unsigned i = 0; i < num_threads; ++i)
+    {
+        threads[i] = joining_thread([&, i]
+                                    { 
+ while (!source.done()) { // 6 
+    if (!i) { // 1 
+    data_block current_block = 
+         source.get_next_data_block(); 
+    chunks = divide_into_chunks( 
+    current_block, num_threads); 
+    } 
+    sync.arrive_and_wait(); // 2 
+    result.set_chunk(i, num_threads, process(chunks[i])); // 3 
+    sync.arrive_and_wait(); // 4 
+    if (!i) { // 5 
+    sink.write_data(std::move(result)); 
+    } 
+    } });
+    }
+} // 7
+
+#endif
+
+#if 0
+void process_data(data_source &source, data_sink &sink)
+{
+    unsigned const concurrency = std::thread::hardware_concurrency();
+    unsigned const num_threads = (concurrency > 0) ? concurrency : 2;
+
+    std::vector<data_chunk> chunks;
+
+    auto split_source = [&] { // 1
+        if (!source.done())
+        {
+            data_block current_block = source.get_next_data_block();
+            chunks = divide_into_chunks(current_block, num_threads);
+        }
+    };
+
+    split_source(); // 2
+
+    result_block result;
+
+    std::experimental::flex_barrier sync(num_threads, [&] { // 3
+        sink.write_data(std::move(result));
+        split_source(); // 4
+        return -1;      // 5
+    });
+    std::vector<joining_thread> threads(num_threads);
+
+    for (unsigned i = 0; i < num_threads; ++i)
+    {
+        threads[i] = joining_thread([&, i]
+                                    { 
+    while (!source.done()) { // 6 
+    result.set_chunk(i, num_threads, process(chunks[i])); 
+    sync.arrive_and_wait(); // 7 
+    } });
+    }
+}
+#endif
 
 int main()
 {
