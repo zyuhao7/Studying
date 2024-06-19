@@ -289,4 +289,181 @@ std::unique_ptr 自动管理内存,当程序结束时会自动销毁单例对象
 缺点: 无法手动控制对象的销毁，单例对象会在程序结束时自动销毁.
 
 ```
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+```C++
+// Double-Checked Locking thesis (DCLP)
 
+// from the header file
+class Singleton
+{
+public:
+    static Singleton* instance();
+
+private:
+    static Singleton* pInstance;
+};
+
+// from the implementation file
+Singleton* Singleton::instance()
+{
+    if(pInstance == 0)
+    {
+        pInstance = new Singleton();
+    }
+    return pInstance;
+} // 不安全
+// 采用锁可实现安全获取单例对象.
+Singleton* Singleton::instance()
+{
+    Lock lock;  //acquire lock.
+    if(pInstance == 0)
+    {
+        pInstance = new Singleton();
+    }
+    return pInstance;
+}// release lock
+// 这种方法能做到线程安全, 缺点就是资源耗费严重, 每次获取实例都需要获取锁,实际上只需要在第一次获取对象时需要加锁.
+
+// The Double-Checked Locking Pattern (DCLP) 实现.
+Singleton* Singleton::instance()
+{
+    if(pInstance == 0)      // 1st
+    {
+        Lock lock;
+        if(pInstance == 0)  // 2st
+          {
+              pInstance = new Singleton();
+          }
+    }
+    return pInstance;
+}
+
+// This statement causes three things to happen:
+1.  Allocate memory to hold a Singleton object.            (分配内存以保存 Singleton 对象).
+2.  Construct a Singleton object in the allocated memory.  (在分配的内存中构造一个 Singleton 对象).
+3.  Make pInstance point to the allocated memory.          (使 pInstance 指向分配的内存).
+
+// 有时编译器交换步骤 2和 3. 如下:
+Singleton* Singleton::instance()
+{
+    if(pInstance == 0)
+    {
+        Lock lock;
+        if(pInstance == 0)
+        {
+            pInstance =                         // Step 3.
+              opeartor new (sizeof(Singleton)); // Step 1.
+              new (pInstance) Singleton;       //  Step 2.
+        }
+    }
+    return pInstance;
+}
+
+// volatile 关键字
+class Singleton
+{
+public:
+    static Singleton* instance();
+
+private:    
+    static Singleton* volatile pInstance; // volatile added.
+    int x;
+    Singleton()
+        :x(5)
+    {}
+};
+
+// from the implementation file
+Singleton* volatile Singleton::pInstance = 0;
+
+Singleton* Singleton::instance()
+{
+    if(pInstance == 0)
+    {
+        Lock lock;
+        if(pInstance == 0)
+        {
+            Singleton* volatile temp = new Singleton(); //volatile added
+            pInstance = temp;
+        }
+    }
+    return pInstance;
+}
+// 内联函数展开之后...
+// After inlining the constructor, the code looks like this:
+if(pInstance == 0)
+{
+    Lock lock;
+    if(pInstance == 0)
+    {
+        Singleton* volatile temp =
+            static_cast<Singleton*>(operator new (sizeof(Singleton)));
+            temp->x = 5;     // inlined Single constructor
+        pInstance = temp;
+    }
+}
+
+// problem:
+//编译器可以对 temp->x 的赋值重新排序，以重新排序对 pInstance 的赋值。如果这样做，pInstance 将在它指向的数据初始化之前分配，这再次导致其他线程读取未初始化的 x 的可能性.
+// 可能解决的方法:
+class Singleton
+{   
+public:
+    static volatile Singleton* volatile instance();
+
+private:
+    static volatile Singleton* volatile pInstance;
+
+};
+
+volatile Singleton* volatile Singleton::pInstance = 0;
+volatile Singleton* volatile Singleton::instance1()
+{
+    if(pInstance == 0)
+    {
+        Lock lock;
+        if(pInstance == 0)
+        {
+            volatile Singleton* volatile temp =
+                new volatile Singleton();
+            pInstance = temp;
+        }
+    }
+    return pInstance;
+}
+
+volatile Singleton* volatile Singleton::instance2()
+{
+    if(pInstance == 0)
+    {
+        Lock lock;
+        if(pInstance == 0)
+        {
+             Singleton* volatile temp =
+               static_cast<Singleton*> (operator new (sizeof(Singleton)));
+            static_cast<volatile int&>(temp->x) = 5;
+            pInstance = temp;
+        }
+    }
+    return pInstance;
+}
+
+// 缓存一致性问题的一般解决方案是使用内存屏障
+Singleton* Singleton::instance()
+{
+    Singleton* tmp = pInstance;
+    //....               insert memory barrier.
+    if(tmp == 0)
+    {
+        Lock lock;
+        tmp = pInstance;
+        if(tmp == 0)
+        {
+            tmp = new Singleton();
+            //...        insert memory barrier.
+            pInstance = tmp;
+        }
+    }
+    return tmp;
+}
+```
