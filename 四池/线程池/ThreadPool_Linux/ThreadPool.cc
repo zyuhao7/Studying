@@ -42,7 +42,7 @@ void ThreadPool::setMode(PoolMode mode)
 // 设置 task任务队列的上线阀值.
 void ThreadPool::setTaskQueMaxThreshHold(int threshold)
 {
-    if (checkRunningState())
+    if (!checkRunningState())
         return;
     taskQueMaxThreshold_ = threshold;
 }
