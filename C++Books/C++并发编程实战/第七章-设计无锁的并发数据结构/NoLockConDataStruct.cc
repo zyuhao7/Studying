@@ -340,9 +340,588 @@ void delete_nodes_with_no_hazards()
 };
 #endif
 
-#if 1
+#if 0
+
+template <typename T>
+class lock_free_stack
+{
+private:
+    struct node
+    {
+        std::shared_ptr<T> data;
+        std::shared_ptr<node> next;
+        node(T const &data_)
+            : data(std::make_shared<T>(data_))
+        {
+        }
+    };
+
+    std::shared_ptr<node> head;
+
+public:
+    void push(T const &data)
+    {
+        std::shared_ptr<node> const new_node = std::make_shared<node>(data);
+        new_node->next = head.load();
+        while (!std::atomic_compare_exchange_weak(&head, &new_node->next, new_node))
+            ;
+    }
+    std::shared_ptr<T> pop()
+    {
+        std::shared_ptr<node> old_head = std::atomic_load(&head);
+        while (old_head && !std::atomic_compare_exchange_weak(&head,
+                                                              &old_head, old_head->next))
+            ;
+        if (old_head)
+        {
+            std::atomic_store(&old_head->next, std::shared_ptr<node>());
+            return old_head->data;
+        }
+        return std::shared_ptr<T>();
+    }
+    ~lock_free_stack()
+    {
+        while (pop())
+            ;
+    }
+};
 
 #endif
+
+#if 0
+
+template <typename T>
+class lock_free_stack
+{
+private:
+    struct node
+    {
+        std::shared_ptr<T> data;
+        std::experimental::atomic_shared_ptr<node> next;
+        node(T const &data_) : data(std::make_shared<T>(data_))
+        {
+        }
+    };
+    std::experimental::atomic_shared_ptr<node> head;
+
+public:
+    void push(T const &data)
+    {
+        std::shared_ptr<node> const new_node = std::make_shared<node>(data);
+        new_node->next = head.load();
+        while (!head.compare_exchange_weak(new_node->next, new_node))
+            ;
+    }
+    std::shared_ptr<T> pop()
+    {
+        std::shared_ptr<node> old_head = head.load();
+        while (old_head && !head.compare_exchange_weak(
+                               old_head, old_head->next.load()))
+            ;
+        if (old_head)
+        {
+            old_head->next = std::shared_ptr<node>();
+            return old_head->data;
+        }
+        return std::shared_ptr<T>();
+    }
+    ~lock_free_stack()
+    {
+        while (pop())
+            ;
+    }
+};
+
+#endif
+
+#if 0
+template <typename T>
+class lock_free_stack
+{
+private:
+    struct node;
+
+    struct counted_node_ptr // 1
+    {
+        int external_count;
+        node *ptr;
+    };
+
+    struct node
+    {
+        std::shared_ptr<T> data;
+        std::atomic<int> internal_count; // 2
+        counted_node_ptr next;           // 3
+
+        node(T const &data_)
+            : data(std::make_shared<T>(data_)),
+              internal_count(0)
+        {
+        }
+    };
+
+    std::atomic<counted_node_ptr> head; // 4
+
+public:
+    ~lock_free_stack()
+    {
+        while (pop())
+            ;
+    }
+
+    void push(T const &data) // 5
+    {
+        counted_node_ptr new_node;
+        new_node.ptr = new node(data);
+        new_node.external_count = 1;
+        new_node.ptr->next = head.load();
+        while (!head.compare_exchange_weak(new_node.ptr->next, new_node))
+            ;
+    }
+};
+
+#endif
+
+#if 0
+template <typename T>
+class lock_free_stack
+{
+private:
+    void increase_head_count(counted_node_ptr &old_counter)
+    {
+        counted_node_ptr new_counter;
+
+        do
+        {
+            new_counter = old_counter;
+            ++new_counter.external_count;
+        } while (!head.compare_exchange_strong(old_counter, new_counter)); // 1
+
+        old_counter.external_count = new_counter.external_count;
+    }
+
+public:
+    std::shared_ptr<T> pop()
+    {
+        counted_node_ptr old_head = head.load();
+        for (;;)
+        {
+            increase_head_count(old_head);
+            node *const ptr = old_head.ptr; // 2
+            if (!ptr)
+            {
+                return std::shared_ptr<T>();
+            }
+            if (head.compare_exchange_strong(old_head, ptr->next)) // 3
+            {
+                std::shared_ptr<T> res;
+                res.swap(ptr->data); // 4
+
+                int const count_increase = old_head.external_count - 2; // 5
+
+                if (ptr->internal_count.fetch_add(count_increase) == // 6
+                    -count_increase)
+                {
+                    delete ptr;
+                }
+
+                return res; // 7
+            }
+            else if (ptr->internal_count.fetch_sub(1) == 1)
+            {
+                delete ptr; // 8
+            }
+        }
+    }
+};
+
+#endif
+
+#if 0
+template <typename T>
+class lock_free_stack
+{
+private:
+    struct node;
+    struct counted_node_ptr
+    {
+        int external_count;
+        node *ptr;
+    };
+
+    struct node
+    {
+        std::shared_ptr<T> data;
+        std::atomic<int> internal_count;
+        counted_node_ptr next;
+
+        node(T const &data_)
+            : data(std::make_shared<T>(data_)),
+              internal_count(0)
+        {
+        }
+    };
+
+    std::atomic<counted_node_ptr> head;
+
+    void increase_head_count(counted_node_ptr &old_counter)
+    {
+        counted_node_ptr new_counter;
+
+        do
+        {
+            new_counter = old_counter;
+            ++new_counter.external_count;
+        } while (!head.compare_exchange_strong(old_counter, new_counter,
+                                               std::memory_order_acquire,
+                                               std::memory_order_relaxed));
+        old_counter.external_count = new_counter.external_count;
+    }
+
+public:
+    ~lock_free_stack()
+    {
+        while (pop())
+            ;
+    }
+
+    void push(T const &data)
+    {
+        counted_node_ptr new_node;
+        new_node.ptr = new node(data);
+        new_node.external_count = 1;
+        new_node.ptr->next = head.load(std::memory_order_relaxed);
+        while (!head.compare_exchange_weak(new_node.ptr->next, new_node,
+                                           std::memory_order_release,
+                                           std::memory_order_relaxed))
+            ;
+    }
+    std::shared_ptr<T> pop()
+    {
+        counted_node_ptr old_head =
+            head.load(std::memory_order_relaxed);
+        for (;;)
+        {
+            increase_head_count(old_head);
+            node *const ptr = old_head.ptr;
+            if (!ptr)
+            {
+                return std::shared_ptr<T>();
+            }
+            if (head.compare_exchange_strong(old_head, ptr->next,
+                                             std::memory_order_relaxed))
+            {
+                std::shared_ptr<T> res;
+                res.swap(ptr->data);
+
+                int const count_increase = old_head.external_count - 2;
+
+                if (ptr->internal_count.fetch_add(count_increase,
+                                                  std::memory_order_release) == -count_increase)
+                {
+                    delete ptr;
+                }
+
+                return res;
+            }
+            else if (ptr->internal_count.fetch_add(-1,
+                                                   std::memory_order_relaxed) == 1)
+            {
+                ptr->internal_count.load(std::memory_order_acquire);
+                delete ptr;
+            }
+        }
+    }
+};
+
+#endif
+
+#if 0
+template <typename T>
+class lock_free_queue
+{
+private:
+    struct node
+    {
+        std::shared_ptr<T> data;
+        node *next;
+
+        node()
+            : next(nullptr)
+        {
+        }
+    };
+
+    std::atomic<node *> head;
+    std::atomic<node *> tail;
+
+    node *pop_head()
+    {
+        node *const old_head = head.load();
+        if (old_head == tail.load()) // 1
+        {
+            return nullptr;
+        }
+        head.store(old_head->next);
+        return old_head;
+    }
+
+public:
+    lock_free_queue()
+        : head(new node), tail(head.load())
+    {
+    }
+
+    lock_free_queue(const lock_free_queue &other) = delete;
+    lock_free_queue &operator=(const lock_free_queue &other) = delete;
+
+    ~lock_free_queue()
+    {
+        while (node *const old_head = head.load())
+        {
+            head.store(old_head->next);
+            delete old_head;
+        }
+    }
+    std::shared_ptr<T> pop()
+    {
+        node *old_head = pop_head();
+        if (!old_head)
+        {
+            return std::shared_ptr<T>();
+        }
+
+        std::shared_ptr<T> const res(old_head->data); // 2
+        delete old_head;
+        return res;
+    }
+
+    void push1(T new_value)
+    {
+        std::shared_ptr<T> new_data(std::make_shared<T>(new_value));
+        node *p = new node;                 // 3
+        node *const old_tail = tail.load(); // 4
+        old_tail->data.swap(new_data);      // 5
+        old_tail->next = p;                 // 6
+        tail.store(p);                      // 7
+    }
+
+    void push2(T new_value)
+
+    {
+        std::unique_ptr<T> new_data(new T(new_value));
+        counted_node_ptr new_next;
+        new_next.ptr = new node;
+        new_next.external_count = 1;
+        for (;;)
+        {
+            node *const old_tail = tail.load(); // 1
+            T *old_data = nullptr;
+            if (old_tail->data.compare_exchange_strong(
+                    old_data, new_data.get())) // 2
+            {
+                old_tail->next = new_next;
+                tail.store(new_next.ptr); // 3
+                new_data.release();
+                break;
+            }
+        }
+    }
+};
+
+#endif
+
+#if 0
+template <typename T>
+class lock_free_queue
+{
+private:
+    struct node;
+    struct counted_node_ptr
+    {
+        int external_count;
+        node *ptr;
+    };
+
+    std::atomic<counted_node_ptr> head;
+    std::atomic<counted_node_ptr> tail; // 1
+
+    struct node_counter
+    {
+        unsigned internal_count : 30;
+        unsigned external_counters : 2; // 2
+    };
+
+    struct node
+    {
+        std::atomic<T *> data;
+        std::atomic<node_counter> count; // 3
+        counted_node_ptr next;
+
+        node()
+        {
+            node_counter new_count;
+            new_count.internal_count = 0;
+            new_count.external_counters = 2; // 4
+            count.store(new_count);
+
+            next.ptr = nullptr;
+            next.external_count = 0;
+        }
+    };
+
+public:
+    void push(T new_value)
+    {
+        std::unique_ptr<T> new_data(new T(new_value));
+        counted_node_ptr new_next;
+        new_next.ptr = new node;
+        new_next.external_count = 1;
+        counted_node_ptr old_tail = tail.load();
+
+        for (;;)
+        {
+            increase_external_count(tail, old_tail); // 5
+
+            T *old_data = nullptr;
+            if (old_tail.ptr->data.compare_exchange_strong( // 6
+                    old_data, new_data.get()))
+            {
+                old_tail.ptr->next = new_next;
+                old_tail = tail.exchange(new_next);
+                free_external_counter(old_tail); // 7
+                new_data.release();
+                break;
+            }
+            old_tail.ptr->release_ref();
+        }
+    }
+};
+
+#endif
+
+#if 0
+template <typename T>
+
+class lock_free_queue
+{
+
+private:
+    struct node
+    {
+        void release_ref();
+    };
+
+public:
+    std::unique_ptr<T> pop()
+    {
+        counted_node_ptr old_head = head.load(std::memory_order_relaxed); // 1
+        for (;;)
+        {
+            increase_external_count(head, old_head); // 2
+            node *const ptr = old_head.ptr;
+            if (ptr == tail.load().ptr)
+            {
+                ptr->release_ref(); // 3
+                return std::unique_ptr<T>();
+            }
+            if (head.compare_exchange_strong(old_head, ptr->next)) // 4
+            {
+                T *const res = ptr->data.exchange(nullptr);
+                free_external_counter(old_head); // 5
+                return std::unique_ptr<T>(res);
+            }
+            ptr->release_ref(); // 6
+        }
+    }
+};
+
+#endif
+
+#if 0
+template <typename T>
+class lock_free_queue
+{
+private:
+    struct node
+    {
+        void release_ref()
+        {
+            node_counter old_counter = count.load(std::memory_order_relaxed);
+            node_counter new_counter;
+            do
+            {
+                new_counter = old_counter;
+                --new_counter.internal_count;        // 1
+            } while (!count.compare_exchange_strong( // 2
+                old_counter, new_counter,
+                std::memory_order_acquire, std::memory_order_relaxed));
+            if (!new_counter.internal_count &&
+                !new_counter.external_counters)
+            {
+                delete this; // 3
+            }
+        }
+    };
+};
+
+#endif
+
+#if 0
+template <typename T>
+class lock_free_queue
+{
+private:
+    static void increase_external_count(std::atomic<counted_node_ptr> &counter,
+                                        counted_node_ptr &old_counter)
+    {
+        counted_node_ptr new_counter;
+        do
+        {
+            new_counter = old_counter;
+            ++new_counter.external_count;
+        } while (!counter.compare_exchange_strong(
+            old_counter, new_counter,
+            std::memory_order_acquire, std::memory_order_relaxed));
+
+        old_counter.external_count = new_counter.external_count;
+    }
+};
+
+#endif
+
+#if 0
+template <typename T>
+class lock_free_queue
+{
+private:
+    static void free_external_counter(counted_node_ptr &old_node_ptr)
+    {
+        node *const ptr = old_node_ptr.ptr;
+        int const count_increase = old_node_ptr.external_count - 2;
+
+        node_counter old_counter =
+            ptr->count.load(std::memory_order_relaxed);
+        node_counter new_counter;
+        do
+        {
+            new_counter = old_counter;
+            --new_counter.external_counters;              // 1
+            new_counter.internal_count += count_increase; // 2
+        } while (!ptr->count.compare_exchange_strong(     // 3
+            old_counter, new_counter,
+            std::memory_order_acquire, std::memory_order_relaxed));
+
+        if (!new_counter.internal_count &&
+            !new_counter.external_counters)
+        {
+            delete ptr; // 4
+        }
+    }
+};
+#endif
+
+
 
 int main()
 {
