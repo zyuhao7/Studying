@@ -10,6 +10,7 @@ using namespace std;
 class String
 {
 public:
+
     String(const char *str = "")
     {
         if (str == nullptr) // nullptr == str
@@ -54,7 +55,7 @@ private:
 
 #endif
 
-#if 1
+#if 0
 // 现代版本 String 写法.
 class String
 {
@@ -83,6 +84,25 @@ public:
         return *this;
     }
 
+    // C++ 11
+    String(String&& rhs)
+      : _str(rhs._str)
+    {
+         rhs._str = nullptr;
+    }
+
+      String& operator=(String&& rhs)
+    {
+        swap(rhs);
+        return *this;
+    }
+    
+      void swap(String& rhs)
+    {
+        std::swap(_str, rhs._str);
+    }
+
+
     ~String()
     {
         if (_str)
@@ -104,5 +124,3 @@ int main()
     // String s2("hello world!");
     // String s3(s2);
 }
-
-
