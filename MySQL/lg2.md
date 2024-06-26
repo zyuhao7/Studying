@@ -104,10 +104,70 @@
               +----+
      使用 order by 和 limit 找到列id最大的值.
 
+  day-2024-6-26
+    使用 where 子句
+     mysql> select  id, name from account where id=7;
+            +----+--------+
+            | id | name   |
+            +----+--------+
+            |  7 | 赵六   |
+            +----+--------+
      
+    where子句的位置:
+      在同时使用 order by 和 where 子句时, 应该让 order by 位于where之后,否则会产生错误.
     
+    where 子句操作符
+      检查单个值
+       mysql> select id, name from account where name="张三";
+              +----+--------+
+              | id | name   |
+              +----+--------+
+              |  1 | 张三   |
+              +----+--------+
+       mysql> select id, name from account where id < 3;
+              +----+--------+
+              | id | name   |
+              +----+--------+
+              |  1 | 张三   |
+              |  2 | 李四   |
+              +----+--------+
 
+       mysql> select id, name from account where id <= 3;
+              +----+--------+
+              | id | name   |
+              +----+--------+
+              |  1 | 张三   |
+              |  2 | 李四   |
+              |  3 | 王五   |
+              +----+--------+
 
+       不匹配检查
+        mysql> select id, name from account where id <> 3; (<> 等于 != )
+              +----+--------+
+              | id | name   |
+              +----+--------+
+              |  1 | 张三   |
+              |  2 | 李四   |
+              |  4 | 田琪   |
+              |  5 | 赵柳   |
+              |  6 | 张帅   |
+              |  7 | 赵六   |
+              +----+--------+
 
-*/
+      单引号用来限定字符串, 如果将值域串类型的列进行比较, 则需要限定引号。 用来与数值列进行比较的值不用引号.
+
+      范围值检查
+        mysql> select id,name from account where id  between 3 and 5;
+              +----+--------+
+              | id | name   |
+              +----+--------+
+              |  3 | 王五   |
+              |  4 | 田琪   |
+              |  5 | 赵柳   |
+              +----+--------+
+              
+      空值检查
+        mysql> select * from account where id is not NULL;
+
+  */
 ```
