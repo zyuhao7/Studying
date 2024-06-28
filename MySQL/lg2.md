@@ -169,5 +169,96 @@
       空值检查
         mysql> select * from account where id is not NULL;
 
+day-2024-6-28
+    
+      组合 where 子句
+        AND 操作符
+         mysql> select id, name from account where id = 5 and balance <= 300;
+                +----+--------+
+                | id | name   |
+                +----+--------+
+                |  5 | 赵柳   |
+                +----+--------+
+
+        OR 操作符
+         mysql> select prod_name, prod_price from products where vend_id = 1002 or vend_id = 1003;
+              +----------------+------------+
+              | prod_name      | prod_price |
+              +----------------+------------+
+              | Detonator      |      13.00 |
+              | Bird seed      |      10.00 |
+              | Carrots        |       2.50 |
+              | Fuses          |       3.42 |
+              | Oil can        |       8.99 |
+              | Safe           |      50.00 |
+              | Sling          |       4.49 |
+              | TNT (1 stick)  |       2.50 |
+              | TNT (5 sticks) |      10.00 |
+              +----------------+------------+
+
+        计算次序
+          mysql> select vend_id, prod_name, prod_price from products where
+          vend_id = 1002 or vend_id = 1003 and prod_price >= 10;
+              +---------+-----------+------------+
+              | vend_id | prod_name | prod_price |
+              +---------+-----------+------------+
+              |    1003 | Detonator |      13.00 |
+              |    1002 | Fuses     |       3.42 |
+              |    1002 | Oil can   |       8.99 |
+              |    1003 | Safe      |      50.00 |
+              +---------+-----------+------------+
+
+          mysql> select vend_id, prod_name, prod_price from products where
+          (vend_id = 1002 or vend_id = 1003) and prod_price >= 10;
+
+              +---------+----------------+------------+
+              | vend_id | prod_name      | prod_price |
+              +---------+----------------+------------+
+              |    1003 | Detonator      |      13.00 |
+              |    1003 | Bird seed      |      10.00 |
+              |    1003 | Safe           |      50.00 |
+              |    1003 | TNT (5 sticks) |      10.00 |
+              +---------+----------------+------------+
+
+        IN 操作符
+          mysql> select vend_id, prod_name, prod_price from products where vend_id in (1002,1003) order by prod_name;
+              +---------+----------------+------------+
+              | vend_id | prod_name      | prod_price |
+              +---------+----------------+------------+
+              |    1003 | Bird seed      |      10.00 |
+              |    1003 | Carrots        |       2.50 |
+              |    1003 | Detonator      |      13.00 |
+              |    1002 | Fuses          |       3.42 |
+              |    1002 | Oil can        |       8.99 |
+              |    1003 | Safe           |      50.00 |
+              |    1003 | Sling          |       4.49 |
+              |    1003 | TNT (1 stick)  |       2.50 |
+              |    1003 | TNT (5 sticks) |      10.00 |
+              +---------+----------------+------------+
+
+        为什么要用 IN 呢 ？ 而不是用 OR
+          1. 在使用长的合法选项清单时, IN 操作符的语法更清楚且直观.
+          2. 在使用 IN 时, 计算的次序更容易管理.
+          3. IN 操作符一般比 OR 操作符清单执行更快.
+          4. IN 的最大优点是可以包含其他 select 语句, 使能动态建立where子句.
+
+        NOT 操作符
+          mysql>  select vend_id, prod_name, prod_price from products 
+          where vend_id not in (1002,1003) order by prod_name;
+              +---------+--------------+------------+
+              | vend_id | prod_name    | prod_price |
+              +---------+--------------+------------+
+              |    1001 | .5 ton anvil |       5.99 |
+              |    1001 | 1 ton anvil  |       9.99 |
+              |    1001 | 2 ton anvil  |      14.99 |
+              |    1005 | JetPack 1000 |      35.00 |
+              |    1005 | JetPack 2000 |      55.00 |
+              +---------+--------------+------------+
+
+      MySQL 中的 NOT :
+        MySQL 支持使用 NOT 对 IN、 BETWEEN 和 EXISTS 子句取反,这与多数其他
+        DBMS 允许使用 NOT 对各种条件取反有很大的差别.
+        
+    
   */
 ```
