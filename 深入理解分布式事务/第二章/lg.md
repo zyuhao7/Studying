@@ -157,8 +157,55 @@
 // 2.2 Undo Log
 /*
     Undo Log在MySQL事务的实现中也起着⾄关重要的作⽤，MySQL中事务的⼀致性是由Undo Log实现的.
-    
+    Undo Log在MySQL事务的实现中主要起到两⽅⾯的作⽤：回滚事务 和 多版本并发事务, 也就是常说的MVCC机制.
 
+     Undo Log存储⽅式
+      在InnoDB存储引擎的数据⽂件中存在⼀种叫作rollback segment 的回滚段，这个回滚段内部有1024个 undo log segment段.
+
+    Undo Log基本原理
+      Undo Log写⼊磁盘时和Redo Log⼀样，默认情况下都需要经过内核空间的OS Buffer
+    
+     Undo Log实现MVCC机制
+      在MySQL中，Undo Log除了实现事务的回滚操作外，另⼀个重要的作⽤就是实现多版本并发控制，也就是MVCC机制.
+      在事务提交之前，向Undo Log 保存事务当前的数据，这些保存到Undo Log中的旧版本数据可以作为快照供其他并发事务进⾏快照读.
 */
+```
+![alt text](./Pic/image4.png)
+![alt text](./Pic/image5.png)
+
+```c++
+/*
+    Undo Log的回滚段中:undo logs分为insert undo log和update undo log
+
+    1）insert undo log：
+      事务对插⼊新记录产⽣的 Undo Log，只在事务回滚时需要，在事务提交后可以⽴即丢弃.
+
+    2）update undo log:
+      事务对记录进⾏删除和更新操作时产⽣的Undo Log, 不仅在事务回滚时需要，在⼀致性读时也需要.
+      因此不能随便删除，只有当数据库所使⽤的快照不涉及该⽇志记录时，对应的回滚⽇志才会被purge线程删除.
+*/
+```
+
+![alt text](./Pic/image6.png)
+
+```c++
+// Undo Log相关参数
+/*
+    在MySQL命令⾏输⼊如下命令可以查看Undo Log相关的参数。
+      mysql> show variables	like "%undo%";
+      +--------------------------+------------+
+        | Variable_name            | Value      |
+        +--------------------------+------------+
+        | innodb_max_undo_log_size | 1073741824 | Undo Log 空间的最大值.
+        | innodb_undo_directory    | .\         | Undo Log 的存储目录.
+        | innodb_undo_log_truncate | OFF        | 是否开启在线回收 Undo Log 文件操作.
+        | innodb_undo_logs         | 128        | Undo Log 的回滚段数量
+        | innodb_undo_tablespaces  | 0          | 
+        +--------------------------+------------+
+*/
+```
+
+```c++
+//  BinLog
 
 ```
