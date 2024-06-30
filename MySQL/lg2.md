@@ -260,5 +260,141 @@ day-2024-6-28
         DBMS 允许使用 NOT 对各种条件取反有很大的差别.
         
     
+day-2024-6-30
+       LIKE 操作符
+        百分号(%) 通配符
+          mysql> select prod_id, prod_name from products where
+          prod_name like "jet%";
+
+              +---------+--------------+
+              | prod_id | prod_name    |
+              +---------+--------------+
+              | JP1000  | JetPack 1000 |
+              | JP2000  | JetPack 2000 |
+              +---------+--------------+
+          % 告诉MySQL接受jet之后的任意字符, 不管它有多少字符.
+
+          mysql> select prod_id, prod_name from products where
+          prod_name like "%anvil%";
+
+              +---------+--------------+
+              | prod_id | prod_name    |
+              +---------+--------------+
+              | ANV01   | .5 ton anvil |
+              | ANV02   | 1 ton anvil  |
+              | ANV03   | 2 ton anvil  |
+              +---------+--------------+
+
+        下划线(_) 通配符
+             
+           mysql> select prod_id, prod_name from products where
+           prod_name like "_ ton anvil";
+        
+            +---------+-------------+
+            | prod_id | prod_name   |
+            +---------+-------------+
+            | ANV02   | 1 ton anvil |
+            | ANV03   | 2 ton anvil |
+            +---------+-------------+
+
+        使用通配符的技巧
+           1. 不要过度使用通配符.
+           2. 在确实需要使用通配符时, 除非绝对有必要, 否则不要把它们
+           用在搜索模式的开始处.
+           3. 仔细注意通配符的位置.
+      
+
+        正则表达式
+           具体学习看《正则表达式必知必会》
+
+           使用 MySQL 正则表达式
+             基本字符匹配
+
+              mysql> select prod_name from products where prod_name 
+              regexp "1000" order by prod_name;
+              +--------------+
+              | prod_name    |
+              +--------------+
+              | JetPack 1000 |
+              +--------------+
+
+              mysql> select prod_name from products where 
+              prod_name regexp ".000" order by prod_name;
+              +--------------+
+              | prod_name    |
+              +--------------+
+              | JetPack 1000 |
+              | JetPack 2000 |
+              +--------------+
+
+         进行 OR 匹配
+              mysql> select prod_name from products where 
+              prod_name regexp "1000|2000" order by prod_name;
+              +--------------+
+              | prod_name    |
+              +--------------+
+              | JetPack 1000 |
+              | JetPack 2000 |
+              +--------------+
+
+         匹配几个字符之一
+              mysql> select prod_name from products where 
+              prod_name regexp "[123] Ton" order by prod_name;
+              +-------------+
+              | prod_name   |
+              +-------------+
+              | 1 ton anvil |
+              | 2 ton anvil |
+              +-------------+
+
+              mysql> select prod_name from products where 
+              prod_name regexp "1|2|3 Ton" order by prod_name;
+              +---------------+
+              | prod_name     |
+              +---------------+
+              | 1 ton anvil   |
+              | 2 ton anvil   |
+              | JetPack 1000  |
+              | JetPack 2000  |
+              | TNT (1 stick) |
+              +---------------+
+        字符集合也可以被否定, 即 他们将匹配除指定字符外的任何东西.
+        为否定一个字符集, 在集合的开始处放置一个 ^ 即可.
+        因此, 尽管 [123]匹配字符1、2或3, 但[^123] 却匹配除这些字符外的任何东西.
+
+        匹配范围
+              mysql> select prod_name from products where 
+              prod_name regexp  "[1-5] Ton" order by prod_name;
+              +--------------+
+              | prod_name    |
+              +--------------+
+              | .5 ton anvil |
+              | 1 ton anvil  |
+              | 2 ton anvil  |
+              +--------------+
+
+        匹配特殊字符
+              mysql> select vend_name from vendors where 
+              vend_name regexp "." order by vend_name;
+              +----------------+
+              | vend_name      |
+              +----------------+
+              | ACME           |
+              | Anvils R Us    |
+              | Furball Inc.   |
+              | Jet Set        |
+              | Jouets Et Ours |
+              | LT Supplies    |
+              +----------------+
+
+              mysql> select vend_name from vendors where
+              vend_name regexp "\\." order by vend_name;
+              +--------------+
+              | vend_name    |
+              +--------------+
+              | Furball Inc. |
+              +--------------+
+
+              
   */
 ```
