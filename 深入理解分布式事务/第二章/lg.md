@@ -310,6 +310,50 @@
       | sync_binlog                             | 1                    |
       +-----------------------------------------+----------------------+
 
+
+    MySQL 事务流程
+        事务执行流程、事务恢复流程
+
 */
+```
+`事务执行流程>`
+
+![alt text](./Pic/image7.png)
+
+`事务恢复流程>`
+![alt text](./Pic/image8.png)
+
+```c++
+// MySQL 中的 XA 事务
+    MySQL 5.0.3 版本开始⽀持XA分布式事务，并且只有InnoDB存储引擎⽀持XA事务.
+
+// XA事务的基本原理
+    XA事务⽀持不同数据库之间实现分布式事务,可以是不同的MySQL实例或者不同的数据库类型.
+
+```
+![alt text](./Pic/image9.png)
+
+```c++
+1）事务管理器：主要对参与全局事务的各个分⽀事务进⾏协调，并与资源管理器进⾏通信.
+2）资源管理器：主要提供对事务资源的访问能⼒。实际上，⼀个数据库就可以看作⼀个资源管理器.
+3）应⽤程序：主要⽤来明确全局事务和各个分⽀事务，指定全局事务中的各个操作.
+
+// MySQL XA事务语法
+    mysql> show engines \g
++--------------------+---------+----------------------------------------------------------------+--------------+------+
+| Engine             | Support | Comment                                                        | Transactions | XA   |
++--------------------+---------+----------------------------------------------------------------+--------------+------+
+| InnoDB             | DEFAULT | Supports transactions, row-level locking, and foreign keys     | YES          | YES  |
+| MRG_MYISAM         | YES     | Collection of identical MyISAM tables                          | NO           | NO   |
+| MEMORY             | YES     | Hash based, stored in memory, useful for temporary tables      | NO           | NO   |
+| BLACKHOLE          | YES     | /dev/null storage engine (anything you write to it disappears) | NO           | NO   |
+| MyISAM             | YES     | MyISAM storage engine                                          | NO           | NO   |
+| CSV                | YES     | CSV storage engine                                             | NO           | NO   |
+| ARCHIVE            | YES     | Archive storage engine                                         | NO           | NO   |
+| PERFORMANCE_SCHEMA | YES     | Performance Schema                                             | NO           | NO   |
+| FEDERATED          | NO      | Federated MySQL storage engine                                 | NULL         | NULL |
++--------------------+---------+----------------------------------------------------------------+--------------+------+
+
+
 
 ```
