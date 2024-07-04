@@ -532,8 +532,97 @@ ps:
         | TNT2    |        5 |      10.00 |          50.00 |
         | FB      |        1 |      10.00 |          10.00 |
         +---------+----------+------------+----------------+
-// MySQL 算术运算符支持 + - * \ 运算.
+// MySQL 算术运算符支持 + - * \ 运算. 
+```
 
-    
-      
+```c++
+day-2024-7-4
+   使用数据处理函数
+   
+       mysql> select vend_name, Upper(vend_name) as vend_name_upcase from vendors order by vend_name;
+        +----------------+------------------+
+        | vend_name      | vend_name_upcase |
+        +----------------+------------------+
+        | ACME           | ACME             |
+        | Anvils R Us    | ANVILS R US      |
+        | Furball Inc.   | FURBALL INC.     |
+        | Jet Set        | JET SET          |
+        | Jouets Et Ours | JOUETS ET OURS   |
+        | LT Supplies    | LT SUPPLIES      |
+        +----------------+------------------+
+
+        常用的文本处理函数
+      Left()          返回串左边的字符
+      Length()        返回串的长度
+      Locate()        找出串的一个子串
+      Lower()         将串转换为小写
+      LTrim()         去掉串左边的空格
+      Right()         返回串右边的字符
+      RTrim()         去掉串右边的空格
+      Soundex()       返回串的 SOUNDEX 值
+      SubString()     返回子串的字符
+      Upper()         将串转换为大写
+
+      mysql> select cust_name, cust_contact from customers where cust_contact="Y.Lie";
+        Empty set (0.00 sec)
+
+      mysql> select cust_name, cust_contact from customers where Soundex(cust_contact)=Soundex("Y.Lie");
+
+        +-------------+--------------+
+        | cust_name   | cust_contact |
+        +-------------+--------------+
+        | Coyote Inc. | Y Lee        |
+        +-------------+--------------+
+
+    日期和时间处理函数
+
+        mysql> select cust_id, order_num,order_date from orders where order_date="2005-09-01";
+
+        +---------+-----------+---------------------+
+        | cust_id | order_num | order_date          |
+        +---------+-----------+---------------------+
+        |   10001 |     20005 | 2005-09-01 00:00:00 |
+        +---------+-----------+---------------------+
+
+        mysql> select cust_id, order_num,order_date from orders where Date(order_date)="2005-09-01";
+
+        +---------+-----------+---------------------+
+        | cust_id | order_num | order_date          |
+        +---------+-----------+---------------------+
+        |   10001 |     20005 | 2005-09-01 00:00:00 |
+        +---------+-----------+---------------------+
+
+        mysql> select cust_id, order_num from orders where Date(order_date) between "2005-09-01" and "2005-09-30";
+
+        +---------+-----------+---------------------+
+        | cust_id | order_num | order_date          |
+        +---------+-----------+---------------------+
+        |   10001 |     20005 | 2005-09-01 00:00:00 |
+        |   10003 |     20006 | 2005-09-12 00:00:00 |
+        |   10004 |     20007 | 2005-09-30 00:00:00 |
+        +---------+-----------+---------------------+
+
+        mysql> select cust_id, order_num,order_date  from orders where Year(order_date)=2005 and Month(order_date)=9;
+
+        +---------+-----------+---------------------+
+        | cust_id | order_num | order_date          |
+        +---------+-----------+---------------------+
+        |   10001 |     20005 | 2005-09-01 00:00:00 |
+        |   10003 |     20006 | 2005-09-12 00:00:00 |
+        |   10004 |     20007 | 2005-09-30 00:00:00 |
+        +---------+-----------+---------------------+
+
+    数值处理函数
+              常用数值处理函数
+            Abs()               返回一个数的绝对值
+            Cos()               返回一个角度的余弦
+            Exp()               返回一个数的指数值
+            Mod()               返回除操作的余数
+            Pi()                返回圆周率
+            Rand()              返回一个随机数
+            Sin()               返回一个角度的正弦
+            Sqrt()              返回一个数的平凡根
+            Tan()               返回一个角度的正切
+            
+
 ```
