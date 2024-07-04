@@ -623,6 +623,101 @@ day-2024-7-4
             Sin()               返回一个角度的正弦
             Sqrt()              返回一个数的平凡根
             Tan()               返回一个角度的正切
-            
+          
+```
+
+```c++
+day-2024-7-5
+
+    汇总数据
+      聚集函数
+            SQL聚集函数
+          AVG()                返回某列的平均值
+          count()              返回某列的行数
+          max()                返回某列的最大值
+          min()                返回某列的最小值
+          sum()                返回某列之和
+
+     AVG() 函数
+       mysql>  select avg(prod_price) as avg_price from products;
+            +-----------+
+            | avg_price |
+            +-----------+
+            | 16.133571 |
+            +-----------+
+
+       mysql> select vend_id, avg(prod_price) as avg_price from products where vend_id = 1003;
+          +---------+-----------+
+          | vend_id | avg_price |
+          +---------+-----------+
+          |    1003 | 13.212857 |
+          +---------+-----------+
+
+     count()函数 
+       mysql> select count(*) as num_cust from customers;
+          +----------+
+          | num_cust |
+          +----------+
+          |        5 |
+          +----------+
+    
+       mysql> select count(cust_email) as num_cust from customers;
+          +----------+
+          | num_cust |
+          +----------+
+          |        3 |
+          +----------+
+
+     max()函数
+       mysql> select max(prod_price) as max_price from products;
+          +-----------+
+          | max_price |
+          +-----------+
+          |     55.00 |
+          +-----------+
+     
+     min()函数
+       mysql> select min(prod_price) as min_price from products;
+          +-----------+
+          | min_price |
+          +-----------+
+          |      2.50 |
+          +-----------+
+
+     sum()函数
+       mysql> select  sum(quantity) as items_ordered from orderitems where order_num=20005;
+          +---------------+
+          | items_ordered |
+          +---------------+
+          |            19 |
+          +---------------+ 
+
+       mysql> select sum(item_price * quantity) as total_price from orderitems where order_num=20005;
+          +-------------+
+          | total_price |
+          +-------------+
+          |      149.87 |
+          +-------------+
+       
+      聚集不同的值
+       mysql>  select avg(distinct prod_price) as avg_price from products where vend_id = 1003;
+          +-----------+
+          | avg_price |
+          +-----------+
+          | 15.998000 |
+          +-----------+
+          使用 distinct参数, 平均值只考虑不同的价格.
+
+    组合聚集函数
+       mysql> select count(*) as num_items, min(prod_price) 
+                              as price_min, max(prod_price) 
+                              as price_max, avg(prod_price) 
+                              as price_avg from products;
+
+          +-----------+-----------+-----------+-----------+
+          | num_items | price_min | price_max | price_avg |
+          +-----------+-----------+-----------+-----------+
+          |        14 |      2.50 |     55.00 | 16.133571 |
+          +-----------+-----------+-----------+-----------+ 
 
 ```
