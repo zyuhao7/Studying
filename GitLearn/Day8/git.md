@@ -242,6 +242,8 @@
         git commit -m "Add b.txt in newbranch1"
 
 
+ ![alt text](./image.png)
+
 ### 今日小结
 
 
