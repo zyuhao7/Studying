@@ -177,7 +177,7 @@ int main()
 }
 #endif
 
-#if 0
+#if 1
 //组态11: __STL_NON_TYPE_TMPL_PARAM_BUG
 class alloc{};
 
