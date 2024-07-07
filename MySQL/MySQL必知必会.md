@@ -719,6 +719,115 @@ day-2024-7-5
           +-----------+-----------+-----------+-----------+
           |        14 |      2.50 |     55.00 | 16.133571 |
           +-----------+-----------+-----------+-----------+ 
+```
+
+```c++
+day-2024-7-7
+    分组数据
+      数据分组
+        mysql> select count(*) as num_prods from products where vend_id = 1003;
+          +-----------+
+          | num_prods |
+          +-----------+
+          |         7 |
+          +-----------+
+
+      创建分组
+        mysql> select vend_id, count(*) as num_prods from products group by vend_id;
+          +---------+-----------+
+          | vend_id | num_prods |
+          +---------+-----------+
+          |    1001 |         3 |
+          |    1002 |         2 |
+          |    1003 |         7 |
+          |    1005 |         2 |
+          +---------+-----------+
+//ps: 使用 rollup  使用 with rollup 关键字, 可以得到每个分组以及每个分组汇总级别的值:
+
+        mysql> select vend_id, count(*) as num_prods from products group by vend_id with rollup;
+          +---------+-----------+
+          | vend_id | num_prods |
+          +---------+-----------+
+          |    1001 |         3 |
+          |    1002 |         2 |
+          |    1003 |         7 |
+          |    1005 |         2 |
+          |    NULL |        14 |
+          +---------+-----------+
+
+    过滤分组
+// ps: having 非常类似 where. In fact, 目前为止学过的所有类型的 where 子句都可以用 having 来替代. 唯一的差别是 where 过滤 行, 而 having 过滤 分组.
+
+      mysql> select cust_id, count(*) as orders from orders group by cust_id having count(*) >= 2;
+          +---------+--------+
+          | cust_id | orders |
+          +---------+--------+
+          |   10001 |      2 |
+          +---------+--------+
+// ps: having 和where 的差别 : where在数据分组前进行过滤, having 在数据分组后进行过滤. where 排除的行不包括在分组中. 这可能会改变计算值, 从而影响 having 子句中基于这些值过滤掉的分组.
+
+      mysql> select vend_id, count(*) as num_prodsfrom products
+             where prod_price >= 10 group by vend_id
+             having  count(*) >= 2;
+          +---------+-----------+
+          | vend_id | num_prods |
+          +---------+-----------+
+          |    1003 |         4 |
+          |    1005 |         2 |
+          +---------+-----------+
+
+      //(没有 where 子句)
+      mysql> select vend_id, count(*) as num_prods from products group by vend_id having count(*) >= 2;                   
+          +---------+-----------+
+          | vend_id | num_prods |
+          +---------+-----------+
+          |    1001 |         3 |
+          |    1002 |         2 |
+          |    1003 |         7 |
+          |    1005 |         2 |
+          +---------+-----------+
+    
+    分组和排序
+                    order by 和 group by
+        order by                          group by
+     排序产生的输出                 分组行. 但输出可能不是分组的顺序.
+    任意列都可以使用      只能使用选择列或表达式列, 而且必须使用每个选择列表达式
+       不一定需要                 如果与聚集函数一起使用列,则必须使用
+
+  
+      mysql> select order_num, sum(quantity * item_price) as ordertotal from orderitems group by order_num having sum(quantity * item_price) >= 50;
+          +-----------+------------+
+          | order_num | ordertotal |
+          +-----------+------------+
+          |     20005 |     149.87 |
+          |     20006 |      55.00 |
+          |     20007 |    1000.00 |
+          |     20008 |     125.00 |
+          +-----------+------------+
+
+      mysql> select order_num, sum(quantity * item_price) as ordertotal from orderitemsgroup by order_num having sum(quantity * item_price)>=50 order by ordertotal;
+          +-----------+----------------+
+          | order_num | orderitemtotal |
+          +-----------+----------------+
+          |     20006 |          55.00 |
+          |     20008 |         125.00 |
+          |     20005 |         149.87 |
+          |     20007 |        1000.00 |
+          +-----------+----------------+
+
+    select子句顺序
+                        select子句及其顺序
+
+          子句                说明                  是否必须使用
+        select         要返回的列或表达式                 是
+        from           从中检索数据的表           仅在表选择数据时使用
+        where          行级过滤                           否
+        group by       分组说明                    仅在按组计算聚集时使用
+        having         组级过滤                           否
+        order by       输出排列顺序                       否
+        limit          检索的行数                         否
+
+
 
 
 ```
