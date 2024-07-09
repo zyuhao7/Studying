@@ -34,7 +34,7 @@ yum install openssl-devel
 
 > ​	上诉文件目录结构
 
-![image-20240326142117032](C:\Users\徐浩\AppData\Roaming\Typora\typora-user-images\image-20240326142117032.png)
+![alt text](./Pic/image1.png)
 
 > ​	添加 CMakeLists.txt文件
 
@@ -68,9 +68,7 @@ add_executable(app add.c;div.c;main.c;mult.c;sub.c)
 ```
 
 
-
-![image-20240326143310046](C:\Users\徐浩\AppData\Roaming\Typora\typora-user-images\image-20240326143310046.png)	
-
+![alt text](./Pic/image2.png)
 
 
 > ​	Set
@@ -100,7 +98,7 @@ set(EXECUTABLE_OUTPUT_PATH ${HOME}/aa/bb/cc) // 将拼接好的路径设置给 E
 
 ```
 
-![image-20240329152758826](C:\Users\徐浩\AppData\Roaming\Typora\typora-user-images\image-20240329152758826.png)
+![alt text](./Pic/image3.png)
 
 > ​	搜索文件
 
@@ -161,7 +159,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 ```
 
-![image-20240330174818868](C:\Users\徐浩\AppData\Roaming\Typora\typora-user-images\image-20240330174818868.png)
+![](Pic/image4.png)
 
 ```shell
 # 链接静态库
@@ -196,7 +194,7 @@ message(WARNING "source path: ${PROJECT_SOURCE_DIR}")
 message(FATAL_ERROR "source path: ${PROJECT_SOURCE_DIR}")
 ```
 
-![image-20240406195535669](C:\Users\徐浩\AppData\Roaming\Typora\typora-user-images\image-20240406195535669.png)
+![alt text](./Pic/image5.png)
 
 
 
@@ -232,9 +230,9 @@ message(${tmp1})
 message(${tmp2})
 ```
 
-![image-20240406200256995](C:\Users\徐浩\AppData\Roaming\Typora\typora-user-images\image-20240406200256995.png)
+![alt text](./Pic/image6.png)
 
-![image-20240406200210728](C:\Users\徐浩\AppData\Roaming\Typora\typora-user-images\image-20240406200210728.png)
+![alt text](./Pic/image7.png)
 
 
 
