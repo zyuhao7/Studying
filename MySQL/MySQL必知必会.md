@@ -949,3 +949,92 @@ mysql> select cust_name, cust_state, (select count(*) from orders where cust_id 
         +----------------+------------+--------+
 
 ```
+
+```c++
+day-7-9
+    联结表
+    联结:  SQL 最强大的功能之一就是能在数据检索查询的执行中联结(join)表.
+    联结是利用 SQL 的 select 能执行的最重要的操作, 很好地理解联结及其语法是学习 SQL 重要组成部分.
+
+    1. 关系表
+Ps: 外键
+      外键为某个表中的一列, 它包含另一个表的主键值, 定义了两个表之间的关系.
+    
+    2. 创建联结
+      mysql> select vend_name, prod_name, prod_price from
+        vendors, products where vendors.vend_id = products.vend_id
+        order by vend_name, prod_name;
+          +-------------+----------------+------------+
+          | vend_name   | prod_name      | prod_price |
+          +-------------+----------------+------------+
+          | ACME        | Bird seed      |      10.00 |
+          | ACME        | Carrots        |       2.50 |
+          | ACME        | Detonator      |      13.00 |
+          | ACME        | Safe           |      50.00 |
+          | ACME        | Sling          |       4.49 |
+          | ACME        | TNT (1 stick)  |       2.50 |
+          | ACME        | TNT (5 sticks) |      10.00 |
+          | Anvils R Us | .5 ton anvil   |       5.99 |
+          | Anvils R Us | 1 ton anvil    |       9.99 |
+          | Anvils R Us | 2 ton anvil    |      14.99 |
+          | Jet Set     | JetPack 1000   |      35.00 |
+          | Jet Set     | JetPack 2000   |      55.00 |
+          | LT Supplies | Fuses          |       3.42 |
+          | LT Supplies | Oil can        |       8.99 |
+          +-------------+----------------+------------+
+Ps: 笛卡尔积
+      由没有联结条件的表关系返回的结果为笛卡尔积. 检索出来的行的数目将是第一个表中的行数乘以第二个表中的行数.
+
+      mysql> select vend_name, prod_name, prod_price from vendors, products order by vend_name, prod_name;
+          +----------------+----------------+------------+
+          | vend_name      | prod_name      | prod_price |
+          +----------------+----------------+------------+
+          | ACME           | .5 ton anvil   |       5.99 |
+          | ACME           | 1 ton anvil    |       9.99 |
+          | ACME           | 2 ton anvil    |      14.99 |
+          | ACME           | Bird seed      |      10.00 |
+          | ACME           | Carrots        |       2.50 |
+          | ACME           | Detonator      |      13.00 |
+          | ACME           | Fuses          |       3.42 |
+          | ACME           | JetPack 1000   |      35.00 |
+          | ACME           | JetPack 2000   |      55.00 |
+          | ACME           | Oil can        |       8.99 |
+          | ACME           | Safe           |      50.00 |
+                  ........ 略.......
+
+      2.2 内部联结
+        mysql> select vend_name, prod_name from vendors inner join products on vendors.vend_id=products.vend_id;
+          +-------------+----------------+
+          | vend_name   | prod_name      |
+          +-------------+----------------+
+          | Anvils R Us | .5 ton anvil   |
+          | Anvils R Us | 1 ton anvil    |
+          | Anvils R Us | 2 ton anvil    |
+          | LT Supplies | Fuses          |
+          | LT Supplies | Oil can        |
+          | ACME        | Detonator      |
+          | ACME        | Bird seed      |
+          | ACME        | Carrots        |
+          | ACME        | Safe           |
+          | ACME        | Sling          |
+          | ACME        | TNT (1 stick)  |
+          | ACME        | TNT (5 sticks) |
+          | Jet Set     | JetPack 1000   |
+          | Jet Set     | JetPack 2000   |
+          +-------------+----------------+
+        
+      2.3联结多个表
+         mysql> select prod_name, vend_name, prod_price, quantity from orderitems, products, vendors
+          where products.vend_id=vendors.vend_id and orderitems.prod_id=products.prod_id and order_num=20005;
+          +----------------+-------------+------------+----------+-----------+
+          | prod_name      | vend_name   | prod_price | quantity | order_num |
+          +----------------+-------------+------------+----------+-----------+
+          | .5 ton anvil   | Anvils R Us |       5.99 |       10 |     20005 |
+          | 1 ton anvil    | Anvils R Us |       9.99 |        3 |     20005 |
+          | TNT (5 sticks) | ACME        |      10.00 |        5 |     20005 |
+          | Bird seed      | ACME        |      10.00 |        1 |     20005 |
+          +----------------+-------------+------------+----------+-----------+
+
+      
+      
+```
