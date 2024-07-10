@@ -1034,7 +1034,123 @@ Ps: 笛卡尔积
           | TNT (5 sticks) | ACME        |      10.00 |        5 |     20005 |
           | Bird seed      | ACME        |      10.00 |        1 |     20005 |
           +----------------+-------------+------------+----------+-----------+
+``` 
 
+```c++
+day-2024-7-10
+      创建高级联结
+        1. 使用表别名 
+        mysql> select Concat(RTrim(vend_name), "(", RTrim(vend_country), ")") as vend_titile from vendors
+        order by vend_name;
+          +------------------------+
+          | vend_titile            |
+          +------------------------+
+          | ACME(USA)              |
+          | Anvils R Us(USA)       |
+          | Furball Inc.(USA)      |
+          | Jet Set(England)       |
+          | Jouets Et Ours(France) |
+          | LT Supplies(USA)       |
+          +------------------------+
+       
+        2. 使用不同类型的联结
+
+          2.1 自联结
+          mysql> select prod_id, prod_name from products where 
+          vend_id= (select vend_id from products where prod_id="DTNTR");
+          +---------+----------------+
+          | prod_id | prod_name      |
+          +---------+----------------+
+          | DTNTR   | Detonator      |
+          | FB      | Bird seed      |
+          | FC      | Carrots        |
+          | SAFE    | Safe           |
+          | SLING   | Sling          |
+          | TNT1    | TNT (1 stick)  |
+          | TNT2    | TNT (5 sticks) |
+          +---------+----------------+
+
+          mysql> select p1.prod_id, p1.prod_name from products as p1, 
+          products as p2 where p1.vend_id=p2.vend_id and p2.prod_id="DTNTR";
+          +---------+----------------+
+          | prod_id | prod_name      |
+          +---------+----------------+
+          | DTNTR   | Detonator      |
+          | FB      | Bird seed      |
+          | FC      | Carrots        |
+          | SAFE    | Safe           |
+          | SLING   | Sling          |
+          | TNT1    | TNT (1 stick)  |
+          | TNT2    | TNT (5 sticks) |
+          +---------+----------------+
+
+         2.2 自然联结
+          mysql> select c.*, o.order_num, o.order_date,
+                oi.prod_id, oi.quantity, OI.item_price
+                from customers as c, orders as o, orderitems as oi
+                where c.cust_id=o.cust_id
+                and oi.order_num=o.order_num
+                and prod_id="FB";
++---------+-------------+----------------+-----------+------------+----------+--------------+--------------+-----------------+-----------+---------------------+---------+----------+------------+
+| cust_id | cust_name   | cust_address   | cust_city | cust_state | cust_zip | cust_country | cust_contact | cust_email      | order_num | order_date          | prod_id | quantity | item_price |
++---------+-------------+----------------+-----------+------------+----------+--------------+--------------+-----------------+-----------+---------------------+---------+----------+------------+
+|   10001 | Coyote Inc. | 200 Maple Lane | Detroit   | MI         | 44444    | USA          | Y Lee        | ylee@coyote.com |     20005 | 2005-09-01 00:00:00 | FB      |        1 |      10.00 |
+|   10001 | Coyote Inc. | 200 Maple Lane | Detroit   | MI         | 44444    | USA          | Y Lee        | ylee@coyote.com |     20009 | 2005-10-08 00:00:00 | FB      |        1 |      10.00 |
++---------+-------------+----------------+-----------+------------+----------+--------------+--------------+-----------------+-----------+---------------------+---------+----------+------------+
+
+        2.3 外部联结
+          mysql> select customers.cust_id, orders.order_num from
+          customers inner join orders on customers.cust_id=orders.cust_id;
+          +---------+-----------+
+          | cust_id | order_num |
+          +---------+-----------+
+          |   10001 |     20005 |
+          |   10001 |     20009 |
+          |   10003 |     20006 |
+          |   10004 |     20007 |
+          |   10005 |     20008 |
+          +---------+-----------+
+
+          mysql> select customers.cust_id, orders.order_num from
+          customers left outer join orders on customers.cust_id=orders.cust_id;
+          +---------+-----------+
+          | cust_id | order_num |
+          +---------+-----------+
+          |   10001 |     20005 |
+          |   10001 |     20009 |
+          |   10002 |      NULL |
+          |   10003 |     20006 |
+          |   10004 |     20007 |
+          |   10005 |     20008 |
+          +---------+-----------+
+
+      3. 使用带聚集函数的联结
+        mysql> select customers.cust_name, customers.cust_id,
+        count(orders.order_num) as num_ord from customers inner join
+        orders on customers.cust_id=orders.cust_id group by customers.cust_id;
+        +----------------+---------+---------+
+        | cust_name      | cust_id | num_ord |
+        +----------------+---------+---------+
+        | Coyote Inc.    |   10001 |       2 |
+        | Wascals        |   10003 |       1 |
+        | Yosemite Place |   10004 |       1 |
+        | E Fudd         |   10005 |       1 |
+        +----------------+---------+---------+
+
+        mysql> select customers.cust_name, customers.cust_id,
+        count (orders.order_num) as num_ord from customers 
+        left outer join orders on customers.cust_id=orders.cust_id 
+        group by customers.cust_id;   
+          +----------------+---------+---------+
+          | cust_name      | cust_id | num_ord |
+          +----------------+---------+---------+
+          | Coyote Inc.    |   10001 |       2 |
+          | Mouse House    |   10002 |       0 |
+          | Wascals        |   10003 |       1 |
+          | Yosemite Place |   10004 |       1 |
+          | E Fudd         |   10005 |       1 |
+          +----------------+---------+---------+
       
-      
+      4. 使用联结和联结条件
+        
 ```
