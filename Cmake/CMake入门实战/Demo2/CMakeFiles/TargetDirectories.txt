@@ -1,0 +1,3 @@
+/workspaces/Studying/Cmake/CMake入门实战/Demo2/CMakeFiles/edit_cache.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo2/CMakeFiles/rebuild_cache.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo2/CMakeFiles/Demo.dir
