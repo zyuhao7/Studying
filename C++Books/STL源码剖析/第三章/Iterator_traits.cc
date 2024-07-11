@@ -47,9 +47,9 @@ int main()
 }
 #endif
 
-#if 0
-template<class I>
-struct iterator__traits                         // traits 意为 "特性"
+#if 1
+template <class I>
+struct iterator_traits // traits 意为 "特性"
 {
 	typedef typename I::value_type value_type; 
 };
@@ -57,11 +57,17 @@ struct iterator__traits                         // traits 意为 "特性"
 template<class T>
 struct iterator_traits<T*>
 {
-	typedef T value_type;                       // 迭代器是原生指针.
-	//于是 原生指针 int* 虽然不是 class type 但是也可以通过 traits 取得 value_type;
+    typedef T value_type; // 迭代器是原生指针.
+                          // 于是 原生指针 int* 虽然不是 class type 但是也可以通过 traits 取得 value type;
 };
 
-template<class I>
+template <class T>
+struct iterator_traits<const T *> // 偏特化版-当迭代器是个 pointer-to-const时. 萃取出来的型别应该是 T 而非 const T
+{
+    typedef T value_type;
+}
+
+template <class I>
 struct Iterator_traits
 {
 	typedef typename I::iterator_category iterator_category;
@@ -71,12 +77,12 @@ struct Iterator_traits
 	typedef typename I::reference         reference;
 };
 
-// 假如 "指向常数对象的指针" 下面得到什么?
 int main()
 {
-	iterator_traits<const int*>::value_type a = 4;
-	a += 1;
-	cout << a << endl; // 5
+    // 假如 "指向常数对象的指针" 下面得到什么?
+    iterator_traits<const int *>::value_type a = 4;
+    a += 1;
+    cout << a << endl; // 5
 }
 #endif
 
@@ -121,7 +127,7 @@ int main()
 }
 #endif
 
-#if 1
+#if 0
 // 链表迭代器.
 
 template <typename T>
@@ -146,6 +152,7 @@ private:
 template <typename T>
 class List
 {
+public:
     void insert_front(T val);
     void insert_end(T val);
     void display(ostream &os = cout) const;
@@ -205,6 +212,9 @@ struct ListIter
     }
 };
 
+#endif
+
+#if 0
 // 简化版 auto_ptr
 template <class T>
 class auto_Ptr
