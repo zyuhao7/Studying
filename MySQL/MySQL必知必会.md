@@ -1154,3 +1154,106 @@ day-2024-7-10
       4. 使用联结和联结条件
         
 ```
+
+```c++
+// day-2024-7-11
+      组合查询
+
+       1.创建组合查询
+        1.1 使用 union
+          mysql> select vend_id, prod_id, prod_price from products where prod_price<=5;
+          +---------+---------+------------+
+          | vend_id | prod_id | prod_price |
+          +---------+---------+------------+
+          |    1003 | FC      |       2.50 |
+          |    1002 | FU1     |       3.42 |
+          |    1003 | SLING   |       4.49 |
+          |    1003 | TNT1    |       2.50 |
+          +---------+---------+------------+
+
+         mysql> select vend_id, prod_id, prod_price from products where vend_id in(1001,1002);
+          +---------+---------+------------+
+          | vend_id | prod_id | prod_price |
+          +---------+---------+------------+
+          |    1001 | ANV01   |       5.99 |
+          |    1001 | ANV02   |       9.99 |
+          |    1001 | ANV03   |      14.99 |
+          |    1002 | FU1     |       3.42 |
+          |    1002 | OL1     |       8.99 |
+          +---------+---------+------------+
+
+        mysql> select vend_id,prod_id,prod_price from products
+           where prod_price<=5 union select vend_id,prod_id,prod_price
+           from products where vend_id in (1001,1002);
+          +---------+---------+------------+
+          | vend_id | prod_id | prod_price |
+          +---------+---------+------------+
+          |    1003 | FC      |       2.50 |
+          |    1002 | FU1     |       3.42 |
+          |    1003 | SLING   |       4.49 |
+          |    1003 | TNT1    |       2.50 |
+          |    1001 | ANV01   |       5.99 |
+          |    1001 | ANV02   |       9.99 |
+          |    1001 | ANV03   |      14.99 |
+          |    1002 | OL1     |       8.99 |
+          +---------+---------+------------+
+        
+        mysql> select vend_id,prod_id,prod_price from products
+               where prod_price<=5 or vend_id in (1001,1002);
+          +---------+---------+------------+
+          | vend_id | prod_id | prod_price |
+          +---------+---------+------------+
+          |    1001 | ANV01   |       5.99 |
+          |    1001 | ANV02   |       9.99 |
+          |    1001 | ANV03   |      14.99 |
+          |    1003 | FC      |       2.50 |
+          |    1002 | FU1     |       3.42 |
+          |    1002 | OL1     |       8.99 |
+          |    1003 | SLING   |       4.49 |
+          |    1003 | TNT1    |       2.50 |
+          +---------+---------+------------+
+        
+      1.2 union 规则
+          1. union 必须由两条或多条select语句组成, 语句之间用 union 分隔.
+          2. union 中的每个查询必须包含相同的列、  表达式或聚集函数.
+          3. 列数据类型必须兼容, 类型不必完全相同, 但必须是 DBMS 可以隐含低转换的类型.
+
+      1.3 包含或取消重复的行
+
+         mysql> select vend_id, prod_id, prod_price from products
+          where prod_price<=5 union all select vend_id, prod_id,
+          prod_pricefrom products where vend_id in(1001,1002);
+          +---------+---------+------------+
+          | vend_id | prod_id | prod_price |
+          +---------+---------+------------+
+          |    1003 | FC      |       2.50 |
+          |    1002 | FU1     |       3.42 |
+          |    1003 | SLING   |       4.49 |
+          |    1003 | TNT1    |       2.50 |
+          |    1001 | ANV01   |       5.99 |
+          |    1001 | ANV02   |       9.99 |
+          |    1001 | ANV03   |      14.99 |
+          |    1002 | FU1     |       3.42 |
+          |    1002 | OL1     |       8.99 |
+          +---------+---------+------------+
+
+      1.4 对组合查询结果排序
+        mysql> select vend_id, prod_id, prod_price from products
+              where prod_price<=5 union select vend_id, prod_id,
+              prod_price from products where vend_id in(1001,1002)
+              order by vend_id, prod_price;
+          +---------+---------+------------+
+          | vend_id | prod_id | prod_price |
+          +---------+---------+------------+
+          |    1001 | ANV01   |       5.99 |
+          |    1001 | ANV02   |       9.99 |
+          |    1001 | ANV03   |      14.99 |
+          |    1002 | FU1     |       3.42 |
+          |    1002 | OL1     |       8.99 |
+          |    1003 | FC      |       2.50 |
+          |    1003 | TNT1    |       2.50 |
+          |    1003 | SLING   |       4.49 |
+          +---------+---------+------------+
+
+        
+```
