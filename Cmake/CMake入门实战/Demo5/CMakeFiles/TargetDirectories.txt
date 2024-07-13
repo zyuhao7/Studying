@@ -1,0 +1,16 @@
+/workspaces/Studying/Cmake/CMake入门实战/Demo5/CMakeFiles/install/strip.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo5/CMakeFiles/install/local.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo5/CMakeFiles/edit_cache.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo5/CMakeFiles/test.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo5/CMakeFiles/install.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo5/CMakeFiles/list_install_components.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo5/CMakeFiles/rebuild_cache.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo5/CMakeFiles/Demo.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo5/math/CMakeFiles/install/strip.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo5/math/CMakeFiles/install.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo5/math/CMakeFiles/list_install_components.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo5/math/CMakeFiles/rebuild_cache.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo5/math/CMakeFiles/edit_cache.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo5/math/CMakeFiles/test.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo5/math/CMakeFiles/install/local.dir
+/workspaces/Studying/Cmake/CMake入门实战/Demo5/math/CMakeFiles/MathFunctions.dir

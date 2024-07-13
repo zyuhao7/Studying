@@ -1,0 +1,91 @@
+Start testing: Jul 13 03:28 UTC
+----------------------------------------------------------
+1/5 Testing: test_run
+1/5 Test: test_run
+Command: "/workspaces/Studying/Cmake/CMake入门实战/Demo5/Demo" "5" "2"
+Directory: /workspaces/Studying/Cmake/CMake入门实战/Demo5
+"test_run" start time: Jul 13 03:28 UTC
+Output:
+----------------------------------------------------------
+Now we use the standard library. 
+5 ^ 2 is 25
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_run" end time: Jul 13 03:28 UTC
+"test_run" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/5 Testing: test_usage
+2/5 Test: test_usage
+Command: "/workspaces/Studying/Cmake/CMake入门实战/Demo5/Demo"
+Directory: /workspaces/Studying/Cmake/CMake入门实战/Demo5
+"test_usage" start time: Jul 13 03:28 UTC
+Output:
+----------------------------------------------------------
+Usage: /workspaces/Studying/Cmake/CMake入门实战/Demo5/Demo base exponent 
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Pass Reason:
+Required regular expression found. Regex=[Usage: .* base exponent]
+"test_usage" end time: Jul 13 03:28 UTC
+"test_usage" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/5 Testing: test_5_2
+3/5 Test: test_5_2
+Command: "/workspaces/Studying/Cmake/CMake入门实战/Demo5/Demo" "5" "2"
+Directory: /workspaces/Studying/Cmake/CMake入门实战/Demo5
+"test_5_2" start time: Jul 13 03:28 UTC
+Output:
+----------------------------------------------------------
+Now we use the standard library. 
+5 ^ 2 is 25
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Pass Reason:
+Required regular expression found. Regex=[is 25]
+"test_5_2" end time: Jul 13 03:28 UTC
+"test_5_2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/5 Testing: test_10_5
+4/5 Test: test_10_5
+Command: "/workspaces/Studying/Cmake/CMake入门实战/Demo5/Demo" "10" "5"
+Directory: /workspaces/Studying/Cmake/CMake入门实战/Demo5
+"test_10_5" start time: Jul 13 03:28 UTC
+Output:
+----------------------------------------------------------
+Now we use the standard library. 
+10 ^ 5 is 100000
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Pass Reason:
+Required regular expression found. Regex=[is 100000]
+"test_10_5" end time: Jul 13 03:28 UTC
+"test_10_5" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/5 Testing: test_2_10
+5/5 Test: test_2_10
+Command: "/workspaces/Studying/Cmake/CMake入门实战/Demo5/Demo" "2" "10"
+Directory: /workspaces/Studying/Cmake/CMake入门实战/Demo5
+"test_2_10" start time: Jul 13 03:28 UTC
+Output:
+----------------------------------------------------------
+Now we use the standard library. 
+2 ^ 10 is 1024
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Pass Reason:
+Required regular expression found. Regex=[is 1024]
+"test_2_10" end time: Jul 13 03:28 UTC
+"test_2_10" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Jul 13 03:28 UTC
