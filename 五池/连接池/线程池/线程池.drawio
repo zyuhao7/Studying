@@ -1,0 +1,432 @@
+<mxfile host="Electron" modified="2024-06-13T07:58:14.668Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.18 Chrome/120.0.6099.199 Electron/28.1.2 Safari/537.36" etag="FGOxvcWYbOApkK5LF_Rv" version="22.1.18" type="device">
+  <diagram name="第 1 页" id="rh-Cp0qaWjbC9YvFf0cH">
+    <mxGraphModel dx="1744" dy="1024" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="20000" pageHeight="20000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-26" value="" style="rounded=0;whiteSpace=wrap;html=1;hachureGap=4;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="620" y="160" width="870" height="780" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-1" value="&lt;font style=&quot;font-size: 36px;&quot; color=&quot;#00994d&quot;&gt;ThreadPool 线程池&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="480" y="30" width="330" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-2" value="" style="rounded=0;whiteSpace=wrap;html=1;hachureGap=4;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="120" y="160" width="370" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-3" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;ThreadPool pool;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="230" y="170" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-6" value="&lt;font face=&quot;Times New Roman&quot;&gt;pool.setMode(fixed(default) | cached);&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="120" y="200" width="400" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-7" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;pool.start();&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="240" y="230" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-8" value="提交异步处理任务" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="200" y="340" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-9" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;hachureGap=4;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;entryX=-0.002;entryY=0.359;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="u8BYjM1vFlFMlW-UQTKU-26">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="160" y="440" as="sourcePoint" />
+            <mxPoint x="630" y="440" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1" source="u8BYjM1vFlFMlW-UQTKU-10" target="u8BYjM1vFlFMlW-UQTKU-34">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-10" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Result&amp;nbsp; result = pool.submitTask(concreteTask)&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="170" y="390" width="420" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-11" value="基于 C++ 17 的 any 和 C++ 20 的 semaphore" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="160" y="550" width="440" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-12" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;hachureGap=4;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="640" y="640" as="sourcePoint" />
+            <mxPoint x="160" y="640" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-13" value="获取异步任务处理结果" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="270" y="730" width="220" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-15" value="result.get().Cast&amp;lt;结果类型&amp;gt;()" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="200" y="823" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-25" value="" style="endArrow=classic;html=1;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;exitX=0.245;exitY=1.167;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="u8BYjM1vFlFMlW-UQTKU-10" target="u8BYjM1vFlFMlW-UQTKU-15">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="530" y="700" as="sourcePoint" />
+            <mxPoint x="580" y="650" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="60" y="650" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-27" value="thread1&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="740" y="350" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-28" value="thread2" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="860" y="350" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-29" value="thread3" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="970" y="350" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-30" value="......." style="rounded=0;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="350" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-31" value="threadN" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="350" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-32" value="cached&lt;br&gt;动态增长" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="350" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1" source="u8BYjM1vFlFMlW-UQTKU-33" target="u8BYjM1vFlFMlW-UQTKU-34">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="315" />
+              <mxPoint x="700" y="550" />
+              <mxPoint x="800" y="550" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-33" value="cached" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="300" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-34" value="Task1&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="740" y="680" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-35" value="Task2" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="860" y="680" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-36" value="Task3" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="970" y="680" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-37" value="......." style="rounded=0;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="680" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-38" value="TaskN" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="680" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-39" value="" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="680" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-40" value="task max threshold = 1024" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="630" width="330" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-42" value="TaskList任务队列" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="970" y="783" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-43" value="virtual void run() = 0" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="630" y="770" width="230" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-47" value="mutex + condition_variable" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="840" y="610" width="270" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-48" value="&lt;font color=&quot;#00994d&quot; style=&quot;font-size: 36px;&quot;&gt;线程互斥&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="160" y="1340" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-49" value="互斥锁 mutex" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="190" y="1420" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-50" value="atomic 原子类型" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="190" y="1460" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-51" value="&lt;font color=&quot;#7ea6e0&quot; style=&quot;font-size: 36px;&quot;&gt;code....&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;hachureGap=4;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="630" y="1400" width="560" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-55" style="edgeStyle=orthogonalEdgeStyle;rounded=0;hachureGap=4;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1" source="u8BYjM1vFlFMlW-UQTKU-52">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="660" y="1390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-52" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;Thread1&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="610" y="1213" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-53" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;Thread2&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="870" y="1200" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-54" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;Thread3&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="1213" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-56" style="edgeStyle=orthogonalEdgeStyle;rounded=0;hachureGap=4;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.527;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1" source="u8BYjM1vFlFMlW-UQTKU-53" target="u8BYjM1vFlFMlW-UQTKU-51">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="925" y="1320" />
+              <mxPoint x="925" y="1320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-57" style="edgeStyle=orthogonalEdgeStyle;rounded=0;hachureGap=4;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.956;entryY=-0.013;entryDx=0;entryDy=0;entryPerimeter=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1" source="u8BYjM1vFlFMlW-UQTKU-54" target="u8BYjM1vFlFMlW-UQTKU-51">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-58" value="&lt;font color=&quot;#7ea6e0&quot; style=&quot;font-size: 24px;&quot;&gt;CAS 操作 (无锁机制)&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="140" y="1573" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-60" value="&lt;font color=&quot;#7ea6e0&quot; style=&quot;font-size: 24px;&quot;&gt;无锁队列、数组、链表&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="145" y="1680" width="260" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-61" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;能否在多线程下执行？&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="390" y="1450" width="260" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-62" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;是否存在 &lt;font color=&quot;#ff3333&quot;&gt;竞态条件&lt;/font&gt; =&amp;gt; 称作&lt;font color=&quot;#ff3333&quot;&gt;临界区代码段&lt;/font&gt; =&amp;gt; 保证它的&lt;font color=&quot;#ff3333&quot;&gt;原子操作&lt;/font&gt;&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="530" y="1710" width="730" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-63" value="&lt;font color=&quot;#7ea6e0&quot; style=&quot;font-size: 24px;&quot;&gt;lock_guard&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="1270" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-64" value="&lt;font color=&quot;#7ea6e0&quot; style=&quot;font-size: 24px;&quot;&gt;unique_guard&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="995" y="1310" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-65" value="&lt;font color=&quot;#7ea6e0&quot; style=&quot;font-size: 24px;&quot;&gt;lock、 trylock (活锁、乐观锁)&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="995" y="1350" width="360" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-67" value="如果在多线程环境下不存在竞态条件的 ==&amp;gt; 可重入的&lt;br&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="1420" width="490" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-68" value="存在竞态条件 ==&amp;gt; 不可重入的" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="1460" width="290" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-69" value="&lt;font color=&quot;#00994d&quot; style=&quot;font-size: 36px;&quot;&gt;线程通信&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="175" y="1950" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-70" value="条件变量 condition_variable" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="210" y="2020" width="270" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-71" value="信号量 semaphore" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="210" y="2070" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-72" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;线程 A&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="660" y="1870" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-73" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;线程 B&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1115" y="1870" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-74" value="" style="endArrow=none;html=1;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="708.5699999999999" y="2350" as="sourcePoint" />
+            <mxPoint x="708.5699999999999" y="1910" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-78" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;coding&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;fontFamily=Architects Daughter;" vertex="1" connectable="0" parent="u8BYjM1vFlFMlW-UQTKU-74">
+          <mxGeometry x="-0.4797" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-76" value="" style="endArrow=none;html=1;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1165" y="2350" as="sourcePoint" />
+            <mxPoint x="1165" y="1910" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-77" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;coding&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;fontFamily=Architects Daughter;" vertex="1" connectable="0" parent="u8BYjM1vFlFMlW-UQTKU-76">
+          <mxGeometry x="0.4987" y="4" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-79" value="" style="endArrow=classic;html=1;rounded=0;hachureGap=4;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="740" y="2220" as="sourcePoint" />
+            <mxPoint x="1120" y="2030" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-81" value="依赖于" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;fontFamily=Architects Daughter;" vertex="1" connectable="0" parent="u8BYjM1vFlFMlW-UQTKU-79">
+          <mxGeometry x="-0.2956" y="4" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-80" value="" style="endArrow=classic;html=1;rounded=0;hachureGap=4;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1130" y="2050" as="sourcePoint" />
+            <mxPoint x="750" y="2240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-82" value="等待 wait" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="650" y="2180" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-83" value="通知 notify" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1185" y="2040" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-84" value="告诉所有等待在这个条件上的线程可以继续工作了" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1230" y="2090" width="460" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-85" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;mutex + condition_variable&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="390" y="2373" width="320" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-86" value="&lt;font color=&quot;#00994d&quot; style=&quot;font-size: 24px;&quot;&gt;mutex mtx;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="180" y="2663" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-87" value="&lt;font color=&quot;#00994d&quot; style=&quot;font-size: 24px;&quot;&gt;condition_variable cond;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="170" y="2710" width="290" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-88" value="&lt;font style=&quot;font-size: 24px;&quot; color=&quot;#00994d&quot;&gt;多线程模型 =&amp;gt; 生产者-消费者模型&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="610" y="2520" width="390" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-89" value="&lt;font style=&quot;font-size: 24px;&quot; color=&quot;#7ea6e0&quot;&gt;lock_guard&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="390" y="2570" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-90" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;生产者 thread1&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="570" y="2600" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-91" value="" style="endArrow=none;html=1;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;exitX=0.464;exitY=1.146;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="u8BYjM1vFlFMlW-UQTKU-90">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="860" y="2560" as="sourcePoint" />
+            <mxPoint x="655" y="3090" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-92" value="&lt;span style=&quot;color: rgb(240, 240, 240); font-family: &amp;quot;Architects Daughter&amp;quot;; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(27, 29, 30); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;&lt;font style=&quot;font-size: 24px;&quot;&gt;消费者 thread2&lt;/font&gt;&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1125" y="2600" width="230" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-93" value="" style="endArrow=none;html=1;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;exitX=0.464;exitY=1.146;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1195" y="2650" as="sourcePoint" />
+            <mxPoint x="1195" y="3094" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-94" value="&lt;font style=&quot;font-size: 24px;&quot; color=&quot;#00994d&quot;&gt;场景一:： 先生产、后消费&amp;nbsp; &amp;nbsp;&amp;nbsp;&lt;br&gt;场景二：生产一个、消费一个&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1105" y="2485" width="340" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-121" style="edgeStyle=orthogonalEdgeStyle;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1" source="u8BYjM1vFlFMlW-UQTKU-95" target="u8BYjM1vFlFMlW-UQTKU-119">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-95" value="容器vector" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="780" y="2830" width="200" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-96" value="&lt;font color=&quot;#00994d&quot; style=&quot;font-size: 24px;&quot;&gt;unique_lock&amp;lt;mutex&amp;gt; lock(mtx);&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="480" y="2680" width="360" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-97" value="&lt;font color=&quot;#00994d&quot; style=&quot;font-size: 24px;&quot;&gt;unique_lock&amp;lt;mutex&amp;gt; lock(mtx);&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="2670" width="360" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-99" value="&lt;font color=&quot;#00994d&quot; style=&quot;font-size: 24px;&quot;&gt;while(full())&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="490" y="2770" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-100" value="&lt;font color=&quot;#00994d&quot; style=&quot;font-size: 24px;&quot;&gt;cond.wait(lock);&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="525" y="2800" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-102" style="edgeStyle=orthogonalEdgeStyle;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1" source="u8BYjM1vFlFMlW-UQTKU-101" target="u8BYjM1vFlFMlW-UQTKU-95">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-101" value="&lt;font color=&quot;#00994d&quot;&gt;生产一个商品&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="560" y="2900" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-103" value="&lt;font color=&quot;#00994d&quot; style=&quot;font-size: 24px;&quot;&gt;cond.notif_all();&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="520" y="2990" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-105" value="1. 改变了线程的状态(等待).&lt;br&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="745" y="2740" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-106" value="2. 把互斥锁 mtx 释放了" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="745" y="2770" width="230" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-107" style="edgeStyle=orthogonalEdgeStyle;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.002;entryY=0.257;entryDx=0;entryDy=0;entryPerimeter=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1" source="u8BYjM1vFlFMlW-UQTKU-100" target="u8BYjM1vFlFMlW-UQTKU-106">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-108" value="阻塞" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="2605" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-110" style="edgeStyle=orthogonalEdgeStyle;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.891;entryY=0.019;entryDx=0;entryDy=0;entryPerimeter=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1" source="u8BYjM1vFlFMlW-UQTKU-108" target="u8BYjM1vFlFMlW-UQTKU-97">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-111" value="&lt;font color=&quot;#00994d&quot; style=&quot;font-size: 24px;&quot;&gt;while(empty())&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="2760" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-116" style="edgeStyle=orthogonalEdgeStyle;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1" source="u8BYjM1vFlFMlW-UQTKU-112">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1460" y="2830" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-112" value="&lt;font color=&quot;#00994d&quot; style=&quot;font-size: 24px;&quot;&gt;cond.wait(lock);&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="2790" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-113" value="1. 把互斥锁 mtx 释放了" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1470" y="2780" width="230" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-117" value="2.等待 =&amp;gt; 阻塞" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1475" y="2820" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-118" value="拿到 mtx&lt;br&gt;阻塞 =&amp;gt; 就绪" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1550" y="2900" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-119" value="&lt;font color=&quot;#00994d&quot;&gt;消费一个商品&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1230" y="2910" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-120" value="&lt;font color=&quot;#00994d&quot; style=&quot;font-size: 24px;&quot;&gt;cond.notif_all();&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="2990" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-122" value="&lt;font style=&quot;font-size: 36px;&quot;&gt;信号量 semephore&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="130" y="3140" width="330" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-123" value="&lt;font style=&quot;font-size: 24px;&quot; color=&quot;#7ea6e0&quot;&gt;看做资源计数没有限制的 mutex 互斥锁&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="180" y="3230" width="440" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-125" value="&lt;span style=&quot;color: rgb(126, 166, 224); font-family: &amp;quot;Architects Daughter&amp;quot;; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(27, 29, 30); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;&lt;font style=&quot;font-size: 24px;&quot;&gt;mutex互斥锁 =&amp;gt; 资源计数只能是 0 或者 1&lt;br&gt;mutex.lock(); 所得资源计数 1 =&amp;gt; 0&lt;br&gt;coding........&lt;br&gt;mutex.unlock(); 锁的资源计数 0=&amp;gt; 1&lt;/font&gt;&lt;br&gt;&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="200" y="3270" width="600" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-128" value="&lt;font style=&quot;font-size: 24px;&quot; color=&quot;#7ea6e0&quot;&gt;semaphore sem(0);&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="740" y="3170" width="230" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-129" value="生产者线程" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="810" y="3253" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-130" value="消费者线程" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1185" y="3253" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-131" value="" style="endArrow=none;html=1;rounded=0;hachureGap=4;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;exitX=0.526;exitY=1.063;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="u8BYjM1vFlFMlW-UQTKU-129">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="910" y="3110" as="sourcePoint" />
+            <mxPoint x="870" y="3680" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-132" value="" style="endArrow=none;html=1;rounded=0;hachureGap=4;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;exitX=0.526;exitY=1.063;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1241.5" y="3293" as="sourcePoint" />
+            <mxPoint x="1238.5" y="3677" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-133" value="&lt;font color=&quot;#00994d&quot;&gt;生产一个商品&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="770" y="3390" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-134" value="容器" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="960" y="3390" width="200" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-136" style="edgeStyle=orthogonalEdgeStyle;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.01;entryY=0.585;entryDx=0;entryDy=0;entryPerimeter=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1" source="u8BYjM1vFlFMlW-UQTKU-133" target="u8BYjM1vFlFMlW-UQTKU-134">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-137" value="消费商品" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="3453" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-138" value="sem.wait(); 等待sem信号量有资源; 有资源后 -1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="3360" width="430" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-139" value="sem.post(); 资源计数 +1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="730" y="3580" width="230" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-140" value="二元信号量" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="260" y="3750" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-141" value="semaphore sem(1); 资源计数 0 1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="400" y="3757" width="310" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-143" value="可以完成和 mutx 互斥锁相同的线程互斥操作" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="410" y="3810" width="420" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-144" value="&lt;font style=&quot;font-size: 36px;&quot;&gt;coding`&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;hachureGap=4;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="595" y="3900" width="300" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-146" value="&lt;font color=&quot;#ff3333&quot;&gt;临界区代码段&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="500" y="3945" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-147" value="区别点：" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="830" y="3730" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-148" value="&lt;font color=&quot;#ff3333&quot;&gt;mutex 只能是哪个线程获取锁，由哪个线程释放锁!&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="880" y="3780" width="470" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="u8BYjM1vFlFMlW-UQTKU-149" value="&lt;font color=&quot;#ff3333&quot;&gt;sem 不同, sem.wait() 和 sem.post() 可以处在不同的线程中调用&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontFamily=Architects Daughter;" vertex="1" parent="1">
+          <mxGeometry x="880" y="3820" width="590" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
