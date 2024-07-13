@@ -28,3 +28,4 @@ int main(int argc, char *argv[])
     printf("%g ^ %d is %g\n", base, exponent, result);
     return 0;
 }
+
