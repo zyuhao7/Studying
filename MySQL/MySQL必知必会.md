@@ -1254,6 +1254,174 @@ day-2024-7-10
           |    1003 | TNT1    |       2.50 |
           |    1003 | SLING   |       4.49 |
           +---------+---------+------------+
+```
 
+```c++
+day-7-13
+    全文本搜索
+
+      1. 使用全文本搜索
+         启用全文本搜索
+
+         mysql> create table productnotes(
+             note_id int not null auto_increment,
+             prod_id char(10) not null,
+             note_date datetime not null,
+             note_text text null,
+             primary key(note_id),
+             fulltext(note_text)) engine=MyISAM;
+         
+         进行全文本搜索
+      在索引之后, 使用两个函数 Match() 和 Against() 执行全本文搜索,其中Match()指定被搜索的列,
+      Against() 指定要使用的搜索表达式.
+
+      mysql> select note_text from productnotes where match(note_text) against("rabbit");
+          +----------------------------------------------------------------------------------------------------------------------+
+          | note_text                                                                                                            |
+          +----------------------------------------------------------------------------------------------------------------------+
+          | Customer complaint: rabbit has been able to detect trap, food apparently less effective now.                         |
+          | Quantity varies, sold by the sack load.
+          All guaranteed to be bright and orange, and suitable for use as rabbit bait. |
+          +----------------------------------------------------------------------------------------------------------------------+
+
+      mysql> select note_text from productnotes where note_text like "%rabbit%";
+          +----------------------------------------------------------------------------------------------------------------------+
+          | note_text                                                                                                            |
+          +----------------------------------------------------------------------------------------------------------------------+
+          | Quantity varies, sold by the sack load.
+          All guaranteed to be bright and orange, and suitable for use as rabbit bait. |
+          | Customer complaint: rabbit has been able to detect trap, food apparently less effective now.                         |
+          +----------------------------------------------------------------------------------------------------------------------+
+
+      mysql> select note_text, match(note_text) against("rabbit") as rank from productnotes;
+          +-----------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------+
+          | note_text                                                                                                                                                 | rank               |
+          +-----------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------+
+          | Customer complaint:
+          Sticks not individually wrapped, too easy to mistakenly detonate all at once.
+          Recommend individual wrapping.                          |                  0 |
+          | Can shipped full, refills not available.
+          Need to order new can if refill needed.                                                                          |                  0 |
+          | Safe is combination locked, combination not provided with safe.
+          This is rarely a problem as safes are typically blown up or dropped by customers.         |                  0 |
+          | Quantity varies, sold by the sack load.
+          All guaranteed to be bright and orange, and suitable for use as rabbit bait.                                      | 1.5905543565750122 |
+          | Included fuses are short and have been known to detonate too quickly for some customers.
+          Longer fuses are available (item FU1) and should be recommended. |                  0 |
+          | Matches not included, recommend purchase of matches or detonator (item DTNTR).                                                                            |                  0 |
+          | Please note that no returns will be accepted if safe opened using explosives.                                                                             |                  0 |
+          | Multiple customer returns, anvils failing to drop fast enough or falling backwards on purchaser. Recommend that customer considers using heavier anvils.  |                  0 |
+          | Item is extremely heavy. Designed for dropping, not recommended for use with slings, ropes, pulleys, or tightropes.                                       |                  0 |
+          | Customer complaint: rabbit has been able to detect trap, food apparently less effective now.                                                              | 1.6408053636550903 |
+          | Shipped unassembled, requires common tools (including oversized hammer).                                                                                  |                  0 |
+          | Customer complaint:
+          Circular hole in safe floor can apparently be easily cut with handsaw.                                                                |                  0 |
+          | Customer complaint:
+          Not heavy enough to generate flying stars around head of victim. If being purchased for dropping, recommend ANV02 or ANV03 instead.   |                  0 |
+          | Call from individual trapped in safe plummeting to the ground, suggests an escape hatch be added.
+          Comment forwarded to vendor.                            |                  0 |
+          +-----------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------+
+
+         使用查询扩展
+
+          mysql> select note_text from productnotes  where match  (note_text) against("anvils");
+          +----------------------------------------------------------------------------------------------------------------------------------------------------------+
+          | note_text                                                                                                                                                |
+          +----------------------------------------------------------------------------------------------------------------------------------------------------------+
+          | Multiple customer returns, anvils failing to drop fast enough or falling backwards on purchaser. Recommend that customer considers using heavier anvils. |
+          +----------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+          mysql> select note_text from productnotes where match(note_text) against("anvils" with query expansion);
+          +----------------------------------------------------------------------------------------------------------------------------------------------------------+
+          | note_text                                                                                                                                                |
+          +----------------------------------------------------------------------------------------------------------------------------------------------------------+
+          | Multiple customer returns, anvils failing to drop fast enough or falling backwards on purchaser. Recommend that customer considers using heavier anvils. |
+          | Customer complaint:
+          Sticks not individually wrapped, too easy to mistakenly detonate all at once.
+          Recommend individual wrapping.                         |
+          | Customer complaint:
+          Not heavy enough to generate flying stars around head of victim. If being purchased for dropping, recommend ANV02 or ANV03 instead.  |
+          | Please note that no returns will be accepted if safe opened using explosives.                                                                            |
+          | Customer complaint: rabbit has been able to detect trap, food apparently less effective now.                                                             |
+          | Customer complaint:
+          Circular hole in safe floor can apparently be easily cut with handsaw.                                                               |
+          | Matches not included, recommend purchase of matches or detonator (item DTNTR).                                                                           |
+          +----------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+         布尔文本搜索
+          
+          mysql> select note_text from productnotes where match(note_text) against("heavy" in boolean mode);
+          +---------------------------------------------------------------------------------------------------------------------------------------------------------+
+          | note_text                                                                                                                                               |
+          +---------------------------------------------------------------------------------------------------------------------------------------------------------+
+          | Item is extremely heavy. Designed for dropping, not recommended for use with slings, ropes, pulleys, or tightropes.                                     |
+          | Customer complaint:
+          Not heavy enough to generate flying stars around head of victim. If being purchased for dropping, recommend ANV02 or ANV03 instead. |
+          +---------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+         mysql> select note_text from productnotes where match(note_text) against("heavy -rope*" in boolean mode); // 搜索不包含任意以 repo 开始的词的行.
+          +---------------------------------------------------------------------------------------------------------------------------------------------------------+
+          | note_text                                                                                                                                               |
+          +---------------------------------------------------------------------------------------------------------------------------------------------------------+
+          | Customer complaint:
+          Not heavy enough to generate flying stars around head of victim. If being purchased for dropping, recommend ANV02 or ANV03 instead. |
+          +---------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+                                                      全文本布尔操作符
+                              布尔操作符                                            说明
+                                  +                                            包含, 词必须存在
+                                  -                                            排除, 词必须不出现
+                                  >                                            包含, 而且增加等级值
+                                  <                                            包含, 而且减少等级值
+                                  ()                                           把词组成子表达式
+                                  ~                                            取消一个词的排序值
+                                  *                                            词尾的通配符
+                                  ""                                           定义一个短句 
         
+        // 匹配包含 rabbit 和 bait 的行.
+        mysql> select note_text from productnotes where match(note_text) against("+rabbit +bait" in boolean mode);
+          +----------------------------------------------------------------------------------------------------------------------+
+          | note_text                                                                                                            |
+          +----------------------------------------------------------------------------------------------------------------------+
+          | Quantity varies, sold by the sack load.
+          All guaranteed to be bright and orange, and suitable for use as rabbit bait. |
+          +----------------------------------------------------------------------------------------------------------------------+
+        
+        // 匹配 rabbit 和 bait 至少一个词.
+        mysql> select note_text from productnotes where match(note_text) against("rabbit bait" in boolean mode);
+          +----------------------------------------------------------------------------------------------------------------------+
+          | note_text                                                                                                            |
+          +----------------------------------------------------------------------------------------------------------------------+
+          | Quantity varies, sold by the sack load.
+          All guaranteed to be bright and orange, and suitable for use as rabbit bait. |
+          | Customer complaint: rabbit has been able to detect trap, food apparently less effective now.                         |
+          +----------------------------------------------------------------------------------------------------------------------+
+
+        //匹配短句 rabit bait 而不是匹配两个词 rabbit 和 bait.
+        mysql> select note_text from productnotes where match(note_text) against('"rabbit bait"' in boolean mode);
+          +----------------------------------------------------------------------------------------------------------------------+
+          | note_text                                                                                                            |
+          +----------------------------------------------------------------------------------------------------------------------+
+          | Quantity varies, sold by the sack load.
+          All guaranteed to be bright and orange, and suitable for use as rabbit bait. |
+          +----------------------------------------------------------------------------------------------------------------------+
+
+        //匹配 rabbit 和  carrot, 增加前者等级, 降低后者等级.
+        mysql> select note_text from productnotes where match(note_text) against(">rabbit <carrot" in boolean mode);
+          +----------------------------------------------------------------------------------------------------------------------+
+          | note_text                                                                                                            |
+          +----------------------------------------------------------------------------------------------------------------------+
+          | Quantity varies, sold by the sack load.
+          All guaranteed to be bright and orange, and suitable for use as rabbit bait. |
+          | Customer complaint: rabbit has been able to detect trap, food apparently less effective now.                         |
+          +----------------------------------------------------------------------------------------------------------------------+
+
+        //匹配搜索词 safe 和 combination, 降低后者等级.
+        mysql> select note_text from productnotes where match(note_text) against("+safe +(<combination)" in boolean mode);
+          +---------------------------------------------------------------------------------------------------------------------------------------------------+
+          | note_text                                                                                                                                         |
+          +---------------------------------------------------------------------------------------------------------------------------------------------------+
+          | Safe is combination locked, combination not provided with safe.
+          This is rarely a problem as safes are typically blown up or dropped by customers. |
+          +---------------------------------------------------------------------------------------------------------------------------------------------------+
 ```
