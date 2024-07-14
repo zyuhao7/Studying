@@ -912,7 +912,7 @@ day-2024-7-7
 ​     +----------------+--------------+
 
    mysql> select cust_name, cust_contact from customers where cust_id 
-   in (select cust_id from orders where-> order_num in 
+   in (select cust_id from orders where order_num in 
    (select order_num from orderitems where prod_id = "TNT2"));
 
 ​     +----------------+--------------+
@@ -923,7 +923,7 @@ day-2024-7-7
 ​     +----------------+--------------+
 
     mysql> select cust_name, cust_state,(select count(*) from orders where orders.cust_id=customers.cust_id) as
-    -> orders from customers order by cust_name;
+     orders from customers order by cust_name;
 
         +----------------+------------+--------+
         | cust_name      | cust_state | orders |
@@ -936,7 +936,7 @@ day-2024-7-7
         +----------------+------------+--------+
 ​
 mysql> select cust_name, cust_state, (select count(*) from orders where cust_id = cust_id) as orders
-    -> from customers order by cust_name;
+     from customers order by cust_name;
     
         +----------------+------------+--------+
         | cust_name      | cust_state | orders |
@@ -1424,4 +1424,40 @@ day-7-13
           | Safe is combination locked, combination not provided with safe.
           This is rarely a problem as safes are typically blown up or dropped by customers. |
           +---------------------------------------------------------------------------------------------------------------------------------------------------+
+```
+
+```c++
+day-2024-7-14
+        插入数据
+           插入完整的行
+
+         mysql> insert into Customers values(NULL, "Pep E. LaPew", "100 Main Street", "Los Angels", "CA", "90046", "USA", NULL, NULL);
+         Query OK, 1 row affected (0.04 sec)
+
+           插入多个行
+
+         mysql> insert into Customers values(NULL, "Pep E. LaPew", "100 Main Street", "Los Angels", "CA", "90046", "USA", NULL, NULL),
+          (NULL, "Pep E.", "100 Main Street", "Los Angels", "CA", "90046", "USA", NULL, NULL);
+
+           插入检索出来的数据 (列对应, 不关心名字是否一致)
+        
+         mysql> insert into customers(cust_id,
+               cust_email,
+               cust_name,
+               cust_address,
+               cust_city,
+               cust_state,
+               cust_zip,
+               cust_country)
+               select cust_id,
+               cust_contact,
+               cust_name,
+               cust_address,
+               cust_city,
+               cust_state,
+               cust_zip,
+               cust_country from custnew;
+          
+
+
 ```
