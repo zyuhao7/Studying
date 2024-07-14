@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <cstring>
 #include <vector>
+#include <queue>
+#include <stack>
 
 using namespace std;
 
@@ -94,8 +96,6 @@ using namespace std;
 // };
 // Singleton *Singleton::m_instance = nullptr;
 
-#endif
-
 // 数组
 // int GetSize(int data[])
 // {
@@ -179,12 +179,161 @@ using namespace std;
 //     return 0;
 // }
 
-#if 1
 // 字符串
+
+// int main()
+// {
+//     char str1[] = "hello world";
+//     char str2[] = "hello world";
+
+//     char *str3 = "hello world";
+//     char *str4 = "hello world";
+
+//     if (str1 == str2)
+//     {
+//         cout << "str1 == str2" << endl;
+//     }
+//     else
+//         cout << "str1 != str2" << endl; // √ str1 和 str2是数组地址
+
+//     if (str3 == str4)
+//     {
+//         cout << "str3 == str4" << endl; // √ 同一 常量字符串  指向同一内存地址
+//     }
+//     else
+//     {
+//         cout << "str3 != str4" << endl;
+//     }
+//     return 0;
+// }
+
+// 面试题 4 替换空格
+// 实现一个函数, 把字符串中的每个空格替换成 "%20".
+// 自解
+// void solve(string s)
+// {
+//     string res = "";
+//     for (int i = 0; i < s.size(); ++i)
+//     {
+//         if (s[i] != ' ')
+//         {
+//             res += s[i];
+//         }
+//         else
+//             res += "%20";
+//     }
+//     cout << res << endl;
+// }
+
+// 书解
+// string replaceSpace(string s)
+// {
+//     int cnt = 0;
+//     for (int i = 0; i < s.size(); ++i)
+//     {
+//         if (s[i] == ' ')
+//             cnt++;
+//     }
+
+//     s.resize(s.size() + 2 * cnt, 0);
+//     for (int i = s.size() - 1; i >= 0; --i)
+//     {
+//         if (s[i] != ' ')
+//         {
+//             s[i + 2 * cnt] = s[i];
+//         }
+//         else
+//         {
+//             cnt--;
+//             s[i + 2 * cnt] = '%';
+//             s[i + 2 * cnt + 1] = '2';
+//             s[i + 2 * cnt + 2] = '0';
+//         }
+//     }
+//     return s;
+// }
+
+// int main()
+// {
+//     string s = "we are happy";
+//     cout << s << endl;
+//     solve(s);
+//     string r = replaceSpace(s);
+//     cout << r << endl;
+// }
+
+// 链表
+// 单向链表的节点定义为:
+
+// struct Listnode
+// {
+//     int val;
+//     Listnode *next;
+// };
+// 尾插.
+// void AddToTail(Listnode **pHead, int v)
+// {
+//     Listnode *pNew = new Listnode();
+//     pNew->val = v;
+//     pNew->next = nullptr;
+//     if (*pHead == nullptr)
+//     {
+//         *pHead = pNew;
+//     }
+//     else
+//     {
+//         Listnode *pNode = *pHead;
+//         while (*pHead != nullptr)
+//         {
+//             pNode = pNode->next;
+//         }
+//         pNode->next = pNew;
+//     }
+// }
+
+// 面试题 5 从尾到头打印链表
+// 节点定义如下:
+// struct ListNode
+// {
+//     int m_nKey;
+//     ListNode *m_pNext;
+// };
+
+// 书解
+// 思路:  从头到尾遍历一遍节点, 将值存到栈中, 然后在从栈取出来即可.
+// void PrintListFromTailToHead(ListNode *pHead)
+// {
+//     std::stack<ListNode *> nodes;
+//     ListNode *pNode = pHead;
+//     while (pNode != nullptr)
+//     {
+//         nodes.push(pNode);
+//         pNode = pNode->m_pNext;
+//     }
+//     while (!nodes.empty())
+//     {
+//         pNode = nodes.top();
+//         cout << pNode->m_nKey << " ";
+//         nodes.pop();
+//     }
+// }
+
+// 既然栈可以实现, 那么本质来说递归就是栈结构, 我们可以访问节点的时候, 递归的输出它后面的节点, 在输出节点本身.
+
+// void PrintListFromTailToHead(ListNode *pHead)
+// {
+//     if (pHead != nullptr)
+//     {
+//         if (pHead->m_pNext != nullptr)
+//         {
+//             PrintListFromTailToHead(pHead->next);
+//         }
+//     }
+//     cout << pHead->m_nKey << " ";
+// }
 
 int main()
 {
 
     return 0;
 }
-#endif
