@@ -1457,7 +1457,36 @@ day-2024-7-14
                cust_state,
                cust_zip,
                cust_country from custnew;
+```
+
+```c++
+day2024-7-15
+
+        更新和删除数据
+
+         更新数据
+
+          mysql> update customers set cust_email="elmer@fudd.com" where cust_id=10005;
+          Query OK, 1 row affected (0.03 sec)
+          Rows matched: 1  Changed: 1  Warnings: 0
+
+        // 更新多列
+          mysql> update customers set cust_name="The Fudds", cust_email="elmer@Fudd.com" where cust_id=10005;
+          Query OK, 1 row affected (0.01 sec)
+          Rows matched: 1  Changed: 1  Warnings: 0        
+
+          mysql> update customers set cust_email=NULL where cust_id=10005;
+          Query OK, 1 row affected (0.03 sec)
+          Rows matched: 1  Changed: 1  Warnings: 0
+
+         删除数据
           
+          mysql> delete from customers where  cust_id=10006;
+          Query OK, 1 row affected (0.03 sec)
+
+          //更快地删除方式, truncate, 实际上是删除原来的表重新再创建一个表, 而不是逐行删除表中的数据.
+        
+         更新和删除的指导原则
 
 
 ```
