@@ -1487,6 +1487,114 @@ day2024-7-15
           //更快地删除方式, truncate, 实际上是删除原来的表重新再创建一个表, 而不是逐行删除表中的数据.
         
          更新和删除的指导原则
+```
 
+```c++
+day-2024-7-15
+        创建和操纵表
 
+          1. 创建表
+           mysql> create table ace( ace_num int not null auto_increment, ace_date datetime not null, ace_id int not null, primary key(ace_num)) engine=InnoDB;
+           Query OK, 0 rows affected (0.05 sec)
+
+          +----------+----------+------+-----+---------+----------------+
+          | Field    | Type     | Null | Key | Default | Extra          |
+          +----------+----------+------+-----+---------+----------------+
+          | ace_num  | int(11)  | NO   | PRI | NULL    | auto_increment |
+          | ace_date | datetime | NO   |     | NULL    |                |
+          | ace_id   | int(11)  | NO   |     | NULL    |                |
+          +----------+----------+------+-----+---------+----------------+
+
+          2. 主键再介绍
+           mysql> create table aceitems( ace_num int not null, ace_item int not null, ace_id char(10) not null, ace_name char(20) not null, ace_age int not null, primary key(ace_num, ace_item)) engine=InnoDB;
+           Query OK, 0 rows affected (0.05 sec)
+
+          +----------+----------+------+-----+---------+-------+
+          | Field    | Type     | Null | Key | Default | Extra |
+          +----------+----------+------+-----+---------+-------+
+          | ace_num  | int(11)  | NO   | PRI | NULL    |       |
+          | ace_item | int(11)  | NO   | PRI | NULL    |       |
+          | ace_id   | char(10) | NO   |     | NULL    |       |
+          | ace_name | char(20) | NO   |     | NULL    |       |
+          | ace_age  | int(11)  | NO   |     | NULL    |       |
+          +----------+----------+------+-----+---------+-------+
+
+          3. 指定默认值
+           mysql> create table aceitems( ace_num int not null, ace_item int not null, ace_id char(10) not null, ace_name char(20) not null, ace_age int not null default 18, primary key (ace_num, ace_item)) engine=InnoDB;
+           Query OK, 0 rows affected (0.05 sec)
+
+          +----------+----------+------+-----+---------+-------+
+          | Field    | Type     | Null | Key | Default | Extra |
+          +----------+----------+------+-----+---------+-------+
+          | ace_num  | int(11)  | NO   | PRI | NULL    |       |
+          | ace_item | int(11)  | NO   | PRI | NULL    |       |
+          | ace_id   | char(10) | NO   |     | NULL    |       |
+          | ace_name | char(20) | NO   |     | NULL    |       |
+          | ace_age  | int(11)  | NO   |     | 18      |       |
+          +----------+----------+------+-----+---------+-------+
+
+          4. 引擎类型
+             1. InnoDB 是一个可靠的事务处理引擎, 他不支持全文本搜索.
+             2. MEMORY 在功能等同于 MyISAM, 但由于数据存储在内存中, 速度很快.
+             3. MyISAM 是一个性能极高的引擎, 它支持全文本搜索, 但不支持事务处理.
+
+      更新表
+           mysql> alter table vendors add vend_phone char(20);
+           Query OK, 0 rows affected (0.11 sec)
+           Records: 0  Duplicates: 0  Warnings: 0
+          
+          +--------------+----------+------+-----+---------+----------------+
+          | Field        | Type     | Null | Key | Default | Extra          |
+          +--------------+----------+------+-----+---------+----------------+
+          | vend_id      | int(11)  | NO   | PRI | NULL    | auto_increment |
+          | vend_name    | char(50) | NO   |     | NULL    |                |
+          | vend_address | char(50) | YES  |     | NULL    |                |
+          | vend_city    | char(50) | YES  |     | NULL    |                |
+          | vend_state   | char(5)  | YES  |     | NULL    |                |
+          | vend_zip     | char(10) | YES  |     | NULL    |                |
+          | vend_country | char(50) | YES  |     | NULL    |                |
+          | vend_phone   | char(20) | YES  |     | NULL    |                |
+          +--------------+----------+------+-----+---------+----------------+
+          
+           mysql> alter table vendors drop column vend_phone;
+           Query OK, 0 rows affected (0.11 sec)
+           Records: 0  Duplicates: 0  Warnings: 0
+
+          +--------------+----------+------+-----+---------+----------------+
+          | Field        | Type     | Null | Key | Default | Extra          |
+          +--------------+----------+------+-----+---------+----------------+
+          | vend_id      | int(11)  | NO   | PRI | NULL    | auto_increment |
+          | vend_name    | char(50) | NO   |     | NULL    |                |
+          | vend_address | char(50) | YES  |     | NULL    |                |
+          | vend_city    | char(50) | YES  |     | NULL    |                |
+          | vend_state   | char(5)  | YES  |     | NULL    |                |
+          | vend_zip     | char(10) | YES  |     | NULL    |                |
+          | vend_country | char(50) | YES  |     | NULL    |                |
+          +--------------+----------+------+-----+---------+----------------+
+
+        查看表外键
+         mysql> show create table orderitems \G
+*************************** 1. row ***************************
+            Table: orderitems
+        Create Table: CREATE TABLE `orderitems` (
+          `order_num` int(11) NOT NULL,
+          `order_item` int(11) NOT NULL,
+          `prod_id` char(10) NOT NULL,
+          `quantity` int(11) NOT NULL,
+          `item_price` decimal(8,2) NOT NULL,
+          PRIMARY KEY (`order_num`,`order_item`),
+          KEY `fk_orderitems_products` (`prod_id`),
+          CONSTRAINT `fk_orderitems_orders` FOREIGN KEY (`order_num`) REFERENCES `orders` (`order_num`),
+          CONSTRAINT `fk_orderitems_products` FOREIGN KEY (`prod_id`) REFERENCES `products` (`prod_id`)
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+         1 row in set (0.00 sec)
+
+        删除表
+         mysql> drop table customes;
+
+        重命名表(支持多表重命名)
+         mysql> rename table ace to ACEE;
+         Query OK, 0 rows affected (0.03 sec)
+        
+        
 ```
