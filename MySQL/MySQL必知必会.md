@@ -1595,6 +1595,129 @@ day-2024-7-15
         重命名表(支持多表重命名)
          mysql> rename table ace to ACEE;
          Query OK, 0 rows affected (0.03 sec)
-        
-        
 ```
+
+```c++
+day-2024-7-16
+        使用视图
+           
+           1. 视图
+             为什么使用视图？
+              1. 重用 SQL 语句.
+              2. 简化复杂的 SQL 操作.
+              3. 使用表的组成部分而不是整个表.
+              4. 保护数据.
+              5. 更改数据格式和表示.
+            
+             视图的规则和限制？
+              1. 与表一样, 视图必须唯一命名.
+              2. 对于可以创建的视图数目没有限制.
+              3. 为了创建视图, 必须具有足够的访问权限.
+              4. 视图可以嵌套, 即可以利用其他视图中检索数据的查询来构造一个视图.
+              5. order by 可以用在视图中, 但如果该视图检索数据 select 中也有 order by, 那么该视图的 order by 会被覆盖.
+              6. 视图不能索引, 也不能有关联的触发器或默认值.
+              7. 视图可以和表一起使用.
+            
+            2. 创建视图
+               利用视图简化复杂的联结
+
+              mysql> create view productcustomers as select cust_name, cust_contact, prod_id
+                  -> from customers, orders, orderitems where customers.cust_id=orders.cust_id
+                  -> and orderitems.order_num=orders.order_num;
+              Query OK, 0 rows affected (0.05 sec)
+
+              mysql> select cust_name, cust_contact from productcustomers where prod_id="TNT2";
+                    +----------------+--------------+
+                    | cust_name      | cust_contact |
+                    +----------------+--------------+
+                    | Coyote Inc.    | Y Lee        |
+                    | Yosemite Place | Y Sam        |
+                    +----------------+--------------+
+               
+               用视图重新格式化检索出来的数据
+
+               mysql> select concat(RTrim(vend_name),"(", RTrim(vend_country), ")") as vend_title from vendors order by vend_name;
+                    +------------------------+
+                    | vend_title             |
+                    +------------------------+
+                    | ACME(USA)              |
+                    | Anvils R Us(USA)       |
+                    | Furball Inc.(USA)      |
+                    | Jet Set(England)       |
+                    | Jouets Et Ours(France) |
+                    | LT Supplies(USA)       |
+                    +------------------------+
+                
+               mysql> create view vendorlocations as select concat(RTrim(vend_name), "(", RTrim(vend_country),")") as
+                     vend_title from vendors order by vend_name;
+                    Query OK, 0 rows affected (0.03 sec)
+                
+               mysql> select * from vendorlocations;
+                    +------------------------+
+                    | vend_title             |
+                    +------------------------+
+                    | ACME(USA)              |
+                    | Anvils R Us(USA)       |
+                    | Furball Inc.(USA)      |
+                    | Jet Set(England)       |
+                    | Jouets Et Ours(France) |
+                    | LT Supplies(USA)       |
+                    +------------------------+
+
+              用视图过滤掉不想要的数据
+                
+               mysql> create view customeremaillist as select cust_id, cust_name cust_email
+                   -> from customers where cust_email is not NULL;
+                Query OK, 0 rows affected (0.03 sec)
+
+               mysql> select * from customeremaillist;
+                    +---------+----------------+
+                    | cust_id | cust_email     |
+                    +---------+----------------+
+                    |   10001 | Coyote Inc.    |
+                    |   10003 | Wascals        |
+                    |   10004 | Yosemite Place |
+                    +---------+----------------+
+
+            使用视图与计算字段
+               mysql> select prod_id, quantity, item_price, quantity*item_price
+                   -> as expanded_price from orderitems where order_num=20005;
+                    +---------+----------+------------+----------------+
+                    | prod_id | quantity | item_price | expanded_price |
+                    +---------+----------+------------+----------------+
+                    | ANV01   |       10 |       5.99 |          59.90 |
+                    | ANV02   |        3 |       9.99 |          29.97 |
+                    | TNT2    |        5 |      10.00 |          50.00 |
+                    | FB      |        1 |      10.00 |          10.00 |
+                    +---------+----------+------------+----------------+
+
+               mysql> create view orderitemsexpanded as select order_num, prod_id,
+                   -> quantity, item_price, quantity*item_price as expanded_price
+                   -> from orderitems;
+               Query OK, 0 rows affected (0.03 sec)
+               
+               mysql> select * from orderitemsexpanded where order_num=20005;
+                    +-----------+---------+----------+------------+----------------+
+                    | order_num | prod_id | quantity | item_price | expanded_price |
+                    +-----------+---------+----------+------------+----------------+
+                    |     20005 | ANV01   |       10 |       5.99 |          59.90 |
+                    |     20005 | ANV02   |        3 |       9.99 |          29.97 |
+                    |     20005 | TNT2    |        5 |      10.00 |          50.00 |
+                    |     20005 | FB      |        1 |      10.00 |          10.00 |
+                    +-----------+---------+----------+------------+----------------+
+
+            更新视图
+
+            并非所有视图都是可更新的. 如果MySQL 不能正确地确定被更新的基数据, 则不允许更新. 
+            这意味着, 如果视图有如下操作, 则不能进行视图的更新:
+              1. 分组 (使用 group by 和 having).
+              2. 联结.
+              3. 子查询.
+              4. 并.
+              5. 聚集函数(Min() count() sum()) 等.
+              6. distinct.
+              7. 导出列.
+
+      视图为虚拟的表. 他们包含的不是数据而是根据需要检索数据的查询. 视图提供了一种 MySQL 的select 语句层次的封装,
+      可以用来简化数据查询以及重新格式化基础数据和保护基础数据.       
+``` 
