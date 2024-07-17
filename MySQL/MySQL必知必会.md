@@ -1622,8 +1622,8 @@ day-2024-7-16
                利用视图简化复杂的联结
 
               mysql> create view productcustomers as select cust_name, cust_contact, prod_id
-                  -> from customers, orders, orderitems where customers.cust_id=orders.cust_id
-                  -> and orderitems.order_num=orders.order_num;
+                   from customers, orders, orderitems where customers.cust_id=orders.cust_id
+                   and orderitems.order_num=orders.order_num;
               Query OK, 0 rows affected (0.05 sec)
 
               mysql> select cust_name, cust_contact from productcustomers where prod_id="TNT2";
@@ -1667,7 +1667,7 @@ day-2024-7-16
               用视图过滤掉不想要的数据
                 
                mysql> create view customeremaillist as select cust_id, cust_name cust_email
-                   -> from customers where cust_email is not NULL;
+                    from customers where cust_email is not NULL;
                 Query OK, 0 rows affected (0.03 sec)
 
                mysql> select * from customeremaillist;
@@ -1681,7 +1681,7 @@ day-2024-7-16
 
             使用视图与计算字段
                mysql> select prod_id, quantity, item_price, quantity*item_price
-                   -> as expanded_price from orderitems where order_num=20005;
+                    as expanded_price from orderitems where order_num=20005;
                     +---------+----------+------------+----------------+
                     | prod_id | quantity | item_price | expanded_price |
                     +---------+----------+------------+----------------+
@@ -1692,8 +1692,8 @@ day-2024-7-16
                     +---------+----------+------------+----------------+
 
                mysql> create view orderitemsexpanded as select order_num, prod_id,
-                   -> quantity, item_price, quantity*item_price as expanded_price
-                   -> from orderitems;
+                    quantity, item_price, quantity*item_price as expanded_price
+                    from orderitems;
                Query OK, 0 rows affected (0.03 sec)
                
                mysql> select * from orderitemsexpanded where order_num=20005;
@@ -1721,3 +1721,124 @@ day-2024-7-16
       视图为虚拟的表. 他们包含的不是数据而是根据需要检索数据的查询. 视图提供了一种 MySQL 的select 语句层次的封装,
       可以用来简化数据查询以及重新格式化基础数据和保护基础数据.       
 ``` 
+
+```c++
+        使用存储过程
+
+          1. 存储过程
+             存储过程简单来说, 就是为以后的使用而保存的一条或多条 MySQL 语句的集合. 可将其视为批文件, 虽然它们的作用不仅限于批处理.
+            
+          2. 为什么要使用存储过程
+             (1)、 通过把处理封装在容易使用的单元中, 简化复杂的操作.
+             (2)、 由于不要求返回建立一系列处理步骤, 这保证了数据完整性. (防止错误)
+             (3)、 简化对变动的管理. (安全性)
+             (4)、 提高性能, 使用存储过程比使用单独的 SQL 语句要快.
+             (5)、存在一些只能在单个请求中的 MySQL 元素和特性, 存储过程可以使用它们来编写功能更强更灵活的代码.
+          
+          总之, 存储过程三个主要好处: 简单、安全、高性能.
+
+          缺点: 
+             复杂和权限.
+            
+          3.使用存储过程
+              (1)、 执行存储过程
+               MySQL 称存储过程的执行为调用, 因此 MySQL 执行存储过程的语句为 CALL.
+
+               mysql> call productpricing(@pricelow,@pricehigh,@priceaverage);
+
+              (2)、创建存储过程
+               mysql> create procedure productpricing() select avg(prod_price) as priceaverage  from products;
+               Query OK, 0 rows affected (0.03 sec)
+               
+               // MySQL 默认的语句分隔符是 ; 这么begin 和 end 就不会成为存储过程的成分.
+               // 解决办法是临时更改命令行实用程序的语句分隔符(除  \ 外, 任意字符都可以用作语句分隔符), 如下:
+               
+               mysql> delimiter //
+               mysql> create procedure productprice()
+                    begin
+                          select avg(prod_price) as priceaverage
+                          from products;
+                    end //
+               Query OK, 0 rows affected (0.03 sec)
+
+               mysql> delimiter ;
+
+               mysql> call productpricing();
+                    +--------------+
+                    | priceaverage |
+                    +--------------+
+                    |    16.133571 |
+                    +--------------+
+              
+              (3)、 删除存储过程
+               mysql> drop procedure productpricing;
+               Query OK, 0 rows affected (0.03 sec)
+
+              (4)、 使用参数
+               mysql> create procedure productpricing(
+                   out pl decimal(8,2),
+                   out ph decimal(8,2),
+                   out pa decimal(8,2)
+                   )
+                   begin
+                     select min(prod_price)
+                     into pl
+                     from products;
+                     select max(prod_price)
+                     into ph
+                     from products;
+                     select avg(prod_price)
+                     into pa
+                     from products;
+                   end //
+              
+               mysql> call productpricing(@pricelow,@pricehigh,@priceaverage);
+               Query OK, 1 row affected, 1 warning (0.03 sec)
+
+               mysql> select @priceaverage;
+                  +---------------+
+                  | @priceaverage |
+                  +---------------+
+                  |         16.13 |
+                  +---------------+
+
+               mysql> select @pricehigh, @pricelow, @priceaverage;
+                  +------------+-----------+---------------+
+                  | @pricehigh | @pricelow | @priceaverage |
+                  +------------+-----------+---------------+
+                  |      55.00 |      2.50 |         16.13 |
+                  +------------+-----------+---------------+
+
+               mysql> create procedure ordertotal(
+                      in onumber int,
+                      out ototal decimal(8,2)
+                      )
+                      begin
+                         select sum(item_price * quantity)
+                         from orderitems
+                         where order_num = onumber
+                         into ototal;
+                      end//
+                
+               mysql> call ordertotal(20005, @total);
+               Query OK, 1 row affected (0.00 sec)
+
+               mysql> select @total;
+                    +--------+
+                    | @total |
+                    +--------+
+                    | 149.87 |
+                    +--------+
+
+          4.  创建智能存储过程
+            ..... P183  ....
+
+              mysql> show procedure status; // 查看存储过程信息.；
+          
+          5. 检查存储过程
+              mysql> show create procedure productpricing \g // 内容过多.
+
+          
+
+
+```
