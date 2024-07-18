@@ -1838,7 +1838,53 @@ day-2024-7-16
           5. 检查存储过程
               mysql> show create procedure productpricing \g // 内容过多.
 
-          
+```
 
+```c++
+          使用游标
+            1. 创建游标
+              mysql> delimiter //
+              mysql> create procedure processorders()
+                    begin
+                       declare ordernumbers cursor
+                       for
+                       select order_num from orders;
+                    end //
+              Query OK, 0 rows affected (0.03 sec)
+            
+            2. 打开和关闭游标
+
+             mysql> open ordernumbers;
+             mysql> close ordernumbers;
+
+            mysql> create procedure processorders()
+                  begin
+                    declare ordernumbers cursor
+                    for
+                    select order_num from orders;
+                    open ordernumbers;
+                    close ordernumbers;
+                  end //
+            Query OK, 0 rows affected (0.00 sec)
+```
+
+```c++
+          触发器
+            1. 创建触发器
+             mysql> create trigger newaccount
+                    after insert on account
+                    for each row
+                    begin
+                      insert into account(name, balance)
+                      values("id added", 2090);
+                    end //
+            Query OK, 0 rows affected (0.03 sec)
+              
+            2. 删除触发器
+             mysql> drop trigger newaccount;
+            
+            3. 使用触发器
+             (1)、 insert 触发器
+               ... 看不懂, 执行都err..
 
 ```
