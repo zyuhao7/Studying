@@ -1973,3 +1973,49 @@ day - 2024 - 7 - 19
 
         autocommit: 是否自动提交更改.
 ```
+
+```c++
+day - 2024 - 7 - 19
+         全球化和本地化 (global 和 local)
+
+      1. 字符集和校对顺序
+        字符集: 为字母和符号的集合.
+        编码: 为某个字符集内部的成员表示.
+        校对: 为规定字符如何比较的指令.
+      
+      2. 使用字符集和校对顺序
+
+        mysql> show character set; // 查看字符集.
+        mysql> show collation; // 查看所支持校对的完整列表.
+
+        mysql> show variables like "character%";
+        +--------------------------+--------------------------+
+        | Variable_name            | Value                    |
+        +--------------------------+--------------------------+
+        | character_set_client     | utf8                     |
+        | character_set_connection | utf8                     |
+        | character_set_database   | utf8                     |
+        | character_set_filesystem | binary                   |
+        | character_set_results    | utf8                     |
+        | character_set_server     | utf8                     |
+        | character_set_system     | utf8                     |
+        | character_sets_dir       | H:\MySQL\share\charsets\ |
+        +--------------------------+--------------------------+
+
+        mysql> show variables like "collation%";
+        +----------------------+-----------------+
+        | Variable_name        | Value           |
+        +----------------------+-----------------+
+        | collation_connection | utf8_general_ci |
+        | collation_database   | utf8_general_ci |
+        | collation_server     | utf8_general_ci |
+        +----------------------+-----------------+
+
+      mysql> create table mytable(
+            c1 int,
+            c2 varchar(2)
+            ) default character set hebrew
+            collate hebrew_general_ci;
+      Query OK, 0 rows affected (0.05 sec)  
+      
+```
