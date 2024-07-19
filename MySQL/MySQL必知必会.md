@@ -1888,3 +1888,88 @@ day-2024-7-16
                ... 看不懂, 执行都err..
 
 ```
+
+```c++
+day - 2024 - 7 - 19
+        管理事务处理
+          1. 事务处理术语
+               事务: 指一组 SQL 语句.
+               回退: 指撤销指定 SQL 语句的过程.
+               提交: 指将未存储的 SQL 语句结果写入数据库表.
+               保留点: 指事务处理中设置的临时占位符,可以对它发布回退.
+          
+          2. 控制事务处理
+
+            mysql> start transaction; // 开启事务
+            Query OK, 0 rows affected (0.02 sec)
+
+            1). 使用 rollback
+            
+            mysql> select * from ordertotals;
+            +------+
+            | id   |
+            +------+
+            |    1 |
+            |    2 |
+            |    3 |
+            +------+
+            3 rows in set (0.00 sec)
+
+            mysql> start transaction;
+            Query OK, 0 rows affected (0.00 sec)
+
+            mysql> delete from ordertotals;
+            Query OK, 3 rows affected (0.02 sec)
+
+            mysql> select * from ordertotals;
+            Empty set (0.00 sec)
+
+            mysql> rollback;
+            Query OK, 0 rows affected (0.01 sec)
+
+            mysql> select * from ordertotals;
+            +------+
+            | id   |
+            +------+
+            |    1 |
+            |    2 |
+            |    3 |
+            +------+
+            3 rows in set (0.00 sec)
+          
+          2). 使用 commit 
+           
+           mysql> start transaction;
+           Query OK, 0 rows affected (0.00 sec)
+
+           mysql> delete from orderitems where order_num = 200010;
+           Query OK, 0 rows affected (0.03 sec)
+
+           mysql> delete from orders where order_num = 200010;
+           Query OK, 0 rows affected (0.00 sec)
+
+           mysql> commit;
+           Query OK, 0 rows affected (0.00 sec)
+
+          3). 使用保留点
+
+            mysql> start transaction;
+           Query OK, 0 rows affected (0.00 sec)
+
+           mysql> savepoint d1;
+           Query OK, 0 rows affected (0.00 sec)
+
+           mysql> rollback to d1;
+           Query OK, 0 rows affected (0.00 sec)
+
+
+          4). 更改默认的提交行为
+
+            mysql> set autocommit=0;
+           Query OK, 0 rows affected (0.00 sec)
+
+           mysql> set autocommit=1;
+           Query OK, 0 rows affected (0.00 sec)
+
+        autocommit: 是否自动提交更改.
+```
