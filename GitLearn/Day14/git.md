@@ -47,6 +47,7 @@
 **Ps:  若要设定「系统层级」选项，请务必用【以系统管理员身分执行】的方式启用命令提示字元，然后再执行 git config 命令，才能写入正确的文件位置.**
 
 2. 使用者层级 ( --global ) (User-level configuration) (设定于目前登入的使用者)
+   
             $ git config --list --global
             credential.https://gitee.com.provider=generic
             user.name=徐浩
