@@ -69,7 +69,27 @@ using namespace std;
  *          swap(l, j)
  *          qsort4(l, j - 1)
  *          qsort4(j + 1, u)
-
+ *
+ *      选择排序伪代码.
+ *      void selectsort()
+ *           for i =(0, n-1)
+ *              for j=(i, n)
+ *                 if(x[j] < x[i])
+ *                     swap(i, j)
+ *
+ *      希尔排序伪代码.
+ *      void shellsort()
+ *           for(h = 1; h < n; h = 3 * h + 1)
+ *              ;
+ *           loop
+ *              h /= 3
+ *              if(h < 1)
+ *                  break
+ *              for i = (h, n)
+ *                  for(j = i; j >= h; j -= h)
+ *                      if(x[j - h] < x[j])
+ *                              break
+ *                      swap(j - h, j)
  */
 
 // 模板.
