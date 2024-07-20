@@ -2019,3 +2019,124 @@ day - 2024 - 7 - 19
       Query OK, 0 rows affected (0.05 sec)  
       
 ```
+```c++
+day 2024-7-20
+          安全管理
+            1. 访问控制
+
+            2. 管理用户
+
+            mysql> select user from user;
+                  +-----------+
+                  | user      |
+                  +-----------+
+                  | myh       |
+                  | root      |
+                  | mysql.sys |
+                  +-----------+
+
+            创建用户账号
+            
+            mysql> create user ben;
+            Query OK, 0 rows affected (0.03 sec)
+
+            mysql> rename user ben to Benb; // 重命名
+            Query OK, 0 rows affected (0.00 sec)
+
+            删除用户账号
+
+            mysql> drop user Benb;
+            Query OK, 0 rows affected (0.00 sec)
+
+            设置访问权限
+
+            mysql> show grants for xiaoming;
+          
+            +--------------------------------------+
+            | Grants for xiaoming@%                |
+            +--------------------------------------+
+            | GRANT USAGE ON *.* TO 'xiaoming'@'%' |
+            +--------------------------------------+
+
+            为设置权限, 使用 grant 语句, grant 要求给出以下信息:
+            1. 要授予的权限
+            2. 被授予访问权限的数据库或表
+            3. 用户名
+
+            mysql> grant select on crashcourse.* to xiaoming; // 用户 xiaoming 对 crashcourse 数据库中的所有数据具有只读访问权限.
+            Query OK, 0 rows affected (0.00 sec)
+
+            mysql> show grants for xiaoming;
+            +---------------------------------------------------+
+            | Grants for xiaoming@%                             |
+            +---------------------------------------------------+
+            | GRANT USAGE ON *.* TO 'xiaoming'@'%'              |
+            | GRANT SELECT ON `crashcourse`.* TO 'xiaoming'@'%' |
+            +---------------------------------------------------+
+
+            mysql> revoke select on crashcourse.* from xiaoming; // 撤销特定的权限
+            Query OK, 0 rows affected (0.00 sec)
+
+            grant 和 revoke 可在几个层次上控制访问权限:
+            1. 整个服务器, 使用 grant all 和 revoke all
+            2. 整个数据库 on database.*
+            3. 特定的表, 使用 on database.table
+            4. 特定的列
+            5. 特定的存储过程
+
+            更改口令
+
+            mysql> set password for xiaoming = password("hhll"); // 更新用户口令.
+            Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+            mysql> set password  = password("hhll"); // 更改当前登录用户的口令
+
+
+```
+
+```c++
+day-2024-7-20
+
+              数据库维护
+                1. 备份数据
+
+            在备份之前, 首先刷新未写数据, 为了保证所有数据被写到磁盘, 需要在进行备份前使用 flush tables 语句.
+
+
+                2. 进行数据库维护
+
+              mysql> analyze table orders; // 检查比表键是否正确.
+              +-------------+---------+----------+----------+
+              | Table       | Op      | Msg_type | Msg_text |
+              +-------------+---------+----------+----------+
+              | test.orders | analyze | status   | OK       |
+              +-------------+---------+----------+----------+
+              
+              mysql> check table orders,orderitems;
+              +-----------------+-------+----------+----------+
+              | Table           | Op    | Msg_type | Msg_text |
+              +-----------------+-------+----------+----------+
+              | test.orders     | check | status   | OK       |
+              | test.orderitems | check | status   | OK       |
+              +-----------------+-------+----------+----------+
+
+
+                3. 诊断启动问题
+                4. 查看日志文件
+                mysql> flush logs; // 刷新和重新开始日志
+
+
+                改善性能
+                 
+                mysql> show processlist; // 显示所有活动进程.
+                +----+------+-----------------+------+---------+------+----------+------------------+
+                | Id | User | Host            | db   | Command | Time | State    | Info             |
+                +----+------+-----------------+------+---------+------+----------+------------------+
+                |  3 | root | localhost:51424 | test | Query   |    0 | starting | show processlist |
+                +----+------+-----------------+------+---------+------+----------+------------------+
+
+
+                
+
+
+```
