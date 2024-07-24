@@ -3,9 +3,10 @@
 #include <stdlib.h>
 #include <cstring>
 #include <vector>
-#include <queue>
 #include <stack>
-
+#include <queue>
+#include <string>
+#include <time.h>
 using namespace std;
 
 // class A
@@ -128,7 +129,7 @@ using namespace std;
 //         if (n == a[r][c])
 //         {
 //             cout << "[" << r << "," << c << "]" << endl;
-//             break;
+//             bream;
 //         }
 //         else if (n > a[r][c])
 //         {
@@ -155,7 +156,7 @@ using namespace std;
 //             if (matrix[row * columns + column] == number)
 //             {
 //                 found = true;
-//                 break;
+//                 bream;
 //             }
 //             else if (matrix[row * columns + column] > number)
 //             {
@@ -295,7 +296,7 @@ using namespace std;
 // 节点定义如下:
 // struct ListNode
 // {
-//     int m_nKey;
+//     int m_nmey;
 //     ListNode *m_pNext;
 // };
 
@@ -303,7 +304,7 @@ using namespace std;
 // 思路:  从头到尾遍历一遍节点, 将值存到栈中, 然后在从栈取出来即可.
 // void PrintListFromTailToHead(ListNode *pHead)
 // {
-//     std::stack<ListNode *> nodes;
+//     std::stacm<ListNode *> nodes;
 //     ListNode *pNode = pHead;
 //     while (pNode != nullptr)
 //     {
@@ -313,7 +314,7 @@ using namespace std;
 //     while (!nodes.empty())
 //     {
 //         pNode = nodes.top();
-//         cout << pNode->m_nKey << " ";
+//         cout << pNode->m_nmey << " ";
 //         nodes.pop();
 //     }
 // }
@@ -329,11 +330,131 @@ using namespace std;
 //             PrintListFromTailToHead(pHead->next);
 //         }
 //     }
-//     cout << pHead->m_nKey << " ";
+//     cout << pHead->m_nmey << " ";
 // }
 
-int main()
-{
+// 树
+// 面试题 6 重建二叉树
+// 输入前序遍历 {1,2,4,7,3,5,6,8} 和中序遍历 {4,7,2,1,5,3,8,6}, 重建出二叉树并输出头结点.
 
-    return 0;
+struct BinaryTreeNode
+{
+    int value_;
+    BinaryTreeNode *Left_;
+    BinaryTreeNode *Right_;
+};
+
+/*
+                   1
+               2       3
+            4       5     6
+               7        8
+*/
+// string Prev, Inorder;
+
+// void build(int l1, int r1, int l2, int r2)
+// {
+//     int m = Inorder.find(Prev[l1]); // 找到中序的根在哪?
+//     if (m > l2)
+//         build(l1 + 1, l1 + m - l2, l2, m - 1); // 左孩子.
+//     if (m < r2)
+//         build(l1 + m - l2 + 1, r1, m + 1, r2); // 右孩子.
+//     cout << Prev[l1];
+// }
+
+// int main()
+// {
+//     while (cin >> Prev >> Inorder)
+//     {
+//         build(0, Prev.size() - 1, 0, Inorder.size() - 1);
+//         cout << endl;
+//     }
+// }
+
+// 栈与队列
+// 用两个栈实现队列.
+// class MyQueue
+// {
+// public:
+//     stack<int> st1;
+//     stack<int> st2;
+//     MyQueue() {}
+
+//     void push(int x)
+//     {
+//         st1.push(x);
+//     }
+
+//     int pop()
+//     {
+//         if (st2.empty())
+//         {
+//             while (!st1.empty())
+//             {
+//                 int top = st1.top();
+//                 st1.pop();
+//                 st2.push(top);
+//             }
+//         }
+//         int t = st2.top();
+//         st2.pop();
+//         return t;
+//     }
+
+//     int peek()
+//     {
+//         if (st2.empty())
+//         {
+//             while (!st1.empty())
+//             {
+//                 st2.push(st1.top());
+//                 st1.pop();
+//             }
+//         }
+//         return st2.top();
+//     }
+
+//     bool empty()
+//     {
+//         return st1.empty() && st2.empty();
+//     }
+// };
+
+// 算法和数据结构.
+
+// 实现快排的关键在于先在数组选择一个数字, 接下来把数组中的数字分为两部分, 左边小于选中数字, 右边大于.
+
+int RandomInRange(int i, int j)
+{
+    srand(time(NULL));
+    int n = (rand() % (j - i + 1)) + i;
+}
+
+int Partition(int data[], int length, int start, int end)
+{
+    if (data == NULL || length <= 0 || start < 0 || end >= length)
+        return;
+    int index = RandomInRange(start, end);
+    swap(&data[index], &data[end]);
+
+    int small = start - 1;
+    for (index = start; index < end; ++index)
+    {
+        ++small;
+        if (small != index)
+            swap(&data[index], &data[small]);
+    }
+    ++small;
+    swap(&data[small], &data[end]);
+}
+
+void QuickSort(int data[], int length, int start, int end)
+{
+    if (start == end)
+        return;
+    int index = Partition(data, length, start, end);
+    if (index > start)
+        Partition(data, length, start, index - 1);
+    if (index < end)
+        Partition(data, length, index + 1, end);
 }
