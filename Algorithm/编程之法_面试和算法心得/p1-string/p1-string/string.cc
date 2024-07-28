@@ -228,8 +228,118 @@ using namespace std;
 // {
 //      CharAllCombination("abc");
 // }
-// ===============================================================================================================================================================================
 
-// ===============================================================================================================================================================================
+// 字符串转整数
+// 输入一个由数字组成的字符串, 把它转换成整数并输出. 例如输入字符串 "123" 输出整数 123.
+// 函数原型为 int StrToInt(const char* str)
+#include <cstring>
+int StrToInt1(const char *str) // 自解, 题目没说明有其他字符或者空格符号等等, 因此简单实现一下.
+{
+     int idx = 0;
+     bool symbol = true;
+     if (str[idx] == '-')
+     {
+          symbol = false;
+          idx++;
+     }
+     int t = 0;
+     while (idx < strlen(str))
+     {
+          t = t * 10 + (str[idx++] - '0');
+     }
+     if (!symbol)
+          t *= -1;
+     return t;
+}
 
-// ===============================================================================================================================================================================
+int StrToInt2(const char *str)
+{
+     int n;
+     while (*str != 0)
+     {
+          int c = *str - '0';
+          n = n * 10 + c;
+          ++str;
+     }
+     return n;
+}
+
+int StrToInt3(const char *str)
+{
+     static const int MAX_INT = (int)((unsigned)~0 >> 1);
+     static const int MIN_INT = -(int)((unsigned)~0 >> 1) - 1;
+     unsigned int n = 0;
+
+     // 判断输入是否为空.
+     if (str == nullptr)
+          return 0;
+
+     // 处理空格.
+     while (isspace(*str))
+          ++str;
+
+     // 处理正负.
+     int sign = 1;
+     if (*str == '+' || *str == '-')
+     {
+          if (*str == '-')
+               sign = -1;
+          ++str;
+     }
+
+     // 确定是数字后再开始执行循环.
+     while (isdigit(*str))
+     {
+          // 处理溢出.
+          int c = *str - '0';
+          if (sign > 0 && (n > MAX_INT / 10 || (n == MAX_INT / 10 && c > MAX_INT % 10)))
+          {
+               n = MAX_INT;
+               break;
+          }
+          else if (sign < 0 && (n > (unsigned)MIN_INT / 10 || (n == (unsigned)MIN_INT / 10 && c > (unsigned)MIN_INT % 10)))
+          {
+               n = MIN_INT;
+               break;
+          }
+          n = n * 10 + c;
+          ++str;
+     }
+     return sign > 0 ? n : -n;
+}
+
+#if 0
+int main()
+{
+     // int n = StrToInt("-123");
+     // cout << n << endl;
+     // int n = StrToInt3("   -123");
+     // cout << n << endl;
+     return 0;
+}
+#endif
+
+// 回文判断
+// 给定一个字符串, 如何判断这个字符串是否是回文串?
+// aba  abba
+bool Is_Palindrome(const char *str) // 从左右两端.
+{
+     if (str == nullptr)
+          return false;
+
+     int begin = 0, end = strlen(str) - 1;
+     while (begin < end)
+     {
+          if (str[begin] != str[end])
+               return false;
+          ++begin;
+          --end;
+     }
+     return true;
+}
+
+int main()
+{
+     cout << Is_Palindrome("heh");
+     return 0;
+}
