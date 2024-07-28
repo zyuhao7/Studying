@@ -7,6 +7,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <deque>
 #include <unordered_map>
 #include <unordered_set>
 #include <queue>
@@ -277,7 +278,7 @@ using namespace std;
 // }
 
 // 6.4 基本算法. 示例
-#if 1
+#if 0
 template <class T>
 struct display
 {
@@ -339,3 +340,56 @@ int main()
     return 0;
 }
 #endif
+// copy_overlap
+template <class T>
+struct display
+{
+    void operator()(const T &x)
+    {
+        cout << x << " ";
+    }
+};
+int main()
+{
+#if 1
+    int ia[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+
+    // 以下, 输出区间的终点与输入区间重叠, 没问题.
+    copy(ia + 2, ia + 7, ia);
+    for_each(ia, ia + 9, display<int>()); // 2 3 4 5 6 5 6 7 8
+    cout << endl;
+
+    int ia[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+    // 以下, 输出区间的起点与输入区间重叠, 可能有问题.
+    copy(ia + 2, ia + 7, ia + 4);
+    for_each(ia, ia + 9, display<int>()); // 0 1 2 3 2 3 4 5 6 本例结果正确, 因为调用的 copy 算法用的 memmove() 执行的.
+    cout << endl;
+    int ia[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+    deque<int> id(ia, ia + 9);
+    deque<int>::iterator first = id.begin();
+    deque<int>::iterator last = id.end();
+    ++first; // advance(first, 1)  //1
+    cout << *first << endl;
+    --last;
+    cout << *last << endl; // 8
+    deque<int>::iterator result = id.begin();
+    cout << *result << endl; // 0
+
+    // 以下, 输出区间的终点与输入区间重叠, 没问题.
+    copy(first, last, result);
+    for_each(id.begin(), id.end(), display<int>()); // 1 2 3 4 5 6 7 7 8
+    cout << endl;
+#endif
+    int ia[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+    deque<int> id(ia, ia + 9);
+    deque<int>::iterator first = id.begin();
+    deque<int>::iterator last = id.end();
+    ++first;
+    --last;
+    deque<int>::iterator result = id.begin();
+
+    advance(result, 4);
+    copy(first, last, result);
+    for_each(id.begin(), id.end(), display<int>()); // 0 1 2 3 1 2 3 4 5 本例copy不使用memmove执行复制.
+    cout << endl;
+}
