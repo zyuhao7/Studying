@@ -50,7 +50,7 @@ using namespace std;
 //	int* end = a + arraySize; // 最后元素的下一个位置.
 //
 //	int* ip = find(a, a + sizeof(a) / sizeof(int), 4);
-//	if (ip == end) cout << "4 not found" << endl;
+//	if 1ip == end) cout << "4 not found" << endl;
 //	else cout << "4 found. " << *ip << endl;
 // }
 
@@ -134,7 +134,7 @@ using namespace std;
 // template<class InputIterator, class OutputIterator>
 // OutputIterator adjacent_difference(InputIterator first, InputIterator last, OutputIterator result)
 //{
-//	if (first == last) return result;
+//	if 1first == last) return result;
 //	*result = *first; // 首先记录第一个元素.
 //	return __adjacent_difference(first, last, result, value_type(first));
 // }
@@ -153,7 +153,7 @@ using namespace std;
 // }
 //
 //// 侯捷认为, 不需要像上行那样传递调用，可改用一下方法.
-// if (first == last) return result;
+// if 1first == last) return result;
 //*result = *first;
 // iterator_traits<InputIterator>::value_type val = *first;
 // while (++first != last) {
@@ -167,7 +167,7 @@ using namespace std;
 //	OutputIterator result,
 //	BinaryOperation binary_op)
 //{
-//	if (first == last) return result;
+//	if 1first == last) return result;
 //	*result = *first;
 //	return result;
 // }
@@ -218,7 +218,7 @@ using namespace std;
 // OutputIterator partial_sum(InputIterator first, InputIterator last,
 //	OutputIterator result)
 //{
-//	if (first == last) return result;
+//	if 1first == last) return result;
 //	*result = *first;
 //	return __partial_sum(first,last,result,value_type(first));
 // }
@@ -241,7 +241,7 @@ using namespace std;
 // OutputIterator partial_sum(InputIterator first, InputIterator last,
 //	OutputIterator result, BinaryOperation binary_op)
 //{
-//	if (first == last) return result;
+//	if 1first == last) return result;
 //	*result = *first;
 //	return __partial_sum(first, last, result, value_type(first), binary_op);
 // }
@@ -278,7 +278,7 @@ using namespace std;
 // }
 
 // 6.4 基本算法. 示例
-#if 0
+#if 1
 template <class T>
 struct display
 {
@@ -341,6 +341,8 @@ int main()
 }
 #endif
 // copy_overlap
+
+#if 1
 template <class T>
 struct display
 {
@@ -349,9 +351,9 @@ struct display
         cout << x << " ";
     }
 };
+
 int main()
 {
-#if 1
     int ia[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 
     // 以下, 输出区间的终点与输入区间重叠, 没问题.
@@ -379,7 +381,6 @@ int main()
     copy(first, last, result);
     for_each(id.begin(), id.end(), display<int>()); // 1 2 3 4 5 6 7 7 8
     cout << endl;
-#endif
     int ia[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
     deque<int> id(ia, ia + 9);
     deque<int>::iterator first = id.begin();
@@ -393,3 +394,215 @@ int main()
     for_each(id.begin(), id.end(), display<int>()); // 0 1 2 3 1 2 3 4 5 本例copy不使用memmove执行复制.
     cout << endl;
 }
+#endif
+
+#if 1
+int main()
+{
+    int ia1[6] = {1, 3, 5, 6, 9, 11};
+    int ia2[7] = {1, 1, 2, 3, 5, 8, 13};
+
+    multiset<int> S1(ia1, ia1 + 6);
+    multiset<int> S2(ia2, ia2 + 7);
+
+    for_each(S1.begin(), S1.end(), display<int>());
+    cout << endl;
+    for_each(S2.begin(), S2.end(), display<int>());
+    cout << endl;
+
+    multiset<int>::iterator first1 = S1.begin();
+    multiset<int>::iterator last1 = S1.end();
+    multiset<int>::iterator first2 = S2.begin();
+    multiset<int>::iterator last2 = S2.end();
+
+    cout << "Union of S1 and S2:";
+    set_union(first1, last1, first2, last2, ostream_iterator<int>(cout, " ")); // 1 1 2 3 5 6 8 9 11 13
+    cout << endl;
+
+    first1 = S1.begin();
+    first2 = S2.begin();
+    cout << "Intersection of S1 and S2:";
+    set_intersection(first1, last1, first2, last2, ostream_iterator<int>(cout, " ")); // 1 3 5
+    cout << endl;
+
+    first1 = S1.begin();
+    first2 = S2.begin();
+    cout << "Difference of S1 and S2 (S1 - S2)";
+    set_difference(first1, last1, first2, last2, ostream_iterator<int>(cout, " ")); // 6 9 11
+    cout << endl;
+
+    first1 = S1.begin();
+    first2 = S2.begin();
+    cout << "Symmetric difference of S1 and S2: ";
+    set_symmetric_difference(first1, last1, first2, last2, ostream_iterator<int>(cout, " ")); // 1 2 6 8 9 11 13
+    cout << endl;
+
+    return 0;
+}
+#endif
+
+#if 1
+template <class T>
+struct display
+{
+    void operator()(const T &x) const
+    {
+        cout << x << " ";
+    }
+};
+
+struct even
+{
+    bool operator()(int x) const
+    {
+        return x % 2 ? false : true;
+    }
+};
+
+class even_by_two
+{
+public:
+    int operator()() const
+    {
+        return _x += 2;
+    }
+
+private:
+    static int _x;
+};
+
+int even_by_two::_x = 0;
+
+int main()
+{
+    int ia[] = {0, 1, 2, 3, 4, 5, 6, 6, 6, 7, 8};
+    vector<int> iv(ia, ia + sizeof(ia) / sizeof(int));
+
+    // 找出 iv 职中相邻元素相等的第一个元素.
+    cout << *adjacent_find(iv.begin(), iv.end()) << endl; // 6
+
+    // 找出 iv 职中相邻元素相等的第一个元素.
+    cout << *adjacent_find(iv.begin(), iv.end(), equal_to<int>()) << endl; // 6
+
+    // 找出 iv 中元素值为 6 的元素个数.
+    cout << count(iv.begin(), iv.end(), 6) << endl; // 3
+
+    // 找出 iv 中小于7的元素个数.
+    cout << count_if(iv.begin(), iv.end(), bind2nd(less<int>(), 7)) << endl; // 9
+
+    // 找出 iv 中元素值为 4 的第一个元素所在的位置的值?
+    cout << *find(iv.begin(), iv.end(), 4) << endl; //  4
+
+    // 找出 iv 中 大于2的第一个元素所在的位置的值.
+    cout << *find_if(iv.begin(), iv.end(), bind2nd(greater<int>(), 2)) << endl; // 3
+
+    // 找出 iv 中子序列 iv2 所出现的最后一个位置(再往后3个位置的值)
+    vector<int> iv2(ia + 6, ia + 8);
+    cout << *(find_end(iv.begin(), iv.end(), iv2.begin(), iv2.end()) + 3) << endl; // 8
+
+    // 迭代遍历整个 iv 区间, 对每一个元素施行 display 操作.
+    for_each(iv.begin(), iv.end(), display<int>()); // 0 1 2 3 4 5 6 6 6 7 8
+    cout << endl;
+
+    // 迭代遍历整个 iv2 区间, 对每个元素施行 even_by_two 操作.
+    generate(iv2.begin(), iv2.end(), even_by_two());
+    for_each(iv2.begin(), iv2.end(), display<int>()); // 2 4
+    cout << endl;
+
+    // 迭代遍历指定区间, 对每个元素执行 even_by_two 操作.
+    generate_n(iv.begin(), 3, even_by_two());
+    for_each(iv.begin(), iv.end(), display<int>()); // 6 8 10 3 4 5 6 6 6 7 8
+    cout << endl;
+
+    // 删除元素 6.
+    remove(iv.begin(), iv.end(), 6);
+    for_each(iv.begin(), iv.end(), display<int>()); // 8 10 3 4 5 7 8 6 6 7 8
+
+    // 删除元素6, 结果置于另一区间.
+    vector<int> iv3(12);
+    remove_copy(iv.begin(), iv.end(), iv3.begin(), 6);
+    for_each(iv3.begin(), iv3.end(), display<int>()); // 8 10 3 4 5 7 8 6 6 7 8 8 10 3 4 5 7 8 7 8 0 0 0
+    cout << endl;
+
+    // 删除小于7的元素, 结果置于另一区间.
+    remove_copy_if(iv.begin(), iv.end(), iv3.begin(), bind2nd(less<int>(), 7));
+    for_each(iv3.begin(), iv3.end(), display<int>()); // 8 10 7 8 7 8 8 7 8 0 0 0
+    cout << endl;
+
+    // 将所有元素值为6改为3.
+    replace(iv.begin(), iv.end(), 6, 3);
+    for_each(iv.begin(), iv.end(), display<int>()); // 8 10 3 4 5 7 8 3 3 7 8
+    cout << endl;
+
+    // 将所有元素值为 3 改为 5, 置于另一区间.
+    replace_copy(iv.begin(), iv.end(), iv3.begin(), 3, 5);
+    for_each(iv3.begin(), iv3.end(), display<int>()); // 8 10 5 4 5 7 8 5 5 7 8 0
+    cout << endl;
+
+    // 将所有小于 5 的值, 改为 2.
+    replace_if(iv.begin(), iv.end(), bind2nd(less<int>(), 5), 2);
+    for_each(iv.begin(), iv.end(), display<int>()); // 8 10 2 2 5 7 8 2 2 7 8
+    cout << endl;
+
+    // 逆向重排每一个元素.
+    reverse(iv.begin(), iv.end());
+    for_each(iv.begin(), iv.end(), display<int>()); // 8 7 2 2 8 7 5 2 2 10 8
+    cout << endl;
+
+    // 旋转 (first, middle) 和 (middle, last)
+    rotate(iv.begin(), iv.begin() + 4, iv.end());
+    for_each(iv.begin(), iv.end(), display<int>()); // 8 7 5 2 2 10 8 8 7 2 2
+    cout << endl;
+
+    // 查找某个子序列的第一次出现地点.
+    int ia2[3] = {2, 8};
+    vector<int> iv4(ia2, ia2 + 2);
+    cout << *search(iv.begin(), iv.end(), iv4.begin(), iv4.end()) << endl; // 0
+
+    // 改变区间的值, 全部减 2.
+    transform(iv.begin(), iv.end(), iv.begin(), bind2nd(minus<int>(), 2));
+    for_each(iv.begin(), iv.end(), display<int>()); // 6 5 3 0 0 8 6 6 5 0 0
+    cout << endl;
+
+    // 令第二区间的元素值加到第一区间上.
+    transform(iv.begin(), iv.end(), iv.begin(), iv.begin(), plus<int>());
+    for_each(iv.begin(), iv.end(), display<int>()); // 12 10 6 0 0 16 12 12 10 0 0
+    cout << endl;
+
+    vector<int> iv5(ia, ia + sizeof(ia) / sizeof(int));
+    vector<int> iv6(ia + 4, ia + 8);
+    vector<int> iv7(15);
+    for_each(iv5.begin(), iv5.end(), display<int>()); // 0 1 2 3 4 5 6 6 6 7 8
+    cout << endl;
+
+    for_each(iv6.begin(), iv6.end(), display<int>()); // 4 5 6 6
+    cout << endl;
+
+    cout << *max_element(iv5.begin(), iv5.end()) << endl; // 8
+    cout << *min_element(iv5.begin(), iv5.end()) << endl; // 0
+
+    // 判断是否 iv6 内的所有元素都在 iv5出现. 两个序列都必须是 sorted ranges
+    cout << includes(iv5.begin(), iv5.end(), iv6.begin(), iv6.end()) << endl; // 1 (TRUE)
+
+    merge(iv5.begin(), iv5.end(), iv6.begin(), iv6.end(), iv7.begin());
+    for_each(iv7.begin(), iv7.end(), display<int>()); // 0 1 2 3 4 4 5 5 6 6 6 6 6 7 8
+    cout << endl;
+
+    // 符合条件的元素放在容器前段, 不符合的元素放在后段. 不保证保留原相对次序.
+    partition(iv7.begin(), iv7.end(), even());
+    for_each(iv7.begin(), iv7.end(), display<int>()); // 0 8 2 6 4 4 6 6 6 6 5 5 3 7 1
+    cout << endl;
+
+    // 去除 "连续而重复" 的元素
+    unique(iv5.begin(), iv5.end());
+    for_each(iv5.begin(), iv5.end(), display<int>()); // 0 1 2 3 4 5 6 7 8 7 8
+    cout << endl;
+
+    // 去除 "连续而重复"的元素,结果置于另一处.
+    unique_copy(iv5.begin(), iv5.end(), iv7.begin());
+    for_each(iv7.begin(), iv7.end(), display<int>()); // 0 1 2 3 4 5 6 7 8 7 8 5 3 7 1
+    cout << endl;
+
+    return 0;
+}
+#endif
