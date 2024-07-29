@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include <string.h>
 // auto 关键字 伟大! 无需多言!
 
 // register 关键字
@@ -47,6 +47,67 @@ int main()
 //  函数前面加 static 使得函数成为静态函数. 此处 "static"的含义不是指存储方式, 而是指对函数的作用域仅限于本文件(又称内部函数).
 //  使用内部函数的好处是, 不同的人编写不同的函数时, 不用担心自己定义的函数是否与其他文件中的函数同名.
 
-
 // 基本数据类型  -- short、 int、 long、 char、 float、 double
 
+// sizeof 关键字
+
+#if 0
+void func(int b[100])
+{
+    printf("sizeof(b) = %d\n", sizeof(b));
+}
+
+int main()
+{
+    int *p = NULL;
+
+    printf("sizeof(p) = %d\n", sizeof(p));   // 8
+    printf("sizeof(*p) = %d\n", sizeof(*p)); // 4
+
+    int a[100];
+    printf("sizeof(a) = %d \n", sizeof(a)); // 400
+
+    printf("sizeof(a[100]) = %d \n", sizeof(a[100])); // 4
+
+    printf("sizeof(&a) = %d \n", sizeof(&a)); // 8
+
+    printf("sizeof(&a[0]) = %d \n", sizeof(&a[0])); // 4 首元素地址就是数组地址啊, 地址是指针, 指针就是 8 啊. 怎么糊涂了..
+
+    func(a); // 8
+
+    return 0;
+}
+#endif
+
+// signed、 unsigned 关键字
+
+#if 0
+int main()
+{
+    signed char a[1000];
+    int i;
+    for (i = 0; i < 1000; ++i)
+    {
+        a[i] = -1 - i;
+    }
+    printf("%d \n", strlen(a));
+
+    int i = -20;
+    unsigned j = 10;
+    printf("%u \n", i + j);
+
+    unsigned k;
+    for (k = 9; k >= 0; k--)
+    {
+        printf("%u \n", k);
+    }
+}
+#endif
+
+// do、 while、 for 关键字
+// goto 关键字
+// void 关键字
+// 修饰函数返回值和参数
+// return 关键字
+// const关键字
+// 编译器通常不为普通 const 只读变量分配存储空间, 而是将它们保存在符号表中, 这使得它成为一个编译期间的值.
