@@ -1,14 +1,14 @@
-#include<iostream>
-#include<cstdio>
-#include<cstdlib>
-#include<algorithm>
-#include<cstring>
-#include<vector>
-#include<map>
-#include<set>
-#include<unordered_map>
-#include<unordered_set>
-#include<queue>
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <algorithm>
+#include <cstring>
+#include <vector>
+#include <map>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
 using namespace std;
 
 #if 0
@@ -29,7 +29,7 @@ int main()
 	cout << testClass<int>::_data << endl; //1
 	cout << testClass<char>::_data << endl; //2
 
-	testClass<int> obji1, obji2;
+	testClass<int> obj1, obj2;
 	testClass<char> objc1, objc2;
 
 	cout << obji1._data << endl; //1
@@ -104,14 +104,14 @@ public:
 	}
 };
 
-#ifdef __STL_FUNCTION_TEMP_PARTIAL_ORDER //只为说明,非本程序内容
+#ifdef __STL_FUNCTION_TEMP_PARTIAL_ORDER // 只为说明,非本程序内容
 template<class T,class Alloc>
 inline void SWAP(vector<T, Alloc>& x, vector<T, Alloc>& y)
 {
 	x.swap(y);
 	cout<<"x.swap(y)"<<endl;
 }
-#endif   //只为说明,非本程序内容
+#endif									 // 只为说明,非本程序内容
 
 int main()
 {
@@ -122,7 +122,6 @@ int main()
 	return 0;
 }
 #endif
-
 
 #if 0
 //组态8: __STL_MEMBER_TEMPLATES
@@ -178,34 +177,37 @@ int main()
 #endif
 
 #if 1
-//组态11: __STL_NON_TYPE_TMPL_PARAM_BUG
-class alloc{};
+// 组态11: __STL_NON_TYPE_TMPL_PARAM_BUG
+class alloc
+{
+};
 
 inline size_t __deque_buf_size(size_t n, size_t sz)
 {
 	return n != 0 ? n : (sz < 512 ? size_t(512 / sz) : size_t(1));
 }
 
-template<class t, class ref, class ptr, size_t bufsiz>
-struct __deque_iterator {
-	typedef __deque_iterator<t, t&, t*, bufsiz> iterator;
-	typedef __deque_iterator<t, const t&, const t*, bufsiz> const_iterator;
+template <class t, class ref, class ptr, size_t bufsiz>
+struct __deque_iterator
+{
+	typedef __deque_iterator<t, t &, t *, bufsiz> iterator;
+	typedef __deque_iterator<t, const t &, const t *, bufsiz> const_iterator;
 	static size_t buffer_size()
 	{
-		return __deque_buf_size(bufsiz, sizeof (t)); // linux 下 sizeof 需要加 () 限定...
+		return __deque_buf_size(bufsiz, sizeof(t)); // linux 下 sizeof 需要加 () 限定...
 	}
 };
 
-template<class t,class alloc=alloc,size_t bufsiz = 0>
+template <class t, class alloc = alloc, size_t bufsiz = 0>
 class Deque
 {
 public:
-	typedef __deque_iterator<t, t&, t*, bufsiz> iterator;
+	typedef __deque_iterator<t, t &, t *, bufsiz> iterator;
 };
 
 int main()
 {
-	cout << Deque<int>::iterator::buffer_size() << endl; // 128   
+	cout << Deque<int>::iterator::buffer_size() << endl;			// 128
 	cout << Deque<int, alloc, 64>::iterator::buffer_size() << endl; // 64
 	return 0;
 }
