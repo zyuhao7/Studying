@@ -30,7 +30,7 @@ using namespace std;
 
 // 条款 5 区间成员函数优先于与之对应的单元素成员函数
 
-#if 1
+#if 0
 int main()
 {
     vector<int> v1, v2;
@@ -55,45 +55,52 @@ int main()
     return 0;
 }
 #endif
-//              ---------------------------------------------------------
+
+// day-2024-8-7
 //  条款 6 当心C++编译器最烦人的分析机制
 
-// 条款 7 当使用 new 得指针的容器时,记得在销毁容器前 delete 那些指针
+// 使用命名的迭代器对象与通常的STL程序风格相违背，但你或许觉得为了使代码对所有编译器都没有二义性，
+// 并且使维护代码的人理解起来更容易，这一 代价是值得的.
 
-// 条款 8 永不建立 auto_ptr的容器
+// 条款 7 如果容器中包含了通过new操作创建的指针，切记在容器对象析构前将指针delete掉
+
+// 条款 8 切勿创建包含auto_ptr的容器对象
 
 // 条款 9 在删除选项中仔细选择
 
-// 3.4
-//  条款 10 注意分配器的协定和约束
+//  条款 10 了解分配子（allocator）的约定和限制
 
-// template<typename T,
-//	typename Allocator = allocator<T> >
-// class list {
-// private:
-//	Allocator alloc;
-//
-//	struct ListNode
-//	{
-//		T data;
-//		ListNode* prev;
-//		ListNode* next;
-//	};
-// };
-//
-// template<typename T>
-// class allocator {
-// public:
-//	template<typename  U>
-//	struct rebind
-//	{
-//		typedef allocator<U> other;
-//	};
-// };
+template <typename T,
+		  typename Allocator = allocator<T>>
+class list
+{
+private:
+	Allocator alloc;
 
-// 条款 11 理解自定义分配器的正确用法
+	struct ListNode
+	{
+		T data;
+		ListNode *prev;
+		ListNode *next;
+	};
+};
 
-// 条款 12 对 STL容器线程安全性的期待现实一些
+template <typename T>
+class allocator
+{
+public:
+	template <typename U>
+	struct rebind
+	{
+		typedef allocator<U> other;
+	};
+};
+
+// 条款 11 理解自定义分配子的合理用法
+
+// 条款 12 切勿对STL容器的线程安全性有不切实际的依赖
+
+//----------------------------------------------------------------------------------------------
 
 //							vector 和 string
 // 条款 13 尽量使用 vector 和 string 来替代动态分配的数组
