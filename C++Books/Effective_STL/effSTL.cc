@@ -100,22 +100,42 @@ public:
 
 // 条款 12 切勿对STL容器的线程安全性有不切实际的依赖
 
-//----------------------------------------------------------------------------------------------
+// day-2024-8-8
 
 //							vector 和 string
 // 条款 13 尽量使用 vector 和 string 来替代动态分配的数组
 
 // 条款 14 使用 reserve 来避免不必要的重新分配
 
-// 3.5
-//  条款 15 小心string实现的多样性
+// 2024-3-5
+//   条款 15 小心string实现的多样性
+#if 0
+int main()
+{
+	cout << sizeof(string) << endl; //32
+	return 0;
+}
+#endif
 
 // 条款 16 如何将 vector 和 string 的数据传给遗留的 API
 
 // 条款 17 使用 "交换技巧" 来修正过剩容量
+// vector<Contestant>(contestants).swap(contestants);
 
 // 条款 18 避免使用 vector<bool>
 
+#if 0
+template <typename Allocator>
+vector<bool, Allocator>
+{
+public:
+	class reference
+	{
+	};
+	reference operator[](size_type n);
+}
+#endif
+//-------------------------------------------------------------------------------------------------------------
 //													关联容器
 // 条款 19 了解 相等 和 等价之间的区别
 
