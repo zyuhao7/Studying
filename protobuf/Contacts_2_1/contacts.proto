@@ -1,0 +1,28 @@
+syntax = "proto3";
+package contacts;
+
+// 联系人
+
+message PeopleInfo
+{
+    string name = 1;
+    int32 age = 2;
+
+    message Phone
+    {
+        string number = 1;
+        enum PhoneType
+        {
+            MP = 0; // mobile phone. 移动电话.
+            F_TEL = 1; // fixed telephone 固定电话.
+        }
+        PhoneType type = 2;
+    }
+
+    repeated Phone phone = 3;
+}
+
+// 通讯录
+message Contacts{
+    repeated PeopleInfo contacts = 1;
+}
