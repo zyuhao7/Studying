@@ -135,35 +135,47 @@ public:
 	reference operator[](size_type n);
 }
 #endif
-//-------------------------------------------------------------------------------------------------------------
+// 2024-8-9
+
 //													关联容器
-// 条款 19 了解 相等 和 等价之间的区别
+
+//  条款 19 了解 相等 和 等价之间的区别
 
 // 条款 20 为指针的关联容器指定比较类型
 
 #if 0
+#include <iterator>
 struct StringPtrLess
 {
 
-		bool operator()(const string* ps1, const string* ps2) const
-		{
-			return *ps1 < *ps2;
-		}
+	bool operator()(const string *ps1, const string *ps2) const
+	{
+		return *ps1 < *ps2;
+	}
 };
 
-void print(const string* ps)
+// 当本类型的仿函数被传入一个 T* 时, 它们返回一个 const T&
+struct Dereference
+{
+	template <typename T>
+	const T &operator()(const T *ptr) const
+	{
+		return *ptr;
+	}
+};
+
+void print(const string *ps)
 {
 	cout << *ps << endl;
 }
 
-
-int main() 
+int main()
 {
 	string s;
-	cout << sizeof(s) << endl;// x64 40  x86 28
-	cout << sizeof(char*) << endl;
+	cout << sizeof(s) << endl; //  x64 40  x86 28  gcc 32
+	cout << sizeof(char *) << endl;
 
-	set<string*,StringPtrLess> ssp;
+	set<string *, StringPtrLess> ssp;
 	ssp.insert(new string("Anteater"));
 	ssp.insert(new string("Wombat"));
 	ssp.insert(new string("Lemur"));
@@ -171,18 +183,33 @@ int main()
 
 	for_each(ssp.begin(), ssp.end(), print);
 
-	for (set<string*>::const_iterator i = ssp.begin();
-		i != ssp.end();
-		++i)
+	for (set<string *>::const_iterator i = ssp.begin();
+		 i != ssp.end();
+		 ++i)
 	{
 		cout << **i << endl;
 	}
 
+	transform(ssp.begin(), ssp.end(), ostream_iterator<string>(cout, "\n"),
+			  Dereference());
+
 	return 0;
 }
+#endif
 
-//3.6
-// 条款 21 永远让比较函数对相等的值返回 false
+// 3.6
+//  条款 21 永远让比较函数对相等的值返回 false
+#if 0
+int main()
+{
+	set<int, less_equal<int>> s;
+	s.insert(10);
+	s.insert(10);
+	for (auto val : s)
+		cout << val << endl; // 10 10 ??? Amazing!
+	return 0;
+}
+#endif
 
 // 条款 22 避免原地修改 set 和 multiset 的键
 
@@ -190,13 +217,15 @@ int main()
 
 // 条款 24 在 map::operator[] 和 map-insert	之间仔细选择
 
-template<typename MapType,
-		typename KeyArgType,
-		typename ValueArgtype>
-typename MapType::iterator 
-efficientAddOrUpdate(MapType& m,
-	const KeyArgType& k,
-	const ValueArgtype& v)
+#if 0
+
+template <typename MapType,
+		  typename KeyArgType,
+		  typename ValueArgType>
+typename MapType::iterator
+efficientAddOrUpdate(MapType &m,
+					 const KeyArgType &k,
+					 const ValueArgType &v)
 {
 	typename MapType::iterator Ib = m.lower_bound(k); // 找到k.
 	if (Ib != m.end() && !(m.key_comp()(k, Ib->first)))
@@ -216,7 +245,7 @@ class Widget
 public:
 	Widget();
 	Widget(double w);
-	Widget& operator=(double w);
+	Widget &operator=(double w);
 };
 
 int main()
@@ -226,16 +255,17 @@ int main()
 	m[1] = 3.67;
 }
 
+// -----------------------------------------------------------------------------------------------------
 // 条款 25 熟悉非标准散列容器
 // 散列容器的声明
-template<typename T,
-	typename HashFunction,
-	typename CompareFunction,
-	typename Allocator = allocator<T>>
-	class hash_container;
+template <typename T,
+		  typename HashFunction,
+		  typename CompareFunction,
+		  typename Allocator = allocator<T>>
+class hash_container;
 
 // 3.7
-//条款 26 尽量用 iterator 代替 const_iterator, reverse_iterator 和 const_reverse_iterator
+// 条款 26 尽量用 iterator 代替 const_iterator, reverse_iterator 和 const_reverse_iterator
 
 // 条款 27 用 distance 和 advance 把 const_iterator 转化成 iterator
 
@@ -245,31 +275,32 @@ int main()
 {
 	vector<int> v;
 	v.reserve(5);
-	for (int i = 0;i < 5;++i) v.push_back(i);
+	for (int i = 0; i < 5; ++i)
+		v.push_back(i);
 	vector<int>::reverse_iterator Ri = find(v.rbegin(), v.rend(), 3);
 	v.erase(--Ri.base()); // 删除3.
-	for (int i = 0;i < v.size();++i) cout << v[i] << " ";
+	for (int i = 0; i < v.size(); ++i)
+		cout << v[i] << " ";
 	cout << endl;
 
-	//vector<int>::reverse_iterator Ri = find(v.rbegin(), v.rend(), 3);
-	//cout << *Ri << endl;
-	//vector<int>::iterator I(Ri.base()); cout << *I << " ";
+	// vector<int>::reverse_iterator Ri = find(v.rbegin(), v.rend(), 3);
+	// cout << *Ri << endl;
+	// vector<int>::iterator I(Ri.base()); cout << *I << " ";
 }
 
 // 条款 29 需要一个一个字符输入时考虑使用 istreambuf_iterator
 
-//ifstream inputFile("data.txt");
+// ifstream inputFile("data.txt");
 //
-//inputFile.unset(ios::skipws);
+// inputFile.unset(ios::skipws);
 //
-//string fileData((istream_iterator<char>(inputFile)),
+// string fileData((istream_iterator<char>(inputFile)),
 //	istream_iterator<>());
 
 ifstream inputFile("data.txt");
 
 string fileData((istreambuf_iterator<char>(inputFile)),
-	istreambuf_iterator<>());
-
+				istreambuf_iterator<>());
 
 //													算法
 // 条款 30 确保目标区间足够大
@@ -277,16 +308,16 @@ string fileData((istreambuf_iterator<char>(inputFile)),
 // 条款 31 了解你的排序选项
 
 partial_sort(Widget.begin(),
-	Widget.begin() + 20,    // 把最好的 20 个元素按顺序放在 Widgets的前端.
-	Widget.end(),
-	QualityComp);
+			 Widget.begin() + 20, // 把最好的 20 个元素按顺序放在 Widgets的前端.
+			 Widget.end(),
+			 QualityComp);
 
-nth_element(Widget.begin(), //把最好的20个元素放在 Widgets的前端, 不担心顺序.
-	Widget.begin() + 19,
-	Widget.end(),
-	QualityComp);
-	
-//3.8
+nth_element(Widget.begin(), // 把最好的20个元素放在 Widgets的前端, 不担心顺序.
+			Widget.begin() + 19,
+			Widget.end(),
+			QualityComp);
+
+// 3.8
 
 // 条款 32 如果真的想删除东西就在类似 remove 的后面接erase
 
@@ -294,12 +325,13 @@ int main()
 {
 	vector<int> v;
 	v.reserve(10);
-	for (int i = 1;i <= 10;++i) v.push_back(i);
+	for (int i = 1; i <= 10; ++i)
+		v.push_back(i);
 	cout << v.size();
 	v[3] = v[5] = v[9] = 100;
-	v.erase(remove(v.begin(), v.end(), 100),v.end());
-	cout << endl << v.size() << endl; 
-
+	v.erase(remove(v.begin(), v.end(), 100), v.end());
+	cout << endl
+		 << v.size() << endl;
 }
 
 // 条款 33 提防在指针的容器上使用类似 remove 的算法
@@ -313,47 +345,52 @@ int ciCharCompare(char c1, char c2)
 	int Ic1 = tolower(static_cast<char>(c1));
 	int Ic2 = tolower(static_cast<char>(c2));
 
-	if (Ic1 < Ic2) return -1;
-	if (Ic1 > Ic2) return 1;
+	if (Ic1 < Ic2)
+		return -1;
+	if (Ic1 > Ic2)
+		return 1;
 	return 0;
 }
 
-int ciStringCompareImpl(const string& s1, const string& s2);
+int ciStringCompareImpl(const string &s1, const string &s2);
 
-int ciStringCompare(const string& s1, const string& s2)
+int ciStringCompare(const string &s1, const string &s2)
 {
-	if (s1.size() <= s2.size()) return ciStringCompareImpl(s1, s2);
-	else return -ciStringCompareImpl(s2, s1);
+	if (s1.size() <= s2.size())
+		return ciStringCompareImpl(s1, s2);
+	else
+		return -ciStringCompareImpl(s2, s1);
 }
 
-int ciStringCompareImpl(const string& s1, const string& s2)
+int ciStringCompareImpl(const string &s1, const string &s2)
 {
 	typedef pair<string::const_iterator,
-		string::const_iterator> PSCI;
+				 string::const_iterator>
+		PSCI;
 	PSCI p = mismatch(
 		s1.begin(), s1.end(),
 		s2.begin(),
-		not2(ptr_fun(ciCharCompare))
-	);
+		not2(ptr_fun(ciCharCompare)));
 	if (p.first != s1.end())
 	{
-		if (p.second == s2.end()) return 0;
-		else return -1;
+		if (p.second == s2.end())
+			return 0;
+		else
+			return -1;
 	}
 	return ciCharCompare(*p.first, *p.second);
 }
 
+// 3.9
+//  条款 36 了解copy_if的正确实现
 
-//3.9
-// 条款 36 了解copy_if的正确实现
-
-template<typename InputIterator,
-		typename OutputIterator,
-		typename Predicate>
+template <typename InputIterator,
+		  typename OutputIterator,
+		  typename Predicate>
 OutputIterator copy_if(InputIterator begin,
-	InputIterator end,
-	OutputIterator destBegin,
-	Predicate p)
+					   InputIterator end,
+					   OutputIterator destBegin,
+					   Predicate p)
 {
 	while (begin != end)
 	{
@@ -367,7 +404,7 @@ OutputIterator copy_if(InputIterator begin,
 // 条款 37 用 accumulate 或 for_each 来统计区间
 // accumulate的返回值是 double. 初始化 0.0 sum = accumulate(v.begin(),v.end(),0.0)
 
-string::size_type stringLengthSum(string::size_type sumSoFar, const string& s)
+string::size_type stringLengthSum(string::size_type sumSoFar, const string &s)
 {
 	return sumSoFar + s.size();
 }
@@ -376,17 +413,18 @@ set<string> ss;
 
 string::size_type lengthSum = accumulate(ss.begin(), ss.end(), 0, stringLengthSum);
 
-
 vector<float> vf;
 
 float product = accumulate(vf.begin(), vf.end(), 1.0f, multiplies<float>());
 
 struct Point
 {
-	;Point(double initX, double initY)
-		:x(initX),
-		y(initY)
-	{}
+	;
+	Point(double initX, double initY)
+		: x(initX),
+		  y(initY)
+	{
+	}
 	double x, y;
 };
 
@@ -396,21 +434,21 @@ Point avg = accumulate(lp.begin(), lp.end(), Point(0, 0), PointAverge());
 
 class PointAverge : public binary_function<Point, Point, Point>
 {
-	public
-		PointAverge()
-		:numPoints(0),
-		xSum(0),
-		ySum(0)
-	{}
+public
+	PointAverge()
+		: numPoints(0),
+		  xSum(0),
+		  ySum(0)
+	{
+	}
 
-	const Point operator()(const Point& avgSoFar, const Point& p)
+	const Point operator()(const Point &avgSoFar, const Point &p)
 	{
 		++numPoints;
 		xSum += p.x;
 		ySum += p.y;
 		return Point(xSum / numPoints, ySum / numPoints);
 	}
-
 
 private:
 	size_t numPoints;
@@ -422,24 +460,26 @@ private:
 
 struct Point
 {
-	;Point(double initX, double initY)
-		:x(initX),
-		y(initY)
-	{}
+	;
+	Point(double initX, double initY)
+		: x(initX),
+		  y(initY)
+	{
+	}
 	double x, y;
 };
 
-
-class PointAverge : public unary_function<Point,void>
+class PointAverge : public unary_function<Point, void>
 {
-	public
-		PointAverge()
-		:numPoints(0),
-		xSum(0),
-		ySum(0)
-	{}
+public
+	PointAverge()
+		: numPoints(0),
+		  xSum(0),
+		  ySum(0)
+	{
+	}
 
-	void perator()( const Point& p)
+	void perator()(const Point &p)
 	{
 		++numPoints;
 		xSum += p.x;
@@ -450,7 +490,6 @@ class PointAverge : public unary_function<Point,void>
 	{
 		return Point(xSum / numPoints, ySum / numPoints);
 	}
-
 
 private:
 	size_t numPoints;
@@ -465,9 +504,8 @@ Point avg = for_each(lp.begin(), lp.end(), PointAverge()).result;
 int main()
 {
 
-	//cout << "The sum of the ints on the standard input is " << accumulate(istream_iterator<int>(cin), istream_iterator<int>(), 0);
+	// cout << "The sum of the ints on the standard input is " << accumulate(istream_iterator<int>(cin), istream_iterator<int>(), 0);
 }
-
 
 //											仿函数、仿函数类、函数等
 // 条款 38 把仿函数类设计为用于值传递
@@ -477,7 +515,8 @@ class Dosomething : public unary_function<int, void>
 {
 public:
 	void operator()(int x)
-	{}
+	{
+	}
 };
 
 typedef deque<int>::iterator DequeIterator;
@@ -485,33 +524,33 @@ deque<int> di;
 
 Dosomething d;
 for_each<DequeIterator,
-	DoSomething&>(di.begin(), // 调用 for_each 参数类型是 DequeIterator和DoSomething& 迫使d按引用传递和返回.
-		di.end(),
-		d);
+		 DoSomething &>(di.begin(), // 调用 for_each 参数类型是 DequeIterator和DoSomething& 迫使d按引用传递和返回.
+						di.end(),
+						d);
 
 // 条款 39 用纯函数做判断式
 
 class Widget;
-
 
 // bad judge class
 class BadPredicate : public unary_function<Widget, bool>
 {
 public:
 	BadPredicate()
-		:timesCalled(0)
-	{}
+		: timesCalled(0)
+	{
+	}
 
-	//bool operator()(const Widget& w) const
+	// bool operator()(const Widget& w) const
 	//{
 	//	return ++timesCalled == 3; // 错误, 在 const 成员函数不能改变局部数据.
-	//}
+	// }
 
-	//bool anotherBadPredicate(const Widget&, const Widget&)
+	// bool anotherBadPredicate(const Widget&, const Widget&)
 	//{
 	//	static int timesCalled = 0；     // no no no no no no
 	//		return ++timesCalled == 3;	 // 判断式应该是纯函数, 纯函数没有状态/
-	//}
+	// }
 
 private:
 	size_t timesCalled;
@@ -522,11 +561,12 @@ vector<Widget> vw;
 
 vw.erase(remove_if(vw.begin(), vw.end(), BadPredicate()), vw.end()); // 看似合理, 它不仅会从 vw中除去第三个元素, 也会除去第六个.
 
-template<typename FwdIterator, typename Predicate>
+template <typename FwdIterator, typename Predicate>
 FwdIterator remove_if(FwdIterator begin, FwdIterator end, Predicate p)
 {
 	begin = find_if(begin, end, p);
-	if (begin == end) return begin;
+	if (begin == end)
+		return begin;
 	else
 	{
 		FwdIterator next = begin;
@@ -536,51 +576,51 @@ FwdIterator remove_if(FwdIterator begin, FwdIterator end, Predicate p)
 
 // 条款 40 使仿函数类可适配
 
-list<Widget*> widgetPtrs;
+list<Widget *> widgetPtrs;
 
-bool isInteresting(const Widget* pw);
+bool isInteresting(const Widget *pw);
 
 // 指向第一个有趣的 widget 指针.
-list<Widget*>::iterator it = find_if(widgetPtrs.begin(), widgetPtrs.end(), isInteresting);
+list<Widget *>::iterator it = find_if(widgetPtrs.begin(), widgetPtrs.end(), isInteresting);
 if (it != widgetPtrs.end())
 {
 	...
 }
 
 // 指向第一个不有趣的 widget 指针.
-list<Widget*>::iterator it2 = find_if(widgetPtrs.begin(), widgetPtrs.end(),
-	not1(ptr_fun(isInteresting)));
+list<Widget *>::iterator it2 = find_if(widgetPtrs.begin(), widgetPtrs.end(),
+									   not1(ptr_fun(isInteresting)));
 if (it2 != widgetPtrs.end())
 {
 	...
 }
 
 class Widget;
-template<typename T>
+template <typename T>
 class MeetsThreshold : public unary_function<Widget, bool>
 {
 private:
 	const T threshold;
+
 public:
-	Meetsthreshold(const T& ts);
-	bool operator()(const Widget&) const;
+	Meetsthreshold(const T &ts);
+	bool operator()(const Widget &) const;
 };
 
 struct WidgetNameCompare : public binary_function<Widget, Widget, bool>
 {
-	bool operator()(const Widget& lhs, const Widget& rhs) const;
+	bool operator()(const Widget &lhs, const Widget &rhs) const;
 };
 
-struct PtrWidgetNameCompare : public binary_function<const Widget*,const Widget*, bool>
+struct PtrWidgetNameCompare : public binary_function<const Widget *, const Widget *, bool>
 {
-	bool operator()(const Widget* lhs, const Widget* rhs) const;
+	bool operator()(const Widget *lhs, const Widget *rhs) const;
 };
-
 
 // 3.10
 // 条款 41 了解 ptr_fun、 mem_fun 和 mem_fun_ref的原因
 
-// 条款 42 确定 less<T> 表示 operator < 
+// 条款 42 确定 less<T> 表示 operator <
 
 class Widget
 {
@@ -588,29 +628,30 @@ public:
 	size_t weight() const;
 	size_t maxSpeed() const;
 
-	bool operator<(const Widget& lhs, const Widget& rhs)
+	bool operator<(const Widget &lhs, const Widget &rhs)
 	{
 		return lhs.weight() < rhs.weight();
 	}
+
 private:
 };
 
 // err idea
-template<>
+template <>
 struct Less<Widget> : public binary_function<Widget,
-	Widget,
-	bool>
+											 Widget,
+											 bool>
 {
-	bool operator<(const Widget& lhs, const Widget& rhs) const
+	bool operator<(const Widget &lhs, const Widget &rhs) const
 	{
 		return lhs.maxSpeed() < rhs.maxSpeed();
 	}
 };
 
-// 
+//
 struct MaxSpeedCompare : public binary_function<Widget, Widget, bool>
 {
-	bool operator() (const Widget& lhs, const Widget& rhs) const
+	bool operator()(const Widget &lhs, const Widget &rhs) const
 	{
 		return lhs.maxSpeed() < rhs.maxSpeed();
 	}
