@@ -255,7 +255,8 @@ int main()
 	m[1] = 3.67;
 }
 
-// -----------------------------------------------------------------------------------------------------
+// day2024-8-11 
+
 // 条款 25 熟悉非标准散列容器
 // 散列容器的声明
 template <typename T,
@@ -263,14 +264,14 @@ template <typename T,
 		  typename CompareFunction,
 		  typename Allocator = allocator<T>>
 class hash_container;
-
-// 3.7
+#endif
+// day2024-3-7
 // 条款 26 尽量用 iterator 代替 const_iterator, reverse_iterator 和 const_reverse_iterator
 
 // 条款 27 用 distance 和 advance 把 const_iterator 转化成 iterator
 
 // 条款 28 了解如何通过 reverse_iterator 的base 得到 iterator
-
+#if 0
 int main()
 {
 	vector<int> v;
@@ -283,11 +284,12 @@ int main()
 		cout << v[i] << " ";
 	cout << endl;
 
-	// vector<int>::reverse_iterator Ri = find(v.rbegin(), v.rend(), 3);
-	// cout << *Ri << endl;
-	// vector<int>::iterator I(Ri.base()); cout << *I << " ";
+	Ri = find(v.rbegin(), v.rend(), 3);
+	cout << *Ri << endl;
+	vector<int>::iterator I(Ri.base());
+	cout << *I << " "; // 0
 }
-
+#endif
 // 条款 29 需要一个一个字符输入时考虑使用 istreambuf_iterator
 
 // ifstream inputFile("data.txt");
@@ -296,11 +298,13 @@ int main()
 //
 // string fileData((istream_iterator<char>(inputFile)),
 //	istream_iterator<>());
-
+#if 0
 ifstream inputFile("data.txt");
 
 string fileData((istreambuf_iterator<char>(inputFile)),
 				istreambuf_iterator<>());
+
+// ------------------------------------------------------------------------------------------------------------
 
 //													算法
 // 条款 30 确保目标区间足够大
