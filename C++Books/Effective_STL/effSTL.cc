@@ -304,7 +304,7 @@ ifstream inputFile("data.txt");
 string fileData((istreambuf_iterator<char>(inputFile)),
 				istreambuf_iterator<>());
 
-// ------------------------------------------------------------------------------------------------------------
+// day-2024-8-12
 
 //													算法
 // 条款 30 确保目标区间足够大
@@ -320,30 +320,35 @@ nth_element(Widget.begin(), // 把最好的20个元素放在 Widgets的前端, �
 			Widget.begin() + 19,
 			Widget.end(),
 			QualityComp);
-
-// 3.8
+#endif
+// day-2024-3-8
 
 // 条款 32 如果真的想删除东西就在类似 remove 的后面接erase
-
+#if 0
 int main()
 {
 	vector<int> v;
 	v.reserve(10);
 	for (int i = 1; i <= 10; ++i)
 		v.push_back(i);
-	cout << v.size();
+	cout << v.size() << endl;
 	v[3] = v[5] = v[9] = 100;
+	// remove(v.begin(), v.end(), 100);
+	// cout << v.size() << endl; // 10
+
 	v.erase(remove(v.begin(), v.end(), 100), v.end());
-	cout << endl
-		 << v.size() << endl;
+	cout << v.size() << endl; // 7
 }
 
+#endif
 // 条款 33 提防在指针的容器上使用类似 remove 的算法
 
+// ----------------------------------------------------------------------------------------------------------
 // 条款 34 注意哪个算法需要有序区间
 
 // 条款 35 通过 mismatch 或 exicographical 比较实现简单的忽略大小学字符串比较
 
+#if 0
 int ciCharCompare(char c1, char c2)
 {
 	int Ic1 = tolower(static_cast<char>(c1));
