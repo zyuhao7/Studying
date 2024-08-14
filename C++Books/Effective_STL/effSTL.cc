@@ -343,10 +343,11 @@ int main()
 #endif
 // 条款 33 提防在指针的容器上使用类似 remove 的算法
 
-// ----------------------------------------------------------------------------------------------------------
+// day-2024-8-13
+
 // 条款 34 注意哪个算法需要有序区间
 
-// 条款 35 通过 mismatch 或 exicographical 比较实现简单的忽略大小学字符串比较
+// 条款 35 通过 mismatch 或 lexicographical 比较实现简单的忽略大小学字符串比较
 
 #if 0
 int ciCharCompare(char c1, char c2)
@@ -374,13 +375,14 @@ int ciStringCompare(const string &s1, const string &s2)
 int ciStringCompareImpl(const string &s1, const string &s2)
 {
 	typedef pair<string::const_iterator,
-				 string::const_iterator>
-		PSCI;
+				 string::const_iterator>	PSCI; // pair of string::const::iterator
+
 	PSCI p = mismatch(
 		s1.begin(), s1.end(),
 		s2.begin(),
 		not2(ptr_fun(ciCharCompare)));
-	if (p.first != s1.end())
+
+	if (p.first != s1.end()) 
 	{
 		if (p.second == s2.end())
 			return 0;
@@ -389,6 +391,25 @@ int ciStringCompareImpl(const string &s1, const string &s2)
 	}
 	return ciCharCompare(*p.first, *p.second);
 }
+
+bool ciCharLess(char c1, char c2)
+{
+	tolower(static_cast<unsigned char>(c1)) <
+		tolower(static_cast<unsigned char>(c2));
+}
+
+bool ciStringCompare(const string& s1, const string& s2)
+{
+	return lexicographical_compare(s1.begin(), s1.end(),
+		s2.begin(), s2.end(),
+		ciCharLess);
+}
+
+bool ciStringCompare2(const string& s1, const string& s2)
+{
+	return stricmp(s1.c_str(), s2.c_str());
+}
+
 
 // 3.9
 //  条款 36 了解copy_if的正确实现
@@ -411,6 +432,7 @@ OutputIterator copy_if(InputIterator begin,
 }
 
 // 条款 37 用 accumulate 或 for_each 来统计区间
+
 // accumulate的返回值是 double. 初始化 0.0 sum = accumulate(v.begin(),v.end(),0.0)
 
 string::size_type stringLengthSum(string::size_type sumSoFar, const string &s)
@@ -427,8 +449,7 @@ vector<float> vf;
 float product = accumulate(vf.begin(), vf.end(), 1.0f, multiplies<float>());
 
 struct Point
-{
-	;
+{		
 	Point(double initX, double initY)
 		: x(initX),
 		  y(initY)
@@ -439,12 +460,12 @@ struct Point
 
 list<Point> lp;
 
-Point avg = accumulate(lp.begin(), lp.end(), Point(0, 0), PointAverge());
+Point avg = accumulate(lp.begin(), lp.end(), Point(0, 0), PointAverage());
 
-class PointAverge : public binary_function<Point, Point, Point>
+class PointAverage : public binary_function<Point, Point, Point>
 {
 public
-	PointAverge()
+	PointAverage()
 		: numPoints(0),
 		  xSum(0),
 		  ySum(0)
@@ -478,17 +499,17 @@ struct Point
 	double x, y;
 };
 
-class PointAverge : public unary_function<Point, void>
+class PointAverage : public unary_function<Point, void>
 {
 public
-	PointAverge()
+	PointAverage()
 		: numPoints(0),
 		  xSum(0),
 		  ySum(0)
 	{
 	}
 
-	void perator()(const Point &p)
+	void operator()(const Point &p)
 	{
 		++numPoints;
 		xSum += p.x;
@@ -508,24 +529,24 @@ private:
 
 list<Point> lp;
 
-Point avg = for_each(lp.begin(), lp.end(), PointAverge()).result;
+Point avg = for_each(lp.begin(), lp.end(), PointAverage()).result;
 
 int main()
 {
 
 	// cout << "The sum of the ints on the standard input is " << accumulate(istream_iterator<int>(cin), istream_iterator<int>(), 0);
 }
+// day-2024-8-14
 
-//											仿函数、仿函数类、函数等
+//								仿函数、仿函数类、函数等
+
 // 条款 38 把仿函数类设计为用于值传递
 
 // 使得 for_each 通过引用传递和返回它的仿函数
 class Dosomething : public unary_function<int, void>
 {
 public:
-	void operator()(int x)
-	{
-	}
+	void operator()(int x){}
 };
 
 typedef deque<int>::iterator DequeIterator;
@@ -536,6 +557,7 @@ for_each<DequeIterator,
 		 DoSomething &>(di.begin(), // 调用 for_each 参数类型是 DequeIterator和DoSomething& 迫使d按引用传递和返回.
 						di.end(),
 						d);
+
 
 // 条款 39 用纯函数做判断式
 
@@ -612,7 +634,7 @@ private:
 	const T threshold;
 
 public:
-	Meetsthreshold(const T &ts);
+	MeetsThreshold(const T &ts);
 	bool operator()(const Widget &) const;
 };
 
@@ -626,7 +648,7 @@ struct PtrWidgetNameCompare : public binary_function<const Widget *, const Widge
 	bool operator()(const Widget *lhs, const Widget *rhs) const;
 };
 
-// 3.10
+// 2024-3-10
 // 条款 41 了解 ptr_fun、 mem_fun 和 mem_fun_ref的原因
 
 // 条款 42 确定 less<T> 表示 operator <
