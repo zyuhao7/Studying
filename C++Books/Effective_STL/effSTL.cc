@@ -679,7 +679,6 @@ struct Less<Widget> : public binary_function<Widget,
 	}
 };
 
-//
 struct MaxSpeedCompare : public binary_function<Widget, Widget, bool>
 {
 	bool operator()(const Widget &lhs, const Widget &rhs) const
@@ -690,14 +689,16 @@ struct MaxSpeedCompare : public binary_function<Widget, Widget, bool>
 multiset<Widget, MaxSpeedCompare> widgets;
 #endif
 
+// day-2024-8-15
+
 //										 使用 STL 编程
 
 // 条款 43 尽量用算法调用代替手写循环
 
 // 把所有元素从 data拷贝到 d的前端, 每个增加 41
-// transform(data, data + numDobules,
+// transform(data, data + numDoubles,
 //	inserter(d, d.begin()),
-//	bind2nd(plus<doube>(), 41));
+//	bind2nd(plus<double>(), 41));
 
 // 条款 44 尽量使用成员函数代替同名的算法
 
