@@ -111,3 +111,113 @@ int main()
     return 0;
 }
 #endif
+
+// day-2024-8-18
+//                                            位运算
+
+// 面试题 10 二进制中 1的个数.
+// 实现函数满足输入一个数, 输出该数二进制中 1的 个数, 比如 9, 1001, 输出 2.
+/*
+int NumOneOfBinary1(int x)
+{
+    int cnt = 0;
+    for (int i = 0; i < 32; ++i)
+    {
+        if (x & (1 << i))
+            cnt++;
+    }
+    return cnt;
+}
+
+int NumOneOfBinary2(int x)
+{
+    int cnt = 0;
+    while (x)
+    {
+        x &= x - 1;
+        cnt++;
+    }
+    return cnt;
+}
+
+int main()
+{
+
+
+    cout << NumOneOfBinary1(0x7FFFFFFF) << endl;
+    cout << NumOneOfBinary2(0x7FFFFFFF) << endl;
+    cout << NumOneOfBinary1(0xC0000000) << endl;
+    cout << NumOneOfBinary2(0xC0000000);
+    return 0;
+}
+*/
+
+// 面试题 11 数值的整数次方
+// 实现函数 double Power(double base, int exponent), 求 base 的 exponent 次方.
+
+/*
+double Power1(double base, int exp)
+{
+    double res = 1.0;
+    while (exp)
+    {
+        res *= base;
+        exp--;
+    }
+    return res;
+}
+
+// 书解.
+
+double PowerWithUnsignedExponent(double base, unsigned int exponent)
+{
+    // double result = 1.0;
+    // for (int i = 1; i <= exponent; ++i)
+    //     result *= base;
+    // return result;
+
+    if (exponent == 0)
+        return 1.0;
+    if (exponent == 1)
+        return base;
+    double result = PowerWithUnsignedExponent(base, exponent >> 1);
+    result *= result; // 快速幂同法.
+    if (exponent & 0x1 == 1)
+        result *= base;
+    return result;
+}
+
+bool Equal(double num1, double num2)
+{
+    return (num1 - num2 > -0.0000001 && num1 - num2 < 0.0000001) ? true : false;
+}
+
+double Power2(double base, int exponent)
+{
+    if (Equal(base, 0.0))
+        return 0.0;
+    if (exponent == 0)
+        return 1.0;
+
+    unsigned int absExponent = (unsigned int)exponent;
+    if (exponent < 0)
+        absExponent = (unsigned int)(-exponent);
+
+    double result = PowerWithUnsignedExponent(base, absExponent);
+    if (exponent < 0)
+        result = 1.0 / result;
+
+    return result;
+}
+
+int main()
+{
+    // cout << Power1(3.0, -3) << endl; // 负数？
+    cout << Power2(3.0, -3) << endl;
+    cout << Power2(3.0, 3) << endl;
+    cout << Power2(3.0, 0) << endl;
+
+    return 0;
+}
+*/
+
