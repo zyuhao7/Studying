@@ -19,35 +19,35 @@ using namespace std;
 class TextBlock
 {
 public:
-    TextBlock(const string s)
-        : text(s)
-    {
-    }
-    const char &operator[](std ::size_t pos) const
-    {
-        cout << " const char &operator[](std ::size_t pos) const" << endl;
-        return text[pos];
-    }
+	TextBlock(const string s)
+		: text(s)
+	{
+	}
+	const char &operator[](std ::size_t pos) const
+	{
+		cout << " const char &operator[](std ::size_t pos) const" << endl;
+		return text[pos];
+	}
 
-    char &operator[](std::size_t pos)
-    {
-        cout << "  char &operator[](std::size_t pos)" << endl;
-        return text[pos];
-    }
+	char &operator[](std::size_t pos)
+	{
+		cout << "  char &operator[](std::size_t pos)" << endl;
+		return text[pos];
+	}
 
 private:
-    std::string text;
+	std::string text;
 };
 
 int main()
 {
-    TextBlock tb("hello");
-    std::cout << tb[0]; //  non-const []
-    tb[0] = 'x'; // ok!
+	TextBlock tb("hello");
+	std::cout << tb[0]; //  non-const []
+	tb[0] = 'x'; // ok!
 
-    const TextBlock ctb("world");
-    std::cout << ctb[0]; // const []
-    ctb[0] = 'x'; // err!
+	const TextBlock ctb("world");
+	std::cout << ctb[0]; // const []
+	ctb[0] = 'x'; // err!
 }
 */
 
@@ -59,24 +59,50 @@ int main()
  * 为免除 "跨编译单元之初始化次序"问题, 以 local static 对象替换 non-local static 对象.
  */
 
-// 第二章 -   构造/析构/赋值运算
-// 条款 5 了解C++ 默默编写并调用哪些函数
+// day-2024-8-18
 
+// 第二章 -   构造/析构/赋值运算
+
+// 条款 5 了解C++ 默默编写并调用哪些函数
+class Empty
+{
+};
+
+// 编译器默认声明空类的操作.
+class Empty
+{
+public:
+	Empty() {}
+	Empty(const Empty &rhs) {}
+	~Empty() {}
+	Empty &operator=(const Empty &rhs) {}
+}
 // 编译器可以暗自为 class 创建 default 构造函数、 copy构造函数、 copy assignment操作符, 以及析构函数.
 
 // 条款 6 若不想使用编译器自动生成的函数, 就该明确拒绝
+class Uncopyable
+{
+protected:
+	Uncopyable() {} // 允许 derived 对象构造和析构.
+	~Uncopyable() {}
 
-// 为驳回编译器自动提供的机能, 可将相应的成员函数声明为 private并且不实现.
+private:
+	Uncopyable(const Uncopyable &); // 但阻止 copying.
+	Uncopyable &operator=(const Uncopyable &);
+};
+
+// 为驳回编译器自动提供的机能, 可将相应的成员函数声明为 private 并且不实现.
 
 // 条款 7 为多态基类声明 virtual 析构函数.
-
-/* polymorphic base classes 应该声明一个 virtual 析构函数. 如果class 带有任何 virtual 函数, 它就应该拥有一个virtual 析构函数.
+/*
+ * polymorphic base classes 应该声明一个 virtual 析构函数. 如果class 带有任何 virtual 函数, 它就应该拥有一个virtual 析构函数.
  * classes 的设计目的如果不是作为 base classes使用, 或不是为了具备多态性, 就不该声明 virtual 析构函数.
  */
 
 // 条款 8 别让异常逃离析构函数
 
-/*析构函数绝对不要吐出异常. 如果一个被析构函数调用的函数可能抛出异常, 析构函数应该捕捉任何异常, 然后吞下它们或结束程序.
+/*
+ * 析构函数绝对不要吐出异常. 如果一个被析构函数调用的函数可能抛出异常, 析构函数应该捕捉任何异常, 然后吞下它们或结束程序.
  * 如果客户需要对某个操作函数运行期间抛出的异常做出反应, 那么class 应该提供一个普通函数执行该操作.
  */
 
@@ -84,6 +110,7 @@ int main()
 
 // 在构造和析构期间不要调用 virtual 函数, 因为这类调用从不下降至 derived class.
 
+// ---
 // 条款 10 令 operator= 返回一个 reference to *this
 
 // 令 赋值(assignment) 操作符返回一个 reference to *this.
