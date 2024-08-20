@@ -1,4 +1,8 @@
 #include <iostream>
+#include <string>
+#include <memory>
+#include <cstring>
+#include <vector>
 using namespace std;
 // 查找和数组
 // 面试题 8 旋转数组的最小数字
@@ -221,3 +225,133 @@ int main()
 }
 */
 
+// 面试题 12 打印 1 到 最大的 n 位数.
+// 输入数字 n, 打印出从 1 到 n 位十进制数, 比如输入3, 则 1,2,3...999.
+
+/*
+// 自解.
+typedef long long ll;
+// 假如最大数不超过 long long.
+void Print1ToNdigits(int n)
+{
+    if (n == 0)
+        return;
+    ll maxNum = 1;
+    for (int i = 0; i < n; ++i)
+    {
+        maxNum *= 10;
+    }
+    for (int i = 1; i < maxNum; ++i)
+    {
+        cout << i << " ";
+    }
+    cout << endl;
+}
+
+// 假如最大数超过 ll.
+// 想法: 先将最大的 n 位数 + 1 用字符串拼接出来, 比如 n = 7, 则  MaxNum = "10000000", 然后给一个空串,初始化为 1, 比较与MaxNum的
+// 大小, 如果小于的话则 string "++", 定义一个字符输出, 如果小于 8的话, 直接用下一个字符替换, 如果是 9的话需要增加一个长度,
+// 但是还需要将 9 替换为 1 后面拼接个0.
+void Print1ToNdigits2(int n)
+{
+    if (n == 0)
+        return;
+    char digits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    string MaxNum = "1";
+    for (int i = 1; i <= n; ++i)
+        MaxNum += "0";
+    string num = "1";
+
+    while (num.size() <= MaxNum.size())
+    {
+        cout << num << " ";
+        int t = num[num.size() - 1] - '0'; // 求得最后一位的整数值.
+        int len = num.size() - 1;
+        if (t == 9) // 如果最后一位是 9.
+        {
+            num[len] = '1';
+            num += '0';
+        }
+        else
+        {
+            num[len] = digits[t + 1];
+        }
+
+        if (num.size() == MaxNum.size())
+            break;
+    }
+} // 有点毛病, 有点难整.
+
+// 书解.
+bool Increment(char *number)
+{
+    bool isOverFlow = false;
+    int nTakeOver = 0;
+    int nLength = strlen(number);
+
+    for (int i = nLength - 1; i >= 0; i--)
+    {
+        int nSum = number[i] - '0' + nTakeOver;
+        if (i == nLength - 1)
+            nSum++;
+        if (nSum >= 10)
+        {
+            if (i == 0)
+                isOverFlow = true;
+            else
+            {
+                nSum -= 10;
+                nTakeOver = 1;
+                number[i] = '0' + nSum;
+            }
+        }
+        else
+        {
+            number[i] = '0' + nSum;
+            break;
+        }
+    }
+    return isOverFlow;
+}
+
+void PrintNumber(char *number)
+{
+
+    bool isBeginning0 = true;
+    int nLength = strlen(number);
+
+    for (int i = 0; i < nLength; ++i)
+    {
+        if (isBeginning0 && number[i] != '0')
+            isBeginning0 = false;
+        if (!isBeginning0)
+        {
+            printf("%c", number[i]);
+        }
+    }
+    cout << " ";
+}
+
+void Print1ToNdigits3(int n)
+{
+    if (n <= 0)
+        return;
+    char *number = new char[n + 1];
+    memset(number, '0', n);
+    number[n] = '\0';
+
+    while (!Increment(number))
+    {
+        PrintNumber(number);
+    }
+    delete[] number;
+}
+
+int main()
+{
+    // Print1ToNdigits(2);
+    Print1ToNdigits3(2);
+
+    return 0;
+}
+*/
