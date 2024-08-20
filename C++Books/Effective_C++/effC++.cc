@@ -110,7 +110,8 @@ private:
 
 // 在构造和析构期间不要调用 virtual 函数, 因为这类调用从不下降至 derived class.
 
-// ---
+// day-2024-8-20
+
 // 条款 10 令 operator= 返回一个 reference to *this
 
 // 令 赋值(assignment) 操作符返回一个 reference to *this.
@@ -129,7 +130,7 @@ private:
 Widget& Widget::operator=(const Widget& rhs) // 一份不安全的 operator= 实现版本.
 {
 	delete pb;
-	pb = new Bitmap(*rhs.pb);
+	pb = new Bitmap(*rhs.pb);               // 无法避免自我复制造得成内存泄漏.
 	return *this;
 }
 
@@ -143,7 +144,7 @@ Widget& Widget::operator=(const Widget& rhs)
 Widget& Widget::operator=(const Widget& rhs)
 {
 	Bitmap* pOrig = pb;
-	pb = new Bitmap(*rhs.pb);          // 效率低
+	pb = new Bitmap(*rhs.pb);  	       	  // 效率低
 	delete pOrig;
 	return *this;
 }
@@ -160,14 +161,20 @@ Widget& Widget::operator=( Widget rhs)
 	return *this;                // 牺牲清晰性
 }
 #endif
-/* 确保当对象自我赋值时 operator= 有良好行为. 其中技术包括比较 "来源对象" 和 "目标对象" 的地址、 精心周到的语句顺序、 以及 copy-and-swap.
+
+/*
+ * 确保当对象自我赋值时 operator= 有良好行为. 其中技术包括比较 "来源对象" 和 "目标对象" 的地址、 精心周到的语句顺序、 以及 copy-and-swap.
  * 确定任何函数如果操作一个及以上的对象, 而其中多个对象是同一个对象时, 其行为任然正确.
  */
 
 // 条款 12 复制对象时勿忘其每一个成分
-/* Copying函数应该确保复制"对象内的所有成员变量" 及 "所有 base class 成分"
+
+/*
+ *  Copying函数应该确保复制"对象内的所有成员变量" 及 "所有 base class 成分"
  * 不要尝试以某个 copying函数实现另一个copying函数. 应该将共同机能放进第三个函数中, 并有两个coping函数共同调用.
  */
+
+//										资源管理
 
 // 条款 13 以对象管理资源
 /* 为防止资源泄露, 使用 RAII 对象, 它们在构造函数中获得资源并在析构函数中释放资源.
