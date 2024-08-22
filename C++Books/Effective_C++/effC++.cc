@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <cstring>
+#include <memory>
+#include <mutex>
 
 using namespace std;
 // 《Effective C++》 second learning.
@@ -177,13 +179,43 @@ Widget& Widget::operator=( Widget rhs)
 //										资源管理
 
 // 条款 13 以对象管理资源
-/* 为防止资源泄露, 使用 RAII 对象, 它们在构造函数中获得资源并在析构函数中释放资源.
-* 两个常被使用的  RAII classes 分别是 tr1;:shared_ptr 和 auto_ptr. 前者通常是较佳选择,因为其 copy行为比较直观.
- 若选择 auto_ptr, 复制动作会使它指向 null.
-*/
+
+/*
+ * 为防止资源泄露, 使用 RAII 对象, 它们在构造函数中获得资源并在析构函数中释放资源.
+ * 两个常被使用的  RAII classes 分别是 tr1;:shared_ptr 和 auto_ptr. 前者通常是较佳选择,因为其 copy行为比较直观.
+ * 若选择 auto_ptr, 复制动作会使它指向 null.
+ */
+
+// day-2024-8-22
 
 // 条款 14 在资源管理类中小心 coping 行为
-/*复制 RAII 对象必须一并复制它所管理的资源,所以资源的 coping行为决定 RAII 对象的coping行为.
+/*
+class Lock
+{
+	explicit Lock(mutex *pm)
+		: mtx(pm)
+	{
+		lock(mtx);
+	}
+
+	explicit Lock(mutex* pm)
+		: shared_ptx(pm, unlock)
+	{
+		lock(shared_ptx.get());
+	}
+	~Lock()
+	{
+		unlock(mtx);
+	}
+
+private:
+	mutex *mtx;
+	shared_ptr<mutex> shared_ptx;
+};
+*/
+
+/*
+ * 复制 RAII 对象必须一并复制它所管理的资源,所以资源的 coping行为决定 RAII 对象的coping行为.
  * 普遍而常见的 RAII class coping 行为是: 抑制 coping、施行引用计数方法. 不过其他行为也都可能被实现.
  */
 
@@ -195,8 +227,9 @@ Widget& Widget::operator=( Widget rhs)
 // 条款 16 成对使用 new 和 delete 时要采取相同形式.
 // 如果你在 new 表达式中使用[], 必须在相应的 delete 表达式中也使用 []. 如果你在 new 表达式中不使用 [], 一定不使用 delete[].
 
-// 条款 17 以独立语句将 newd 对象置入智能指针.
-// 以独立语句将 newd 对象存储于智能指针内. 如果不那样做, 一旦异常抛出, 有可能导致难以察觉的资源泄露.
+// 条款 17 以独立语句将 newed 对象置入智能指针.
+// 以独立语句将 newed 对象存储于智能指针内. 如果不那样做, 一旦异常抛出, 有可能导致难以察觉的资源泄露.
+
 
 // 第四章 设计与声明
 
