@@ -111,3 +111,85 @@ int main()
 // return 关键字
 // const关键字
 // 编译器通常不为普通 const 只读变量分配存储空间, 而是将它们保存在符号表中, 这使得它成为一个编译期间的值.
+
+// 2024-8-22
+// struct
+
+// struct student
+// {
+// } stu;
+
+// int main()
+// {
+//     printf("%d \n", sizeof(stu)); // 1
+//     return 0;
+// }
+#include <memory>
+
+// 柔性数组
+// typedef struct st_type
+// {
+//     int i;
+//     int a[];
+// } type_a;
+
+// int main()
+// {
+//     printf("%d \n", sizeof(type_a)); // 4
+
+//     type_a *p = (type_a *)malloc(sizeof(type_a) + sizeof(int) * 100);
+
+//     free(p);
+// }
+
+// struct 和 class 的区别
+// struct 默认属性是 public, class 是 private
+
+// union
+
+// union
+// {
+//     int i;
+//     char a[2];
+// } *p, u;
+
+// void checkSystem()
+// {
+//     union check
+//     {
+//         int i;
+//         char ch;
+//     } c;
+//     c.i = 1;
+//     if (c.ch == 1)
+//     {
+//         printf("1");
+//         printf("小端 \n");
+//     }
+//     else
+//     {
+//         printf("2");
+//         printf("大端 \n");
+//     }
+// };
+
+// int main()
+// {
+//     p = &u;
+//     p->a[0] = 0x39;
+//     p->a[1] = 0x38;
+//     printf("%0x \n", p->i); // 3839
+//     checkSystem();          // 小端.
+//     printf("%d \n", sizeof(int *));
+// }
+
+// int main()
+// {
+//     printf("%d \n", sizeof(int *));
+//     int a[5] = {1, 2, 3, 4, 5};
+//     int *ptr1 = (int *)(&a + 1);
+//     int *ptr2 = (int *)((int)a + 1);
+//     printf("%x %x \n", ptr1[-1], *ptr2); // 5 2000000
+// }
+
+// typedef 
