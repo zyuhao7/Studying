@@ -355,3 +355,95 @@ int main()
     return 0;
 }
 */
+
+// 面试题 13 在 O(1) 时间删除链表节点
+/*
+struct ListNode
+{
+    int _Val;
+    ListNode *_next;
+};
+
+void DeleteNode(ListNode **pListHead, ListNode *pToBeDeleted)
+{
+    if (pListHead == nullptr || *pListHead == nullptr)
+        return;
+    // 思路.
+    // Node1 -> Node2 -> DeleteNode -> Node3
+    //   Node2->next = DeleteNode->next ？ 完了？ ..
+    // 考虑: 1. delete 是头 ? other
+    // 如果是头的话. 就需要重新构造头, 但是结构中没有头结点, 故 直接置空就行了吧? other的话, 直接指向下一个就行.
+    // if (*pListHead == pToBeDeleted)
+    // {
+    //     *pListHead = pToBeDeleted->_next;
+    //     delete pToBeDeleted;
+    //     return;
+    // }
+    // 不是, Node2 不遍历怎么找？？
+
+    //  Node1 -> Node2 -> DeleteNode -> Node3 -> Node4
+    //  Node1 -> Node2 -> Node3 -> Node3 -> Node4
+    //  Node1 -> Node2 -> Node3-> Node4
+    // 妙~
+    // 要删除的节点不是尾结点.
+    if (pToBeDeleted->_next != NULL)
+    {
+        ListNode *pNext = pToBeDeleted->_next;
+        pToBeDeleted->_Val = pNext->_Val;
+        pToBeDeleted->_next = pNext->_next;
+        delete pNext;
+        pNext = NULL;
+    }
+    // 链表只有一个节点.
+    else if (*pListHead == pToBeDeleted)
+    {
+        delete pToBeDeleted;
+        pToBeDeleted = NULL;
+        *pListHead = NULL;
+    }
+    // 链表有多个节点, 删除尾结点.
+    else
+    {
+        ListNode *pNode = *pListHead;
+        while (pNode->_next != pToBeDeleted)
+        {
+            pNode = pNode->_next;
+        }
+        pNode->_next = NULL;
+        delete pToBeDeleted;
+        pToBeDeleted = NULL;
+    }
+}
+*/
+
+// 面试题 14 调整数组顺序使奇数位于偶数前面
+// 实现函数调整数组中数组顺序, 使得所有奇数位于数组的前半部分, 偶数后半部分.
+/*
+void solve(int a[], int n)
+{
+    int i = -1, j = n;
+    while (i < j)
+    {
+        do
+            ++i;
+        while (a[i] % 2 != 0);
+        do
+            --j;
+        while (a[j] % 2 == 0);
+        if (i < j)
+            swap(a[i], a[j]);
+    }
+
+    for (int i = 0; i < n; ++i)
+        printf("%d ", a[i]); // 3 7 3 1 7 9 4 8 2 2 4
+                             // 考虑代码整体框架不变, 只是变得比较函数, 因此可以把比较函数抽离出来,构成一个函数指针的形式.
+}
+
+int main()
+{
+    int a[] = {2, 7, 3, 1, 4, 9, 7, 8, 2, 3, 4};
+    solve(a, sizeof(a) / sizeof(a[0]));
+
+    return 0;
+}
+*/
