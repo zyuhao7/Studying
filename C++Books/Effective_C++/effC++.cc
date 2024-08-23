@@ -71,14 +71,14 @@ class Empty
 };
 
 // 编译器默认声明空类的操作.
-class Empty
-{
-public:
-	Empty() {}
-	Empty(const Empty &rhs) {}
-	~Empty() {}
-	Empty &operator=(const Empty &rhs) {}
-}
+// class Empty
+// {
+// public:
+// 	Empty() {}
+// 	Empty(const Empty &rhs) {}
+// 	~Empty() {}
+// 	Empty &operator=(const Empty &rhs) {}
+// }
 // 编译器可以暗自为 class 创建 default 构造函数、 copy构造函数、 copy assignment操作符, 以及析构函数.
 
 // 条款 6 若不想使用编译器自动生成的函数, 就该明确拒绝
@@ -230,14 +230,15 @@ private:
 // 条款 17 以独立语句将 newed 对象置入智能指针.
 // 以独立语句将 newed 对象存储于智能指针内. 如果不那样做, 一旦异常抛出, 有可能导致难以察觉的资源泄露.
 
-
-// 第四章 设计与声明
+// day-2024-8-23
+//  			第四章 设计与声明
 
 // 条款 18 让接口容易被正确使用, 不易被误用
-/* 好的接口很容易被正确使用, 不容易被误用. 你应该在你的所有接口中努力达成这些性质.
+/*
+ *  好的接口很容易被正确使用, 不容易被误用. 你应该在你的所有接口中努力达成这些性质.
  * "促进正确使用" 的方法包括接口的一致性, 以及与内置类型的行为兼容.
  * "组织误用" 的方法包括建立新类型, 限制类型上的操作, 束缚对象值, 以及消除客户的资源管理责任.
- *  tr1::shared_ptr 支持定制型删除器, 这可防范 DLL 问题, 可被用来自动解除 互斥锁(mutexs) 等.
+ *  tr1::shared_ptr 支持定制型删除器, 这可防范 DLL 问题, 可被用来自动解除 互斥锁(mutexes) 等.
  */
 
 // 条款 19 设计 class 犹如设计 type
@@ -256,15 +257,22 @@ public:
 	{
 		cout << "~Person()" << endl;
 	}
+
 private:
 	string name;
 	string address;
 };
 
-class Student : public Person {
+class Student : public Person
+{
 public:
 	Student() { cout << "Student()" << endl; }
 	~Student() { cout << "~Student()" << endl; }
+	Student(const Student &s)
+	{
+		cout << "Student(const Student& s)" << endl;
+	}
+
 private:
 	string schoolName;
 	string schoolAddress;
@@ -272,7 +280,7 @@ private:
 
 bool validateStudent(Student s)
 {
-	cout << "call validateStudent(Student s) successed!" << endl;
+	cout << "call validateStudent(Student s) succeed!" << endl;
 	return true;
 }
 
@@ -283,15 +291,19 @@ int main()
 	return 0;
 }
 #endif
+
 /* 尽量以 pass-by-reference-to-const 替换 pass-by-value. 前者通常比较高效, 并可避免切割问题.
  * 以上规则并不适用于内置类型，以及 STL的迭代器和函数对象, 对它们而言 pass-by-value 往往比较适当.
  */
 
 // 条款 21 必须返回对象时, 别妄想返回其 reference
-/* 绝不要返回 pointer或reference指向一个 local stack 对象, 或返回 reference指向一个 heap-allocated对象,或返回pointer 或
+/*
+ * 绝不要返回 pointer或reference指向一个 local stack 对象, 或返回 reference指向一个 heap-allocated对象,或返回pointer 或
  * reference 指向一个 local static 对象而有可能同时需要多个这样的对象。 条款 4 已经为 "在单线程环境中合理返回 reference 指向
  * 一个 local static" 提供了一份设计实例.
  */
+
+// --
 
 // 条款 22 将成员变量声明为 private
 /* 切记将成员变量声明为 private. 这可赋予客户访问数据的一致性、可细微划分访问控制、允诺约束条件获得保证, 并提供 class
