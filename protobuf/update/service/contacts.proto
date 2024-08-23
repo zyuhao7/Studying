@@ -1,0 +1,25 @@
+syntax = "proto3";
+package s_contacts;
+
+
+message PeopleInfo
+{
+    reserved 2;
+
+    string name = 1;
+    // int32 age = 2;  错误方式, 不应该注释后重新设置相同值的字段
+    // int32 birthday = 2; 
+
+    int32 birthday = 4; 
+
+    message Phone{
+        string number = 1;
+    }
+
+    repeated Phone phone = 3; 
+}
+
+message Contacts
+{
+   repeated PeopleInfo contacts = 1;    
+}
