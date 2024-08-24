@@ -303,10 +303,12 @@ int main()
  * 一个 local static" 提供了一份设计实例.
  */
 
-// --
+// day-2024-8-24
 
 // 条款 22 将成员变量声明为 private
-/* 切记将成员变量声明为 private. 这可赋予客户访问数据的一致性、可细微划分访问控制、允诺约束条件获得保证, 并提供 class
+
+/*
+ * 切记将成员变量声明为 private. 这可赋予客户访问数据的一致性、可细微划分访问控制、允诺约束条件获得保证, 并提供 class
  * 作者以充分的实现弹性. protected 并不比 public 更具有封装性.
  */
 
@@ -348,7 +350,7 @@ public:
 
 	void swap(Widget& other)
 	{
-		swap(pimpl, otehr.pimpl);
+		swap(pimpl, other.pimpl);
 	}
 private:
 	WidgetImpl* pimpl;
@@ -371,6 +373,7 @@ void swap<Widget>(Widget& a, Widget& b)
  * 调用 swap 时应针对 std::swap使用using声明式, 然后调用 swap 并且不带任何 "命名空间资格修饰".
  * 为 "用户定义类型" 进行 std templates 全特化是好的, 但千万不要尝试在std内加入某些对std而言全新的东西.
  */
+// --
 
 // 第五章 实现
 // 条款 26 尽可能延后变量定义式的出现时间
