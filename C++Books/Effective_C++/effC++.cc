@@ -373,10 +373,12 @@ void swap<Widget>(Widget& a, Widget& b)
  * 调用 swap 时应针对 std::swap使用using声明式, 然后调用 swap 并且不带任何 "命名空间资格修饰".
  * 为 "用户定义类型" 进行 std templates 全特化是好的, 但千万不要尝试在std内加入某些对std而言全新的东西.
  */
-// --
 
-// 第五章 实现
+// day-2024-8-25
+
+// 											第五章 实现
 // 条款 26 尽可能延后变量定义式的出现时间
+
 // 尽可能延后变量定义式的出现. 这样做可以增加程序的清晰度并改善程序效率.
 
 // 条款 27 尽量少做转型动作
@@ -386,10 +388,13 @@ void swap<Widget>(Widget& a, Widget& b)
 
 // const_cast<T> (expression)
 // 通常被用来将对象的常量性转除.
+
 // dynamic_cast<T> (expression)
 // 执行 "安全向下转型", 也就是用来决定某个对象是否归属继承体系中的某个类型.
+
 // reinterpret_cast<T> (expression)
 // 意图执行低级转型, 实际动作可能取决于编译器, 也就表示不可移植。 例如将一个 int* 转型为 int.
+
 // static_cast<T> (expression)          "新式转型"
 // 用来强迫隐式转换, 例如将 non-const 对象转为 const 对象, 或将int转为 double. 它也可以用来执行上诉多种转换的反向转换,
 // 例如将 void* 转换成 typed指针, 将 基类指针 转换成 派生类指针, 但无法将 const 转为 non-const.
@@ -400,6 +405,7 @@ void swap<Widget>(Widget& a, Widget& b)
  */
 
 // 条款 28 避免返回 handlers 指向对象内部成分
+
 /* 避免返回 handlers(包括 references、指针、迭代器)指向对象内部. 遵守这个条款可以增加封装性, 帮助 const 成员函数的行为
  * 像个const, 并将发生 "虚吊号码牌" 的可能性降到最低.
  */
@@ -411,9 +417,11 @@ void swap<Widget>(Widget& a, Widget& b)
  * 函数提供的 "异常安全保证" 通常最高只等于其所调用之各个函数的 "异常安全保证" 中的最弱者.
  */
 
+// day-2024-8-26
 // 条款 30 彻底了解 "inlining" 的里里外外
 
-/* 将大多数 inlining 限制在小型、被频繁调用的函数身上. 这可使日后的调试过程和二进制升级更容易, 也可使潜在的代码膨胀问题
+/*
+ * 将大多数 inlining 限制在小型、被频繁调用的函数身上. 这可使日后的调试过程和二进制升级更容易, 也可使潜在的代码膨胀问题
  * 最小化, 使程序的速度提升机会最大化.
  * 不要只因为 function templates 出现在头文件, 就将他们声明为 inline.
  */
@@ -425,7 +433,8 @@ void swap<Widget>(Widget& a, Widget& b)
  *  程序库头文件应该以 "完全且仅有声明式" 的形式存在. 这种做法不论是否涉及 templates 都适用.
  */
 
-// 第六章 继承与面向对象设计
+// 							第六章 继承与面向对象设计
+
 // 条款 32 确定你的 public 继承塑模出 is-a 关系
 /* "public 继承" 意味 is-a. 适用于 base classes 身上的每一件事情一定也适用于 derived classes 身上, 因为没一个derived class
  * 对象也是一个 base class 对象.
