@@ -122,3 +122,158 @@ int main()
     return 0;
 }
 */
+
+// day-2024-8-26
+// 面试题 17 合并两个排序的链表
+/*
+struct ListNode
+{
+    ListNode(int val)
+        : _val(val), _next(NULL)
+    {
+    }
+    int _val;
+    ListNode *_next;
+};
+// 两个链表是两个递增的链表: 如
+// 1 -> 3 -> 5 -> 7
+// 2 -> 4 -> 6 -> 8
+// 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
+
+ListNode *merge(ListNode *pHead1, ListNode *pHead2)
+{
+    if (pHead1 == NULL)
+        return pHead2;
+    else if (pHead2 == NULL)
+        return pHead1;
+
+    ListNode *pMergeHead = NULL;
+    if (pHead1->_val < pHead2->_val)
+    {
+        pMergeHead = pHead1;
+        pMergeHead->_next = merge(pHead1->_next, pHead2);
+    }
+    else
+    {
+        pMergeHead = pHead2;
+        pMergeHead->_next = merge(pHead1, pHead2->_next);
+    }
+    return pMergeHead;
+}
+
+int main()
+{
+    ListNode *p1 = new ListNode(1);
+    ListNode *p2 = new ListNode(2);
+    ListNode *p3 = new ListNode(3);
+    ListNode *p4 = new ListNode(4);
+    ListNode *p5 = new ListNode(5);
+    ListNode *p6 = new ListNode(6);
+    ListNode *p7 = new ListNode(7);
+    ListNode *p8 = new ListNode(8);
+
+    p1->_next = p3;
+    p2->_next = p4;
+    p3->_next = p5;
+    p4->_next = p6;
+    p5->_next = p7;
+    p6->_next = p8;
+
+    ListNode *head = merge(p1, p2);
+    while (head->_next != NULL)
+    {
+        cout << head->_val << "->";
+        head = head->_next;
+
+        if (head->_next == NULL)
+            cout << head->_val;
+    }
+
+    return 0;
+}
+*/
+
+// 面试题 18 树的子结构
+// 输入两棵二叉树 A 和 B, 判断 B 是否是 A 的子树.
+/*
+struct BinaryTreeNode
+{
+    BinaryTreeNode(int val)
+        : _val(val),
+          _left(NULL),
+          _right(NULL)
+    {
+    }
+    int _val;
+    BinaryTreeNode *_left;
+    BinaryTreeNode *_right;
+};
+// 例如 :
+//         A                           B
+//         8                           8
+//      8     7                     9     2
+//    9   2
+//      4   7
+// B 树 是 A 树的子结构.
+
+bool DoseTreeHaveTree2(BinaryTreeNode *pRoot1, BinaryTreeNode *pRoot2)
+{
+    if (pRoot2 == NULL)
+        return true;
+    if (pRoot1 == NULL)
+        return false;
+    if (pRoot1->_val != pRoot2->_val)
+        return false;
+    return DoseTreeHaveTree2(pRoot1->_left, pRoot2->_left) &&
+           DoseTreeHaveTree2(pRoot1->_right, pRoot2->_right);
+}
+
+bool HasSubtree(BinaryTreeNode *pRoot1, BinaryTreeNode *pRoot2)
+{
+    bool result = false;
+    if (pRoot1 != NULL && pRoot2 != NULL)
+    {
+        if (pRoot1->_val == pRoot2->_val)
+        {
+            result = DoseTreeHaveTree2(pRoot1, pRoot2);
+        }
+        if (!result)
+        {
+            result = HasSubtree(pRoot1->_left, pRoot2);
+        }
+        if (!result)
+        {
+            result = HasSubtree(pRoot1->_right, pRoot2);
+        }
+    }
+    return result;
+}
+
+int main()
+{
+    BinaryTreeNode *b1 = new BinaryTreeNode(8);
+    BinaryTreeNode *b2 = new BinaryTreeNode(8);
+    BinaryTreeNode *b3 = new BinaryTreeNode(7);
+    BinaryTreeNode *b4 = new BinaryTreeNode(9);
+    BinaryTreeNode *b5 = new BinaryTreeNode(2);
+    BinaryTreeNode *b6 = new BinaryTreeNode(4);
+    BinaryTreeNode *b7 = new BinaryTreeNode(7);
+    b1->_left = b2;
+    b2->_right = b3;
+    b2->_left = b4;
+    b2->_right = b5;
+    b5->_left = b6;
+    b5->_right = b7;
+
+    BinaryTreeNode *b8 = new BinaryTreeNode(8);
+    BinaryTreeNode *b9 = new BinaryTreeNode(9);
+    BinaryTreeNode *b10 = new BinaryTreeNode(2);
+    BinaryTreeNode *b11 = new BinaryTreeNode(0);
+
+    b8->_left = b9;
+    b8->_right = b10;
+
+    cout << HasSubtree(b1, b8); // 1
+    return 0;
+}
+*/
