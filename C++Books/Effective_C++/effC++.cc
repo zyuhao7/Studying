@@ -445,6 +445,8 @@ void swap<Widget>(Widget& a, Widget& b)
  * 为了让被遮掩的名称再见天日, 可以使用 using 声明式或转交函数.
  */
 
+// day-2024-8-27
+
 // 条款 34 区分接口继承和实现继承
 /* 接口继承和实现继承不同. 在public 继承之下, derived classes 总是继承 base class 的接口.
  * pure virtual 函数只具体指定接口继承.
@@ -476,27 +478,27 @@ public:
 
 int main()
 {
-	D x;
-	B* pB = &x;
-	pB->mf(); //B::mf()
+	// D x;
+	// B *pB = &x;
+	// pB->mf(); // B::mf()
 
-	D* pD = &x;
-	pD->mf();// B::mf(); D 没实现 void mf()
+	// D *pD = &x;
+	// pD->mf(); // B::mf();  D 没实现 void mf()
 
-	D x;
-	B* pB = &x;
-	pB->mf(); //B::mf()
+	// D x;
+	// B *pB = &x;
+	// pB->mf(); // B::mf()
 
-	D* pD = &x;
-	pD->mf();// D::mf(); D 实现 void mf()
+	// D *pD = &x;
+	// pD->mf(); // D::mf(); D 实现 void mf()
 
-	D x;
-	B* pB = &x;
-	pB->mf(); //D::mf()
+	// D x;
+	// B *pB = &x;
+	// pB->mf(); // D::mf()
 
-	D* pD = &x;
-	pD->mf();// D::mf(); B 内 为 virtual void mf()
-	return 0;	
+	// D *pD = &x;
+	// pD->mf(); // D::mf(); B 内 为 virtual void mf()
+	return 0;
 }
 #endif
 
