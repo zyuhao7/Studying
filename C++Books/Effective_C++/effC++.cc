@@ -507,17 +507,23 @@ int main()
 // 条款 37 绝对不重新定义继承而来的缺省参数值.
 // 绝对不要重新定义一个继承而来的缺省参数值, 因为缺省参数值都是静态绑定, 而 virtual 函数 - 你唯一应该覆写的东西 - 确实动态绑定的.
 
+// day-2024-8-28
+
 // 条款 38 通过复合塑模出 has-a 或 "根据某物质实现出"
-/* 复合的意义和 public 继承完全不同.
+
+/*
+ * 复合的意义和 public 继承完全不同.
  * 在应用域, 复合意味 has-a. 在实现域, 复合意味 is-implemented-in-terms-of(根据某物实现出).
  */
 
 // 条款 39 明智而审慎地使用 private 继承
+
 // Private 继承意味 is-implemented-in-terms of. 它通常比复合的级别低. 但是当 derived class 需要访问 protected base class 的成员,
 // 或需要重新定义继承而来的 virtual 函数时, 这么设计是合理的.
 // 和复合不同, private 继承可以造成 empty base 最优化. 这对致力于 "对象尺寸最小化" 的程序库开发者而言可能很重要.
 
 // 条款 40 明智而审慎地使用多重继承
+
 /* 多重继承比单一继承复杂. 它可能导致新的歧义性, 以及对 virtual 继承的需要.
  * virtual 继承会增加 大小、速度、初始化复杂度等等成本. 如果 virtual base classes 不带任何数据, 将是最具有实用价值的.
  * 多重继承正当用途: 其中一个情节涉及 "public 继承某个 Interface class" 和 "private 继承某个协助实现的class" 的两项组合.
