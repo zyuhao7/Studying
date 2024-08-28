@@ -369,6 +369,7 @@ public:
                 res.push_back(matrix[t][i]);
             for (int j = t + 1; j <= b; ++j)
                 res.push_back(matrix[j][r]);
+
             if (l < r && t < b)
             {
                 for (int i = r - 1; i >= l; --i)
@@ -403,4 +404,76 @@ int main()
     // 7 8 9
     // 1 2 3 6 9 8 7 4 5
 }
+*/
+
+// day-2024-8-28
+// 面试题 21 包含 min 函数的栈
+// 定义栈结构, 实现一个能够得到栈最小值的min函数, 调用 min 、push、pop的时间复杂度为 O(1).
+
+/*
+#include <stack>
+class MinStack
+{
+public:
+    stack<int> data;
+    stack<int> min;
+
+    MinStack()
+    {
+    }
+
+    void push(int x)
+    {
+        data.push(x);
+        if (min.empty() || x < min.top())
+        {
+            min.push(x);
+        }
+        else
+        {
+            min.push(min.top());
+        }
+    }
+
+    void pop()
+    {
+        data.pop();
+        min.pop();
+    }
+
+    int top()
+    {
+        return data.top();
+    }
+
+    int getMin()
+    {
+        return min.top();
+    }
+};
+*/
+
+// 面试题 22 栈的压入、弹出序列
+// 输入两个整数序列, 第一个序列表示栈压入顺序, 请判断第二个序列是否可能为栈的弹出顺序.
+// 例如: 1 2 3 4 5   -> 4 5 3 2 1 是, 4 3 5 1 2 不是.
+
+/*
+class Solution {
+public:
+    bool validateStackSequences(vector<int>& v1, vector<int>& v2) {
+        stack<int> st1;
+        int j=0;
+
+       for(int i=0;i<v1.size();++i)
+       {
+            st1.push(v1[i]);
+            while(!st1.empty() && st1.top() == v2[j])
+            {
+                st1.pop();
+                j++;
+            }
+       }
+       return st1.empty();
+    }
+};
 */
