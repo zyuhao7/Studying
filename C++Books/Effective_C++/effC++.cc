@@ -536,6 +536,8 @@ int main()
  * 对 template 参数而言, 接口是隐式的, 奠基于有效表达式. 多态则是通过 template 具现化 和 函数重载解析发生于编译期.
  */
 
+// day-2024-8-42
+
 // 条款 42 了解typename的双重意义
 /* 声明 template 参数时, 前缀关键字 class 和 typename 可互换.
  * 请使用关键字 typename 标识嵌套从属类型名称; 但不得在 base class lists(基类列) 或 member init list(成员初值列)内以它作为 base class 修饰符.
