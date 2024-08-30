@@ -536,7 +536,7 @@ int main()
  * 对 template 参数而言, 接口是隐式的, 奠基于有效表达式. 多态则是通过 template 具现化 和 函数重载解析发生于编译期.
  */
 
-// day-2024-8-42
+// day-2024-8-29
 
 // 条款 42 了解typename的双重意义
 /* 声明 template 参数时, 前缀关键字 class 和 typename 可互换.
@@ -547,17 +547,20 @@ int main()
 // 可在 derived class templates 内通过 "this->" 指涉 base class templates内的成员名称, 或藉由一个明白写出的"base class 资格修饰符"完成.
 
 // 条款 44 将于参数无关的代码抽离 templates
+
 /* Templates 生成多个 classes 和 多个函数, 所以任何 template 代码都不该与某个造成膨胀的 template 参数产生相依关系.
  * 因非类型模板参数而造成的代码膨胀, 往往可消除, 做法是以函数参数或class成员变量代替template参数.
  * 因类型参数而造成的代码膨胀, 往往可降低, 做法是让带有完全相同二进制表述的具现类型共享实现码.
  */
 
 // 条款 45 运用成员函数模板接受所有兼容类型
+
 /* 请使用 member function templates 生成 "可接受所有兼容类型" 的函数.
  * 如果你生命 member templates 用于 "泛化 copy构造" 或 "泛化 assignment操作" 你还是需要声明正常的 copy构造函数和 copy assignment操作符.
  */
 
-// 使用类型转换时请为模板定义非成员函数.
+// 条款 46 需要类型转换时请为模版定义非成员函数
+
 /* 当我们编写一个 class template, 而它所提供之 "于此template 相关的" 函数支持 "所有参数之隐式类型转换"时, 请将那些函数定义为 "class template
  * 内部的 friend函数".
  */
@@ -593,7 +596,7 @@ int main()
 //	fac<5> f;
 //	cout << f.val;
 //	return 0;
-// }
+// }	
 
 /* Template metaprogramming(TMP 模板元编程) 可将工作由运行期往编译期, 因而得以实现早期错误侦测和更高的执行效率.
  * TMP 可被用来生成 "基于政策选择组合" 的客户定制代码, 也可用来避免生成对某些特殊类型不合适的代码.
