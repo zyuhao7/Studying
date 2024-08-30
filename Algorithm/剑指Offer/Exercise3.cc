@@ -132,3 +132,139 @@ int main()
     return 0;
 }
 */
+
+// 2024-8-30
+// 面试题 25 二叉树中和为某一值的路径
+// 输入一颗二叉树和一个整数, 打印出二叉树中节点值的和为输入整数的所有路径.
+//       10
+//    5    12
+//  4  7                      --> 22   10 + 5 + 7  |  10 + 22
+// 先进入 10, 把值 求和, 和 22 比较, 大于则返回, 小于进入左右子树, 先进入左子树, 求路径和, 然后比较,如果大于 则 返回, 小于
+// 则继续进入左子树, 求路径和 然后比较,小于则进入左子树, 如果左子树为空, 则 减掉此节点值返回上一节点,然后继续进入右子树, 直到
+// 遍历完整棵树. 需要保存遍历的路径.
+/*
+class Solution
+{
+public:
+    vector<vector<int>> pathSum(BinaryTreeNode *root, int targetSum)
+    {
+        dfs(root, targetSum);
+        return res;
+    }
+
+private:
+    vector<vector<int>> res;
+    vector<int> path;
+    void dfs(BinaryTreeNode *root, int targetSum)
+    {
+        if (root == nullptr)
+            return;
+        path.push_back(root->_val);
+        targetSum -= root->_val;
+        if (root->_left == nullptr && root->_right == nullptr && targetSum == 0)
+            res.push_back(path);
+        dfs(root->_left, targetSum);
+        dfs(root->_right, targetSum);
+        path.pop_back();
+    }
+};
+
+int main()
+{
+    BinaryTreeNode *b1 = new BinaryTreeNode(10);
+    BinaryTreeNode *b2 = new BinaryTreeNode(5);
+    BinaryTreeNode *b3 = new BinaryTreeNode(12);
+    BinaryTreeNode *b4 = new BinaryTreeNode(4);
+    BinaryTreeNode *b5 = new BinaryTreeNode(7);
+    b1->_left = b2;
+    b1->_right = b3;
+    b2->_left = b4;
+    b2->_right = b5;
+    vector<vector<int>> res = Solution().pathSum(b1, 22);
+    for (int i = 0; i < res.size(); ++i)
+    {
+        for (int j = 0; j < res[i].size(); ++j)
+        {
+            cout << res[i][j] << " "; // 10 5 7
+                                      // 10 12
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
+*/
+
+// 面试题 26 复杂链表的复制
+// 1、 直接复制, 然后每个节点找在链表什么位置, 置 random 指针, 时间复杂度 O(N^2)
+// 2、 存个哈希, <R,R`>, 直接找对应节点的 random指针, 空间换时间, 空间复杂度 O(N), 时间复杂度 O(N).
+// 3、 将节点复制到本节点的后面 A A` B B` 这种, 然后遍历一遍, 存一下奇数节点的 random 指针, 然后偶数节点指向 存的技术节点的下一
+// 位置就行, 然后根据奇偶将两个链表分开.
+/*
+class Solution
+{
+public:
+    void copyNode(Node *head)
+    {
+        if (head == NULL)
+            return;
+
+        Node *node = new Node(head->val);
+        node->random = NULL;
+        node->next = head->next;
+        head->next = node;
+        copyNode(node->next);
+    }
+
+    void setRandomPtr(Node *head)
+    {
+        Node *cur = head;
+        while (cur)
+        {
+            Node *copy = cur->next;
+            if (cur->random == NULL)
+                copy->random = NULL;
+            else
+                copy->random = cur->random->next;
+            cur = copy->next;
+        }
+    }
+    Node *detachList(Node *head)
+    {
+        Node *copyHead = NULL, *copyTail = NULL;
+        Node *cur = head;
+        while (cur)
+        {
+            Node *copy = cur->next;
+            Node *next = copy->next;
+            if (copyTail == NULL)
+            {
+                copyHead = copyTail = copy;
+            }
+            else
+            {
+                copyTail->next = copy;
+                copyTail = copy;
+            }
+            cur->next = next;
+            cur = next;
+        }
+        return copyHead;
+    }
+
+    Node *copyRandomList(Node *head)
+    {
+        if (head == NULL)
+            return NULL;
+        // 1、 复制节点.
+        copyNode(head);
+
+        // 2、 设置 random 指针.
+        setRandomPtr(head);
+
+        // 3、 分离链表
+        Node *res = detachList(head);
+        return res;
+    }
+};
+*/
