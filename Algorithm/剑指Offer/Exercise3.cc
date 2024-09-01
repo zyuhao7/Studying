@@ -268,3 +268,200 @@ public:
     }
 };
 */
+
+// 2024-9-1
+// 面试题 27 二叉搜索树与双向链表
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+
+    Node() {}
+
+    Node(int _val) {
+        val = _val;
+        left = NULL;
+        right = NULL;
+    }
+
+    Node(int _val, Node* _left, Node* _right) {
+        val = _val;
+        left = _left;
+        right = _right;
+    }
+};
+class Solution
+{
+public:
+    Node *treeToDoublyList(Node *root)
+    {
+        if (root == nullptr)
+            return nullptr;
+        dfs(root);
+        head->left = prev;
+        prev->right = head;
+        return head;
+    }
+
+private:
+    Node *prev, *head;
+
+    void dfs(Node *cur)
+    {
+        if (cur == nullptr)
+            return;
+        dfs(cur->left);
+        if (prev != nullptr)
+            prev->right = cur;
+        else
+            head = cur;
+        cur->left = prev;
+        prev = cur;
+        dfs(cur->right);
+    }
+};
+*/
+
+// 面试题 28 字符串的排列
+// 输入一个字符串, 打印该字符串中字符的所有排列, 例如输入字符串 abc 则打印出 abc、acb、bac、bca、cab、cba.
+/*
+void StringPermutation(string &s, vector<bool> &used, string str)
+{
+    if (str.size() == s.size())
+    {
+        cout << str << endl;
+        return;
+    }
+
+    for (int i = 0; i < s.size(); ++i)
+    {
+        if (used[i])
+            continue;
+
+        used[i] = true;
+        str += s[i];
+
+        StringPermutation(s, used, str);
+
+        str.pop_back();
+        used[i] = false;
+    }
+}
+
+// 交换两个字符的辅助函数
+void swap(char &a, char &b)
+{
+    char temp = a;
+    a = b;
+    b = temp;
+}
+
+// 生成排列的递归函数
+void Permutation(string &s, int left, int right)
+{
+    if (left == right)
+    {
+        cout << s << endl;
+    }
+    else
+    {
+        for (int i = left; i <= right; i++)
+        {
+            swap(s[left], s[i]);             // 交换当前字符与后续字符
+            Permutation(s, left + 1, right); // 递归调用
+            swap(s[left], s[i]);             // 回溯：恢复原有字符顺序
+        }
+    }
+}
+
+int main()
+{
+    string s = "abc";
+    vector<bool> used(s.size(), false);
+    StringPermutation(s, used, "");
+    cout << "--------------------" << endl;
+    Permutation(s, 0, 2);
+
+    return 0;
+}
+// 画图 、 举例子、 分解
+*/
+
+// 面试题 29 数组中出现次数超过一半的数字
+// 例如 输入一个长度为 9 的数组 {1,2,3,2,2,2,5,4,2} 由于数字 2 在数组中出现了五次, 超过数组长度的一半, 因此输出 2.
+
+/*
+int Partition(int data[], int length, int start, int end)
+{
+    if (data == NULL || length <= 0 || start < 0 || end >= length)
+        return;
+    int index = RandomInRange(start, end);
+    swap(&data[index], &data[end]);
+
+    int small = start - 1;
+    for (index = start; index < end; ++index)
+    {
+        ++small;
+        if (small != index)
+            swap(&data[index], &data[small]);
+    }
+    ++small;
+    swap(&data[small], &data[end]);
+}
+
+bool state = false;
+bool CheckInvalidArray(int *numbers, int length)
+{
+    state = false;
+    if (numbers == NULL && length <= 0)
+        state = true;
+    return state;
+}
+
+bool CheckMoreThanHalf(int *numbers, int length, int number)
+{
+    int times = 0;
+    for (int i = 0; i < length; ++i)
+    {
+        if (numbers[i] == number)
+            times++;
+    }
+    bool isMoreThanHalf = true;
+    if (time * 2 <= length)
+    {
+        state = true;
+        isMoreThanHalf = false;
+    }
+    return isMoreThanHalf;
+}
+
+int MoreThanHalfNum(int *numbers, int length)
+{
+    if (CheckInvalidArray(numbers, length))
+        return 0;
+    int mid = length >> 1;
+    int start = 0;
+    int end = length - 1;
+    int index = Partition(numbers, length, start, end);
+    while (index != mid)
+    {
+        if (index > mid)
+        {
+            end = index - 1;
+            index = Partition(numbers, length, start, end);
+        }
+        else
+        {
+            start = index + 1;
+            index = Partition(numbers, length, start, end);
+        }
+    }
+    int result = numbers[mid];
+    if (!CheckMoreThanHalf(numbers, length, result))
+        result = 0;
+    return result;
+}
+*/
