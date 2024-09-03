@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include <ctime>
 using namespace std;
 // 2024-9-2
@@ -101,4 +102,69 @@ int main()
     cout << dp(a, sizeof(a) / sizeof(a[0])) << endl;
     return 0;
 }
+*/
+
+// day-2024-9-3
+// 面试题 32 从 1 到 n 整数中 1出现的次数
+// 例如 12,  从 1 到 12, 1出现的次数包括 1, 10, 11, 12 共五次.
+// 暴力做法 - 从 1 到 n 遍历, 取每位值与 1 比较.
+/*
+int NumOneOfVal(int val)
+{
+    int one = 0;
+    while (val)
+    {
+        if (val % 10 == 1)
+            one++;
+        val /= 10;
+    }
+    return one;
+}
+
+int FromOneToN(int n)
+{
+    int sumOne = 0;
+    for (int i = 1; i <= n; ++i)
+    {
+        sumOne += NumOneOfVal(i);
+    }
+    return sumOne;
+} // 效率太低!
+// O(lgN) 的思路有点难想
+// 比如 n = 21345, 先考虑 1 ~ 1345  再考虑 1346 ~ 21345 从 1346 ~ 21345 万位存在1 的情况 是 10000 ~ 19999 共 1^4 个.
+// 如果 n 是 12345, 那么 1存在万位的个数是 1000~12345  共 2346 个了. 接下来分析 1345 ~ 21345 数字中后四位1出现的次数是
+// 2000, 分成 1345 ~ 11345 和 11346 ~ 21345 ...
+//
+
+int main()
+{
+    cout << FromOneToN(21);
+    return 0;
+}
+*/
+
+// 面试题 33 把数组排成最小的数
+// 输入一个正整数数组, 把数组中的所有数字排列成一个数, 打印能拼接出的所有数字中最小的一个. 例如输如 {3,32,321}
+// 则打印出 321323
+// 思路: 现将数组排序 -> 先根据数据大小 如果位数相同 降序  如果 位数不同, 则位数小的放在前面.
+
+/*
+class Solution
+{
+public:
+    string crackPassword(vector<int> &password)
+    {
+        vector<string> strs;
+        for (int i = 0; i < password.size(); ++i)
+        {
+            strs.push_back(to_string(password[i]));
+        }
+        sort(strs.begin(), strs.end(), [](string &a, string &b)
+             { return a + b < b + a; });
+        string res;
+        for (auto s : strs)
+            res += s;
+        return res;
+    }
+};
 */
