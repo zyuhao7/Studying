@@ -204,3 +204,322 @@ int main()
     return 0;
 }
 */
+
+// 2024-9-3
+
+/*
+#include <cstddef>
+#include <iostream>
+namespace myh
+{
+    // ref. C++Primer 3/e, p.765
+    // per-class allocator
+
+    class Screen
+    {
+    public:
+        Screen(int x) : i(x) {};
+        int get() { return i; }
+
+        void *operator new(size_t);
+        void operator delete(void *, size_t); //(2)
+        // void operator delete(void *);         //(1) 二选一. 若(1)(2)並存,會有很奇怪的報錯 (摸不著頭緒)
+
+    private:
+        Screen *next;
+        static Screen *freeStore;
+        static const int screenChunk;
+
+    private:
+        int i;
+    };
+
+    Screen *Screen::freeStore = 0;
+    const int Screen::screenChunk = 24;
+
+    void *Screen::operator new(size_t size)
+    {
+        Screen *p;
+        if (!freeStore)
+        {
+            // linked list 是空的，所以获取一大块 memory
+            // 以下呼叫的是 global operator new
+            size_t chunk = screenChunk * size;
+            freeStore = p =
+                reinterpret_cast<Screen *>(new char[chunk]);
+            // 將分配得來的一大塊 memory 當做 linked list 般小塊小塊串接起來
+            for (; p != &freeStore[screenChunk - 1]; ++p)
+                p->next = p + 1;
+            p->next = 0;
+        }
+        p = freeStore;
+        freeStore = freeStore->next;
+        return p;
+    }
+
+    //! void Screen::operator delete(void *p)		//(1)
+    void Screen::operator delete(void *p, size_t) //(2)二擇一
+    {
+        // 將 deleted object 收回插入 free list 前端
+        (static_cast<Screen *>(p))->next = freeStore;
+        freeStore = static_cast<Screen *>(p);
+    }
+
+    //-------------
+    void test_per_class_allocator_1()
+    {
+        cout << "\ntest_per_class_allocator_1().......... \n";
+
+        cout << sizeof(Screen) << endl; // 16
+
+        size_t const N = 100;
+        Screen *p[N];
+
+        for (int i = 0; i < N; ++i)
+            p[i] = new Screen(i);
+
+        // 輸出前 10 個 pointers, 用以比較其間隔
+        for (int i = 0; i < 10; ++i)
+            cout << p[i] << endl;
+
+        for (int i = 0; i < N; ++i)
+            delete p[i];
+    }
+}
+
+int main()
+{
+    myh::test_per_class_allocator_1();
+    return 0;
+}
+*/
+
+/*
+#include <cstddef>
+#include <iostream>
+namespace myh
+{
+    // ref. Effective C++ 2e, item10
+    // per-class allocator
+
+    class Airplane
+    { // 支援 customized memory management
+    private:
+        struct AirplaneRep
+        {
+            unsigned long miles;
+            char type;
+        };
+
+    private:
+        union
+        {
+            AirplaneRep rep; // 此針對 used object
+            Airplane *next;  // 此針對 free list
+        };
+
+    public:
+        unsigned long getMiles() { return rep.miles; }
+        char getType() { return rep.type; }
+        void set(unsigned long m, char t)
+        {
+            rep.miles = m;
+            rep.type = t;
+        }
+
+    public:
+        static void *operator new(size_t size);
+        static void operator delete(void *deadObject, size_t size);
+
+    private:
+        static const int BLOCK_SIZE;
+        static Airplane *headOfFreeList;
+    };
+
+    Airplane *Airplane::headOfFreeList;
+    const int Airplane::BLOCK_SIZE = 512;
+
+    void *Airplane::operator new(size_t size)
+    {
+        // 如果大小错误，转交給 ::operator new()
+        if (size != sizeof(Airplane))
+            return ::operator new(size);
+
+        Airplane *p = headOfFreeList;
+
+        // 如果 p 有效，就把list頭部移往下一個元素
+        if (p)
+            headOfFreeList = p->next;
+        else
+        {
+            // free list 已空. 配置一块够大内存
+            // 令足够容纳 BLOCK_SIZE 个 Airplanes
+
+            Airplane *newBlock = static_cast<Airplane *>(::operator new(BLOCK_SIZE * sizeof(Airplane)));
+
+            // 组成一个新的 free list : 将小块串在一起, 但跳过 #0 元素, 因为要将他传回给呼叫者.
+            for (int i = 1; i < BLOCK_SIZE - 1; ++i)
+                newBlock[i].next = &newBlock[i + 1];
+
+            newBlock[BLOCK_SIZE - 1].next = 0; // 以null結束
+
+            // 将 p 设为头部, 将 headOfFreeList 设至为下一个可被使用的小块.
+            p = newBlock;
+            headOfFreeList = &newBlock[1];
+        }
+        return p;
+    }
+
+    // operator delete 接收一块内存
+    // 如果它的大小正確，就把它加到 free list 的前端
+    void Airplane::operator delete(void *deadObject,
+                                   size_t size)
+    {
+        if (deadObject == 0)
+            return;
+        if (size != sizeof(Airplane))
+        {
+            ::operator delete(deadObject);
+            return;
+        }
+
+        Airplane *carcass =
+            static_cast<Airplane *>(deadObject);
+
+        carcass->next = headOfFreeList;
+        headOfFreeList = carcass;
+    }
+
+    //-------------
+    void test_per_class_allocator_2()
+    {
+        cout << "\ntest_per_class_allocator_2().......... \n";
+
+        cout << sizeof(Airplane) << endl; // 16
+
+        size_t const N = 100;
+        Airplane *p[N];
+
+        for (int i = 0; i < N; ++i)
+            p[i] = new Airplane;
+
+        // 随机测试 object 正常否
+        p[1]->set(1000, 'A');
+        p[5]->set(2000, 'B');
+        p[9]->set(500000, 'C');
+        cout << p[1] << ' ' << p[1]->getType() << ' ' << p[1]->getMiles() << endl;
+        cout << p[5] << ' ' << p[5]->getType() << ' ' << p[5]->getMiles() << endl;
+        cout << p[9] << ' ' << p[9]->getType() << ' ' << p[9]->getMiles() << endl;
+
+        // 輸出前 10 個 pointers, 用以比較其間隔
+        for (int i = 0; i < 10; ++i)
+            cout << p[i] << endl;
+
+        for (int i = 0; i < N; ++i)
+            delete p[i];
+    }
+}
+
+int main()
+{
+    myh::test_per_class_allocator_2();
+    return 0;
+}
+*/
+
+/*
+#include <cstddef>
+#include <iostream>
+#include <string>
+namespace myh
+{
+
+    class Foo
+    {
+    public:
+        int _id;
+        long _data;
+        string _str;
+
+    public:
+        static void *operator new(size_t size);
+        static void operator delete(void *deadObject, size_t size);
+        static void *operator new[](size_t size);
+        static void operator delete[](void *deadObject, size_t size);
+
+        Foo() : _id(0) { cout << "default ctor. this=" << this << " id=" << _id << endl; }
+        Foo(int i) : _id(i) { cout << "ctor. this=" << this << " id=" << _id << endl; }
+
+        // virtual
+        virtual ~Foo() { cout << "dtor. this=" << this << " id=" << _id << endl; }
+
+        // 不加 virtual dtor, sizeof = 24, new Foo[5] => operator new[]() 的 size 參數是 128
+        // 加了 virtual dtor, sizeof = 32, new Foo[5] => operator new[]() 的 size 參數是 168
+
+        // 上述二例，多出來的 8 可能就是個 size_t 欄位用來放置 array size.
+    };
+
+    void *Foo::operator new(size_t size)
+    {
+        Foo *p = (Foo *)malloc(size);
+        cout << "Foo::operator new(), size=" << size << "\t  return: " << p << endl;
+
+        return p;
+    }
+
+    void Foo::operator delete(void *pdead, size_t size)
+    {
+        cout << "Foo::operator delete(), pdead= " << pdead << "  size= " << size << endl;
+        free(pdead);
+    }
+
+    void *Foo::operator new[](size_t size)
+    {
+        Foo *p = (Foo *)malloc(size); // crash, 問題可能出在这里.
+        cout << "Foo::operator new[](), size=" << size << "\t  return: " << p << endl;
+
+        return p;
+    }
+
+    void Foo::operator delete[](void *pdead, size_t size)
+    {
+        cout << "Foo::operator delete[](), pdead= " << pdead << "  size= " << size << endl;
+
+        free(pdead);
+    }
+
+    //-------------
+    void test_overload_operator_new_and_array_new()
+    {
+        cout << "\ntest_overload_operator_new_and_array_new().......... \n";
+
+        cout << "sizeof(Foo)= " << sizeof(Foo) << endl;
+
+        {
+            Foo *p = new Foo(7);
+            delete p;
+
+            Foo *pArray = new Foo[5]; // 無法給 array elements 以 initializer
+            delete[] pArray;
+        }
+
+        {
+            cout << "testing global expression ::new and ::new[] \n";
+            // 這會繞過 overloaded new(), delete(), new[](), delete[]()
+            // 但當然 ctor, dtor 都會被正常呼叫.
+
+            Foo *p = ::new Foo(7);
+            ::delete p;
+
+            Foo *pArray = ::new Foo[5];
+            ::delete[] pArray;
+        }
+    }
+}
+
+int main()
+{
+    myh::test_overload_operator_new_and_array_new();
+    return 0;
+}
+*/
