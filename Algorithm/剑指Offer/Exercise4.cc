@@ -168,3 +168,105 @@ public:
     }
 };
 */
+
+// 面试题 34 丑数
+// 我们把只包含因子 2、 3、 5 的数称为 丑数 (Ugly Number). 求从小到大的顺序的第1500个丑数. 习惯 1 是第一个丑数.
+/*
+bool is_uglyNumer(int n)
+{
+    while (n % 2 == 0)
+        n /= 2;
+    while (n % 3 == 0)
+        n /= 3;
+    while (n % 5 == 0)
+        n /= 5;
+    return n == 1 ? true : false;
+}
+
+int GetUglyNumber(int index)
+{
+    if (index <= 0)
+        return 0;
+    int n = 0;
+    int uglyFound = 0;
+
+    while (uglyFound < index)
+    {
+        ++n;
+        if (is_uglyNumer(n))
+        {
+            ++uglyFound;
+        }
+    }
+    return n;
+} // 耗时.
+
+int Min(int n1, int n2, int n3);
+int GetUglyNumber1(int index)
+{
+    if (index <= 0)
+        return 0;
+    int *pa = new int[index];
+    pa[0] = 1;
+    int nextUglyIndex = 1;
+
+    int *p1 = pa;
+    int *p2 = pa;
+    int *p3 = pa;
+
+    while (nextUglyIndex < index)
+    {
+        int MinNumber = Min(*p1 * 2, *p2 * 3, *p3 * 5);
+        pa[nextUglyIndex] = MinNumber;
+
+        while (*p1 * 2 <= pa[nextUglyIndex])
+            ++p1;
+        while (*p2 * 3 <= pa[nextUglyIndex])
+            ++p2;
+        while (*p3 * 5 <= pa[nextUglyIndex])
+            ++p3;
+        ++nextUglyIndex;
+    }
+    int ret = pa[nextUglyIndex - 1];
+    delete[] pa;
+    return ret;
+}
+
+int Min(int n1, int n2, int n3)
+{
+    int n = (n1 < n2) ? n1 : n2;
+    return n < n3 ? n : n3;
+}
+
+int main()
+{
+    // cout << GetUglyNumber(1500);
+    cout << GetUglyNumber1(1500);
+
+    return 0;
+}
+*/
+
+// 面试题 35 第一次只出现一次的字符
+// 在字符串中查找第一个只出现一次的字符, 如输入 "abaccdeff", 则输出 b.
+/*
+#include <map>
+char FirstCharOfAppearOne(const string &s)
+{
+    map<char, int> mp;
+    char c;
+    for (int i = 0; i < s.size(); ++i)
+        mp[s[i]]++;
+
+    for (int i = 0; i < s.size(); ++i)
+        if (mp[s[i]] == 1)
+            return s[i];
+    return 0;
+}
+int main()
+{
+    char c = FirstCharOfAppearOne("abaccdeff");
+    cout << c << endl;
+    return 0;
+}
+*/
