@@ -270,3 +270,108 @@ int main()
     return 0;
 }
 */
+
+// 面试题 36 数组中的逆序对
+// 在数组中, 如果前一个数字大于后一个数字,则组成一个逆序对. 求出数组逆序对的总数.
+// 例如 {7,6, 5, 4} 存在五个逆序对 (7, 6)(7, 5)(7, 4)(6, 4)(5, 4)
+// class Solution
+// {
+// public:
+//     int reversePairs(vector<int> &record)
+//     {
+//         vector<int> tmp(record.size());
+//         return mergeSort(0, record.size() - 1, record, tmp);
+//     }
+
+// private:
+//     int mergeSort(int l, int r, vector<int> &record, vector<int> &tmp)
+//     {
+//         if (l >= r)
+//             return 0;
+//         int m = (l + r) >> 1;
+//         int res = mergeSort(l, m, record, tmp) + mergeSort(m + 1, r, record, tmp);
+
+//         int i = l, j = m + 1, k = 0;
+//         while (i <= m && j <= r)
+//         {
+//             if (record[i] <= record[j])
+//                 tmp[k++] = record[i++];
+//             else
+//             {
+//                 res += m - i + 1;
+//                 tmp[k++] = record[j++];
+//             }
+//         }
+//         while (i <= m)
+//             tmp[k++] = record[i++];
+//         while (j <= r)
+//             tmp[k++] = record[j++];
+//         for (int i = l, j = 0; i <= r; ++i, ++j)
+//             record[i] = tmp[j];
+//         return res;
+//     }
+// };
+
+// 面试题 37 两个链表的第一个公共节点
+// 输入两个链表, 找出他们的第一个公共节点.
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
+// class Solution
+// {
+// public:
+//     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB)
+//     {
+//         if (headA == NULL || headB == NULL)
+//             return NULL;
+//         int lenA = 1, lenB = 1;
+//         ListNode *curA = headA, *curB = headB;
+//         while (curA->next)
+//         {
+//             lenA++;
+//             curA = curA->next;
+//         }
+//         while (curB->next)
+//         {
+//             lenB++;
+//             curB = curB->next;
+//         }
+//         if (curA != curB)
+//             return NULL;
+
+//         int t = abs(lenB - lenA);
+//         curA = headA;
+//         curB = headB;
+//         if (lenA > lenB)
+//         {
+//             while (t)
+//             {
+//                 t--;
+//                 curA = curA->next;
+//             }
+//         }
+//         else
+//         {
+//             while (t)
+//             {
+//                 t--;
+//                 curB = curB->next;
+//             }
+//         }
+
+//         while (curA && curB)
+//         {
+//             if (curA == curB)
+//                 return curA;
+//             curA = curA->next;
+//             curB = curB->next;
+//         }
+//         return NULL;
+//     }
+// };
