@@ -375,3 +375,149 @@ int main()
 //         return NULL;
 //     }
 // };
+
+// day-2024-9-6
+//  数字在排序数组中出现的次数.
+// class Solution
+// {
+// public:
+//     int countTarget(vector<int> &scores, int target)
+//     {
+//         if (scores.size() == 0)
+//             return 0;
+//         int l = -1, r = scores.size();
+//         while (l + 1 < r)
+//         {
+//             int m = l + r >> 1;
+//             if (scores[m] >= target)
+//                 r = m;
+//             else
+//                 l = m;
+//         }
+//         int i = -1;
+//         if (r == scores.size())
+//             return 0;
+//         if (scores[r] != target)
+//             return 0;
+//         i = r;
+//         l = -1, r = scores.size();
+//         while (l + 1 < r)
+//         {
+//             int m = l + r >> 1;
+//             if (scores[m] <= target)
+//                 l = m;
+//             else
+//                 r = m;
+//         }
+//         int j = l;
+//         return j - i + 1;
+//     }
+// };
+
+// 面试题 39 二叉树的深度
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+// 递归.
+// class Solution
+// {
+// public:
+//     int maxDepth(TreeNode *root)
+//     {
+//         if (root == nullptr)
+//             return 0;
+//         return max(maxDepth(root->left), maxDepth(root->right)) + 1;
+//     }
+// };
+// // 层序遍历
+// class Solution
+// {
+// public:
+//     int maxDepth(TreeNode *root)
+//     {
+//         if (root == nullptr)
+//             return 0;
+//         vector<TreeNode *> q;
+//         q.push_back(root);
+//         int res = 0;
+//         while (!q.empty())
+//         {
+//             vector<TreeNode *> tmp;
+//             for (TreeNode *node : q)
+//             {
+//                 if (node->left != nullptr)
+//                     tmp.push_back(node->left);
+//                 if (node->right != nullptr)
+//                     tmp.push_back(node->right);
+//             }
+//             q = tmp;
+//             res++;
+//         }
+//         return res;
+//     }
+// };
+
+// 平衡二叉树.
+// class Solution
+// {
+// public:
+//     bool isBalanced(TreeNode *root)
+//     {
+//         int depth = 0;
+//         return IsBalanced(root, &depth);
+//     }
+//     bool IsBalanced(TreeNode *root, int *pDepth)
+//     {
+//         if (root == nullptr)
+//         {
+//             *pDepth = 0;
+//             return true;
+//         }
+//         int left;
+//         int right;
+//         if (IsBalanced(root->left, &left) &&
+//             IsBalanced(root->right, &right))
+//         {
+//             int diff = left - right;
+//             if (diff <= 1 && diff >= -1)
+//             {
+//                 *pDepth = 1 + (left > right ? left : right);
+//                 return true;
+//             }
+//         }
+//         return false;
+//     }
+// };
+
+// 面试题 40 数组中只出现一次的数字
+// 一个整形数组中除了两个数字之外, 其他数字都出现了两次, 找出这两个只出现一次的数字.
+// class Solution
+// {
+// public:
+//     vector<int> singleNumber(vector<int> &nums)
+//     {
+//         vector<int> res(2, 0);
+//         int x;
+//         for (int i = 0; i < nums.size(); ++i)
+//         {
+//             x ^= nums[i];
+//         }
+//         int Mask = (x == INT_MIN ? x : x & (-x));
+//         for (int i = 0; i < nums.size(); ++i)
+//         {
+//             if (Mask & nums[i])
+//                 res[0] ^= nums[i];
+//             else
+//                 res[1] ^= nums[i];
+//         }
+//         return res;
+//     }
+// };
