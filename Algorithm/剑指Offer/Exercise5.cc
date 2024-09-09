@@ -157,3 +157,109 @@ using namespace std;
 //     string s = "abcdefg";
 //     LeftRotationString(s, 2);
 // }
+
+// day-2024-9-9`
+// 面试题 43 n个 骰子的点数
+// 把 n 个骰子扔在地上, 所有朝上一面的和为 s,输入 n 求 s 的所有可能出现的值的概率.
+// class Solution
+// {
+// public:
+//     vector<double> statisticsProbability(int num)
+//     {
+//         vector<double> dp(6, 1.0 / 6.0);
+//         for (int i = 2; i <= num; ++i)
+//         {
+//             vector<double> tmp(5 * i + 1);
+//             for (int j = 0; j < dp.size(); ++j)
+//             {
+//                 for (int k = 0; k < 6; ++k)
+//                 {
+//                     tmp[j + k] += dp[j] / 6.0;
+//                 }
+//             }
+//             dp = tmp;
+//         }
+//         return dp;
+//     }
+// };
+
+// 面试题 44 扑克牌的顺子
+// 从扑克牌中随机抽五张牌, 判断是不是一个顺子, 即 这五张牌是不是连续的. 2 ~ 10 为数字本身, A 为 1, J = 11, Q = 12, K = 13
+// 大小王为任意的数.
+// class Solution
+// {
+// public:
+//     bool checkDynasty(vector<int> &places)
+//     {
+//         sort(places.begin(), places.end());
+//         int zeroCnt = 0;
+//         for (int i = 0; i < places.size(); ++i)
+//         {
+//             if (places[i] == 0)
+//                 zeroCnt++;
+//             else if (i > 0 && places[i] == places[i - 1])
+//                 return false;
+//         }
+//         int gapCnt = 0;
+//         for (int i = zeroCnt; i < places.size() - 1; ++i)
+//         {
+//             int diff = places[i + 1] - places[i];
+//             if (diff == 0)
+//                 return false;
+//             gapCnt += diff - 1;
+//         }
+//         return gapCnt <= zeroCnt;
+//     }
+// };
+
+// 面试题 45 圆圈中最后剩下的数字
+// 0, 1 ... n - 1个数字排成一个圆圈, 从 0 开始每次从这个圆圈中删除第 m 个数字, 求最后剩下的数字.
+// 链表 - 超出时间限制.
+// class Solution
+// {
+// public:
+//     int iceBreakingGame(int n, int m)
+//     {
+//         if (n < 1 || m < 1)
+//             return -1;
+//         list<int> lt;
+//         for (int i = 0; i < n; ++i)
+//             lt.push_back(i);
+
+//         list<int>::iterator it = lt.begin();
+//         while (lt.size() > 1)
+//         {
+//             for (int i = 1; i < m; ++i)
+//             {
+//                 it++;
+//                 if (it == lt.end())
+//                     it = lt.begin();
+//             }
+//             list<int>::iterator next = ++it;
+//             if (next == lt.end())
+//                 next = lt.begin();
+//             --it;
+//             lt.erase(it);
+//             it = next;
+//         }
+//         return *it;
+//     }
+// };
+
+
+// class Solution
+// {
+// public:
+//     int iceBreakingGame(int n, int m)
+//     {
+//         if (n < 1 || m < 1)
+//             return -1;
+//         int x = 0;
+//         // f [i] = (f[i - 1] + m ) % i.
+//         for (int i = 2; i <= n; ++i)
+//         {
+//             x = (x + m) % i;
+//         }
+//         return x;
+//     }
+// };
