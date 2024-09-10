@@ -804,3 +804,238 @@ int main()
 //     myh::test_overload_global_new();
 //     return 0;
 // }
+
+// day-2024-9-8
+// namespace myh
+// {
+
+//     class allocator
+//     {
+//     private:
+//         struct obj
+//         {
+//             struct obj *next; // 内嵌指针.
+//         };
+
+//     public:
+//         void *allocate(size_t);
+//         void deallocate(void *, size_t);
+//         void check();
+
+//     private:
+//         obj *freeStore = nullptr;
+//         const int CHUNK = 5;
+//     };
+
+//     void *allocator::allocate(size_t size)
+//     {
+//         obj *p;
+
+//         if (!freeStore)
+//         {
+//             // linked list 是空的，所以获取一大块 memory
+//             size_t chunk = CHUNK * size;
+//             freeStore = p = (obj *)malloc(chunk);
+
+//             // 將分配得來的一大塊當做 linked list 般小塊小塊串接起來
+//             for (int i = 0; i < (CHUNK - 1); ++i)
+//             { // 沒寫很漂亮, 不是重點無所謂.
+//                 p->next = (obj *)((char *)p + size);
+//                 p = p->next;
+//             }
+//             p->next = nullptr; // last
+//         }
+//         p = freeStore;
+//         freeStore = freeStore->next;
+
+//         cout << "p= " << p << "  freeStore= " << freeStore << endl;
+
+//         return p;
+//     }
+//     void allocator::deallocate(void *p, size_t)
+//     {
+//         // 將 deleted object 收回插入 free list 前端
+//         ((obj *)p)->next = freeStore;
+//         freeStore = (obj *)p;
+//     }
+//     void allocator::check()
+//     {
+//         obj *p = freeStore;
+//         int count = 0;
+
+//         while (p)
+//         {
+//             cout << p << endl;
+//             p = p->next;
+//             count++;
+//         }
+//         cout << count << endl;
+//     }
+//     //--------------
+
+//     class Foo
+//     {
+//     public:
+//         long L;
+//         string str;
+//         static allocator myAlloc;
+
+//     public:
+//         Foo(long l) : L(l) {}
+//         static void *operator new(size_t size)
+//         {
+//             return myAlloc.allocate(size);
+//         }
+//         static void operator delete(void *pdead, size_t size)
+//         {
+//             return myAlloc.deallocate(pdead, size);
+//         }
+//     };
+//     allocator Foo::myAlloc;
+
+//     class Goo
+//     {
+//     public:
+//         complex<double> c;
+//         string str;
+//         static allocator myAlloc;
+
+//     public:
+//         Goo(const complex<double> &x) : c(x) {}
+//         static void *operator new(size_t size)
+//         {
+//             return myAlloc.allocate(size);
+//         }
+//         static void operator delete(void *pdead, size_t size)
+//         {
+//             return myAlloc.deallocate(pdead, size);
+//         }
+//     };
+//     allocator Goo::myAlloc;
+
+//     //-------------
+//     void test_static_allocator_3()
+//     {
+//         cout << "\n\n\ntest_static_allocator().......... \n";
+
+//         {
+//             Foo *p[100];
+
+//             cout << "sizeof(Foo)= " << sizeof(Foo) << endl; // 16
+//             for (int i = 0; i < 23; ++i)
+//             { // 23,任意數, 隨意看看結果
+//                 p[i] = new Foo(i);
+//                 cout << p[i] << ' ' << p[i]->L << endl;
+//             }
+//             Foo::myAlloc.check();
+
+//             for (int i = 0; i < 23; ++i)
+//             {
+//                 delete p[i];
+//             }
+//             Foo::myAlloc.check();
+//         }
+
+//         {
+//             Goo *p[100];
+
+//             cout << "sizeof(Goo)= " << sizeof(Goo) << endl; // 24
+//             for (int i = 0; i < 17; ++i)
+//             { // 17,任意數, 隨意看看結果
+//                 p[i] = new Goo(complex<double>(i, i));
+//                 cout << p[i] << ' ' << p[i]->c << endl;
+//             }
+//             // Goo::myAlloc.check();
+
+//             for (int i = 0; i < 17; ++i)
+//             {
+//                 delete p[i];
+//             }
+//             // Goo::myAlloc.check();
+//         }
+//     }
+// }
+// // int main()
+// // {
+// //     myh::test_static_allocator_3();
+// //     return 0;
+// // }
+
+// namespace moyuh
+// {
+//     using myh::allocator;
+
+// // 借鏡 MFC macros.
+// //  DECLARE_POOL_ALLOC -- used in class definition
+// #define DECLARE_POOL_ALLOC()                                           \
+// public:                                                                \
+//     void *operator new(size_t size) { return myAlloc.allocate(size); } \
+//     void operator delete(void *p) { myAlloc.deallocate(p, 0); }        \
+//                                                                        \
+// protected:                                                             \
+//     static allocator myAlloc;
+
+// // IMPLEMENT_POOL_ALLOC -- used in class implementation file
+// #define IMPLEMENT_POOL_ALLOC(class_name) \
+//     allocator class_name::myAlloc;
+
+//     // in class definition file
+//     class Foo
+//     {
+//         DECLARE_POOL_ALLOC()
+//     public:
+//         long L;
+//         string str;
+
+//     public:
+//         Foo(long l) : L(l) {}
+//     };
+//     // in class implementation file
+//     IMPLEMENT_POOL_ALLOC(Foo)
+
+//     //  in class definition file
+//     class Goo
+//     {
+//         DECLARE_POOL_ALLOC()
+//     public:
+//         complex<double> c;
+//         string str;
+
+//     public:
+//         Goo(const complex<double> &x) : c(x) {}
+//     };
+//     // in class implementation file
+//     IMPLEMENT_POOL_ALLOC(Goo)
+
+//     void test_macros_for_static_allocator()
+//     {
+//         cout << "\n\n\ntest_macro_for_static_allocator().......... \n";
+
+//         Foo *pF[100];
+//         Goo *pG[100];
+
+//         cout << "sizeof(Foo)= " << sizeof(Foo) << endl;
+//         cout << "sizeof(Goo)= " << sizeof(Goo) << endl;
+
+//         for (int i = 0; i < 23; ++i)
+//         { // 23,任意數, 隨意看看結果
+//             pF[i] = new Foo(i);
+//             pG[i] = new Goo(complex<double>(i, i));
+//             cout << pF[i] << ' ' << pF[i]->L << "\t";
+//             cout << pG[i] << ' ' << pG[i]->c << "\n";
+//         }
+
+//         for (int i = 0; i < 23; ++i)
+//         {
+//             delete pF[i];
+//             delete pG[i];
+//         }
+//     }
+// }
+// int main()
+// {
+//     moyuh::test_macros_for_static_allocator();
+//     return 0;
+// }
+
+
