@@ -246,7 +246,6 @@ using namespace std;
 //     }
 // };
 
-
 // class Solution
 // {
 // public:
@@ -263,3 +262,203 @@ using namespace std;
 //         return x;
 //     }
 // };
+
+// 面试题 46 求 1 + 2 + + n
+// 构造函数求解
+// class Temp
+// {
+// public:
+//     Temp()
+//     {
+//         ++N;
+//         Sum += N;
+//     }
+//     static void Reset()
+//     {
+//         N = 0;
+//         Sum = 0;
+//     }
+//     static unsigned int GetSum()
+//     {
+//         return Sum;
+//     }
+
+// private:
+//     static unsigned int N;
+//     static unsigned int Sum;
+// };
+// unsigned int Temp::N = 0;
+// unsigned int Temp::Sum = 0;
+
+// unsigned int Sum_solution1(int n)
+// {
+//     Temp::Reset();
+//     Temp *t = new Temp[n];
+//     delete[] t;
+//     t = nullptr;
+//     return Temp::GetSum();
+// }
+
+// // 虚函数求解
+// class A;
+// A *Array[2];
+// class A
+// {
+// public:
+//     virtual unsigned int Sum(unsigned int n)
+//     {
+//         return 0;
+//     }
+// };
+
+// class B : public A
+// {
+// public:
+//     unsigned int Sum(unsigned int n)
+//     {
+//         return Array[!!n]->Sum(n - 1) + n;
+//     }
+// };
+
+// int Sum_solution2(int n)
+// {
+//     A a;
+//     B b;
+//     Array[0] = &a;
+//     Array[1] = &b;
+//     int val = Array[1]->Sum(n);
+//     return val;
+// }
+
+// // 模板类型求解
+// template <unsigned int n>
+// struct Sum_solution4
+// {
+//     enum Val
+//     {
+//         N = Sum_solution4<n - 1>::N + n
+//     };
+// };
+// template <>
+// struct Sum_solution4<1>
+// {
+//     enum Val
+//     {
+//         N = 1
+//     };
+// };
+
+// int main()
+// {
+
+//     cout << Sum_solution1(5) << endl;
+//     cout << Sum_solution2(5) << endl;
+//     cout << Sum_solution4<5>().N << endl;
+// }
+
+// 面试题 47 不用加减乘除做加法
+// 写一个函数, 求两个整数之和, 要求不得使用 + - * / 四则运算符号.
+
+// int Add(int a, int b)
+// {
+//     //  3 + 5 11  101
+//     int sum, carry;
+//     do
+//     {
+//         sum = a ^ b;
+//         carry = (a & b) << 1;
+//         a = sum;
+//         b = carry;
+//     } while (b != 0);
+//     return a;
+// }
+
+// int main()
+// {
+//     cout << Add(3, 5) << endl;
+//     cout << Add(-1, 3) << endl;
+//     cout << Add(-1, -3) << endl;
+
+//     return 0;
+// }
+
+// 面试题 48 不能被继承的类
+// 用 C++ 设计一个不能被继承的类
+// 构造函数私有化？
+// class A
+// {
+// public:
+//     static A *GetInstance()
+//     {
+//         return new A();
+//     }
+//     static void DeleteInstance(A *pIns)
+//     {
+//         delete pIns;
+//     }
+
+// private:
+//     A() {}
+//     ~A() {}
+// };
+
+// class B : public A
+// {
+// };
+
+// // 利用虚拟继承.
+// template <typename T>
+// class C
+// {
+//     friend T;
+
+// private:
+//     C() {}
+//     ~C() {}
+// };
+
+// class D : virtual public C<D>
+// {
+// public:
+//     D() {}
+//     ~D() {}
+// };
+
+// class Try : public D
+// {
+// public:
+//     Try() {}
+//     ~Try() {}
+// };
+// int main()
+// {
+//     // B b;
+//     D d;
+//     Try t;
+//     return 0;
+// }
+
+// class A
+// {
+// private:
+//     int n1;
+//     int n2;
+
+// public:
+//     A()
+//         : n2(0),
+//           n1(n2 + 2)
+//     {
+//     }
+//     void Print()
+//     {
+//         cout << "n1: " << n1 << ", n2: " << n2 << endl;
+//     }
+// };
+
+// int main(int argc, char *argv[])
+// {
+//     A a;
+//     a.Print();
+//     return 0;
+// }
