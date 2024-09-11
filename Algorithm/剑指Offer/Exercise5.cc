@@ -462,3 +462,36 @@ using namespace std;
 //     a.Print();
 //     return 0;
 // }
+
+// day-2024-9-11
+//  面试题 49 把字符串转成整数
+// class Solution
+// {
+// public:
+//     int myAtoi(string s)
+//     {
+//         int n = 0;
+//         bool flag = true;
+//         int i = 0;
+//         while (s[i] == ' ')
+//             i++;
+//         if (s[i] == '+')
+//             i++;
+//         else if (s[i] == '-')
+//         {
+//             flag = false;
+//             i++;
+//         }
+//         while (i < s.size() && isdigit(s[i]))
+//         {
+//             if (n > INT_MAX / 10 || (n == INT_MAX / 10 && (s[i] - '0' > 7)))
+//                 return flag ? INT_MAX : INT_MIN;
+//             n = n * 10 + (s[i] - '0');
+//             i++;
+//         }
+//         return flag ? n : -n;
+//     }
+// };
+
+
+// 面试题 50 树中两个节点的最低公共祖先
