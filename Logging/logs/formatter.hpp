@@ -8,7 +8,7 @@
 #include <vector>
 #include <tuple>
 
-namespace bit
+namespace log
 {
     class FormatItem
     {
@@ -21,8 +21,8 @@ namespace bit
     class MsgFormatItem : public FormatItem
     {
     public:
-        MsgFormatItem(const string &str = "") {}
-        virtual void format(std::string &os, const LogMsg &msg)
+        MsgFormatItem(const std::string &str = "") {}
+        virtual void format(std::ostream &os, const LogMsg &msg)
         {
             os << msg._payload;
         }
@@ -32,7 +32,7 @@ namespace bit
     {
     public:
         LevelFormatItem(const std::string &str = "") {}
-        virtual void format(std::ostream, const LogMsg &msg)
+        virtual void format(std::ostream &os, const LogMsg &msg)
         {
             os << LogLevel::toString(msg._level);
         }
@@ -42,7 +42,7 @@ namespace bit
     {
     public:
         NameFormatItem(const std::string &str = "") {}
-        virtual void format(std::ostream, const LogMsg &msg)
+        virtual void format(std::ostream &os, const LogMsg &msg)
         {
             os << msg._name;
         }
@@ -52,7 +52,7 @@ namespace bit
     {
     public:
         ThreadFormatItem(const std::string &str = "") {}
-        virtual void format(std::ostream, const LogMsg &msg)
+        virtual void format(std::ostream &os, const LogMsg &msg)
         {
             os << msg._tid;
         }
@@ -70,7 +70,7 @@ namespace bit
             if (format.empty())
                 _format = "%H:%M:%S";
         }
-        virtual void format(std::ostream, const LogMsg &msg)
+        virtual void format(std::ostream &os, const LogMsg &msg)
         {
             time_t t = msg._ctime;
             struct tm lt;
@@ -85,7 +85,7 @@ namespace bit
     {
     public:
         CFileFormatItem(const std::string &str = "") {}
-        virtual void format(std::ostream, const LogMsg &msg)
+        virtual void format(std::ostream &os, const LogMsg &msg)
         {
             os << msg._file;
         }
@@ -95,7 +95,7 @@ namespace bit
     {
     public:
         CLineFormatItem(const std::string &str = "") {}
-        virtual void format(std::ostream, const LogMsg &msg)
+        virtual void format(std::ostream &os, const LogMsg &msg)
         {
             os << msg._line;
         }
@@ -105,7 +105,7 @@ namespace bit
     {
     public:
         TabFormatItem(const std::string &str = "") {}
-        virtual void format(std::ostream, const LogMsg &msg)
+        virtual void format(std::ostream &os, const LogMsg &msg)
         {
             os << "\t";
         }
@@ -115,7 +115,7 @@ namespace bit
     {
     public:
         NLineFormatItem(const std::string &str = "") {}
-        virtual void format(std::ostream, const LogMsg &msg)
+        virtual void format(std::ostream &os, const LogMsg &msg)
         {
             os << "\n";
         }
@@ -131,7 +131,7 @@ namespace bit
             : _str(str)
         {
         }
-        virtual void format(std::ostream, const LogMsg &msg)
+        virtual void format(std::ostream &os, const LogMsg &msg)
         {
             os << _str;
         }
@@ -168,7 +168,7 @@ namespace bit
             return ss.str();
         }
 
-        std::ostream &format(ostream &os, const LogMsg &msg)
+        std::ostream &format(std::ostream &os, const LogMsg &msg)
         {
             for (auto &it : _items)
             {
@@ -253,7 +253,7 @@ namespace bit
                 if (pos < _pattern.size() && _pattern[pos] == '{')
                 {
                     sub_format_error = true;
-                    pos + = 1; // pos 指向花括号的下一个字符处
+                    pos += 1; // pos 指向花括号的下一个字符处
                     while (pos < _pattern.size())
                     {
                         if (_pattern[pos] == '}')
