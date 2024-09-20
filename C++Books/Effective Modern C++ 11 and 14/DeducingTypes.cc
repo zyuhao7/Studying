@@ -67,5 +67,68 @@ using namespace std;
 // 在模板类选择使用圆括号初始化或使用花括号初始化创建对象是一个挑战
 
 // Item 8:优先考虑nullptr而非0和NULL
+
 // 优先考虑nullptr而非0和NULL
 // 避免重载指针和整型
+
+// day-2024-9-20
+// Item 9:优先考虑别名声明而非typedefs
+
+// std::remove_const<T>::type          //C++11: const T → T
+// std::remove_const_t<T>              //C++14 等价形式
+
+// std::remove_reference<T>::type      //C++11: T&/T&& → T
+// std::remove_reference_t<T>          //C++14 等价形式
+
+// std::add_lvalue_reference<T>::type  //C++11: T → T&
+// std::add_lvalue_reference_t<T>      //C++14 等价形式
+
+// template <class T>
+// using remove_const_t = typename remove_const<T>::type;
+
+// template <class T>
+// using remove_reference_t = typename remove_reference<T>::type;
+
+// template <class T>
+// using add_lvalue_reference_t =
+//     typename add_lvalue_reference<T>::type;
+
+// typedef不支持模板化，但是别名声明支持。
+// 别名模板避免了使用“::type”后缀，而且在模板中使用typedef还需要在前面加上typename
+// C++14提供了C++11所有type traits 转换的别名声明版本
+
+// Item 10:优先考虑限域枚举而非未限域枚举
+
+// C++98的enum即 非限域enum。
+// 限域enum 的枚举名 仅在enum内可见。要转换为其它类型只能使用cast。
+// 非限域/限域enum 都支持底层类型说明语法，限域enum 底层类型默认是int。非限域enum 没有默认底层类型。
+// 限域enum总是可以前置声明。非限域enum 仅当指定它们的底层类型时才能前置。
+
+// Item 11:优先考虑使用deleted函数而非使用未定义的私有声明
+
+// 比起声明函数为private但不定义，使用deleted函数更好
+// 任何函数都能被删除（be deleted），包括非成员函数和模板实例（译注：实例化的函数）
+
+// Item 12:使用override声明重载函数
+
+// 要想重写一个函数，必须满足下列要求：
+//  基类函数必须是virtual
+//  基类和派生类函数名必须完全一样（除非是析构函数)
+//  基类和派生类函数形参类型必须完全一样
+//  基类和派生类函数常量性 constness 必须完全一样
+//  基类和派生类函数的返回值和异常说明（exception specifications）必须兼容
+// C++ 11 新加入的限制: 函数的引用限定符（reference qualifiers）必须完全一样。
+
+// class Widget {
+// public:
+//      ...
+//     void doWork() &;    //只有*this为左值的时候才能被调用
+//     void doWork() &&;   //只有*this为右值的时候才能被调用
+// };
+
+// 为重写函数加上override
+// 成员函数引用限定让我们可以区别对待左值对象和右值对象（即*this)
+
+int main()
+{
+}
