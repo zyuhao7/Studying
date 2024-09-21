@@ -66,3 +66,48 @@ using namespace std;
 //         return res;
 //     }
 // };
+
+// day-2024-9-21
+// 剑指 Offer II 003. 前 n 个数字二进制中 1 的个数
+// class Solution
+// {
+// public:
+//     vector<int> countBits(int n)
+//     {
+//         vector<int> res(n + 1);
+//         for (int i = 1; i <= n; ++i)
+//         {
+//             res[i] = res[i >> 1] + i % 2;
+//             res[i] = res[i & (i - 1)] + 1;
+//         }
+//         return res;
+//     }
+// };
+
+// 剑指 Offer II 004. 只出现一次的数字
+// 给你一个整数数组 nums ，除某个元素仅出现 一次 外，其余每个元素都恰出现 三次 。请你找出并返回那个只出现了一次的元素。
+
+// 位运算
+// 统计所有数字每位出现 1 的个数, 如果 1 出现的个数无法被三整除, 说明 只出现一次的数字在该位为 1, 否则是 0.
+// 时间复杂度 为 O(N * logM) n 是 数组 nums 长度, M 是数组中元素的最大值.
+
+// class Solution
+// {
+// public:
+//     int singleNumber(vector<int> &nums)
+//     {
+//         int ans = 0;
+//         for (int i = 0; i < 32; ++i)
+//         {
+//             int cnt = 0;
+//             for (int n : nums)
+//             {
+//                 if (n >> i & 1)
+//                     cnt++;
+//             }
+//             cnt %= 3;
+//             ans |= cnt << i;
+//         }
+//         return ans;
+//     }
+// };
