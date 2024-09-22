@@ -111,3 +111,81 @@ using namespace std;
 //         return ans;
 //     }
 // };
+
+// day-2024-9-22
+// 剑指 Offer II 005. 单词长度的最大乘积
+// 给你一个字符串数组 words ，找出并返回 length(words[i]) * length(words[j]) 的最大值，并且这两个单词不含有公共字母。
+// 如果不存在这样的两个单词，返回 0 。
+
+// 思路: 统计每一个字符串各位字符是否存在, 放在一个数组, 按长度排序.(不用排序, 直接遍历就可)
+// class Solution
+// {
+// public:
+//     int maxProduct(vector<string> &words)
+//     {
+//         int n = words.size();
+//         int mask[n];
+//         memset(mask, 0, sizeof(mask));
+//         for (int i = 0; i < words.size(); ++i)
+//         {
+//             for (auto c : words[i])
+//             {
+//                 mask[i] |= 1 << (c - 'a');
+//             }
+//         }
+//         int ans = 0;
+//         for (int i = 0; i < n; ++i)
+//         {
+//             for (int j = i + 1; j < n; ++j)
+//             {
+//                 if ((mask[i] & mask[j]) == 0)
+//                 {
+//                     ans = max(ans, int(words[i].size() * words[j].size()));
+//                 }
+//             }
+//         }
+//         return ans;
+//     }
+// };
+
+// 剑指 Offer II 006. 排序数组中两个数字之和
+// 法 1
+// class Solution
+// {
+// public:
+//     vector<int> twoSum(vector<int> &numbers, int target)
+//     {
+//         vector<int> res(2, 0);
+//         int n = numbers.size();
+//         int i = 0, j = n - 1;
+//         while (i < j)
+//         {
+//             if (numbers[i] + numbers[j] == target)
+//             {
+//                 res[0] = i + 1;
+//                 res[1] = j + 1;
+//                 break;
+//             }
+//             else if (numbers[i] + numbers[j] < target)
+//             {
+//                 i++;
+//             }
+//             else
+//                 j--;
+//         }
+//         return res;
+//     }
+// };
+// 法 2
+// class Solution {
+// public:
+//     vector<int> twoSum(vector<int>& numbers, int target) {
+//         for (int i = 0, n = numbers.size();; ++i) {
+//             int x = target - numbers[i];
+//             int j = lower_bound(numbers.begin() + i + 1, numbers.end(), x) - numbers.begin();
+//             if (j < n && numbers[j] == x) {
+//                 return {i + 1, j + 1};
+//             }
+//         }
+//     }
+// };
