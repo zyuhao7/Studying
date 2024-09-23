@@ -189,3 +189,91 @@ using namespace std;
 //         }
 //     }
 // };
+
+// day-2024-9-23
+// 剑指 Offer II 007. 数组中和为 0 的三个数
+// 给你一个整数数组 nums ，判断是否存在三元组 [nums[i], nums[j], nums[k]] 满足 i != j、i != k 且 j != k ，
+// 同时还满足 nums[i] + nums[j] + nums[k] == 0. 请你返回所有和为 0 且不重复的三元组。
+// class Solution
+// {
+// public:
+//     vector<vector<int>> threeSum(vector<int> &nums)
+//     {
+//         sort(nums.begin(), nums.end());
+//         vector<vector<int>> res;
+//         for (int i = 0; i < nums.size() - 2; i++)
+//         {
+//             if (i > 0 && nums[i] == nums[i - 1])
+//                 continue;
+//             int target = -nums[i];
+//             int l = i + 1, r = nums.size() - 1;
+//             while (l < r)
+//             {
+//                 if (nums[l] + nums[r] == target)
+//                 {
+//                     res.push_back({nums[i], nums[l], nums[r]});
+//                     while (l < r && nums[l + 1] == nums[l])
+//                         l++;
+//                     while (l < r && nums[r] == nums[r - 1])
+//                         r--;
+//                     l++;
+//                     r--;
+//                 }
+//                 else if (nums[l] + nums[r] < target)
+//                     l++;
+//                 else
+//                     r--;
+//             }
+//         }
+//         return res;
+//     }
+// };
+
+// 剑指 Offer II 008. 和大于等于 target 的最短子数组
+// 找出该数组中满足其总和大于等于 target 的长度最小的子数组[ numsl, numsl + 1, ..., numsr - 1, numsr ] ，并返回其长度。
+// 如果不存在符合条件的子数组，返回 0.
+
+// class Solution
+// {
+// public:
+//     int minSubArrayLen(int target, vector<int> &nums)
+//     {
+//         int l = 0, r = 0, sum = 0, res = INT_MAX;
+//         while (r < nums.size())
+//         {
+//             sum += nums[r];
+//             while (sum >= target)
+//             {
+//                 res = min(res, r - l + 1);
+//                 sum -= nums[l];
+//                 l++;
+//             }
+//             r++;
+//         }
+//         return res == INT_MAX ? 0 : res;
+//     }
+// };
+
+// 剑指 Offer II 009. 乘积小于 K 的子数组
+// 给你一个整数数组 nums 和一个整数 k ，请你返回子数组内所有元素的乘积严格小于 k 的连续子数组的数目。
+
+// class Solution
+// {
+// public:
+//     int numSubarrayProductLessThanK(vector<int> &nums, int k)
+//     {
+//         long long s = 1;
+//         int ans = 0;
+//         int n = nums.size();
+//         for (int i = 0, j = 0; j < n; ++j)
+//         {
+//             s *= nums[j];
+//             while (i <= j && s >= k)
+//             {
+//                 s /= nums[i++];
+//             }
+//             ans += j - i + 1;
+//         }
+//         return ans;
+//     }
+// };
