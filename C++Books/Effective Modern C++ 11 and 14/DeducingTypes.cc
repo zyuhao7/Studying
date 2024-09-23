@@ -129,6 +129,62 @@ using namespace std;
 // 为重写函数加上override
 // 成员函数引用限定让我们可以区别对待左值对象和右值对象（即*this)
 
+// 2024-9-23
+// Item 13:优先考虑const_iterator而非iterator
+
+// 优先考虑const_iterator而非iterator
+// 在最大程度通用的代码中，优先考虑非成员函数版本的begin,end,rbegin等，而非同名成员函数
+
+// Item 14:如果函数不抛出异常请使用noexcept
+
+// int f(int x) throw();   //C++98风格，没有来自f的异常
+// int f(int x) noexcept;  //C++11风格，没有来自f的异常
+
+// noexcept是函数接口的一部分，这意味着调用者可能会依赖它
+// noexcept函数较之于non -noexcept函数更容易优化
+// noexcept对于移动语义，swap，内存释放函数和析构函数非常有用
+// 大多数函数是异常中立的（译注：可能抛也可能不抛异常）而不是noexcept
+
+// Item 15:尽可能的使用constexpr
+
+//  constexpr对象是const，它被在编译期可知的值初始化
+// 当传递编译期可知的值时，constexpr函数可以产出编译期可知的结果
+// constexpr对象和函数可以使用的范围比non-constexpr对象和函数要大
+// constexpr是对象和函数接口的一部分
+
+// Item 16:让const成员函数线程安全
+
+// 确保const成员函数线程安全，除非你确定它们永远不会在并发上下文（concurrent context）中使用。
+// 使用std::atomic变量可能比互斥量提供更好的性能，但是它只适合操作单个变量或内存位置。
+
+// Item 17:理解特殊成员函数的生成
+// class Widget
+// {
+// public:
+//     Widget(Widget &&rhs);              // 移动构造函数
+//     Widget &operator=(Widget &&rhs);   // 移动赋值运算符
+// };
+
+// class Base {
+// public:
+//     virtual ~Base() = default;              //使析构函数virtual
+
+//     Base(Base&&) = default;                 //支持移动
+//     Base& operator=(Base&&) = default;
+
+//     Base(const Base&) = default;            //支持拷贝
+//     Base& operator=(const Base&) = default;
+// };
+
+// 特殊成员函数是编译器可能自动生成的函数：默认构造函数，析构函数，拷贝操作，移动操作。
+// 移动操作仅当类没有显式声明移动操作，拷贝操作，析构函数时才自动生成。
+// 拷贝构造函数仅当类没有显式声明拷贝构造函数时才自动生成，并且如果用户声明了移动操作，拷贝构造就是delete。
+// 拷贝赋值运算符仅当类没有显式声明拷贝赋值运算符时才自动生成，并且如果用户声明了移动操作，拷贝赋值运算符就是delete。
+// 当用户声明了析构函数，拷贝操作的自动生成已被废弃。
+// 成员函数模板不抑制特殊成员函数的生成。
+
+// 第四章 智能指针
+
 int main()
 {
 }
