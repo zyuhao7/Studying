@@ -183,7 +183,33 @@ using namespace std;
 // 当用户声明了析构函数，拷贝操作的自动生成已被废弃。
 // 成员函数模板不抑制特殊成员函数的生成。
 
+// day-2024-9-24
 // 第四章 智能指针
+// Item 18:对于独占资源使用std::unique_ptr
+
+// std::unique_ptr是轻量级、快速的、只可移动（move-only）的管理专有所有权语义资源的智能指针
+// 默认情况，资源销毁通过delete实现，但是支持自定义删除器。有状态的删除器和函数指针会增加std::unique_ptr对象的大小
+// 将std::unique_ptr转化为std::shared_ptr非常简单
+
+// Item 19:对于共享资源使用std::shared_ptr
+
+// std::shared_ptr 为有共享所有权的任意资源提供一种自动垃圾回收的便捷方式。
+// 较之于std::unique_ptr，std::shared_ptr 对象通常大两倍，控制块会产生开销，需要原子性的引用计数修改操作。
+// 默认资源销毁是通过delete，但是也支持自定义删除器。删除器的类型是什么对于std::shared_ptr的类型没有影响。
+// 避免从原始指针变量上创建std::shared_ptr。
+
+// Item 20:当std::shared_ptr可能悬空时使用std::weak_ptr
+
+// 用std::weak_ptr替代可能会悬空的std::shared_ptr。
+// std::weak_ptr的潜在使用场景包括：缓存、观察者列表、打破std::shared_ptr环状结构。
+
+// Item 21:优先考虑使用std::make_unique和std::make_shared而非new
+
+// 和直接使用new相比，make函数消除了代码重复，提高了异常安全性。对于std::make_shared和std::allocate_shared，生成的代码更小更快。
+// 不适合使用make函数的情况包括需要指定自定义删除器和希望用花括号初始化。
+// 对于std::shared_ptrs，其他不建议使用make函数的情况包括
+// (1)有自定义内存管理的类；
+// (2)特别关注内存的系统，非常大的对象，以及std::weak_ptrs比对应的std::shared_ptrs活得更久。
 
 int main()
 {
