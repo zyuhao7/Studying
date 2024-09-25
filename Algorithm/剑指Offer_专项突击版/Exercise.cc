@@ -277,3 +277,105 @@ using namespace std;
 //         return ans;
 //     }
 // };
+
+// day-2024-9-24
+// 剑指 Offer II 010. 和为 k 的子数组
+
+// 给你一个整数数组 nums 和一个整数 k ，请你统计并返回 该数组中和为 k 的子数组的个数 。
+// 子数组是数组中元素的连续非空序列。
+
+// 哈希表 + 前缀和
+// class Solution {
+// public:
+//     int subarraySum(vector<int>& nums, int k) {
+//         unordered_map<int,int> prefixSum;
+//         prefixSum[0] = 1;
+//         int ans = 0, sum = 0;
+//         for(auto num : nums)
+//         {
+//             sum += num;
+//             ans += prefixSum[sum - k]; // 前缀和 - k 出现次数 3 4 7    K=7.
+//             prefixSum[sum]++;
+//         }
+//         return ans;
+//     }
+// };
+
+// 剑指 Offer II 011. 0 和 1 个数相同的子数组
+// 给定一个二进制数组 nums , 找到含有相同数量的 0 和 1 的最长连续子数组，并返回该子数组的长度
+// class Solution
+// {
+// public:
+//     int findMaxLength(vector<int> &nums)
+//     {
+//         unordered_map<int, int> d;
+//         d[0] = -1;
+//         int ans = 0, s = 0;
+//         // 前缀和, 求 j 到 i 的最长和为 0 的连续数组长度. 为什么 d[0] = -1 ? 因为 i = j = 0,时候需要就算 s[0] - s[-1],
+//         // 进而相当于 s[1] - s[0] ? 那么 s[1] 由数组可知, 那么 s[0] 只能等于 -1.
+//         for (int i = 0; i < nums.size(); ++i)
+//         {
+//             s += nums[i] ? 1 : -1;
+//             if (d.count(s))
+//             {
+//                 ans = max(ans, i - d[s]);
+//             }
+//             else
+//                 d[s] = i;
+//         }
+//         return ans;
+//     }
+// };
+
+// day-2024-9-25
+// 剑指 Offer II 012. 左右两边子数组的和相等
+// 数组 中心下标 是数组的一个下标，其左侧所有元素相加的和等于右侧所有元素相加的和。
+
+// 前缀和
+
+// class Solution
+// {
+// public:
+//     int pivotIndex(vector<int> &nums)
+//     {
+//         int sum_left = 0;
+//         int sum_right = accumulate(nums.begin(), nums.end(), 0);
+//         for (int i = 0; i < nums.size(); ++i)
+//         {
+//             sum_right -= nums[i];
+//             if (sum_left == sum_right)
+//                 return i;
+//             sum_left += nums[i];
+//         }
+//         return -1;
+//     }
+// };
+
+// 剑指 Offer II 013. 二维子矩阵的和
+
+// 二维前缀和
+// class NumMatrix
+// {
+// public:
+//     NumMatrix(vector<vector<int>> &mtx)
+//     {
+//         int m = mtx.size();
+//         int n = mtx[0].size();
+//         s.resize(m + 1, vector<int>(n + 1, 0));
+//         for (int i = 1; i <= m; ++i)
+//         {
+//             for (int j = 1; j <= n; ++j)
+//             {
+//                 s[i][j] = s[i - 1][j] + s[i][j - 1] - s[i - 1][j - 1] + mtx[i - 1][j - 1];
+//             }
+//         }
+//     }
+
+//     int sumRegion(int r1, int c1, int r2, int c2)
+//     {
+//         return s[r2 + 1][c2 + 1] - s[r2 + 1][c1] - s[r1][c2 + 1] + s[r1][c1];
+//     }
+
+// private:
+//     vector<vector<int>> s;
+// };
