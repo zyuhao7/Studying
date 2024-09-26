@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <memory>
+#include <cstring>
 using namespace std;
 // day-2024-9-20
 // 剑指 Offer II 001.整数除法
@@ -378,4 +380,112 @@ using namespace std;
 
 // private:
 //     vector<vector<int>> s;
+// };
+
+// day-2024-9-26
+//  剑指 Offer II 014. 字符串中的变位词
+//  给你两个字符串 s1 和 s2 ，写一个函数来判断 s2 是否包含 s1 的 排列。如果是，返回 true ；否则，返回 false 。
+//  换句话说，s1 的排列之一是 s2 的 子串 。
+
+// class Solution
+// {
+// public:
+//     bool checkInclusion(string s1, string s2)
+//     {
+//         int hash[26] = {0};
+//         for (char c : s1)
+//         {
+//             hash[c - 'a']++;
+//         }
+
+//         int hash2[26] = {0};
+//         for (int i = 0; i < s1.size() && i < s2.size(); i++)
+//         {
+//             hash2[s2[i] - 'a']++;
+//         }
+
+//         if (memcmp(hash, hash2, sizeof(hash)) == 0)
+//         {
+//             return true;
+//         }
+
+//         for (int i = s1.size(); i < s2.size(); i++)
+//         {
+//             hash2[s2[i] - 'a']++;
+//             hash2[s2[i - s1.size()] - 'a']--;
+
+//             if (memcmp(hash, hash2, sizeof(hash)) == 0)
+//             {
+//                 for (int i = 0; i < 26; ++i)
+//                 {
+//                     cout << hash[i] << " " << hash2[i] << endl;
+//                 }
+//                 return true;
+//             }
+//         }
+
+//         return false;
+//     }
+// };
+
+// 剑指 Offer II 015. 字符串中的所有变位词
+// 给定两个字符串 s 和 p，找到 s 中所有 p 的 异位词的子串，返回这些子串的起始索引。不考虑答案输出的顺序。
+
+// class Solution
+// {
+// public:
+//     vector<int> findAnagrams(string s, string p)
+//     {
+//         int hash[26], hash2[26];
+//         vector<int> res;
+
+//         for (auto c : p)
+//         {
+//             hash[c - 'a']++;
+//         }
+//         for (int i = 0; i < p.size() && i < s.size(); i++)
+//         {
+//             hash2[s[i] - 'a']++;
+//         }
+//         if (memcmp(hash, hash2, sizeof(hash)) == 0)
+//             res.push_back(0);
+//         for (int i = p.size(); i < s.size(); ++i)
+//         {
+//             hash2[s[i] - 'a']++;
+//             hash2[s[i - p.size()] - 'a']--;
+//             if (memcmp(hash, hash2, sizeof(hash)) == 0)
+//                 res.push_back(i - p.size() + 1);
+//         }
+//         return res;
+//     }
+// };
+
+// class Solution {
+// public:
+//     vector<int> findAnagrams(string s, string p) {
+//         vector<int> res;
+//         unordered_map<char,int> freq;
+//         for(auto c : p)
+//             freq[c]++;
+//         int l = 0, r = 0, cnt = p.size();
+//         while(r < s.size())
+//         {
+//             if(freq[s[r]] > 0)
+//             {
+//                 cnt--;
+//             }
+//             freq[s[r]] --;
+//             r++;
+//             if(cnt == 0)
+//                 res.push_back(l);
+//             if(r - l == p.size())
+//             {
+//                 if(freq[s[l]] >= 0)
+//                     cnt++;
+//                 freq[s[l]]++;
+//                 l++;
+//             }
+//         }
+//         return res;
+//     }
 // };
