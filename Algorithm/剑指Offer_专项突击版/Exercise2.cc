@@ -104,6 +104,182 @@ using namespace std;
 //     }
 // };
 
+// day-2024-10-4
+// 剑指 Offer II 019. 最多删除一个字符得到回文
+// class Solution
+// {
+// public:
+//     bool validPalindrome(string s)
+//     {
+//         auto check = [&](int i, int j)
+//         {
+//             for (; i < j; ++i, --j)
+//             {
+//                 if (s[i] != s[j])
+//                     return false;
+//             }
+//             return true;
+//         };
+
+//         for (int i = 0, j = s.size() - 1; i < j; ++i, --j)
+//         {
+//             if (s[i] != s[j])
+//                 return check(i + 1, j) || check(i, j - 1);
+//         }
+//         return true;
+//     }
+// };
+
+// day-2024-10-5
+// 剑指 Offer II 020. 回文子字符串的个数
+// class Solution
+// {
+// public:
+//     int countSubstrings(string s)
+//     {
+//         int res = 0;
+//         for (int i = 0; i < s.size(); ++i)
+//         {
+//             res += extendStrings(s, i, i);     // odd
+//             res += extendStrings(s, i, i + 1); // even
+//         }
+//         return res;
+//     }
+
+//     int extendStrings(string s, int l, int r)
+//     {
+//         int cnt = 0;
+//         while (l >= 0 && r < s.size() && s[l] == s[r])
+//         {
+//             l--;
+//             ++r;
+//             ++cnt;
+//         }
+//         return cnt;
+//     }
+// };
+
+// 剑指 Offer II 021. 删除链表的倒数第 n 个结点
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+// class Solution
+// {
+// public:
+//     ListNode *removeNthFromEnd(ListNode *head, int n)
+//     {
+//         if (head->next == nullptr && n == 1)
+//             return nullptr;
+//         ListNode *slow = head;
+//         ListNode *fast = head;
+//         while (n--)
+//         {
+//             fast = fast->next;
+//         }
+//         if (!fast)
+//             return head->next;
+
+//         while (fast && fast->next)
+//         {
+//             fast = fast->next;
+//             slow = slow->next;
+//         }
+//         if (slow->next)
+//             slow->next = slow->next->next;
+
+//         return head;
+//     }
+// };
+
+// 剑指 Offer II 022. 链表中环的入口节点
+// class Solution
+// {
+// public:
+//     ListNode *detectCycle(ListNode *head)
+//     {
+//         if (!head || !head->next)
+//             return nullptr;
+//         ListNode *slow = head;
+//         ListNode *fast = head;
+
+//         while (fast && fast->next)
+//         {
+//             slow = slow->next;
+//             fast = fast->next->next;
+//             if (slow == fast)
+//                 break;
+//         }
+//         if (slow != fast)
+//             return nullptr;
+//         ListNode *p = head, *q = fast;
+//         while (p != q)
+//         {
+//             p = p->next;
+//             q = q->next;
+//         }
+//         return p;
+//     }
+// };
+
+// 剑指 Offer II 023. 两个链表的第一个重合节点
+// class Solution
+// {
+// public:
+//     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB)
+//     {
+//         int lenA = 0, lenB = 0;
+//         ListNode *curA = headA, *curB = headB;
+//         while (curA)
+//             lenA++, curA = curA->next;
+//         while (curB)
+//             lenB++, curB = curB->next;
+
+//         ListNode *nodeA = headA, *nodeB = headB;
+//         if (lenB > lenA)
+//             nodeA = headB, nodeB = headA;
+//         int gap = abs(lenA - lenB);
+
+//         while (gap--)
+//             nodeA = nodeA->next;
+//         while (nodeA && nodeA != nodeB)
+//         {
+//             nodeA = nodeA->next;
+//             nodeB = nodeB->next;
+//         }
+//         return nodeA;
+//     }
+// };
+
+// 剑指 Offer II 024. 反转链表
+// class Solution
+// {
+// public:
+//     ListNode *reverseList(ListNode *head)
+//     {
+//         if (!head)
+//             return nullptr;
+//         ListNode *prev = nullptr, *cur = head;
+//         while (cur)
+//         {
+//             ListNode *tmp = cur->next;
+//             cur->next = prev;
+//             prev = cur;
+//             if (tmp)
+//                 cur = tmp;
+//             else
+//                 break;
+//         }
+//         return cur;
+//     }
+// };
+
 int main()
 {
 
