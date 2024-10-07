@@ -280,6 +280,124 @@ using namespace std;
 //     }
 // };
 
+// 剑指 Offer II 025. 链表中的两数相加
+// class Solution
+// {
+// public:
+//     ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
+//     {
+//         ListNode *cur1 = reverseList(l1);
+//         ListNode *cur2 = reverseList(l2);
+
+//         int carry = 0;
+//         ListNode *newHead = nullptr;
+//         ListNode *prev = nullptr;
+//         while (cur1 || cur2 || carry)
+//         {
+//             int sum = carry;
+//             if (cur1)
+//             {
+//                 sum += cur1->val;
+//                 cur1 = cur1->next;
+//             }
+//             if (cur2)
+//             {
+//                 sum += cur2->val;
+//                 cur2 = cur2->next;
+//             }
+//             ListNode *newNode = new ListNode(sum % 10);
+//             carry = sum / 10;
+//             newNode->next = newHead;
+//             newHead = newNode;
+//         }
+//         return newHead;
+//     }
+
+//     ListNode *reverseList(ListNode *head)
+//     {
+//         ListNode *prev = nullptr, *cur = head;
+//         while (cur)
+//         {
+//             ListNode *tmp = cur->next;
+//             cur->next = prev;
+//             prev = cur;
+//             cur = tmp;
+//         }
+//         return prev;
+//     }
+// };
+
+// 剑指 Offer II 026. 重排链表
+// class Solution
+// {
+// public:
+//     void reorderList(ListNode *head)
+//     {
+//         ListNode *mid = middleNode(head);
+//         ListNode *rhead = reverseList(mid);
+
+//         while (rhead->next)
+//         {
+//             ListNode *tmp = head->next;
+//             ListNode *tmp2 = rhead->next;
+//             head->next = rhead;
+//             rhead->next = tmp;
+//             head = tmp;
+//             rhead = tmp2;
+//         }
+//     }
+
+//     ListNode *middleNode(ListNode *head)
+//     {
+//         ListNode *slow = head;
+//         ListNode *fast = head;
+//         while (fast && fast->next)
+//         {
+//             slow = slow->next;
+//             fast = fast->next->next;
+//         }
+//         return slow;
+//     }
+
+//     ListNode *reverseList(ListNode *head)
+//     {
+//         ListNode *prev = nullptr, *cur = head;
+//         while (cur)
+//         {
+//             ListNode *tmp = cur->next;
+//             cur->next = prev;
+//             prev = cur;
+//             cur = tmp;
+//         }
+//         return prev;
+//     }
+// };
+
+// 剑指 Offer II 027. 回文链表
+// class Solution
+// {
+// public:
+//     bool isPalindrome(ListNode *head)
+//     {
+//         vector<int> vec;
+//         while (head)
+//         {
+//             vec.push_back(head->val);
+//             head = head->next;
+//         }
+//         for (int i = 0, j = vec.size() - 1; i < j; --j, ++i)
+//         {
+//             if (vec[i] != vec[j])
+//                 return false;
+//         }
+//         return true;
+//     }
+// };
+// 法二: 先找到中间节点, 然后翻转后半部分, 1 2 2 1 -> 1 2 1 2 然后再比较, 从 rhead 和 head.
+
+// day-2024-10-7
+
+
 int main()
 {
 
