@@ -396,7 +396,140 @@ using namespace std;
 // 法二: 先找到中间节点, 然后翻转后半部分, 1 2 2 1 -> 1 2 1 2 然后再比较, 从 rhead 和 head.
 
 // day-2024-10-7
+// 剑指 Offer II 028	展平多级双向链表
+// class Solution
+// {
+// public:
+//     Node *flatten(Node *head)
+//     {
+//         flattenGetTail(head);
+//         return head;
+//     }
 
+//     Node *flattenGetTail(Node *head)
+//     {
+//         Node *cur = head;
+//         Node *tail = nullptr;
+
+//         while (cur)
+//         {
+//             Node *next = cur->next;
+//             if (cur->child)
+//             {
+//                 Node *child = cur->child;
+//                 Node *childTail = flattenGetTail(child);
+
+//                 cur->child = nullptr;
+//                 child->prev = cur;
+//                 cur->next = child;
+//                 childTail->next = next;
+
+//                 if (next)
+//                 {
+//                     next->prev = childTail;
+//                 }
+//                 tail = childTail;
+//             }
+//             else
+//             {
+//                 tail = cur;
+//             }
+//             cur = next;
+//         }
+//         return tail;
+//     }
+// };
+
+// 剑指 Offer II 029. 排序的循环链表
+// Definition for a Node.
+class Node
+{
+public:
+    int val;
+    Node *next;
+
+    Node() {}
+
+    Node(int _val)
+    {
+        val = _val;
+        next = NULL;
+    }
+
+    Node(int _val, Node *_next)
+    {
+        val = _val;
+        next = _next;
+    }
+};
+// 1 ->    2       insertVal = 2
+// ↑     ↓
+// 4 <-   3    <--- head
+
+// class Solution
+// {
+// public:
+//     Node *insert(Node *head, int insertVal)
+//     {
+//         Node *node = new Node(insertVal);
+//         if (!head)
+//         {
+//             node->next = node;
+//             return node;
+//         }
+//         Node *cur = head;
+//         while (cur)
+//         {
+//             if ((cur->val <= insertVal && cur->next->val > insertVal) || (cur->val < insertVal && cur->next->val >= insertVal))
+//             {
+//                 node->next = next;
+//                 cur->next = node;
+//                 break;
+//             }
+//             else
+//                 cur = cur->next;
+//         }
+
+//         return head;
+//     }
+// };
+
+// 剑指 Offer II 030. 插入、删除和随机访问都是 O(1) 的容器
+// class RandomizedSet
+// {
+//     unordered_map<int, int> mp;
+//     vector<int> nums;
+
+// public:
+//     RandomizedSet() {}
+
+//     bool insert(int val)
+//     {
+//         if (mp.count(val))
+//             return false;
+//         mp[val] = nums.size();
+//         nums.push_back(val);
+//         return true;
+//     }
+
+//     bool remove(int val)
+//     {
+//         if (!mp.count(val))
+//             return false;
+//         int i = mp[val];
+//         nums[i] = nums.back();
+//         mp[nums.back()] = i;
+
+//         mp.erase(val);
+//         nums.pop_back();
+//         return true;
+//     }
+
+//     int getRandom()
+//     {
+//         return nums[rand() % nums.size()];
+//     }
+// };
 
 int main()
 {
