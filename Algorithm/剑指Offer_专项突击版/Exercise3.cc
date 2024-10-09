@@ -151,6 +151,78 @@ using namespace std;
 //     }
 // };
 
+// day-2024-10-9
+// 剑指 Offer II 034. 外星语言是否排序
+// class Solution
+// {
+// public:
+//     bool isAlienSorted(vector<string> &words, string order)
+//     {
+//         int i = 1;
+//         unordered_map<char, int> mp;
+//         for (auto c : order)
+//             mp[c] = i++;
+//         if (words.size() == 1)
+//             return true;
+//         for (int i = 0, j = 1; i < words.size() && j < words.size(); ++i, ++j)
+//         {
+//             int k = 0, z = 0;
+//             int n = words[i].size(), m = words[j].size();
+//             while (k < n && z < m && words[i][k] == words[j][z])
+//             {
+//                 k++;
+//                 z++;
+//             }
+//             if (mp[words[i][k]] > mp[words[j][z]])
+//                 return false;
+//         }
+//         return true;
+//     }
+// };
+
+// 剑指 Offer II 035. 最小时间差
+// class Solution
+// {
+// public:
+//     int findMinDifference(vector<string> &timePoints)
+//     {
+//         int res = 1440;
+//         sort(timePoints.begin(), timePoints.end());
+//         for (int i = 0; i < timePoints.size() - 1; ++i)
+//         {
+//             int n1 = atoi(timePoints[i].substr(0, 2).c_str());
+//             int n2 = atoi(timePoints[i].substr(3, 2).c_str());
+//             int n3 = atoi(timePoints[i + 1].substr(0, 2).c_str());
+//             int n4 = atoi(timePoints[i + 1].substr(3, 2).c_str());
+//             int gap;
+//             if (n4 < n2)
+//                 gap = abs(n3 - n1) * 60 - abs(n4 - n2);
+//             else
+//                 gap = abs(n3 - n1) * 60 + abs(n4 - n2);
+
+//             gap = min(1440, gap);
+//             gap = min(gap, 1440 - gap);
+//             res = min(res, gap);
+//         }
+
+//         int n1 = atoi(timePoints[0].substr(0, 2).c_str());
+//         int n2 = atoi(timePoints[0].substr(3, 2).c_str());
+//         int n3 = atoi(timePoints[timePoints.size() - 1].substr(0, 2).c_str());
+//         int n4 = atoi(timePoints[timePoints.size() - 1].substr(3, 2).c_str());
+//         int gap;
+//         if (n4 < n2)
+//             gap = abs(n3 - n1) * 60 - abs(n4 - n2);
+//         else
+//             gap = abs(n3 - n1) * 60 + abs(n4 - n2);
+
+//         gap = min(1440, gap);
+//         gap = min(gap, 1440 - gap);
+//         res = min(res, gap);
+
+//         return res;
+//     }
+// };
+
 int main()
 {
     return 0;
