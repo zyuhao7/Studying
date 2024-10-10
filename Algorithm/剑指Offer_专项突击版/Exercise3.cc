@@ -223,6 +223,81 @@ using namespace std;
 //     }
 // };
 
+// day-2024-10-10
+//  剑指 Offer II 036. 后缀表达式
+// class Solution
+// {
+// public:
+//     int evalRPN(vector<string> &tokens)
+//     {
+//         stack<int> stk;
+//         for (auto &t : tokens)
+//         {
+//             if (t.size() > 1 || isdigit(t[0]))
+//             {
+//                 stk.push(stoi(t));
+//             }
+//             else
+//             {
+//                 int y = stk.top();
+//                 stk.pop();
+//                 int x = stk.top();
+//                 stk.pop();
+//                 if (t[0] == '+')
+//                     stk.push(x + y);
+//                 else if (t[0] == '-')
+//                     stk.push(x - y);
+//                 else if (t[0] == '*')
+//                     stk.push(x * y);
+//                 else
+//                     stk.push(x / y);
+//             }
+//         }
+//         return stk.top();
+//     }
+// };
+
+// 剑指 Offer II 037. 小行星碰撞
+// class Solution
+// {
+// public:
+//     vector<int> asteroidCollision(vector<int> &a)
+//     {
+//         stack<int> st;
+//         for (int i = 0; i < a.size(); ++i)
+//         {
+//             bool exploded = false;
+//             while (!st.empty() && a[i] < 0 && st.top() > 0)
+//             {
+//                 if (abs(st.top()) > abs(a[i]))
+//                 {
+//                     exploded = true;
+//                     break;
+//                 }
+//                 else if (abs(st.top()) == abs(a[i]))
+//                 {
+//                     exploded = true;
+//                     st.pop();
+//                     break;
+//                 }
+//                 else
+//                 {
+//                     st.pop();
+//                 }
+//             }
+//             if (!exploded)
+//                 st.push(a[i]);
+//         }
+//         vector<int> res(st.size());
+//         for (int i = res.size() - 1; i >= 0; --i)
+//         {
+//             res[i] = st.top();
+//             st.pop();
+//         }
+//         return res;
+//     }
+// };
+
 int main()
 {
     return 0;
