@@ -298,6 +298,67 @@ using namespace std;
 //     }
 // };
 
+// day-2024-10-11
+// 剑指 Offer II 038. 每日温度
+// class Solution
+// {
+// public:
+//     vector<int> dailyTemperatures(vector<int> &t)
+//     {
+//         vector<int> ans(t.size());
+//         stack<int> st;
+//         st.push(0);
+//         for (int i = 1; i < t.size(); ++i)
+//         {
+//             // 栈顶元素下标等于 i - top的下标.
+//             while (!st.empty() && t[i] > t[st.top()])
+//             {
+//                 ans[st.top()] = i - st.top();
+//                 st.pop();
+//             }
+//             st.push(i);
+//         }
+//         return ans;
+//     }
+// };
+
+// 剑指 Offer II 039. 直方图最大矩形面积
+// class Solution
+// {
+// public:
+//     int largestRectangleArea(vector<int> &h)
+//     {
+//         int n = h.size();
+//         int ans = 0;
+//         vector<int> l(n, -1), r(n, n);
+//         stack<int> st;
+//         for (int i = 0; i < h.size(); ++i)
+//         {
+//             while (!st.empty() && h[st.top()] >= h[i])
+//             {
+//                 st.pop();
+//             }
+//             if (!st.empty())
+//                 l[i] = st.top();
+//             st.push(i);
+//         }
+//         st = stack<int>();
+//         for (int i = n - 1; ~i; --i)
+//         {
+//             while (!st.empty() && h[st.top()] >= h[i])
+//                 st.pop();
+//             if (!st.empty())
+//                 r[i] = st.top();
+//             st.push(i);
+//         }
+//         for (int i = 0; i < n; ++i)
+//         {
+//             ans = max(ans, (r[i] - l[i] - 1) * h[i]);
+//         }
+//         return ans;
+//     }
+// };
+
 int main()
 {
     return 0;
