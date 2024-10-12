@@ -359,6 +359,111 @@ using namespace std;
 //     }
 // };
 
+// day-2024-10-12
+// 剑指 Offer II 040. 矩阵中最大的矩形
+// class Solution
+// {
+// public:
+//     int maximalRectangle(vector<vector<char>> &matrix)
+//     {
+//         int m = matrix.size();
+//         if (m == 0)
+//             return 0;
+//         int n = matrix[0].size();
+//         vector<vector<int>> left(m, vector<int>(n, 0));
+//         for (int i = 0; i < m; ++i)
+//         {
+//             for (int j = 0; j < n; ++j)
+//             {
+//                 if (matrix[i][j] == '1')
+//                 {
+//                     left[i][j] = (j == 0 ? 0 : left[i][j - 1]) + 1;
+//                 }
+//             }
+//         }
+//         int ret = 0;
+//         for (int i = 0; i < m; ++i)
+//         {
+//             for (int j = 0; j < n; ++j)
+//             {
+//                 if (matrix[i][j] == '0')
+//                     continue;
+
+//                 int width = left[i][j];
+//                 int area = width;
+//                 for (int k = i - 1; k >= 0; --k)
+//                 {
+//                     width = min(width, left[k][j]);
+//                     area = max(area, width * (i - k + 1));
+//                 }
+//                 ret = max(ret, area);
+//             }
+//         }
+//         return ret;
+//     }
+// };
+
+// 剑指 Offer II 041. 滑动窗口的平均值
+// class MovingAverage
+// {
+// public:
+//     MovingAverage(int size)
+//     {
+//         arr.resize(size);
+//     }
+
+//     double next(int val)
+//     {
+//         int idx = cnt % arr.size();
+//         s += val - arr[idx];
+//         arr[idx] = val;
+//         ++cnt;
+//         return (double)s / min(cnt, (int)arr.size());
+//     }
+
+// private:
+//     vector<int> arr;
+//     int cnt = 0;
+//     int s = 0;
+// };
+
+// 剑指 Offer II 042. 最近请求次数
+// class RecentCounter
+// {
+// public:
+//     RecentCounter() {}
+
+//     int ping(int t)
+//     {
+//         int cnt = 1;
+//         for (int i = 0; i < v.size(); ++i)
+//         {
+//             if (v[i] >= t - 3000 && v[i] <= t)
+//                 cnt++;
+//         }
+//         v.push_back(t);
+//         return cnt;
+//     }
+//     vector<int> v;
+// };
+
+// class RecentCounter
+// {
+// public:
+//     RecentCounter() {}
+
+//     int ping(int t)
+//     {
+//         q.push_back(t);
+//         while (q.front() < t - 3000)
+//         {
+//             q.pop_front();
+//         }
+//         return q.size();
+//     }
+//     deque<int> q;
+// };
+
 int main()
 {
     return 0;
