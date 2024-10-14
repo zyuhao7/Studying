@@ -422,66 +422,231 @@ private:
 
 // MemoryPool<Rational> *Rational::memPool = nullptr;
 
-// 版本 3 单线程可变大小内存管理器 .. todo.
+// 版本 3 单线程可变大小内存管理器
 
-int main()
-{
-    // 测量全局函数 new() 和 delete() 的基准性能.
-    // Rational *array[1000];
-    // auto start = chrono::high_resolution_clock::now();
-    // for (int j = 0; j < 5000; j++)
-    // {
-    //     for (int i = 0; i < 1000; ++i)
-    //     {
-    //         array[i] = new Rational(i);
-    //     }
-    //     for (int i = 0; i < 1000; ++i)
-    //     {
-    //         delete array[i];
-    //     }
-    // }
-    // auto end = chrono::high_resolution_clock::now();
-    // auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    // std::cout << "spends: " << duration.count() << " milliseconds" << std::endl;
-    // 版本 0  212 mil
+// class MemoryChunk
+// {
+// public:
+//     MemoryChunk(MemoryChunk *nextChunk, size_t ChunkSize);
+//     ~MemoryChunk() { delete[] reinterpret_cast<char *>(mem); }
 
-    // Rational *array[1000];
-    // Rational::newMemPool();
-    // auto start = chrono::high_resolution_clock::now();
-    // for (int j = 0; j < 5000; j++)
-    // {
-    //     for (int i = 0; i < 1000; ++i)
-    //     {
-    //         array[i] = new Rational(i);
-    //     }
-    //     for (int i = 0; i < 1000; ++i)
-    //     {
-    //         delete array[i];
-    //     }
-    // }
-    // auto end = chrono::high_resolution_clock::now();
-    // auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    // std::cout << "spends: " << duration.count() << " milliseconds" << std::endl; // 版本 1 28 mil
-    // Rational::deleteMemPool();
+//     inline void *alloc(size_t size);
+//     inline void free(void *someElement);
 
-    // Rational *array[1000];
-    // Rational::newMemPool();
-    // auto start = chrono::high_resolution_clock::now();
-    // for (int j = 0; j < 5000; j++)
-    // {
-    //     for (int i = 0; i < 1000; ++i)
-    //     {
-    //         array[i] = new Rational(i);
-    //     }
-    //     for (int i = 0; i < 1000; ++i)
-    //     {
-    //         delete array[i];
-    //     }
-    // }
-    // auto end = chrono::high_resolution_clock::now();
-    // auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    // std::cout << "spends: " << duration.count() << " milliseconds" << std::endl; // 版本 2  41 mil
-    // Rational::deleteMemPool();
+//     // 指向列表下一内存块的指针.
+//     MemoryChunk *nextMemChunk() { return next; }
 
-    return 0;
-}
+//     // 当前内存块剩余空间大小
+//     size_t spaceAvailable()
+//     {
+//         return chunkSize - bytesAlreadyAllocated;
+//     }
+
+//     enum
+//     {
+//         DEFAULT_CHUNK_SIZE = 4096
+//     };
+
+// private:
+//     MemoryChunk *next;
+//     void *mem;
+
+//     // 内存块大小
+//     size_t chunkSize;
+
+//     // 当前内存块已分配字节数
+//     size_t bytesAlreadyAllocated;
+// };
+
+// MemoryChunk::MemoryChunk(MemoryChunk *nextChunk, size_t reqSize)
+// {
+//     chunkSize = (reqSize > DEFAULT_CHUNK_SIZE) ? reqSize : DEFAULT_CHUNK_SIZE;
+//     next = nextChunk;
+//     bytesAlreadyAllocated = 0;
+//     mem = new char[chunkSize];
+// }
+
+// void *MemoryChunk::alloc(size_t reqSize)
+// {
+//     if (bytesAlreadyAllocated + reqSize > chunkSize)
+//     {
+//         return nullptr; // Not enough space
+//     }
+//     void *addr = reinterpret_cast<char *>(mem) + bytesAlreadyAllocated;
+//     bytesAlreadyAllocated += reqSize;
+//     return addr;
+// }
+
+// inline void MemoryChunk::free(void *doomed)
+// {
+//     // No-op (since we are using a pool, individual freeing is not needed)
+// }
+
+// class ByteMemoryPool
+// {
+// public:
+//     ByteMemoryPool(size_t initSize = MemoryChunk::DEFAULT_CHUNK_SIZE);
+//     ~ByteMemoryPool();
+
+//     // 从私有内存池分配内存.
+//     inline void *alloc(size_t size);
+
+//     // 释放先前从内存池中分配的内存
+//     inline void free(void *someElement);
+
+// private:
+//     // 内存块列表. 他是我们的私有存储空间
+//     MemoryChunk *listOfMemoryChunks;
+
+//     // 向我们的私有内存添加一个内存块
+//     void expandStorage(size_t reqSize);
+// };
+
+// ByteMemoryPool::ByteMemoryPool(size_t initSize)
+// {
+//     listOfMemoryChunks = nullptr;
+//     expandStorage(initSize);
+// }
+
+// ByteMemoryPool::~ByteMemoryPool()
+// {
+//     MemoryChunk *memChunk = listOfMemoryChunks;
+//     while (memChunk)
+//     {
+//         listOfMemoryChunks = memChunk->nextMemChunk();
+//         delete memChunk;
+//         memChunk = listOfMemoryChunks;
+//     }
+// }
+
+// void *ByteMemoryPool::alloc(size_t reqSize)
+// {
+//     size_t space = listOfMemoryChunks->spaceAvailable();
+//     if (space < reqSize)
+//     {
+//         expandStorage(reqSize);
+//     }
+//     return listOfMemoryChunks->alloc(reqSize);
+// }
+
+// inline void ByteMemoryPool::free(void *doomed)
+// {
+//     listOfMemoryChunks->free(doomed);
+// }
+
+// void ByteMemoryPool::expandStorage(size_t reqSize)
+// {
+//     listOfMemoryChunks = new MemoryChunk(listOfMemoryChunks, reqSize);
+// }
+
+// class Rational
+// {
+// public:
+//     Rational(int a = 0, int b = 1)
+//         : n(a),
+//           d(b)
+//     {
+//     }
+
+//     void *operator new(size_t size) { return memPool->alloc(size); }
+//     void operator delete(void *doomed, size_t size) { memPool->free(doomed); }
+
+//     static void newMemPool() { memPool = new ByteMemoryPool; }
+//     static void deleteMemPool() { delete memPool; }
+
+// private:
+//     int n;
+//     int d;
+//     static ByteMemoryPool *memPool;
+// };
+
+// ByteMemoryPool *Rational::memPool = nullptr;
+
+// int main()
+// {
+// 测量全局函数 new() 和 delete() 的基准性能.
+// Rational *array[1000];
+// auto start = chrono::high_resolution_clock::now();
+// for (int j = 0; j < 5000; j++)
+// {
+//     for (int i = 0; i < 1000; ++i)
+//     {
+//         array[i] = new Rational(i);
+//     }
+//     for (int i = 0; i < 1000; ++i)
+//     {
+//         delete array[i];
+//     }
+// }
+// auto end = chrono::high_resolution_clock::now();
+// auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+// std::cout << "spends: " << duration.count() << " milliseconds" << std::endl;
+// 版本 0  212 mil
+
+// Rational *array[1000];
+// Rational::newMemPool();
+// auto start = chrono::high_resolution_clock::now();
+// for (int j = 0; j < 5000; j++)
+// {
+//     for (int i = 0; i < 1000; ++i)
+//     {
+//         array[i] = new Rational(i);
+//     }
+//     for (int i = 0; i < 1000; ++i)
+//     {
+//         delete array[i];
+//     }
+// }
+// auto end = chrono::high_resolution_clock::now();
+// auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+// std::cout << "spends: " << duration.count() << " milliseconds" << std::endl; // 版本 1 28 mil
+// Rational::deleteMemPool();
+
+// Rational *array[1000];
+// Rational::newMemPool();
+// auto start = chrono::high_resolution_clock::now();
+// for (int j = 0; j < 5000; j++)
+// {
+//     for (int i = 0; i < 1000; ++i)
+//     {
+//         array[i] = new Rational(i);
+//     }
+//     for (int i = 0; i < 1000; ++i)
+//     {
+//         delete array[i];
+//     }
+// }
+// auto end = chrono::high_resolution_clock::now();
+// auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+// std::cout << "spends: " << duration.count() << " milliseconds" << std::endl; // 版本 2  41 mil
+// Rational::deleteMemPool();
+
+// Rational *array[1000];
+// Rational::newMemPool();
+// auto start = chrono::high_resolution_clock::now();
+// for (int j = 0; j < 5000; j++)
+// {
+//     for (int i = 0; i < 1000; ++i)
+//     {
+//         array[i] = new Rational(i);
+//     }
+//     for (int i = 0; i < 1000; ++i)
+//     {
+//         delete array[i];
+//     }
+// }
+// auto end = chrono::high_resolution_clock::now();
+// auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+// std::cout << "spends: " << duration.count() << " milliseconds" << std::endl; // 版本 3  85 mil
+// Rational::deleteMemPool();
+
+//     return 0;
+// }
+
+// 要点:
+// 1. 灵活性以速度的降低为代价. 随着内存管理的功能和灵活性的增强, 执行速度降低.
+// 2. 全局内存管理器(new()和delete()) 是通用的, 代价高.
+// 3. 专用内存管理器比全局内存管理器块一个数量级以上.
+// 4. 如果主要分配固定大小的内存块, 专用的固定大小内存管理器将明显地提升性能.
+// 5. 如果主要分配限于单线程的内存块, 那么内存管理器也会有类似的性能提高. 由于省去了全局函数 new()和delete()必须
+// 处理的并发问题, 单线程内存管理器的性能有所提高.
