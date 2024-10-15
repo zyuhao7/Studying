@@ -2,6 +2,7 @@
 #include <string>
 #include <mutex>
 #include <chrono>
+#include <vector>
 using namespace std;
 // day-2024-10-10
 // 第一章 跟踪实例
@@ -650,3 +651,216 @@ private:
 // 4. 如果主要分配固定大小的内存块, 专用的固定大小内存管理器将明显地提升性能.
 // 5. 如果主要分配限于单线程的内存块, 那么内存管理器也会有类似的性能提高. 由于省去了全局函数 new()和delete()必须
 // 处理的并发问题, 单线程内存管理器的性能有所提高.
+
+// day-2024-10-15
+//  第七章 多线程版本内存池
+// 7.1 版本四 实现多线程版内存池
+
+// template <class T>
+// class MemoryPool
+// {
+// public:
+//     MemoryPool(size_t size = EXPANSION_SIZE);
+//     ~MemoryPool();
+
+//     // From freeList allocate T element.
+//     inline void *alloc(size_t size);
+
+//     // Return T element to freeList
+//     inline void free(void *someElement);
+
+// private:
+//     // Next element in freeList.
+//     MemoryPool<T> *next;
+
+//     // If freeList is empty, expand it by this size
+//     enum
+//     {
+//         EXPANSION_SIZE = 32
+//     };
+
+//     // Add free elements to freeList
+//     void expandTheFreeList(int howMany = EXPANSION_SIZE);
+
+//     // Keep track of allocated memory to free it properly
+//     std::vector<char *> allocatedBlocks;
+// };
+
+// template <class T>
+// MemoryPool<T>::MemoryPool(size_t size)
+// {
+//     next = nullptr;
+//     expandTheFreeList(size);
+// }
+
+// // Destructor traverses the freeList and deletes all elements
+// template <class T>
+// MemoryPool<T>::~MemoryPool()
+// {
+//     MemoryPool<T> *nextPtr = next;
+//     while (nextPtr != nullptr)
+//     {
+//         MemoryPool<T> *curr = nextPtr;
+//         nextPtr = nextPtr->next;
+//         delete curr; // Delete each element from the pool
+//     }
+
+//     // Free the actual memory blocks
+//     for (char *block : allocatedBlocks)
+//     {
+//         delete[] block; // Properly delete the allocated char array
+//     }
+// }
+
+// // Alloc function allocates enough space for T elements.
+// // If freeList is empty, it calls expandTheFreeList() to expand it.
+// template <class T>
+// inline void *MemoryPool<T>::alloc(size_t)
+// {
+//     if (!next)
+//     {
+//         expandTheFreeList();
+//     }
+//     MemoryPool<T> *head = next;
+//     next = head->next;
+//     return head;
+// }
+
+// template <class T>
+// inline void MemoryPool<T>::free(void *doomed)
+// {
+//     MemoryPool<T> *head = static_cast<MemoryPool<T> *>(doomed);
+//     head->next = next;
+//     next = head;
+// }
+
+// // expandTheFreeList() is used to add new elements to the freeList.
+// template <class T>
+// void MemoryPool<T>::expandTheFreeList(int howMany)
+// {
+//     size_t size = (sizeof(T) > sizeof(MemoryPool<T> *)) ? sizeof(T) : sizeof(MemoryPool<T> *);
+
+//     // Allocate a block of memory for the free list elements
+//     char *newBlock = new char[size * howMany];
+//     allocatedBlocks.push_back(newBlock); // Keep track of the allocated block
+
+//     MemoryPool<T> *runner = reinterpret_cast<MemoryPool<T> *>(newBlock);
+
+//     next = runner;
+//     for (int i = 0; i < howMany - 1; ++i)
+//     {
+//         runner->next = reinterpret_cast<MemoryPool<T> *>(newBlock + (i + 1) * size);
+//         runner = runner->next;
+//     }
+//     runner->next = nullptr;
+// }
+
+// template <class POOLTYPE, class LOCK>
+// class MTMemoryPool
+// {
+// public:
+//     // 从 freeList 里分配一个元素
+//     inline void *alloc(size_t size);
+
+//     // 返回一个元素给 freeList
+//     inline void free(void *someElement);
+
+// private:
+//     POOLTYPE stPool; // 单线程池
+//     LOCK theLock;
+// };
+
+// // 在具体实现时, alloc() 方法将分配任务委托给内存池成员, 而将锁定任务委托给锁成员.
+// template <class M, class L>
+// inline void *MTMemoryPool<M, L>::alloc(size_t size)
+// {
+//     void *mem;
+//     theLock.lock();
+//     mem = stPool.alloc(size);
+//     theLock.unlock();
+//     return mem;
+// }
+
+// template <class M, class L>
+// inline void MTMemoryPool<M, L>::free(void *doomed)
+// {
+//     theLock.lock();
+//     stPool.free(doomed);
+//     theLock.unlock();
+// }
+
+// class ABCLock
+// {
+// public:
+//     virtual ~ABCLock() {}
+//     virtual void lock() = 0;
+//     virtual void unlock() = 0;
+// };
+
+// class MutexLock : public ABCLock
+// {
+// public:
+//     inline void lock() override
+//     {
+//         mtx.lock();
+//     }
+
+//     inline void unlock() override
+//     {
+//         mtx.unlock();
+//     }
+
+// private:
+//     std::mutex mtx;
+// };
+
+// class Rational
+// {
+// public:
+//     Rational(int a = 0, int b = 1)
+//         : n(a),
+//           d(b == 0 ? 1 : b) // 防止分母为零
+//     {
+//     }
+
+//     void *operator new(size_t size) { return memPool->alloc(size); }
+//     void operator delete(void *doomed, size_t size) { memPool->free(doomed); }
+
+//     static void newMemPool() { memPool = new MTMemoryPool<MemoryPool<Rational>, MutexLock>; }
+//     static void deleteMemPool() { delete memPool; }
+
+// private:
+//     int n;
+//     int d;
+//     static MTMemoryPool<MemoryPool<Rational>, MutexLock> *memPool;
+// };
+
+// // Corrected static member initialization
+// MTMemoryPool<MemoryPool<Rational>, MutexLock> *Rational::memPool = nullptr;
+
+// int main()
+// {
+//     Rational *array[1000];
+//     Rational::newMemPool();
+//     auto start = std::chrono::high_resolution_clock::now();
+//     for (int j = 0; j < 5000; j++)
+//     {
+//         for (int i = 0; i < 1000; ++i)
+//         {
+//             array[i] = new Rational(i);
+//         }
+//         for (int i = 0; i < 1000; ++i)
+//         {
+//             delete array[i];
+//         }
+//     }
+//     auto end = std::chrono::high_resolution_clock::now();
+//     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+//     std::cout << "spends: " << duration.count() << " milliseconds" << std::endl; // 版本 4 298 mil
+//     Rational::deleteMemPool();
+//     return 0;
+// }
+
+// 全局内存管理 是通用的, 不过开销也很大.
+// 单线程内存管理器比多线程内存管理器快得多, 所以分配大多数内存块限于单线程, 明显可以提升性能.
+// 如果开发一条有效的单线程分配器 那么通过模版可以方便地将它们扩展到多线程中.
