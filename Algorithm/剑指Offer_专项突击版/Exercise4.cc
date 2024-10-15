@@ -109,6 +109,168 @@ using namespace std;
 //         return node->val;
 //     }
 // };
+
+// day-2024-10-14
+// 剑指 Offer II 046. 二叉树的右侧视图
+// class Solution
+// {
+// public:
+//     vector<int> rightSideView(TreeNode *root)
+//     {
+//         vector<int> res;
+//         queue<TreeNode *> q;
+//         if (root == nullptr)
+//             return res;
+//         q.push(root);
+//         while (!q.empty())
+//         {
+//             int n = q.size();
+//             int firstR = 0;
+//             for (int i = 0; i < n; ++i)
+//             {
+//                 auto t = q.front();
+//                 q.pop();
+//                 if (i == 0)
+//                     firstR = t->val;
+//                 if (t->right)
+//                     q.push(t->right);
+//                 if (t->left)
+//                     q.push(t->left);
+//             }
+//             res.push_back(firstR);
+//         }
+//         return res;
+//     }
+// };
+
+// 剑指 Offer II 047. 二叉树剪枝
+// class Solution
+// {
+// public:
+//     TreeNode *pruneTree(TreeNode *root)
+//     {
+//         if (!root)
+//             return nullptr;
+//         root->left = pruneTree(root->left);
+//         root->right = pruneTree(root->right);
+//         if (!root->left && !root->right && root->val == 0)
+//             return nullptr;
+//         return root;
+//     }
+// };
+
+// day-2024-10-15
+//  剑指 Offer II 048. 序列化与反序列化二叉树
+
+// 层序遍历冗余编码.
+// class Codec
+// {
+// public:
+//     string serialize(TreeNode *root)
+//     {
+//         string res;
+//         if (root == nullptr)
+//             return res;
+//         queue<TreeNode *> q;
+//         q.push(root);
+//         while (!q.empty())
+//         {
+//             auto t = q.front();
+//             q.pop();
+//             if (t)
+//             {
+//                 q.push(t->left);
+//                 q.push(t->right);
+//                 res += to_string(t->val) + ",";
+//             }
+//             else
+//             {
+//                 res += "null,";
+//             }
+//         }
+//         return res;
+//     }
+//     TreeNode *deserialize(string data)
+//     {
+//         stringstream ss(data);
+//         queue<TreeNode *> q;
+//         string str;
+//         vector<string> s;
+//         while (getline(ss, str, ','))
+//             s.push_back(str);
+//         if (s.size() == 0)
+//             return nullptr;
+//         q.push(new TreeNode(stoi(s[0])));
+//         int i = 1;
+//         auto root = q.front();
+//         while (!q.empty())
+//         {
+//             auto t = q.front();
+//             q.pop();
+//             t->left = s[i] == "null" ? nullptr : new TreeNode(stoi(s[i]));
+//             i++;
+//             if (t->left)
+//                 q.push(t->left);
+
+//             t->right = s[i] == "null" ? nullptr : new TreeNode(stoi(s[i]));
+//             i++;
+//             if (t->right)
+//                 q.push(t->right);
+//         }
+//         return root;
+//     }
+// };
+
+// class Codec
+// {
+// public:
+//     // Encodes a tree to a single string.
+//     string serialize(TreeNode *root)
+//     {
+//         if (root == nullptr)
+//             return "null";
+//         return to_string(root->val) + ' ' + serialize(root->left) + ' ' + serialize(root->right);
+//     }
+
+//     TreeNode *mydeserialize(istringstream &ss)
+//     {
+//         string tmp;
+//         ss >> tmp;
+//         if (tmp == "null")
+//             return nullptr;
+//         TreeNode *node = new TreeNode(stoi(tmp));
+//         node->left = mydeserialize(ss);
+//         node->right = mydeserialize(ss);
+//         return node;
+//     }
+//     // Decodes your encoded data to tree.
+//     TreeNode *deserialize(string data)
+//     {
+//         istringstream ss(data);
+//         return mydeserialize(ss);
+//     }
+// };
+
+// 剑指 Offer II 049. 从根节点到叶节点的路径数字之和
+// class Solution
+// {
+// public:
+//     int sumNumbers(TreeNode *root)
+//     {
+//         return dfs(root, 0);
+//     }
+//     int dfs(TreeNode *root, int val)
+//     {
+//         if (root == nullptr)
+//             return 0;
+//         val = val * 10 + root->val;
+//         if (root->left == nullptr && root->right == nullptr)
+//             return val;
+//         return dfs(root->left, val) + dfs(root->right, val);
+//     }
+// };
+
+
 int main()
 {
 
