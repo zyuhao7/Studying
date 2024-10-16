@@ -269,6 +269,79 @@ using namespace std;
 //         return dfs(root->left, val) + dfs(root->right, val);
 //     }
 // };
+
+// day-2024-10-16
+// 剑指 Offer II 050. 向下的路径节点之和  路径总和 III
+
+// 深度优先搜索.
+// class Solution
+// {
+// public:
+//     int pathSum(TreeNode *root, int targetSum)
+//     {
+//         if (root == nullptr)
+//             return 0;
+//         return dfs(root, targetSum) + pathSum(root->left, targetSum) + pathSum(root->right, targetSum);
+//     }
+//     int dfs(TreeNode *root, long long targetSum)
+//     {
+//         if (!root)
+//             return 0;
+//         return (root->val == targetSum ? 1 : 0) + dfs(root->left, targetSum - root->val) + dfs(root->right, targetSum - root->val);
+//     }
+// };
+
+// 前缀和 + 哈希 + 递归
+// class Solution {
+// public:
+//     int pathSum(TreeNode* root, int targetSum) {
+//         unordered_map<long, int> cnt;
+//         cnt[0] = 1;
+//         function<int(TreeNode*, long)> dfs = [&](TreeNode* node, long s) -> int {
+//             if (!node) return 0;
+//             s += node->val;
+//             int ans = cnt[s - targetSum];
+//             ++cnt[s];
+//             ans += dfs(node->left, s) + dfs(node->right, s);
+//             --cnt[s];
+//             return ans;
+//         };
+//         return dfs(root, 0);
+//     }
+// };
+
+// 剑指 Offer II 051. 节点之和最大的路径
+
+
+// 剑指 Offer II 052. 展平二叉搜索树
+// class Solution
+// {
+// public:
+//     TreeNode *increasingBST(TreeNode *root)
+//     {
+//         TreeNode *head = nullptr, *tail = nullptr;
+//         stack<TreeNode *> st;
+//         TreeNode *cur = root;
+//         while (!st.empty() || cur != nullptr)
+//         {
+//             while (cur != nullptr)
+//             {
+//                 st.push(cur);
+//                 cur = cur->left;
+//             }
+//             cur = st.top();
+//             st.pop();
+//             if (head == nullptr)
+//                 head = cur;
+//             else
+//                 tail->right = cur;
+//             tail = cur;
+//             cur->left = nullptr;
+//             cur = cur->right;
+//         }
+//         return head;
+//     }
+// };
 int main()
 {
 
