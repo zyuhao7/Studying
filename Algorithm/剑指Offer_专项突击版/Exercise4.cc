@@ -311,7 +311,25 @@ using namespace std;
 // };
 
 // 剑指 Offer II 051. 节点之和最大的路径
+// class Solution {
+// public:
+//     int maxPathSum(TreeNode* root) {
+//         int maxSum = INT_MIN;
 
+//         function<int(TreeNode*)> dfs = [&](TreeNode* root){
+//             if(!root) return 0;
+//             int left = max(0, dfs(root->left));
+//             int right = max(0, dfs(root->right));
+
+//            maxSum = max(maxSum, left + right + root->val);
+//            return root->val + max(left, right);
+//         };
+
+//         dfs(root);
+//         return maxSum;
+//     }
+
+// };
 
 // 剑指 Offer II 052. 展平二叉搜索树
 // class Solution
@@ -342,8 +360,78 @@ using namespace std;
 //         return head;
 //     }
 // };
-int main()
-{
 
-    return 0;
-}
+// day-2024-10-17
+// 剑指 Offer II 053. 二叉搜索树中的中序后继
+
+// class Solution
+// {
+// public:
+//     TreeNode *inorderSuccessor(TreeNode *root, TreeNode *p)
+//     {
+//         TreeNode *ans = nullptr;
+//         while (root)
+//         {
+//             if (root->val > p->val)
+//             {
+//                 ans = root;
+//                 root = root->left;
+//             }
+//             else
+//             {
+//                 root = root->right;
+//             }
+//         }
+//         return ans;
+//     }
+// };
+
+// 剑指 Offer II 054. 所有大于等于节点的值之和
+// class Solution
+// {
+// public:
+//     int sum = 0;
+//     TreeNode *bstToGst(TreeNode *root)
+//     {
+//         if (!root)
+//             return nullptr;
+//         bstToGst(root->right);
+//         sum += root->val;
+//         root->val = sum;
+//         bstToGst(root->left);
+//         return root;
+//     }
+// };
+
+// 剑指 Offer II 055. 二叉搜索树迭代器
+// class BSTIterator
+// {
+// public:
+//     vector<int> vec;
+//     int cur;
+//     BSTIterator(TreeNode *root)
+//     {
+//         cur = 0;
+//         Inorder(root);
+//     }
+
+//     int next()
+//     {
+//         return vec[cur++];
+//     }
+
+//     bool hasNext()
+//     {
+//         return cur < vec.size();
+//     }
+//     void Inorder(TreeNode *root)
+//     {
+//         if (!root)
+//             return;
+
+//         Inorder(root->left);
+//         vec.push_back(root->val);
+//         Inorder(root->right);
+//     }
+// };
+
