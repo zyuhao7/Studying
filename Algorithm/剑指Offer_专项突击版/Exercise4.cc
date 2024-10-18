@@ -435,3 +435,62 @@ using namespace std;
 //     }
 // };
 
+// day-2024-10-18
+//  剑指 Offer II 056. 二叉搜索树中两个节点之和
+// class Solution
+// {
+// public:
+//     unordered_map<int, int> hash;
+//     bool findTarget(TreeNode *root, int k)
+//     {
+//         return dfs(root, k);
+//     }
+//     bool dfs(TreeNode *root, int k)
+//     {
+//         if (!root)
+//             return false;
+//         if (hash[k - root->val])
+//             return true;
+//         hash[root->val]++;
+//         return dfs(root->left, k) || dfs(root->right, k);
+//     }
+// };
+
+// 剑指 Offer II 057. 值和下标之差都在给定的范围内   存在重复元素 III
+// 暴力 超时
+// class Solution
+// {
+// public:
+//     bool containsNearbyAlmostDuplicate(vector<int> &nums, int indexDiff, int valueDiff)
+//     {
+//         for (int i = 0; i < nums.size(); ++i)
+//         {
+//             for (int j = i + 1; j < nums.size() && j - i <= indexDiff; ++j)
+//             {
+//                 if (abs(nums[j] - nums[i]) <= valueDiff)
+//                     return true;
+//             }
+//         }
+//         return false;
+//     }
+// };
+
+// 滑动窗口 + 有序集合
+// class Solution
+// {
+// public:
+//     bool containsNearbyAlmostDuplicate(vector<int> &nums, int k, int t)
+//     {
+//         set<long long> set;
+//         for (int i = 0; i < nums.size(); ++i)
+//         {
+//             auto it = set.lower_bound(static_cast<long long>(nums[i] - t));
+//             if (it != set.end() && *it - nums[i] <= t)
+//                 return true;
+//             set.insert(nums[i]);
+//             if (set.size() > k)
+//                 set.erase(nums[i - k]);
+//         }
+//         return false;
+//     }
+// };
