@@ -155,6 +155,76 @@ using namespace std;
 //     }
 // };
 
+// day-2024-10-24
+// 剑指 Offer II 068. 查找插入位置
+
+// class Solution {
+// public:
+//     int searchInsert(vector<int>& nums, int target) {
+//         int l = 0, r = nums.size() - 1;
+//         while(l <= r)
+//         {
+//             int m = l + r >> 1;
+//             if(nums[m] == target) return m;
+//             else if(nums[m] > target) r = m - 1;
+//             else l = m + 1;
+//         }
+//         return l;
+//     }
+// };
+
+// 剑指 Offer II 069. 山峰数组的顶部
+// class Solution {
+// public:
+//     int peakIndexInMountainArray(vector<int>& arr) {
+//         if(arr.size() == 3) return 1;
+//         int l = 1, r = arr.size() - 2;
+//         while(l <= r)
+//         {
+//             int m = l + r >> 1;
+//             if(arr[m] > arr[m - 1] && arr[m] > arr[m + 1])
+//                 return m;
+//             else if(arr[m] < arr[m - 1] && arr[m] > arr[m + 1])
+//                 r = m - 1;
+//             else
+//                 l = m + 1;
+//         }
+//         return l;
+//     }
+// };
+
+// 剑指 Offer II 070. 排序数组中只出现一次的数字
+// ，其中每个元素都会出现两次，唯有一个数只会出现一次。
+// 解法一: 异或求余
+// class Solution
+// {
+// public:
+//     int singleNonDuplicate(vector<int> &nums)
+//     {
+//         int x = 0;
+//         for (int i = 0; i < nums.size(); ++i)
+//             x ^= nums[i];
+//         return x;
+//     }
+// };
+
+// 二分异或判断
+// class Solution {
+// public:
+//     int singleNonDuplicate(vector<int>& nums) {
+//        int l = 0, r = nums.size() - 1;
+//        while(l < r)
+//        {
+//             int m = l + r >> 1;
+//             if(nums[m] == nums[m ^ 1])
+//                 l = m + 1;
+//             else
+//                 r = m;
+//        }
+//        return nums[l];
+//     }
+// };
+
 int main()
 {
 
