@@ -225,6 +225,124 @@ using namespace std;
 //     }
 // };
 
+// day-2024-10-25
+// 剑指 Offer II 071. 按权重生成随机数
+// class Solution
+// {
+//     vector<int> w;
+
+// public:
+//     Solution(vector<int> &W)
+//     {
+//         partial_sum(W.begin(), W.end(), back_inserter(w));
+//     }
+
+//     int pickIndex()
+//     {
+//         int weight = rand() % w.back();
+//         return upper_bound(w.begin(), w.end(), weight) - w.begin();
+//     }
+// };
+
+// day-2024-10-27
+// 剑指 Offer II 072. 求平方根
+// class Solution
+// {
+// public:
+//     int mySqrt(int x)
+//     {
+//         int l = 0, r = x, ans = -1;
+//         while (l <= r)
+//         {
+//             int m = l + (r - l) / 2;
+//             if ((long long)m * m <= x)
+//             {
+//                 ans = m;
+//                 l = m + 1;
+//             }
+//             else
+//                 r = m - 1;
+//         }
+//         return ans;
+//     }
+// };
+
+// 剑指 Offer II 073. 狒狒吃香蕉
+// class Solution
+// {
+// public:
+//     int minEatingSpeed(vector<int> &piles, int h)
+//     {
+//         int left = 1, right = *max_element(piles.begin(), piles.end());
+
+//         while (left < right)
+//         {
+//             int m = (left + right) >> 1;
+//             int s = 0;
+//             for (int pile : piles)
+//                 s += (pile + m - 1) / m;
+//             if (s <= h)
+//                 right = m;
+//             else
+//                 left = m + 1;
+//         }
+//         return left;
+//     }
+// };
+
+// 剑指 Offer II 074. 合并区间
+// class Solution {
+// public:
+//     vector<vector<int>> merge(vector<vector<int>>& intervals) {
+//         vector<vector<int>> res;
+//         sort(intervals.begin(), intervals.end());
+//         res.push_back({intervals[0][0], intervals[0][1]});
+
+//         for(int i = 1; i < intervals.size(); ++i)
+//         {
+//             int l = intervals[i][0];
+//             int r = intervals[i][1];
+//             if(l <= res.back()[1])
+//                 res.back()[1] = max(res.back()[1], r);
+//             else
+//                 res.push_back({l, r});
+//         }
+//         return res;
+//     }
+// };
+
+// 剑指 Offer II 075. 数组相对排序
+// class Solution
+// {
+// public:
+//     vector<int> relativeSortArray(vector<int> &arr1, vector<int> &arr2)
+//     {
+//         vector<int> res;
+//         unordered_map<int, int> hash;
+//         for (int i = 0; i < arr1.size(); ++i)
+//             hash[arr1[i]]++;
+//         for (int i = 0; i < arr2.size(); ++i)
+//         {
+//             while (hash[arr2[i]])
+//             {
+//                 res.push_back(arr2[i]);
+//                 hash[arr2[i]]--;
+//             }
+//         }
+
+//         vector<int> remaining;
+//         for (auto &[num, count] : hash)
+//         {
+//             while (count-- > 0)
+//                 remaining.push_back(num);
+//         }
+
+//         sort(remaining.begin(), remaining.end());
+//         res.insert(res.end(), remaining.begin(), remaining.end());
+//         return res;
+//     }
+// };
+
 int main()
 {
 
