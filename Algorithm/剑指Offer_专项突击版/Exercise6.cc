@@ -343,6 +343,104 @@ using namespace std;
 //     }
 // };
 
+// day-2024-10-28
+// 剑指 Offer II 076. 数组中的第 k 大的数字
+// 小根堆
+// class Solution
+// {
+// public:
+//     int findKthLargest(vector<int> &nums, int k)
+//     {
+//         priority_queue<int, vector<int>, greater<int>> pq;
+//         for (int i = 0; i < nums.size(); ++i)
+//         {
+//             pq.push(nums[i]);
+//             if (pq.size() > k)
+//                 pq.pop();
+//         }
+//         return pq.top();
+//     }
+// };
+
+// 快排
+// class Solution
+// {
+// public:
+//     int findKthLargest(vector<int> &nums, int k)
+//     {
+//         int n = nums.size();
+//         return quick_sort(nums, 0, n - 1, k - 1);
+//     }
+//     int quick_sort(vector<int> nums, int l, int r, int k)
+//     {
+//         if (l >= r)
+//             return nums[l];
+//         int i = l - 1, j = r + 1, x = nums[l + r >> 1];
+//         while (i < j)
+//         {
+//             do
+//                 ++i;
+//             while (nums[i] > x);
+//             do
+//                 --j;
+//             while (nums[j] < x);
+//             if (i < j)
+//                 swap(nums[i], nums[j]);
+//         }
+//         if (j >= k)
+//             return quick_sort(nums, l, j, k);
+//         else
+//             return quick_sort(nums, j + 1, r, k);
+//     }
+// };
+
+// 077 链表排序
+// class Solution
+// {
+// public:
+//     ListNode *sortList(ListNode *head)
+//     {
+//         if (!head || !head->next)
+//             return head;
+//         ListNode *fast = head, *slow = head;
+//         while (fast->next && fast->next->next)
+//         {
+//             slow = slow->next;
+//             fast = fast->next->next;
+//         }
+//         ListNode *mid = slow->next;
+//         slow->next = nullptr;
+//         ListNode *left = sortList(head);
+//         ListNode *right = sortList(mid);
+//         return merge(left, right);
+//     }
+
+//     ListNode *merge(ListNode *l1, ListNode *l2)
+//     {
+//         ListNode *dummy = new ListNode(0);
+//         ListNode *tail = dummy;
+//         while (l1 && l2)
+//         {
+//             if (l1->val < l2->val)
+//             {
+//                 tail->next = l1;
+//                 l1 = l1->next;
+//             }
+//             else
+//             {
+//                 tail->next = l2;
+//                 l2 = l2->next;
+//             }
+//             tail = tail->next;
+//         }
+//         if (l1)
+//             tail->next = l1;
+//         if (l2)
+//             tail->next = l2;
+//         return dummy->next;
+//     }
+// };
+
 int main()
 {
 
