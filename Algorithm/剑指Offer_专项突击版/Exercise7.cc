@@ -140,6 +140,157 @@ using namespace std;
 //     }
 // };
 
+// 剑指 Offer II 081. 允许重复选择元素的组合
+// class Solution
+// {
+// public:
+//     vector<vector<int>> res;
+//     vector<int> path;
+//     vector<vector<int>> combinationSum(vector<int> &candidates, int target)
+//     {
+//         dfs(candidates, 0, candidates.size(), target, 0);
+//         return res;
+//     }
+
+//     void dfs(vector<int>& candis, int idx, int n, int target, int CurSum)
+//     {
+//         if (idx == n || CurSum > target)
+//             return;
+//         if (CurSum == target)
+//         {
+//             res.push_back(path);
+//         }
+
+//         for (int i = idx; i < n; ++i)
+//         {
+//             path.push_back(candis[i]);
+//             dfs(candis, i, n, target, candis[i] + CurSum);
+//             path.pop_back();
+//         }
+//     }
+// };
+
+// 剑指 Offer II 082. 含有重复元素集合的组合
+// class Solution
+// {
+// public:
+//     vector<vector<int>> res;
+//     vector<int> path;
+//     vector<vector<int>> combinationSum2(vector<int> &candidates, int target)
+//     {
+//         sort(candidates.begin(), candidates.end());
+//         dfs(candidates, 0, candidates.size(), 0, target);
+//         return res;
+//     }
+
+//     void dfs(vector<int> &candis, int idx, int n, int CurSum, int target)
+//     {
+//         if (idx > n || CurSum > target)
+//             return;
+//         if (CurSum == target)
+//             res.push_back(path);
+
+//         for (int i = idx; i < n; ++i)
+//         {
+//             if (i > idx && candis[i] == candis[i - 1])
+//                 continue;
+//             path.push_back(candis[i]);
+//             dfs(candis, i + 1, n, CurSum + candis[i], target);
+//             path.pop_back();
+//         }
+//     }
+// };
+
+// 剑指 Offer II 083. 没有重复元素集合的全排列
+// class Solution {
+// public:
+//     vector<vector<int>> res;
+//     vector<int> path;
+//     vector<vector<int>> permute(vector<int>& nums) {
+//         dfs(nums,0);
+//         return res;
+//     }
+// void dfs(vector<int>& nums, int idx)
+// {
+//     if(idx == nums.size())
+//     {
+//         res.push_back(path);
+//         return;
+//     }
+//     for(int i = idx; i < nums.size(); ++i)
+//     {
+//         path.push_back(nums[i]);
+//         swap(nums[i], nums[idx]);
+//         dfs(nums, idx + 1);
+//         swap(nums[i], nums[idx]);
+//         path.pop_back();
+//     }
+// }
+// };
+
+// 剑指 Offer II 084. 含有重复元素集合的全排列
+// class Solution
+// {
+// public:
+//     vector<vector<int>> res;
+//     vector<int> path;
+//     vector<vector<int>> permuteUnique(vector<int> &nums)
+//     {
+//         sort(nums.begin(), nums.end());
+//         dfs(nums, 0);
+//         return res;
+//     }
+//     void dfs(vector<int> &nums, int idx)
+//     {
+//         if (idx == nums.size())
+//         {
+//             auto it = find(res.begin(), res.end(), path);
+//             if (it == res.end())
+//                 res.push_back(path);
+//         }
+//         for (int i = idx; i < nums.size(); ++i)
+//         {
+//             if (i > idx && nums[i] == nums[i - 1])
+//                 continue;
+//             path.push_back(nums[i]);
+//             swap(nums[i], nums[idx]);
+//             dfs(nums, idx + 1);
+//             swap(nums[i], nums[idx]);
+//             path.pop_back();
+//         }
+//     }
+// };
+
+// class Solution {
+// public:
+//     vector<int> vis;
+//     vector<vector<int>> res;
+//     vector<int> path;
+//     vector<vector<int>> permuteUnique(vector<int>& nums) {
+//         sort(nums.begin(), nums.end());
+//         vis.resize(nums.size());
+//         dfs(nums, 0);
+//         return res;
+//     }
+//     void dfs(vector<int>& nums, int idx)
+//     {
+//         if(idx == nums.size())
+//         {
+//             res.emplace_back(path);
+//             return;
+//         }
+//         for(int i = 0; i < nums.size(); ++i)
+//         {
+//             if(vis[i]  || (i > 0 && nums[i] == nums[i - 1] && !vis[i - 1])) continue;
+//             path.emplace_back(nums[i]);
+//             vis[i] = 1;
+//             dfs(nums, idx + 1);
+//             vis[i] = 0;
+//             path.pop_back();
+//         }
+//     }
+// };
+
 int main()
 {
 
