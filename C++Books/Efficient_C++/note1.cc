@@ -1,7 +1,10 @@
 #include <iostream>
 #include <string>
 #include <mutex>
+#include <cstring>
 #include <chrono>
+#include <algorithm>
+#include <memory>
 using namespace std;
 
 // day-2024-10-15
@@ -194,3 +197,370 @@ using namespace std;
 // 2、 对于特定的应用模式, 一些容器比其他的更加高效, 这都要随着实际应用而定.
 // 3、除非了解一些相关领域内 STL 所忽略的问题, 否则您是不可能超过 STL 实现的.
 // 4、不过, 在一些特定的情况下, 还是有可能超过 STL 实现的性能的.
+
+// day-2024-10-31
+//  第十一章 引用计数
+
+class Widget
+{
+public:
+    Widget(int size);
+    Widget(const Widget &rhs);
+    ~Widget();
+
+    Widget &operator=(const Widget &rhs);
+
+    void doThis();
+    int showThat() const;
+
+private:
+    char *somePtr;
+    int refCount;
+};
+
+class RCWidget
+{
+public:
+    RCWidget(int size)
+        : value(new Widget(size))
+    {
+    }
+
+    // RCWidget(const RCWidget &rhs);
+    // ~RCWidget();
+
+    // RCWidget &operator=(const RCWidget &rhs);
+
+    void doThis()
+    {
+        value->doThis();
+    }
+
+    int showThat() const
+    {
+        return value->showThat();
+    }
+
+private:
+    Widget *value;
+};
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <memory> // 仅用于 std::shared_ptr 的使用示例
+
+// RCObject类
+class RCObject
+{
+public:
+    void addReference() { ++refCount; }
+    void removeReference()
+    {
+        if (--refCount == 0)
+            delete this;
+    }
+
+    void markUnshareable() { shareable = false; }
+    bool isShareable() const { return shareable; }
+
+protected:
+    RCObject() : refCount(0), shareable(true) {}
+    RCObject(const RCObject &rhs) : refCount(0), shareable(true) {}
+    RCObject &operator=(const RCObject &rhs) { return *this; }
+    virtual ~RCObject() {}
+
+private:
+    int refCount;
+    bool shareable;
+};
+
+// BigInt类
+class BigInt : public RCObject
+{
+    friend BigInt operator+(const BigInt &, const BigInt &);
+
+public:
+    BigInt(const char *);
+    BigInt(unsigned = 0);
+    BigInt(const BigInt &);
+    BigInt &operator=(const BigInt &);
+    BigInt &operator+=(const BigInt &);
+    ~BigInt();
+
+    void print() const;
+    char *getDigits() const { return digits; }
+    unsigned getNdigits() const { return ndigits; }
+
+private:
+    char *digits;
+    unsigned ndigits;
+    char fetch(unsigned i) const;
+};
+
+BigInt::BigInt(const char *str)
+{
+    ndigits = strlen(str);
+    digits = new char[ndigits + 1];
+    for (unsigned i = 0; i < ndigits; ++i)
+        digits[ndigits - i - 1] = str[i] - '0'; // 倒序存储
+}
+
+BigInt::BigInt(unsigned num)
+{
+    ndigits = 0;
+    unsigned temp = num;
+    while (temp > 0)
+    {
+        temp /= 10;
+        ++ndigits;
+    }
+    if (ndigits == 0)
+        ndigits = 1;
+
+    digits = new char[ndigits];
+    for (unsigned i = 0; i < ndigits; ++i)
+    {
+        digits[i] = num % 10;
+        num /= 10;
+    }
+}
+
+BigInt::BigInt(const BigInt &other)
+{
+    ndigits = other.ndigits;
+    digits = new char[ndigits];
+    std::memcpy(digits, other.digits, ndigits);
+}
+
+BigInt &BigInt::operator=(const BigInt &other)
+{
+    if (this == &other)
+        return *this;
+
+    delete[] digits;
+
+    ndigits = other.ndigits;
+    digits = new char[ndigits];
+    std::memcpy(digits, other.digits, ndigits);
+
+    return *this;
+}
+
+BigInt::~BigInt()
+{
+    delete[] digits;
+}
+
+BigInt operator+(const BigInt &a, const BigInt &b)
+{
+    unsigned maxDigits = std::max(a.ndigits, b.ndigits);
+    char *sumDigits = new char[maxDigits + 1];
+    unsigned carry = 0;
+
+    for (unsigned i = 0; i < maxDigits; ++i)
+    {
+        unsigned digitA = (i < a.ndigits) ? a.fetch(i) : 0;
+        unsigned digitB = (i < b.ndigits) ? b.fetch(i) : 0;
+        unsigned sum = digitA + digitB + carry;
+        sumDigits[i] = sum % 10;
+        carry = sum / 10;
+    }
+
+    if (carry > 0)
+    {
+        sumDigits[maxDigits] = carry;
+        ++maxDigits;
+    }
+
+    BigInt result;
+    delete[] result.digits;
+    result.ndigits = maxDigits;
+    result.digits = new char[maxDigits];
+    std::memcpy(result.digits, sumDigits, maxDigits);
+
+    delete[] sumDigits;
+    return result;
+}
+
+BigInt &BigInt::operator+=(const BigInt &other)
+{
+    *this = *this + other;
+    return *this;
+}
+
+char BigInt::fetch(unsigned i) const
+{
+    return (i < ndigits) ? digits[i] : 0;
+}
+
+void BigInt::print() const
+{
+    for (int i = ndigits - 1; i >= 0; --i)
+        std::cout << static_cast<char>(digits[i] + '0');
+    std::cout << std::endl;
+}
+
+// RCPtr类
+template <class T>
+class RCPtr
+{
+public:
+    RCPtr(T *realPtr = nullptr) : pointee(realPtr)
+    {
+        init();
+    }
+
+    RCPtr(const RCPtr &rhs) : pointee(rhs.pointee)
+    {
+        init();
+    }
+
+    ~RCPtr()
+    {
+        if (pointee)
+            pointee->removeReference();
+    }
+
+    RCPtr &operator=(const RCPtr &rhs)
+    {
+        if (pointee != rhs.pointee)
+        {
+            if (pointee)
+                pointee->removeReference();
+            pointee = rhs.pointee;
+            init();
+        }
+        return *this;
+    }
+
+    T *operator->() const { return pointee; }
+    T &operator*() const { return *pointee; }
+
+private:
+    T *pointee;
+
+    void init()
+    {
+        if (!pointee)
+            return;
+        if (!pointee->isShareable())
+            pointee = new T(*pointee);
+        pointee->addReference();
+    }
+};
+
+// RCBigInt类
+class RCBigInt
+{
+    friend RCBigInt operator+(const RCBigInt &, const RCBigInt &);
+
+public:
+    RCBigInt(const char *p) : value(new BigInt(p)) {}
+    RCBigInt(unsigned u = 0) : value(new BigInt(u)) {}
+    RCBigInt(const BigInt &bi) : value(new BigInt(bi)) {}
+
+    void print() const
+    {
+        value->print();
+    }
+
+private:
+    RCPtr<BigInt> value;
+};
+
+inline RCBigInt operator+(const RCBigInt &left, const RCBigInt &right)
+{
+    return RCBigInt(*(left.value) + *(right.value));
+}
+
+void performanceComparison()
+{
+    const int iterations = 10000000; // 设置测试次数
+    BigInt a("123456789012345678901234567890");
+    BigInt b("987654321098765432109876543210");
+    a.print();
+    // --------------------
+    // 加法性能比较
+    // --------------------
+    clock_t start = clock();
+    for (int i = 0; i < iterations; ++i)
+    {
+        BigInt c = a + b;
+    }
+    clock_t end = clock();
+    double bigIntAddTime = double(end - start) / CLOCKS_PER_SEC;
+
+    RCBigInt ra("123456789012345678901234567890");
+    RCBigInt rb("987654321098765432109876543210");
+
+    start = clock();
+    for (int i = 0; i < iterations; ++i)
+    {
+        RCBigInt rc = ra + rb;
+    }
+    end = clock();
+    double rcBigIntAddTime = double(end - start) / CLOCKS_PER_SEC;
+
+    std::cout << "BigInt addition time: " << bigIntAddTime << " seconds\n";
+    std::cout << "RCBigInt addition time: " << rcBigIntAddTime << " seconds\n";
+
+    // --------------------
+    // 赋值性能比较
+    // --------------------
+    clock_t startAssign = clock();
+    for (int i = 0; i < iterations; ++i)
+    {
+        BigInt c = a;
+    }
+    clock_t endAssign = clock();
+    double bigIntAssignTime = double(endAssign - startAssign) / CLOCKS_PER_SEC;
+
+    clock_t startRCAssign = clock();
+    for (int i = 0; i < iterations; ++i)
+    {
+        RCBigInt rc = ra;
+    }
+    clock_t endRCAssign = clock();
+    double rcBigIntAssignTime = double(endRCAssign - startRCAssign) / CLOCKS_PER_SEC;
+
+    std::cout << "BigInt assignment time: " << bigIntAssignTime << " seconds\n";
+    std::cout << "RCBigInt assignment time: " << rcBigIntAssignTime << " seconds\n";
+
+    // --------------------
+    // 拷贝构造性能比较
+    // --------------------
+    clock_t startCopy = clock();
+    for (int i = 0; i < iterations; ++i)
+    {
+        BigInt c(a); // 拷贝构造
+    }
+    clock_t endCopy = clock();
+    double bigIntCopyTime = double(endCopy - startCopy) / CLOCKS_PER_SEC;
+
+    clock_t startRCCopy = clock();
+    for (int i = 0; i < iterations; ++i)
+    {
+        RCBigInt rc(ra); // 拷贝构造
+    }
+    clock_t endRCCopy = clock();
+    double rcBigIntCopyTime = double(endRCCopy - startRCCopy) / CLOCKS_PER_SEC;
+
+    std::cout << "BigInt copy construction time: " << bigIntCopyTime << " seconds\n";
+    std::cout << "RCBigInt copy construction time: " << rcBigIntCopyTime << " seconds\n";
+}
+
+int main()
+{
+    performanceComparison();
+    return 0;
+}
+
+/*
+    要点:
+        下面任意一种情况都可以使引用计数变得更为有效:
+            1. 目标对象是很大的资源消费者
+            2. 资源分配和释放的代价很高
+            3. 高度共享: 由于使用赋值操作符和拷贝构造函数, 引用计数的性能可能会很高
+            4. 创建和销毁引用的代价低廉
+*/
