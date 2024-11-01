@@ -357,8 +357,87 @@ using namespace std;
 //     }
 // };
 
-int main()
-{
+// day-2024-11-1
+// 剑指 Offer II 087. 复原 IP
+// class Solution
+// {
+// public:
+//     vector<string> restoreIpAddresses(string s)
+//     {
+//         vector<string> ans;
+//         dfs(s, "", 0, 0, ans);
+//         return ans;
+//     }
+//     void dfs(string &s, string path, int idx, int segments, vector<string> &ans)
+//     {
+//         if (segments == 4)
+//         {
+//             if (idx == s.size())
+//             {
+//                 ans.push_back(path.substr(0, path.size() - 1));
+//                 return;
+//             }
+//         }
 
-    return 0;
-}
+//         for (int len = 1; len <= 3 && idx + len <= s.size(); ++len)
+//         {
+//             string segment = s.substr(idx, len);
+//             if (IsValid(segment))
+//                 dfs(s, path + segment + '.', idx + len, segments + 1, ans);
+//         }
+//     }
+
+//     bool IsValid(string &s)
+//     {
+//         if (s.size() > 1 && s[0] == '0')
+//             return false;
+//         int n = stoi(s);
+//         if (n >= 0 && n <= 255)
+//             return true;
+//         return false;
+//     }
+// };
+
+// 剑指 Offer II 088. 爬楼梯的最少成本
+// class Solution
+// {
+// public:
+//     int minCostClimbingStairs(vector<int> &cost)
+//     {
+//         int n = cost.size();
+//         vector<int> dp(n + 1, 0);
+//         dp[0] = 0;
+//         dp[1] = 0;
+//         for (int i = 2; i <= n; ++i)
+//         {
+//             dp[i] = min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2]);
+//             cout << dp[i - 1] + cost[i - 1] << " " << dp[i - 2] + cost[i - 2] << endl;
+//         }
+//         return dp[n];
+//     }
+//     // dp[2] = min(10, 15) = 10
+//     // dp[3] = min(10 + 20, 0 + 15) = 15
+// };
+
+// 剑指 Offer II 089. 房屋偷盗
+// class Solution
+// {
+// public:
+//     int rob(vector<int> &nums)
+//     {
+//         int n = nums.size();
+//         vector<int> dp(n, 0);
+//         if (n == 1)
+//             return nums[0];
+//         if (n == 2)
+//             return max(nums[0], nums[1]);
+
+//         dp[0] = nums[0];
+//         dp[1] = max(nums[1], nums[0]);
+//         for (int i = 2; i < n; ++i)
+//         {
+//             dp[i] = max(dp[i - 1], dp[i - 2] + nums[i]);
+//         }
+//         return dp[n - 1];
+//     }
+// };
