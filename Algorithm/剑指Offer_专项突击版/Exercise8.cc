@@ -400,6 +400,114 @@ using namespace std;
 //     }
 // };
 
+// 剑指 Offer II 102. 加减的目标值
+// 回溯法
+// class Solution
+// {
+// public:
+//     int ans = 0;
+//     int findTargetSumWays(vector<int> &nums, int target)
+//     {
+//         backtrack(nums, target, 0, 0);
+//         return ans;
+//     }
+//     void backtrack(vector<int> &nums, int target, int idx, int sum)
+//     {
+//         if (idx == nums.size())
+//         {
+//             if (sum == target)
+//                 ans++;
+//         }
+//         else
+//         {
+//             backtrack(nums, target, idx + 1, sum + nums[idx]);
+//             backtrack(nums, target, idx + 1, sum - nums[idx]);
+//         }
+//     }
+// };
+
+// class Solution {
+// public:
+//     int findTargetSumWays(vector<int>& nums, int target) {
+//         int sum = accumulate(nums.begin(), nums.end(), 0);
+//         if(abs(target) > sum) return 0;
+//         if((sum - target) % 2 == 1) return 0;
+//         int n = nums.size(),neg = (sum - target) / 2;
+//         vector<vector<int>> dp(n + 1, vector<int>(neg + 1));
+//         dp[0][0] = 1;
+//         for(int i = 1; i <= n; ++i)
+//         {
+//             for(int j = 0; j <= neg; ++j)
+//             {
+//                dp[i][j] = dp[i - 1][j];
+//                 if(j >= nums[i - 1])
+//                     dp[i][j] += dp[i - 1][j - nums[i - 1]];
+//             }
+//         }
+//         return dp[n][neg];
+//     }
+// };
+
+// class Solution
+// {
+// public:
+//     int findTargetSumWays(vector<int> &nums, int target)
+//     {
+//         int sum = accumulate(nums.begin(), nums.end(), 0);
+//         if (abs(target) > sum)
+//             return 0;
+//         if ((sum - target) % 2 == 1)
+//             return 0;
+//         int neg = (sum - target) / 2;
+
+//         vector<int> dp(neg + 1);
+//         dp[0] = 1;
+//         for (int i = 0; i < nums.size(); ++i)
+//             for (int j = neg; j >= nums[i]; j--)
+//                 dp[j] += dp[j - nums[i]];
+//         return dp[neg];
+//     }
+// };
+
+// 剑指 Offer II 103. 最少的硬币数目
+// class Solution {
+// public:
+//     int coinChange(vector<int>& coins, int amount) {
+//         vector<int> dp(amount + 1, amount + 1);
+//         dp[0] = 0;
+//         for(int i = 0; i < coins.size(); ++i)
+//         {
+//             for(int j = coins[i]; j <= amount; ++j)
+//             {
+//                 dp[j] = min(dp[j], dp[j - coins[i]] + 1);
+//             }
+//         }
+//         return dp[amount] > amount ? -1 : dp[amount];
+//     }
+// };
+
+// 剑指 Offer II 104. 排列的数目
+// class Solution
+// {
+// public:
+//     int combinationSum4(vector<int> &nums, int target)
+//     {
+//         int n = nums.size();
+//         vector<unsigned> dp(target + 1);
+//         dp[0] = 1;
+//         for (int i = 1; i <= target; ++i)
+//         {
+//             for (auto num : nums)
+//             {
+//                 if (i >= num)
+//                 {
+//                     dp[i] += dp[i - num];
+//                 }
+//             }
+//         }
+//         return dp[target];
+//     }
+// };
 int main()
 {
 
