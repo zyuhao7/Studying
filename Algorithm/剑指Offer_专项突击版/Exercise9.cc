@@ -335,6 +335,254 @@ using namespace std;
 //     }
 // };
 
+// day-2024-11-11
+// 剑指 Offer II 110. 所有路径
+// class Solution
+// {
+// public:
+//     vector<vector<int>> graph;
+//     vector<vector<int>> ans;
+
+//     vector<vector<int>> allPathsSourceTarget(vector<vector<int>> &graph)
+//     {
+//         this->graph = graph;
+//         vector<int> path;
+//         path.push_back(0);
+//         dfs(0, path);
+//         return ans;
+//     }
+//     void dfs(int i, vector<int> &path)
+//     {
+//         if (i == graph.size() - 1)
+//         {
+//             ans.push_back(path);
+//             return;
+//         }
+//         for (int g : graph[i])
+//         {
+//             path.push_back(g);
+//             dfs(g, path);
+//             path.pop_back();
+//         }
+//     }
+// };
+
+// 剑指 Offer II 116. 朋友圈
+// class ufs
+// {
+// public:
+//     vector<int> pa, size;
+//     ufs(int n)
+//         : pa(n),
+//           size(n, 1)
+//     {
+//         iota(pa.begin(), pa.end(), 0);
+//     }
+
+//     int find(int x)
+//     {
+//         if (pa[x] == x)
+//             return x;
+//         return pa[x] = find(pa[x]);
+//     }
+
+//     void Union(int x, int y)
+//     {
+//         int rootx = find(x);
+//         int rooty = find(y);
+//         if (rootx != rooty)
+//         {
+//             if (size[rootx] > size[rooty])
+//                 swap(rootx, rooty);
+//             pa[rootx] = rooty;
+//             size[rooty] += size[rootx];
+//         }
+//     }
+
+//     int count()
+//     {
+//         int cnt = 0;
+//         for (int i = 0; i < pa.size(); ++i)
+//             if (pa[i] == i)
+//                 cnt++;
+//         return cnt;
+//     }
+// };
+
+// class Solution
+// {
+// public:
+//     int findCircleNum(vector<vector<int>> &isConnected)
+//     {
+//         int m = isConnected.size(), n = isConnected[0].size();
+//         ufs uf(m);
+//         for (int i = 0; i < m; ++i)
+//         {
+//             for (int j = 0; j < n; ++j)
+//             {
+//                 if (isConnected[i][j] == 1)
+//                     uf.Union(i, j);
+//             }
+//         }
+//         return uf.count();
+//     }
+// };
+
+// 剑指 Offer II 117. 相似的字符串
+// class UFS
+// {
+// private:
+//     vector<int> pa, siz;
+
+// public:
+//     UFS(int n)
+//         : pa(n),
+//           siz(n, 1)
+//     {
+//         iota(pa.begin(), pa.end(), 0);
+//     }
+//     void Union(int x, int y)
+//     {
+//         int root1 = find(x);
+//         int root2 = find(y);
+//         if (root1 == root2)
+//             return;
+//         if (siz[root1] < siz[root2])
+//             swap(root1, root2);
+
+//         pa[root2] = root1;
+//         siz[root1] += siz[root2];
+//     }
+
+//     int find(int x)
+//     {
+//         if (x == pa[x])
+//             return x;
+//         return pa[x] = find(pa[x]);
+//     }
+
+//     int Size()
+//     {
+//         int cnt = 0;
+//         for (int i = 0; i < pa.size(); ++i)
+//             if (pa[i] == i)
+//                 cnt++;
+//         return cnt;
+//     }
+// };
+
+// class Solution
+// {
+// public:
+//     int numSimilarGroups(vector<string> &strs)
+//     {
+//         int n = strs.size();
+//         UFS ufs(n);
+//         for (int i = 0; i < n; ++i)
+//         {
+//             for (int j = i + 1; j < n; ++j)
+//             {
+//                 if (isSimilar(strs[i], strs[j]))
+//                     ufs.Union(i, j);
+//             }
+//         }
+//         return ufs.Size();
+//     }
+
+//     bool isSimilar(string &s1, string &s2)
+//     {
+//         int cnt = 0;
+//         for (int i = 0; i < s1.size(); ++i)
+//         {
+//             if (s1[i] != s2[i])
+//                 cnt++;
+//             if (cnt > 2)
+//                 return false;
+//         }
+//         return cnt == 0 || cnt == 2;
+//     }
+// };
+
+// 剑指 Offer II 118. 多余的边
+// class Solution
+// {
+// private:
+//     vector<int> pa;
+//     vector<int> size;
+
+//     int find(int x)
+//     {
+//         if (pa[x] == x)
+//             return x;
+//         return pa[x] = find(pa[x]);
+//     }
+//     void Union(int x, int y)
+//     {
+//         int rootx = find(x);
+//         int rooty = find(y);
+//         if (rootx != rooty)
+//         {
+
+//             if (size[rootx] < size[rooty])
+//             {
+//                 swap(rootx, rooty);
+//             }
+//             pa[rooty] = rootx;
+//             size[rootx] += size[rooty];
+//         }
+//     }
+//     bool isConnect(int x, int y)
+//     {
+//         return find(x) == find(y);
+//     }
+
+// public:
+//     vector<int> findRedundantConnection(vector<vector<int>> &edges)
+//     {
+//         int n = edges.size();
+//         pa.resize(n + 1);
+//         size.resize(n + 1, 1);
+//         for (int i = 1; i <= n; ++i)
+//         {
+//             pa[i] = i;
+//         }
+//         for (int i = 0; i < n; ++i)
+//         {
+//             int e1 = edges[i][0], e2 = edges[i][1];
+//             if (isConnect(e1, e2))
+//                 return {e1, e2};
+//             Union(e1, e2);
+//         }
+//         return {-1, -1};
+//     }
+// };
+
+// 剑指 Offer II 119. 最长连续序列
+// class Solution {
+// public:
+//     int longestConsecutive(vector<int>& nums) {
+//         unordered_set<int> set;
+//         for(auto& n : nums)
+//             set.insert(n);
+//         int ans = 0;
+//         for(int i = 0; i < nums.size(); ++i)
+//         {
+//             int curNum = nums[i];
+//             int curLen = 1;
+//             if(!set.count(curNum - 1))
+//             {
+//                 while(set.count(curNum + 1))
+//                 {
+//                     curLen ++;
+//                     curNum ++;
+//                 }
+//             }
+//             ans = max(ans, curLen);
+//         }
+//         return ans;
+//     }
+// };
+
 int main()
 {
 
