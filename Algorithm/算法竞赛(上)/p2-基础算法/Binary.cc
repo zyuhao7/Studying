@@ -1,5 +1,52 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
+using namespace std;
+// day-2024-11-25
+// P1824 进击的奶牛
+
+// int main()
+// {
+//     int n, C;
+//     cin >> n >> C;
+//     vector<int> stalls(n);
+//     for (int i = 0; i < n; ++i)
+//         cin >> stalls[i];
+
+//     sort(stalls.begin(), stalls.end());
+//     auto check = [&](int dis)
+//     {
+//         int cnt = 1, place = 0;
+//         for (int i = 1; i < n; ++i)
+//         {
+//             if (stalls[i] - stalls[place] >= dis)
+//             {
+//                 cnt++;
+//                 place = i;
+//             }
+//         }
+//         if (cnt >= C)
+//             return true;
+//         return false;
+//     };
+
+//     int l = stalls[0], r = stalls[n - 1] - stalls[0], result = 0;
+//     while (l < r)
+//     {
+//         int m = l + (r - l) / 2;
+//         if (check(m))
+//         {
+//             result = m;
+//             l = m + 1;
+//         }
+//         else
+//         {
+//             r = m;
+//         }
+//     }
+//     cout << result;
+//     return 0;
+// }
 
 // day-2024-11-19
 // 二分. 整数二分 实数二分
@@ -32,33 +79,93 @@
 //             right = mid - 1;
 //     }
 // }
-#include <algorithm>
-#include <cmath>
-#include <numeric>
+// #include <iostream>
+// #include <vector>
+// #include <algorithm>
+// #include <queue>
+// #include <numeric>
+// #include <climits>
+// using namespace std;
 
-using namespace std;
-const int N = 1e5 + 10;
-int a[N], b[N], c[N], f[N];
-int n, m, blood;
+// struct Edge
+// {
+//     int to, cost;
+// };
 
-// P1462 通往奥格瑞玛的道路
+// const int inf = INT_MAX;
 
-int main()
-{
-    cin >> n >> m >> blood;
+// bool CanReach(int maxFee, int n, int b, vector<int> &f, vector<vector<Edge>> &g)
+// {
+//     vector<int> Health(n + 1, -1);
 
-    for (int i = 0; i < n; ++i)
-    {
-        scanf("%d", &f[i]);
-    }
-    // 公路信息.
-    for (int j = 0; j < m; ++j)
-    {
-        scanf("%d %d %d", &a[j], &b[j], &c[j]);
-    }
-    
-    return 0;
-}
+//     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
+//     pq.push({b, 1});
+//     Health[1] = b;
+
+//     while (!pq.empty())
+//     {
+//         auto [curHealth, node] = pq.top();
+//         pq.pop();
+//         if (curHealth < Health[node])
+//             continue;
+//         for (auto &edge : g[node])
+//         {
+//             int next = edge.to;
+//             int cost = edge.cost;
+//             if (f[next] > maxFee)
+//                 continue;
+
+//             int NewHealth = curHealth - cost;
+
+//             if (NewHealth < 0)
+//                 continue;
+
+//             if (NewHealth > Health[next])
+//             {
+//                 Health[next] = NewHealth;
+//                 pq.emplace(NewHealth, next);
+//             }
+//         }
+//     }
+//     return Health[n] >= 0;
+// }
+
+// int main()
+// {
+//     int n, m, b;
+//     cin >> n >> m >> b;
+//     vector<int> f(n + 1);
+//     for (int i = 1; i <= n; ++i)
+//         scanf("%d", &f[i]);
+
+//     vector<vector<Edge>> g(n + 1);
+//     for (int j = 0; j < m; ++j)
+//     {
+//         int a, b, c;
+//         scanf("%d%d%d", &a, &b, &c);
+//         g[a].push_back({b, c});
+//         g[b].push_back({a, c});
+//     }
+//     long long l = f[1], r = *max_element(f.begin() + 1, f.end()), ans = -1;
+//     while (l <= r)
+//     {
+//         int m = l + (r - l) / 2;
+//         if (CanReach(m, n, b, f, g))
+//         {
+//             ans = m;
+//             r = m - 1;
+//         }
+//         else
+//             l = m + 1;
+//     }
+//     if (ans == -1)
+//     {
+//         cout << "AFK";
+//     }
+//     else
+//         cout << ans << endl;
+//     return 0;
+// }
 
 // int main()
 // {
