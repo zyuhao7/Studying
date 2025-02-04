@@ -97,22 +97,160 @@ using namespace std;
 // };
 
 // 206. 反转链表
-class Solution
-{
-public:
-    ListNode *reverseList(ListNode *head)
-    {
-        if (!head)
-            return nullptr;
-        ListNode *prev = nullptr, *cur = head, *next = head->next;
-        while (cur)
-        {
-            cur->next = prev;
-            prev = cur;
-            cur = next;
-            if (next)
-                next = next->next;
-        }
-        return prev;
-    }
-};
+// class Solution
+// {
+// public:
+//     ListNode *reverseList(ListNode *head)
+//     {
+//         if (!head)
+//             return nullptr;
+//         ListNode *prev = nullptr, *cur = head, *next = head->next;
+//         while (cur)
+//         {
+//             cur->next = prev;
+//             prev = cur;
+//             cur = next;
+//             if (next)
+//                 next = next->next;
+//         }
+//         return prev;
+//     }
+// };
+
+// day-2025-2-4
+//  21. 合并两个有序链表
+// 递归法
+// class Solution
+// {
+// public:
+//     ListNode *mergeTwoLists(ListNode *l1, ListNode *l2)
+//     {
+//         if (!l1)
+//             return l2;
+//         if (!l2)
+//             return l1;
+//         ListNode *dummy = new ListNode(-1);
+//         ListNode *cur = dummy;
+//         while (l1 && l2)
+//         {
+//             if (l1->val < l2->val)
+//             {
+//                 cur->next = l1;
+//                 l1 = l1->next;
+//             }
+//             else
+//             {
+//                 cur->next = l2;
+//                 l2 = l2->next;
+//             }
+//             cur = cur->next;
+//         }
+//         cur->next = l1 ? l1 : l2;
+//         return dummy->next;
+//     }
+
+// 递归法
+//     ListNode *mergeTwoLists(ListNode *l1, ListNode *l2)
+//     {
+//         if (!l1)
+//             return l2;
+//         if (!l2)
+//             return l1;
+//         if (l1->val < l2->val)
+//         {
+//             l1->next = mergeTwoLists(l1->next, l2);
+//             return l1;
+//         }
+//         else
+//         {
+//             l2->next = mergeTwoLists(l1, l2->next);
+//             return l2;
+//         }
+//     }
+// };
+
+// 141. 环形链表
+// class Solution
+// {
+// public:
+//     bool hasCycle(ListNode *head)
+//     {
+//         if (!head || head->next == nullptr)
+//             return false;
+//         ListNode *fast = head, *slow = head;
+//         while (fast && fast->next)
+//         {
+//             fast = fast->next->next;
+//             slow = slow->next;
+//             if (fast == slow)
+//                 return true;
+//         }
+//         return false;
+//     }
+// };
+// 142. 环形链表 II
+// class Solution
+// {
+// public:
+//     ListNode *detectCycle(ListNode *head)
+//     {
+//         if (!head || !head->next)
+//             return nullptr;
+//         ListNode *slow = head;
+//         ListNode *fast = head;
+
+//         while (fast && fast->next)
+//         {
+//             slow = slow->next;
+//             fast = fast->next->next;
+//             if (slow == fast)
+//                 break;
+//         }
+//         if (slow != fast)
+//             return nullptr;
+
+//         ListNode *p = head, *q = fast;
+//         while (p != q)
+//         {
+//             p = p->next;
+//             q = q->next;
+//         }
+//         return p;
+//     }
+// };
+
+// 19. 删除链表的倒数第 N 个结点
+// class Solution
+// {
+// public:
+//     ListNode *removeNthFromEnd(ListNode *head, int n)
+//     {
+//         if (!head)
+//             return nullptr;
+//         ListNode *fast = head, *slow = head;
+//         while (n--)
+//             fast = fast->next;
+//         if(!fast) return head->next;
+//         while (fast->next)
+//         {
+//             fast = fast->next;
+//             slow = slow->next;
+//         }
+//         ListNode *tmp = slow->next;
+//         slow->next = slow->next->next;
+//         delete tmp;
+//         return head;
+//     }
+// };
+
+// class Solution {
+// public:
+//     ListNode* removeNthFromEnd(ListNode* head, int n) {
+//         if(head == nullptr)
+//             return head;
+//         head->next = removeNthFromEnd(head->next, n);
+//         cnt++;
+//         return cnt == n ? head->next : head;
+//     }
+//     int cnt = 0;
+// };
