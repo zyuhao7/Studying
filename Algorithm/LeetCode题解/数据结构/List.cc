@@ -254,3 +254,100 @@ using namespace std;
 //     }
 //     int cnt = 0;
 // };
+
+// 2025-2-5
+//  24. 两两交换链表中的节点
+// class Solution
+// {
+// public:
+//     ListNode *swapPairs(ListNode *head)
+//     {
+//         if (!head || !head->next)
+//             return head;
+//         ListNode *cur = head->next;
+//         ListNode *tmp = cur->next;
+//         cur->next = head;
+//         head->next = swapPairs(tmp);
+//         return cur;
+//     }
+// };
+
+// 2. 两数相加
+// class Solution
+// {
+// public:
+//     ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
+//     {
+//         ListNode *dummy = new ListNode(-1);
+//         ListNode *cur = dummy;
+//         int carry = 0;
+//         while (l1 || l2)
+//         {
+//             int t = carry;
+//             if (l1)
+//             {
+//                 t += l1->val;
+//                 l1 = l1->next;
+//             }
+//             if (l2)
+//             {
+//                 t += l2->val;
+//                 l2 = l2->next;
+//             }
+//             carry = t / 10;
+//             t %= 10;
+//             ListNode *node = new ListNode(t);
+//             cur->next = node;
+//             cur = cur->next;
+//         }
+//         if (carry)
+//         {
+//             ListNode *node = new ListNode(carry);
+//             cur->next = node;
+//         }
+//         return dummy->next;
+//     }
+// };
+
+// 445. 两数相加 II
+// class Solution
+// {
+// public:
+//     ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
+//     {
+//         ListNode *dummy = new ListNode(-1);
+//         ListNode *cur = dummy;
+//         int carry = 0;
+//         l1 = reverse(l1);
+//         l2 = reverse(l2);
+//         while (l1 || l2 || carry)
+//         {
+//             int t = carry;
+//             if (l1)
+//             {
+//                 t += l1->val;
+//                 l1 = l1->next;
+//             }
+//             if (l2)
+//             {
+//                 t += l2->val;
+//                 l2 = l2->next;
+//             }
+//             ListNode *node = new ListNode(t % 10);
+//             carry = t / 10;
+//             cur->next = node;
+//             cur = cur->next;
+//         }
+//         return reverse(dummy->next);
+//     }
+
+//     ListNode *reverse(ListNode *head)
+//     {
+//         if (!head || !head->next)
+//             return head;
+//         ListNode *tmp = reverse(head->next);
+//         head->next->next = head;
+//         head->next = nullptr;
+//         return tmp;
+//     }
+// };
