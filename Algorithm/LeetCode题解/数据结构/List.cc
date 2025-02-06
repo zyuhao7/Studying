@@ -351,3 +351,117 @@ using namespace std;
 //         return tmp;
 //     }
 // };
+
+// day-2025-2-6
+// 725. 分隔链表
+// class Solution
+// {
+// public:
+//     vector<ListNode *> splitListToParts(ListNode *head, int k)
+//     {
+//         vector<ListNode *> res(k, nullptr);
+//         int len = 0;
+//         ListNode *cur = head;
+//         while (cur)
+//         {
+//             len++;
+//             cur = cur->next;
+//         }
+//         int t = len / k;
+//         int m = len % k;
+//         cur = head;
+//         for (int i = 0; i < k && cur; ++i)
+//         {
+//             res[i] = cur;
+//             int n = t + (i < m ? 1 : 0);
+//             for (int j = 1; j < n; ++j)
+//             {
+//                 cur = cur->next;
+//             }
+//             ListNode *next = cur->next;
+//             cur->next = nullptr;
+//             cur = next;
+//         }
+//         return res;
+
+//         return res;
+//     }
+// };
+
+// 328. 奇偶链表
+// class Solution
+// {
+// public:
+//     ListNode *oddEvenList(ListNode *head)
+//     {
+//         if (!head || !head->next)
+//             return head;
+//         ListNode *odd = head;
+//         ListNode *even = head->next;
+//         ListNode *evenHead = even;
+//         while (even && even->next)
+//         {
+//             odd->next = even->next;
+//             odd = odd->next;
+//             even->next = odd->next;
+//             even = even->next;
+//         }
+//         odd->next = evenHead;
+//         return head;
+//     }
+// };
+
+//  92. 反转链表 II
+//  递归法
+// class Solution
+// {
+// public:
+//     ListNode *reverseBetween(ListNode *head, int left, int right)
+//     {
+//         ListNode *dummy = new ListNode(-1);
+//         dummy->next = head;
+//         ListNode *pre = dummy;
+//         for (int i = 0; i < left - 1; ++i)
+//         {
+//             pre = pre->next;
+//         }
+//         ListNode *cur = pre->next;
+//         for (int i = 0; i < right - left; ++i)
+//         {
+//             ListNode *tmp = cur->next;
+//             cur->next = tmp->next;
+//             tmp->next = pre->next;
+//             pre->next = tmp;
+//         }
+//         return dummy->next;
+//     }
+// };
+
+//  86. 分隔链表
+//
+
+//  61. 旋转链表
+
+//  143. 重排链表
+
+//  138. 复制带随机指针的链表
+
+//  25. K 个一组翻转链表
+
+//  147. 对链表进行插入排序
+
+//  148. 排序链表
+
+//  234. 回文链表
+
+//  237. 删除链表中的节点
+
+//  203. 移除链表元素
+
+//  82. 删除排序链表中的重复元素 II
+
+//  83. 删除排序链表中的重复元素
+
+//  328. 奇偶链表
+
+//  143. 重排链表
