@@ -437,16 +437,83 @@ using namespace std;
 //     }
 // };
 
+// day-2025-2-7
+//  83. 删除排序链表中的重复元素
+// class Solution {
+// public:
+//     ListNode* deleteDuplicates(ListNode* head) {
+//         if(!head || !head->next) return head;
+//         ListNode* prev = nullptr;
+//         ListNode* cur = head;
+//         ListNode* next = cur->next;
+//         while(cur)
+//         {
+//             if(prev == nullptr)
+//             {
+//                 prev = cur;
+//             }
+//             while(cur && cur->val == prev->val)
+//             {
+//                 prev->next = next;
+//                 cur = next;
+//                 if(next)
+//                 next = next->next;
+//             }
+//             prev = cur;
+//             cur = next;
+//             if(next)
+//                 next = next->next;
+//         }
+//         return head;
+//     }
+// };
+
+//  25. K 个一组翻转链表
+// class Solution
+// {
+// public:
+//     ListNode *reverseKGroup(ListNode *head, int k)
+//     {
+//         ListNode *dummy = new ListNode(-1);
+//         dummy->next = head;
+//         ListNode *pre = dummy;
+//         ListNode *end = dummy;
+//         while (end->next)
+//         {
+//             for (int i = 0; i < k && end; ++i)
+//             {
+//                 end = end->next;
+//             }
+//             if (!end)
+//                 break;
+//             ListNode *start = pre->next;
+//             ListNode *next = end->next;
+//             end->next = nullptr;
+//             pre->next = reverse(start);
+//             start->next = next;
+//             pre = start;
+//             end = pre;
+//         }
+//         return dummy->next;
+//     }
+//     ListNode *reverse(ListNode *head)
+//     {
+//         if (!head || !head->next)
+//             return head;
+//         ListNode *tmp = reverse(head->next);
+//         head->next->next = head;
+//         head->next = nullptr;
+//         return tmp;
+//     }
+// };
+
 //  86. 分隔链表
-//
 
 //  61. 旋转链表
 
 //  143. 重排链表
 
 //  138. 复制带随机指针的链表
-
-//  25. K 个一组翻转链表
 
 //  147. 对链表进行插入排序
 
@@ -459,8 +526,6 @@ using namespace std;
 //  203. 移除链表元素
 
 //  82. 删除排序链表中的重复元素 II
-
-//  83. 删除排序链表中的重复元素
 
 //  328. 奇偶链表
 
