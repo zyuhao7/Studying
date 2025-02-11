@@ -192,6 +192,90 @@ using namespace std;
 //     }
 // };
 
+// day-2025-2-11
+// 654 最大二叉树
+// class Solution
+// {
+// public:
+//     TreeNode *constructMaximumBinaryTree(vector<int> &nums)
+//     {
+//         return builder(nums, 0, nums.size() - 1);
+//     }
+
+//     TreeNode *builder(vector<int> &nums, int l, int r)
+//     {
+//         if (l > r)
+//             return nullptr;
+//         int idx = 0, maxn = -1;
+//         for (int i = l; i <= r; ++i)
+//         {
+//             if (nums[i] > maxn)
+//             {
+//                 maxn = nums[i];
+//                 idx = i;
+//             }
+//         }
+//         TreeNode *node = new TreeNode(maxn);
+//         node->left = builder(nums, l, idx - 1);
+//         node->right = builder(nums, idx + 1, r);
+//         return node;
+//     }
+// };
+
+// 105 从前序与中序遍历序列构造二叉树
+// class Solution {
+//     public:
+//         TreeNode* buildTree(vector<int>& pre, vector<int>& in) {
+//             return build(pre, 0, pre.size() - 1, in, 0, in.size() -1);
+//         }
+//         TreeNode* build(vector<int>& pre, int pl, int pr, vector<int>& in, int il, int ir)
+//         {
+//             if(pl > pr) return nullptr;
+//             int rootVal = pre[pl];
+//             int idx = 0;
+//             for(int i = il; i <= ir; ++i)
+//             {
+//                 if(rootVal == in[i])
+//                 {
+//                     idx = i;
+//                     break;
+//                 }
+//             }
+//             TreeNode *root = new TreeNode(rootVal);
+//             int leftSize = idx - il;
+//             root->left = build(pre, pl + 1, pl + leftSize, in, il, idx - 1);
+//             root->right = build(pre, pl + leftSize + 1, pr, in, idx + 1, ir);
+//             return root;
+//         }
+//     };
+
+// 106 从中序与后序遍历序列构造二叉树
+// class Solution {
+//     public:
+//         TreeNode* buildTree(vector<int>& in, vector<int>& post) {
+//             return build(in, 0, in.size() - 1, post, 0, post.size() - 1);
+//         }
+//         TreeNode* build(vector<int>& in, int il, int ir, vector<int>& post, int pl, int pr)
+//         {
+//             if(il > ir) return nullptr;
+//             int rootVal = post[pr];
+//             int index = 0;
+//             for(int i = il; i <= ir; ++i)
+//             {
+//                 if(in[i] == rootVal)
+//                 {
+//                     index = i;
+//                     break;
+//                 }
+//             }
+//             int leftSize = index - il;
+//             TreeNode* root = new TreeNode(rootVal);
+//             root->left = build(in, il, index - 1, post, pl, pl + leftSize - 1);
+//             root->right = build(in, index + 1, ir, post, pl + leftSize, pr - 1);
+//             return root;
+//         }
+//     };
+
 int main()
 {
     return 0;
