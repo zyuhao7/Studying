@@ -276,6 +276,119 @@ using namespace std;
 //         }
 //     };
 
+// day-2025-2-12
+
+// 652 寻找重复的子树
+// class Solution {
+//     public:
+//         vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {
+//             dfs(root);
+//             return res;
+//         }
+//         vector<TreeNode*> res;
+//         unordered_map<string, int> map;
+//         string dfs(TreeNode* root)
+//         {
+//             if(root == nullptr) return "#";
+//             string s = to_string(root->val) + "," + dfs(root->left) + "," + dfs(root->right);
+//             if(map[s] == 1)
+//                 res.push_back(root);
+//             ++map[s];
+//             return s;
+//         }
+//     };
+
+// 102 二叉树的层序遍历
+// class Solution
+// {
+// public:
+//     vector<vector<int>> levelOrder(TreeNode *root)
+//     {
+//         vector<vector<int>> res;
+//         queue<TreeNode *> q;
+//         if (!root)
+//             return res;
+//         q.push(root);
+//         while (!q.empty())
+//         {
+//             int sz = q.size();
+//             vector<int> tmp;
+//             for (int i = 0; i < sz; ++i)
+//             {
+//                 auto t = q.front();
+//                 q.pop();
+//                 tmp.push_back(t->val);
+//                 if (t->left != nullptr)
+//                     q.push(t->left);
+//                 if (t->right != nullptr)
+//                     q.push(t->right);
+//             }
+//             res.push_back(tmp);
+//         }
+//         return res;
+//     }
+// };
+
+// 124 二叉树中的最大路径和
+// class Solution
+// {
+// public:
+//     int ans = INT_MIN;
+//     int maxPathSum(TreeNode *root)
+//     {
+//         dfs(root);
+//         return ans;
+//     }
+
+//     int dfs(TreeNode *root)
+//     {
+//         if (root == nullptr)
+//             return 0;
+//         int left = max(0, dfs(root->left));
+//         int right = max(0, dfs(root->right));
+
+//         ans = max(ans, left + right + root->val);
+//         return root->val + max(left, right);
+//     }
+// };
+
+// 968 监控二叉树
+// class Solution
+// {
+// public:
+//     int res = 0;
+//     int minCameraCover(TreeNode *root)
+//     {
+//         // 0 表示没有被监视
+//         // 1 表示 有摄像头
+//         // 2 表示被监控到了
+//         if (dfs(root) == 0)
+//             res++;
+//         return res;
+//     }
+//     int dfs(TreeNode *root)
+//     {
+//         if (root == nullptr)
+//             return 2;
+//         // 后序遍历, 先解决子树, 在解决根
+//         int left = dfs(root->left);
+//         int right = dfs(root->right);
+
+//         // 左右节点有一个没被监视到, 需要在父节点安装摄像头.
+//         if (left == 0 || right == 0)
+//         {
+//             res++;
+//             return 1;
+//         }
+//         // 左右子节点有一个摄像头, 父节点已经被监视到了
+//         if (left == 1 || right == 1)
+//         {
+//             return 2;
+//         }
+//         // 当前节点没被监视到
+//         return 0;
+//     }
+// };
 int main()
 {
     return 0;
