@@ -389,6 +389,76 @@ using namespace std;
 //         return 0;
 //     }
 // };
+
+// day-2025-2-13
+// 236 二叉树的最近公共祖先
+//  class Solution {
+//  public:
+//      TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+//          if(root == nullptr || root == p || root == q) return root;
+//          TreeNode* left = lowestCommonAncestor(root->left, p, q);
+//          TreeNode* right = lowestCommonAncestor(root->right, p, q);
+//          if(left == nullptr) return right;
+//          if(right == nullptr) return left;
+//          return root;
+//      }
+//  };
+
+// 222 完全二叉树的节点个数
+// class Solution {
+//     public:
+//         int countNodes(TreeNode* root) {
+//             return dfs(root);
+//         }
+//         int dfs(TreeNode* root)
+//         {
+//             if(root == nullptr) return 0;
+//             int leftSum = dfs(root->left);
+//             int rightSum = dfs(root->right);
+//             return leftSum + rightSum + 1;
+//         }
+//     };
+
+// 700 二叉搜索树中的搜索
+// class Solution
+// {
+// public:
+//     TreeNode *searchBST(TreeNode *root, int val)
+//     {
+//         if (root == nullptr)
+//             return nullptr;
+//         if (root->val == val)
+//             return root;
+//         if (root->val < val)
+//             return searchBST(root->right, val);
+//         return searchBST(root->left, val);
+//     }
+// };
+
+// 230 二叉搜索树中第K小的元素
+// class Solution {
+//     public:
+//         int res;
+//         int count = 0;
+//         int kthSmallest(TreeNode* root, int k) {
+//             inorder(root, k);
+//             return res;
+//         }
+//         void inorder(TreeNode* root, int k)
+//         {
+//             if(root == nullptr) return ;
+//             inorder(root->left, k);
+//             count++;
+//             if(count == k)
+//             {
+//                 res = root->val;
+//                 return ;
+//             }
+//             inorder(root->right, k);
+//             return ;
+//         }
+//     };
+
 int main()
 {
     return 0;
