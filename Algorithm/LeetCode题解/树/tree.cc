@@ -459,6 +459,71 @@ using namespace std;
 //         }
 //     };
 
+// day-20252-17
+// 538 把二叉搜索树转换为累加树
+// class Solution
+// {
+// public:
+//     int s = 0;
+//     TreeNode *convertBST(TreeNode *root)
+//     {
+//         if (root == nullptr)
+//             return nullptr;
+//         convertBST(root->right);
+//         s += root->val;
+//         root->val = s;
+//         convertBST(root->left);
+//         return root;
+//     }
+// };
+
+// 98 验证二叉搜索树
+// class Solution
+// {
+// public:
+//     long long pre = LLONG_MIN;
+//     bool isValidBST(TreeNode *root)
+//     {
+//         if (root == nullptr)
+//             return true;
+//         if (!isValidBST(root->left) || root->val <= pre)
+//             return false;
+//         pre = root->val;
+//         return isValidBST(root->right);
+//     }
+// };
+
+// 701 二叉搜索树中的插入操作
+// class Solution
+// {
+// public:
+//     TreeNode *insertIntoBST(TreeNode *root, int val)
+//     {
+//         if (root == nullptr)
+//             return new TreeNode(val);
+//         dfs(root, val);
+//         return root;
+//     }
+//     void dfs(TreeNode *root, int val)
+//     {
+//         // 先找到要插入的位置.
+//         if (root->val > val)
+//         {
+//             if (root->left == nullptr)
+//                 root->left = new TreeNode(val);
+//             else
+//                 dfs(root->left, val);
+//         }
+//         else
+//         {
+//             if (root->right == nullptr)
+//                 root->right = new TreeNode(val);
+//             else
+//                 dfs(root->right, val);
+//         }
+//     }
+// };
+
 int main()
 {
     return 0;
