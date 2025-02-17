@@ -524,6 +524,101 @@ using namespace std;
 //     }
 // };
 
+// 450 删除二叉搜索树中的节点
+
+// class Solution
+// {
+// public:
+//     TreeNode *deleteNode(TreeNode *root, int key)
+//     {
+//         // 1. 叶子节点
+//         // 2. 只有左孩子的左节点
+//         //  . 只有右孩子的右节点
+//         // 3. 带有左右孩子的节点
+//         // 4. 找不到要删除的节点
+
+//         // 找不到要删除的节点
+//         if (root == nullptr)
+//             return nullptr;
+//         // 找到要删除的节点
+//         if (root->val == key)
+//         {
+//             // 叶子节点
+//             if (root->left == nullptr && root->right == nullptr)
+//                 return nullptr;
+//             // 只有右孩子
+//             if (!root->left)
+//                 return root->right;
+//             // 只有左孩子
+//             if (!root->right)
+//                 return root->left;
+//             // 左右都有
+//             TreeNode *maxNode = root->left;
+//             while (maxNode->right)
+//                 maxNode = maxNode->right;
+//             root->val = maxNode->val;
+//             root->left = deleteNode(root->left, maxNode->val);
+//         }
+//         else if (root->val < key)
+//             root->right = deleteNode(root->right, key);
+//         else
+//             root->left = deleteNode(root->left, key);
+//         return root;
+//     }
+// };
+
+// 96 不同的二叉搜索树
+// class Solution {
+//     public:
+//         int numTrees(int n) {
+//             vector<int> dp(n + 1);
+//             dp[0] = 1;
+//             for(int i = 1; i<= n; ++i)
+//             {
+//                 for(int j = 1; j <= i; ++j)
+//                 {
+//                     dp[i] += dp[j - 1] * dp[i - j];
+//                 }
+//             }
+//             // 1 2 5 14 42
+//             return dp[n];
+//         }
+//     };
+
+// 95 不同的二叉搜索树 II
+// class Solution
+// {
+// public:
+//     vector<TreeNode *> generateTrees(int n)
+//     {
+//         return generate(1, n);
+//     }
+//     vector<TreeNode *> generate(int st, int ed)
+//     {
+//         vector<TreeNode *> res;
+//         if (st > ed)
+//         {
+//             res.push_back(nullptr);
+//             return res;
+//         }
+//         for (int i = st; i <= ed; ++i)
+//         {
+//             vector<TreeNode *> left = generate(st, i - 1);  // 生成左子树
+//             vector<TreeNode *> right = generate(i + 1, ed); // 生成右子树
+//             for (auto l : left)
+//             {
+//                 for (auto r : right)
+//                 {
+//                     TreeNode *root = new TreeNode(i);
+//                     root->left = l;
+//                     root->right = r;
+//                     res.push_back(root);
+//                 }
+//             }
+//         }
+//         return res;
+//     }
+// };
 int main()
 {
     return 0;
