@@ -228,6 +228,135 @@ using namespace std;
 //     }
 // };
 
+// day-2025-2-20
+// 416 分割等和子集
+// class Solution
+// {
+// public:
+//     bool canPartition(vector<int> &nums)
+//     {
+//         int sum = accumulate(nums.begin(), nums.end(), 0);
+
+//         if (sum % 2 == 1)
+//             return false;
+//         int target = sum / 2;
+//         vector<int> dp(target + 1, 0);
+
+//         for (int i = 0; i < nums.size(); ++i)
+//         {
+//             for (int j = target; j >= nums[i]; --j)
+//             {
+//                 dp[j] = max(dp[j], dp[j - nums[i]] + nums[i]);
+//             }
+//         }
+//         return dp[target] == target;
+//     }
+// };
+
+// 1049 最后一块石头的重量 II
+// class Solution
+// {
+// public:
+//     int lastStoneWeightII(vector<int> &st)
+//     {
+//         int sum = accumulate(st.begin(), st.end(), 0);
+//         int target = sum / 2;
+//         vector<int> dp(target + 1);
+
+//         for (int i = 0; i < st.size(); ++i)
+//         {
+//             for (int j = target; j >= st[i]; --j)
+//             {
+//                 dp[j] = max(dp[j], dp[j - st[i]] + st[i]);
+//             }
+//         }
+//         return sum - 2 * dp[target];
+//     }
+// };
+
+// 494 目标和
+// class Solution {
+//     public:
+//         int findTargetSumWays(vector<int>& nums, int target) {
+
+//             int sum = accumulate(nums.begin(), nums.end(), 0);
+//             if(abs(target)  >sum || (sum - target) % 2) return 0;
+//             int neg = (sum - target) / 2;
+//              vector<int> dp(neg + 1);
+//              dp[0] = 1;
+//             for(int i = 0; i < nums.size(); ++i)
+//             {
+//                 for(int j = neg; j >= nums[i]; --j)
+//                     dp[j] += dp[j - nums[i]];
+//             }
+//             return dp[neg];
+//         }
+//     };
+
+// 474 一和零
+// class Solution
+// {
+// public:
+//     vector<int> getZerosOnes(string &s)
+//     {
+//         vector<int> zo(2);
+//         for (int i = 0; i < s.size(); ++i)
+//         {
+//             zo[s[i] - '0']++;
+//         }
+//         return zo;
+//     }
+//     int findMaxForm(vector<string> &strs, int m, int n)
+//     {
+//         int l = strs.size();
+//         vector<vector<vector<int>>> dp(l + 1, vector<vector<int>>(m + 1, vector<int>(n + 1)));
+//         for (int i = 1; i <= l; ++i)
+//         {
+//             vector<int> &&zo = getZerosOnes(strs[i - 1]);
+//             int zeros = zo[0], ones = zo[1];
+//             for (int j = 0; j <= m; ++j)
+//             {
+//                 for (int k = 0; k <= n; ++k)
+//                 {
+//                     dp[i][j][k] = dp[i - 1][j][k];
+//                     if (j >= zeros && k >= ones)
+//                         dp[i][j][k] = max(dp[i - 1][j][k], dp[i - 1][j - zeros][k - ones] + 1);
+//                 }
+//             }
+//         }
+//         return dp[l][m][n];
+//     }
+// };
+
+// class Solution {
+//     public:
+//         vector<int> getZerosOnes(string& s)
+//         {
+//             vector<int> zo(2);
+//             for(int i = 0; i < s.size(); ++i)
+//             {
+//                 zo[s[i] - '0'] ++;
+//             }
+//             return zo;
+//         }
+//         int findMaxForm(vector<string>& strs, int m, int n) {
+//             vector<vector<int>> dp(m + 1, vector<int>(n + 1));
+//             for(int i = 1; i <= strs.size(); ++i)
+//             {
+//                 vector<int>&& zo = getZerosOnes(strs[i - 1]);
+//                 int zeros = zo[0], ones = zo[1];
+//                 for(int j = m; j >=zeros; --j)
+//                 {
+//                     for(int k = n; k >= ones; --k)
+//                     {
+//                         dp[j][k] = max(dp[j][k], dp[j - zeros][k - ones] + 1);
+//                     }
+//                 }
+//             }
+
+//             return dp[m][n];
+//         }
+//     };
 int main()
 {
 
