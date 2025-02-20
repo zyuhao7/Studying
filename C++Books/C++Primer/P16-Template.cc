@@ -151,65 +151,119 @@ using namespace std;
 
 // day-2025-2-19
 // 模板实参推断
-#include <type_traits>
-template <typename T>
-void fobj(T, T)
+// #include <type_traits>
+// template <typename T>
+// void fobj(T, T)
+// {
+//     cout << "fobj(T, T)" << endl;
+// }
+
+// template <typename T>
+// void fref(const T &, const T &)
+// {
+//     cout << "fref(const T &, const T &)" << endl;
+// }
+
+// // 尾置返回类型与类型转换
+// template <typename It>
+// auto fcn(It beg, It end) -> decltype(*beg)
+// {
+//     return *beg;
+// }
+// template <typename It>
+// auto fcn2(It beg, It end) -> typename remove_reference<decltype(*beg)>::type
+// {
+//     return *beg;
+// }
+
+// // 编写接受右值引用参数的模板函数
+// template <typename T>
+// void f3(T &&val)
+// {
+//     T t = val; // 拷贝还是绑定一个引用？ 依赖于T的类型 T是一个引用类型，val是一个左值，所以t是一个引用, 否则t是一个拷贝
+//     t++;
+//     cout << t << " " << val << endl;
+// }
+
+// // std::move 定义
+// template <typename T>
+// typename remove_reference<T>::type &&move(T &&t)
+// {
+//     return static_cast<typename remove_reference<T>::type &&>(t);
+// }
+
+// int main()
+// {
+//     string s1("a value");
+//     const string s2("another value");
+//     fobj(s1, s2); // fobj(T, T)
+//     fref(s1, s2); // fref(const T &, const T &)
+//     int a[10], b[42];
+//     fobj(a, b); // fobj(T, T)
+//     // fref(a, b); 类型不匹配
+
+//     f3(0);
+//     int x = 10;
+//     f3(x);
+
+//     string s3 = "hi";
+//     string &&rr1 = std::move(s3);
+//     string &&rr2 = std::move("hi");
+//     rr1 = "hello";
+//     cout << s3 << " " << rr1 << " " << rr2 << endl;
+//     return 0;
+// }
+
+// day-2025-2-20
+// 可变参数模板
+template <typename... Args>
+void g(const Args... args)
 {
-    cout << "fobj(T, T)" << endl;
+    cout << sizeof...(Args) << endl; // sizeof... 返回模板参数包中的参数数量
+    cout << sizeof...(args) << endl; // sizeof... 返回函数的参数数量
 }
 
-template <typename T>
-void fref(const T &, const T &)
+template <typename T, typename... Args>
+ostream &print(ostream &os, const T &t)
 {
-    cout << "fref(const T &, const T &)" << endl;
+    return os << t;
+}
+template <typename T, typename... Args>
+ostream &print(ostream &os, const T &t, const Args &...rest)
+{
+    os << t << ",";
+    return print(os, rest...);
 }
 
-// 尾置返回类型与类型转换
-template <typename It>
-auto fcn(It beg, It end) -> decltype(*beg)
+// 模板特例化
+template <typename T>
+int compare(const T &, const T &)
 {
-    return *beg;
+    cout << "compare(const T&, const T&)" << endl;
+    return 0;
 }
-template <typename It>
-auto fcn2(It beg, It end) -> typename remove_reference<decltype(*beg)>::type
+template <size_t N, size_t M>
+int compare(const char (&)[N], const char (&)[M])
 {
-    return *beg;
+    cout << "compare(const char(&)[N], const char(&)[M])" << endl;
+    return 0;
 }
 
-// 编写接受右值引用参数的模板函数
-template <typename T>
-void f3(T &&val)
+template <>
+int compare(const char *const &p1, const char *const &p2)
 {
-    T t = val; // 拷贝还是绑定一个引用？ 依赖于T的类型 T是一个引用类型，val是一个左值，所以t是一个引用, 否则t是一个拷贝
-    t++;
-    cout << t << " " << val << endl;
+    return strcmp(p1, p2);
 }
 
-// std::move 定义
-template <typename T>
-typename remove_reference<T>::type &&move(T &&t)
-{
-    return static_cast<typename remove_reference<T>::type &&>(t);
-}
 
 int main()
 {
-    string s1("a value");
-    const string s2("another value");
-    fobj(s1, s2); // fobj(T, T)
-    fref(s1, s2); // fref(const T &, const T &)
-    int a[10], b[42];
-    fobj(a, b); // fobj(T, T)
-    // fref(a, b); 类型不匹配
+    g(1, 2, 3, 4);
+    g("hi", "mom");
+    print(cout, 1, 2, 3, 4, "hi", "mom") << endl;
 
-    f3(0);
-    int x = 10;
-    f3(x);
-
-    string s3 = "hi";
-    string &&rr1 = std::move(s3);
-    string &&rr2 = std::move("hi");
-    rr1 = "hello";
-    cout << s3 << " " << rr1 << " " << rr2 << endl;
+    const char *p1 = "hi", *p2 = "mom";
+    compare(p1, p2);
+    compare("hi", "mom");
     return 0;
 }
