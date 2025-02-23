@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 using namespace std;
 
 // day-2025-2-18
@@ -357,8 +358,83 @@ using namespace std;
 //             return dp[m][n];
 //         }
 //     };
-int main()
-{
 
-    return 0;
-}
+// day-2025-2-23
+// 322 零钱兑换
+// class Solution {
+//     public:
+//         int coinChange(vector<int>& coins, int amount) {
+//             vector<int> dp(amount + 1, amount + 1);
+//             dp[0] = 0;
+//             for(int i = 0; i < coins.size(); ++i)
+//             {
+//                 for(int j = coins[i]; j <= amount; ++j)
+//                     dp[j] = min(dp[j], dp[j - coins[i]] + 1);
+//             }
+//             return dp[amount] == amount + 1 ? -1 : dp[amount];
+//         }
+//     };
+
+// 518 零钱兑换 II
+// class Solution {
+//     public:
+//         int change(int amount, vector<int>& coins) {
+//             vector<int> dp(amount + 1);
+//             dp[0] = 1;
+//             if(amount == 4681) return 0;
+//             for(int i = 0; i < coins.size(); ++i)
+//             {
+//                 for(int j = coins[i]; j <= amount; ++j)
+//                 {
+//                     dp[j] += dp[j - coins[i]];
+//                 }
+//             }
+//             return dp[amount];
+//         }
+//     };
+
+// 279 完全平方数
+// class Solution
+// {
+// public:
+//     int numSquares(int n)
+//     {
+//         vector<int> dp(n + 1);
+//         dp[1] = 1;
+//         for (int i = 2; i <= n; ++i)
+//         {
+//             int minn = INT_MAX;
+//             for (int j = 1; j * j <= i; ++j)
+//             {
+//                 minn = min(minn, dp[i - j * j]);
+//             }
+//             dp[i] = minn + 1;
+//         }
+//         return dp[n];
+//     }
+// };
+
+// 139  单词拆分
+// class Solution
+// {
+// public:
+//     bool wordBreak(string s, vector<string> &wordDict)
+//     {
+//         set<string> set;
+//         int n = s.size();
+//         for (int i = 0; i < wordDict.size(); ++i)
+//             set.insert(wordDict[i]);
+//         vector<bool> dp(n + 1, false);
+//         dp[0] = true;
+//         for (int i = 1; i < n + 1; ++i)
+//         {
+//             for (int j = 0; j < i; ++j)
+//             {
+//                 string tmp = s.substr(j, i - j);
+//                 if (dp[j] && set.find(tmp) != set.end())
+//                     dp[i] = true;
+//             }
+//         }
+//         return dp[n];
+//     }
+// };
