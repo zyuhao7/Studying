@@ -438,3 +438,75 @@ using namespace std;
 //         return dp[n];
 //     }
 // };
+
+// day-2025-2-24
+// 198 打家劫舍
+// class Solution
+// {
+// public:
+//     int rob(vector<int> &nums)
+//     {
+//         int n = nums.size();
+//         vector<int> dp(n);
+//         if (n == 1)
+//             return nums[0];
+//         dp[0] = nums[0];
+//         dp[1] = max(dp[0], nums[1]);
+//         for (int i = 2; i < n; ++i)
+//             dp[i] = max(dp[i - 1], dp[i - 2] + nums[i]);
+//         return dp[n - 1];
+//     }
+// };
+
+// 213 打家劫舍 II
+// class Solution
+// {
+// public:
+//     int rob(vector<int> &nums)
+//     {
+//         int n = nums.size();
+//         if (n == 1)
+//             return nums[0];
+//         // 1 ~ n - 1 和 2 ~ n
+//         vector<int> dp(n + 2);
+//         for (int i = 2; i < n + 1; ++i)
+//         {
+//             dp[i] = max(dp[i - 1], dp[i - 2] + nums[i - 2]);
+//         }
+//         int prev = dp[n];
+//         dp[2] = 0;
+//         for (int i = 3; i < n + 2; ++i)
+//         {
+//             dp[i] = max(dp[i - 1], dp[i - 2] + nums[i - 2]);
+//         }
+//         return max(prev, dp[n + 1]);
+//     }
+// };
+
+// 337 打家劫舍 III
+// class Solution
+// {
+// public:
+//     vector<int> dfs(TreeNode *node)
+//     {
+//         if (!node)
+//             return {0, 0};
+
+//         // 递归求左右子树的结果
+//         vector<int> left = dfs(node->left);
+//         vector<int> right = dfs(node->right);
+
+//         // 当前节点选中时的最大收益
+//         int select = node->val + left[1] + right[1];
+//         // 当前节点不选中时的最大收益
+//         int notSelect = max(left[0], left[1]) + max(right[0], right[1]);
+
+//         return {select, notSelect};
+//     }
+
+//     int rob(TreeNode *root)
+//     {
+//         vector<int> ans = dfs(root);
+//         return max(ans[0], ans[1]);
+//     }
+// };
