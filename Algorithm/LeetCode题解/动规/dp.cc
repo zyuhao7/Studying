@@ -510,3 +510,67 @@ using namespace std;
 //         return max(ans[0], ans[1]);
 //     }
 // };
+
+// day-2025-2-25
+// 674 最长连续递增序列
+// class Solution
+// {
+// public:
+//     int findLengthOfLCIS(vector<int> &nums)
+//     {
+//         int n = nums.size();
+//         vector<int> dp(n + 1, 1);
+//         for (int i = 2; i <= n; ++i)
+//         {
+//             for (int j = i - 1; j > 0; --j)
+//             {
+//                 if (nums[j - 1] >= nums[j])
+//                     break;
+//                 else
+//                     dp[i] = max(dp[i], dp[j] + 1);
+//             }
+//         }
+//         return *max_element(dp.begin(), dp.end());
+//     }
+// };
+
+// 718 最长重复子数组
+// class Solution {
+//     public:
+//         int findLength(vector<int>& nums1, vector<int>& nums2) {
+//            int n1 = nums1.size(), n2 = nums2.size();
+//            vector<vector<int>> dp(n1 + 1, vector<int>(n2 + 1));
+//            int ans = 0;
+//             for(int i = 1; i <= n1; ++i)
+//             {
+//                 for(int j = 1; j <= n2; ++j)
+//                 {
+//                     if(nums1[i - 1] == nums2[j - 1])
+//                     {
+//                         dp[i][j] = dp[i - 1][j - 1] + 1;
+//                         ans = max(ans, dp[i][j]);
+//                     }
+//                 }
+//             }
+//             return ans;
+//         }
+//     };
+
+// 53 最大子序和
+// class Solution
+// {
+// public:
+//     int maxSubArray(vector<int> &nums)
+//     {
+//         int n = nums.size();
+//         vector<int> dp(n);
+//         dp[0] = nums[0];
+//         int result = nums[0];
+//         for (int i = 1; i < n; ++i)
+//         {
+//             dp[i] = max(nums[i], dp[i - 1] + nums[i]);
+//             result = max(result, dp[i]);
+//         }
+//         return result;
+//     }
+// };
