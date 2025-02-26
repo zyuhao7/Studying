@@ -574,3 +574,107 @@ using namespace std;
 //         return result;
 //     }
 // };
+
+// day-2025-2-26
+//  300 最长递增子序列
+// class Solution
+// {
+// public:
+//     int lengthOfLIS(vector<int> &nums)
+//     {
+//         int n = nums.size();
+//         vector<int> dp(n, 1);
+//         int ans = 1;
+//         for (int i = 1; i < n; ++i)
+//         {
+//             for (int j = i - 1; j >= 0; --j)
+//             {
+//                 if (nums[i] > nums[j])
+//                     dp[i] = max(dp[i], dp[j] + 1);
+//             }
+//             ans = max(ans, dp[i]);
+//         }
+//         return ans;
+//     }
+// };
+
+// 二分
+// class Solution
+// {
+// public:
+//     int lengthOfLIS(vector<int> &nums)
+//     {
+//         int n = nums.size();
+//         vector<int> ret;
+//         ret.push_back(nums[0]);
+//         for (int i = 1; i < n; ++i)
+//         {
+//             if (nums[i] > ret.back())
+//                 ret.push_back(nums[i]);
+//             else
+//             {
+//                 int l = 0, r = ret.size();
+//                 while (l < r)
+//                 {
+//                     int m = (l + r) >> 1;
+//                     if (nums[i] > ret[m])
+//                         l = m + 1;
+//                     else
+//                         r = m;
+//                 }
+//                 ret[l] = nums[i];
+//             }
+//         }
+//         return ret.size();
+//     }
+// };
+
+// 1143 最长公共子序列
+// class Solution
+// {
+// public:
+//     int longestCommonSubsequence(string text1, string text2)
+//     {
+//         int n1 = text1.size(), n2 = text2.size();
+//         vector<vector<int>> dp(n1 + 1, vector<int>(n2 + 1));
+//         for (int i = 1; i <= n1; ++i)
+//         {
+//             for (int j = 1; j <= n2; ++j)
+//             {
+//                 if (text1[i - 1] == text2[j - 1])
+//                 {
+//                     dp[i][j] = dp[i - 1][j - 1] + 1;
+//                 }
+//                 else
+//                 {
+//                     dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+//                 }
+//             }
+//         }
+//         return dp[n1][n2];
+//     }
+// };
+
+// 583 两个字符串的删除操作
+// class Solution
+// {
+// public:
+//     int minDistance(string word1, string word2)
+//     {
+//         int n1 = word1.size(), n2 = word2.size();
+//         vector<vector<int>> dp(n1 + 1, vector<int>(n2 + 1));
+//         for (int i = 1; i <= n1; ++i)
+//         {
+//             for (int j = 1; j <= n2; ++j)
+//             {
+//                 if (word1[i - 1] == word2[j - 1])
+//                     dp[i][j] = dp[i - 1][j - 1] + 1;
+//                 else
+//                 {
+//                     dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+//                 }
+//             }
+//         }
+//         return n1 + n2 - 2 * dp[n1][n2];
+//     }
+// };
