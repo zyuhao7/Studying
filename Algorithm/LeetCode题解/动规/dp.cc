@@ -678,3 +678,78 @@ using namespace std;
 //         return n1 + n2 - 2 * dp[n1][n2];
 //     }
 // };
+
+// day-2025-2-28
+// 121 买卖股票的最佳时机
+// class Solution
+// {
+// public:
+//     int maxProfit(vector<int> &prices)
+//     {
+//         int n = prices.size();
+//         int prev = INT_MAX, ans = 0;
+//         for (int i = 1; i < n; ++i)
+//         {
+//             prev = min(prev, prices[i - 1]);
+//             ans = max(ans, prices[i] - prev);
+//         }
+//         return ans;
+//     }
+// };
+
+// 122 买卖股票的最佳时机 II
+// class Solution
+// {
+// public:
+//     int maxProfit(vector<int> &prices)
+//     {
+//         int n = prices.size();
+//         vector<vector<int>> dp(n, vector<int>(2)); // dp[i][0] 表示第 i 天不持有股票的最大利润, dp[i][1] 表示第 i 天持有股票最大利润.
+//         dp[0][1] -= prices[0];
+//         for (int i = 1; i < n; i++)
+//         {
+//             dp[i][0] = max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+//             dp[i][1] = max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
+//         }
+//         return dp[n - 1][0];
+//     }
+// };
+
+// 123 买卖股票的最佳时机 III
+// class Solution
+// {
+// public:
+//     int maxProfit(vector<int> &prices)
+//     {
+//         int k = 2;
+//         vector<int> buy(k + 1, INT_MIN), sell(k + 1, 0);
+//         for (auto &price : prices)
+//         {
+//             for (int i = 1; i <= k; ++i)
+//             {
+//                 buy[i] = max(buy[i], sell[i - 1] - price);
+//                 sell[i] = max(sell[i], buy[i] + price);
+//             }
+//         }
+//         return sell[2];
+//     }
+// };
+
+// 188 买卖股票的最佳时机 IV
+// class Solution
+// {
+// public:
+//     int maxProfit(int k, vector<int> &prices)
+//     {
+//         vector<int> buy(k + 1, INT_MIN), sell(k + 1, 0);
+//         for (auto price : prices)
+//         {
+//             for (int i = 1; i <= k; ++i)
+//             {
+//                 buy[i] = max(buy[i], sell[i - 1] - price);
+//                 sell[i] = max(sell[i], buy[i] + price);
+//             }
+//         }
+//         return sell[k];
+//     }
+// };
