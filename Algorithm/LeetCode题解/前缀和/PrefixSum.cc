@@ -2,6 +2,7 @@
 #include <vector>
 using namespace std;
 // day-2025-3-8
+// §1.1 前缀和基础
 // 303. 区域和检索 - 数组不可变
 // class NumArray
 // {
@@ -41,6 +42,31 @@ using namespace std;
 //         return accumulate(subnums.begin(), subnums.end(), 0);
 //     }
 // };
+
+// day-2025-3-10
+// 2559. 统计范围内的元音字符串数
+// class Solution
+// {
+// public:
+//     bool is_vowel(char c)
+//     {
+//         return c == 'a' || c == 'e' ||
+//                c == 'i' || c == 'o' ||
+//                c == 'u';
+//     }
+//     vector<int> vowelStrings(vector<string> &words, vector<vector<int>> &queries)
+//     {
+//         int n = words.size();
+//         vector<int> Prefix(n + 1);
+//         for (int i = 1; i <= n; ++i)
+//             Prefix[i] = Prefix[i - 1] + ((is_vowel(words[i - 1][0]) && is_vowel(words[i - 1][words[i - 1].size() - 1])) ? 1 : 0);
+//         vector<int> res;
+//         for (int i = 0; i < queries.size(); ++i)
+//             res.push_back(Prefix[queries[i][1] + 1] - Prefix[queries[i][0]]);
+//         return res;
+//     }
+// };
+
 int main()
 {
 
