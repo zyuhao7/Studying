@@ -115,6 +115,65 @@ using namespace std;
 //     }
 // };
 
+// day-2025-3-11
+// 2390. 从字符串中移除星号
+// class Solution
+// {
+// public:
+//     string removeStars(string s)
+//     {
+//         string ans;
+//         for (int i = 0; i < s.size(); ++i)
+//         {
+//             if (s[i] != '*')
+//                 ans += s[i];
+//             else
+//                 ans.pop_back();
+//         }
+//         return ans;
+//     }
+// };
+
+// 1472. 设计浏览器历史记录
+class BrowserHistory
+{
+public:
+    stack<string> b, f;
+    BrowserHistory(string homepage)
+    {
+        b.push(homepage);
+    }
+
+    void visit(string url)
+    {
+        while (!f.empty())
+            f.pop();
+        b.push(url);
+    }
+
+    string back(int steps)
+    {
+        while (b.size() > 1 && steps > 0)
+        {
+            f.push(b.top());
+            b.pop();
+            steps--;
+        }
+        return b.top();
+    }
+
+    string forward(int steps)
+    {
+        while (!f.empty() && steps > 0)
+        {
+            b.push(f.top());
+            f.pop();
+            steps--;
+        }
+        return b.top();
+    }
+};
+
 int main()
 {
     return 0;
