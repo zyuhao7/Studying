@@ -1,0 +1,8 @@
+﻿  JsonClient.cpp
+  Please define _WIN32_WINNT or _WIN32_WINDOWS appropriately. For example:
+  - add -D_WIN32_WINNT=0x0601 to the compiler command line; or
+  - add _WIN32_WINNT=0x0601 to your project's Preprocessor Definitions.
+  Assuming _WIN32_WINNT=0x0601 (i.e. Windows 7 target).
+D:\桌面\Studying\asio\JsonClient\JsonClient\JsonClient.cpp(45,87): warning C4267: “参数”: 从“size_t”转换到“boost::asio::detail::u_short_type”，可能丢失数据
+D:\桌面\Studying\asio\JsonClient\JsonClient\JsonClient.cpp(72,1): warning C4715: “`main'::`4'::<lambda_1>::operator()”: 不是所有的控件路径都返回值
+  JsonClient.vcxproj -> D:\桌面\Studying\asio\JsonClient\x64\Debug\JsonClient.exe
