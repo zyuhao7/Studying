@@ -16,7 +16,7 @@ using namespace std;
 
 // public:
 //     A(int n) { val = n; }
-//     A(const A &other) { val = other.val; } // 不加 & 会造成无穷递归.
+//     A(const A &other) { val = other.val; } // 不加 & 会造成无穷递归.  invalid constructor; you probably meant 'A (const A&)'
 //     void Print() { cout << val << endl; }
 // };
 
@@ -29,41 +29,41 @@ using namespace std;
 // }
 
 // 面试题 1: 赋值运算符函数
-// class CMyString
-// {
-// public:
-//     CMyString(char *pData = NULL)
-//     {
-//         if (!pData)
-//             m_pData = NULL;
-//         strcpy(m_pData, pData);
-//     }
+class CMyString
+{
+public:
+    CMyString(char *pData = NULL)
+    {
+        if (!pData)
+            m_pData = NULL;
+        strcpy(m_pData, pData);
+    }
 
-//     CMyString(const CMyString &str)
-//     {
-//     }
+    CMyString(const CMyString &str)
+    {
+    }
 
-//     ~CMyString(void)
-//     {
-//         m_pData = NULL;
-//     }
+    ~CMyString(void)
+    {
+        m_pData = NULL;
+    }
 
-// private:
-//     CMyString operator=(const CMyString &str);
-//     char *m_pData;
-// };
+private:
+    CMyString operator=(const CMyString &str);
+    char *m_pData;
+};
 
-// CMyString CMyString::operator=(const CMyString &str)
-// {
-//     if (this != &str)
-//     {
-//         delete[] m_pData; // 先置空啊! 有值怎么赋值. ******
-//         m_pData = NULL;
-//         m_pData = new char[strlen(str.m_pData) + 1];
-//         strcpy(m_pData, str.m_pData);
-//     }
-//     return *this;
-// }
+CMyString CMyString::operator=(const CMyString &str)
+{
+    if (this != &str)
+    {
+        delete[] m_pData; // 先置空啊! 有值怎么赋值. ******
+        m_pData = NULL;
+        m_pData = new char[strlen(str.m_pData) + 1];
+        strcpy(m_pData, str.m_pData);
+    }
+    return *this;
+}
 
 // // 上面没考虑出现异常情况处理.
 // CMyString CMyString::operator=(const CMyString &str)
@@ -337,12 +337,12 @@ using namespace std;
 // 面试题 6 重建二叉树
 // 输入前序遍历 {1,2,4,7,3,5,6,8} 和中序遍历 {4,7,2,1,5,3,8,6}, 重建出二叉树并输出头结点.
 
-struct BinaryTreeNode
-{
-    int value_;
-    BinaryTreeNode *Left_;
-    BinaryTreeNode *Right_;
-};
+// struct BinaryTreeNode
+// {
+//     int value_;
+//     BinaryTreeNode *Left_;
+//     BinaryTreeNode *Right_;
+// };
 
 /*
                    1
@@ -424,37 +424,38 @@ struct BinaryTreeNode
 
 // 实现快排的关键在于先在数组选择一个数字, 接下来把数组中的数字分为两部分, 左边小于选中数字, 右边大于.
 
-int RandomInRange(int i, int j)
-{
-    srand(time(NULL));
-    int n = (rand() % (j - i + 1)) + i;
-}
+// int RandomInRange(int i, int j)
+// {
+//     srand(time(NULL));
+//     int n = (rand() % (j - i + 1)) + i;
+// }
 
-int Partition(int data[], int length, int start, int end)
-{
-    if (data == NULL || length <= 0 || start < 0 || end >= length)
-        return;
-    int index = RandomInRange(start, end);
-    swap(&data[index], &data[end]);
+// int Partition(int data[], int length, int start, int end)
+// {
+//     if (data == NULL || length <= 0 || start < 0 || end >= length)
+//         return;
+//     int index = RandomInRange(start, end);
+//     swap(&data[index], &data[end]);
 
-    int small = start - 1;
-    for (index = start; index < end; ++index)
-    {
-        ++small;
-        if (small != index)
-            swap(&data[index], &data[small]);
-    }
-    ++small;
-    swap(&data[small], &data[end]);
-}
+//     int small = start - 1;
+//     for (index = start; index < end; ++index)
+//     {
+//         ++small;
+//         if (small != index)
+//             swap(&data[index], &data[small]);
+//     }
+//     ++small;
+//     swap(&data[small], &data[end]);
+//     return small;
+// }
 
-void QuickSort(int data[], int length, int start, int end)
-{
-    if (start == end)
-        return;
-    int index = Partition(data, length, start, end);
-    if (index > start)
-        Partition(data, length, start, index - 1);
-    if (index < end)
-        Partition(data, length, index + 1, end);
-}
+// void QuickSort(int data[], int length, int start, int end)
+// {
+//     if (start == end)
+//         return;
+//     int index = Partition(data, length, start, end);
+//     if (index > start)
+//         Partition(data, length, start, index - 1);
+//     if (index < end)
+//         Partition(data, length, index + 1, end);
+// }
