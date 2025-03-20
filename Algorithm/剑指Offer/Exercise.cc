@@ -6,6 +6,7 @@
 #include <stack>
 #include <queue>
 #include <string>
+#include <unordered_map>
 #include <time.h>
 using namespace std;
 
@@ -32,38 +33,47 @@ using namespace std;
 class CMyString
 {
 public:
-    CMyString(char *pData = NULL)
+    CMyString(const char *str)
     {
-        if (!pData)
-            m_pData = NULL;
-        strcpy(m_pData, pData);
+        if (str)
+        {
+            _data = new char[strlen(str) + 1];
+            strcpy(_data, str);
+        }
+        else
+        {
+            _data = new char[1];
+            _data[0] = '\0';
+        }
     }
 
-    CMyString(const CMyString &str)
+    CMyString(const CMyString &other)
     {
+        _data = new char[strlen(other._data) + 1];
+        strcpy(_data, other._data);
     }
 
-    ~CMyString(void)
+    ~CMyString()
     {
-        m_pData = NULL;
+        delete[] _data;
     }
 
 private:
     CMyString operator=(const CMyString &str);
-    char *m_pData;
+    char *_data;
 };
 
-CMyString CMyString::operator=(const CMyString &str)
-{
-    if (this != &str)
-    {
-        delete[] m_pData; // 先置空啊! 有值怎么赋值. ******
-        m_pData = NULL;
-        m_pData = new char[strlen(str.m_pData) + 1];
-        strcpy(m_pData, str.m_pData);
-    }
-    return *this;
-}
+// CMyString CMyString::operator=(const CMyString &str)
+// {
+//     if (this != &str)
+//     {
+//         delete[] m_pData; // 先置空啊! 有值怎么赋值. ******
+//         m_pData = NULL;
+//         m_pData = new char[strlen(str._data) + 1];
+//         strcpy(m_pData, str.m_pData);
+//     }
+//     return *this;
+// }
 
 // // 上面没考虑出现异常情况处理.
 // CMyString CMyString::operator=(const CMyString &str)
@@ -78,8 +88,8 @@ CMyString CMyString::operator=(const CMyString &str)
 //     return *this;
 // }
 
-// 面试题 2 实现 Singlton 模式
-// 再 github上有总结的设计模式关于单例模式的详细说明.
+// 面试题 2 实现 Singleton 模式
+// 再 github 上有总结的设计模式关于单例模式的详细说明.
 // class Singleton
 // {
 // public:
@@ -98,10 +108,10 @@ CMyString CMyString::operator=(const CMyString &str)
 // Singleton *Singleton::m_instance = nullptr;
 
 // 数组
-// int GetSize(int data[])
-// {
-//     return sizeof(data);
-// }
+int GetSize(int data[])
+{
+    return sizeof(data);
+}
 
 // int main()
 // {
@@ -114,7 +124,6 @@ CMyString CMyString::operator=(const CMyString &str)
 //     int size3 = GetSize(data1);
 
 //     cout << size1 << " " << size2 << " " << size3 << endl; // 20 8 8 //64位.
-
 // }
 
 // 面试题 3 二维数组中的查找
@@ -124,7 +133,7 @@ CMyString CMyString::operator=(const CMyString &str)
 // {
 
 //     int c, r;
-//     for (c = col - 1, r = 0; c >= 0 && r < row;)
+//     for (c = col - 1, r = 0; c >= 0 && r < row)
 //     {
 //         if (n == a[r][c])
 //         {
@@ -271,7 +280,7 @@ CMyString CMyString::operator=(const CMyString &str)
 //     int val;
 //     Listnode *next;
 // };
-// 尾插.
+// // 尾插.
 // void AddToTail(Listnode **pHead, int v)
 // {
 //     Listnode *pNew = new Listnode();
@@ -284,7 +293,7 @@ CMyString CMyString::operator=(const CMyString &str)
 //     else
 //     {
 //         Listnode *pNode = *pHead;
-//         while (*pHead != nullptr)
+//         while (pNode->next != nullptr)
 //         {
 //             pNode = pNode->next;
 //         }
@@ -292,19 +301,21 @@ CMyString CMyString::operator=(const CMyString &str)
 //     }
 // }
 
+//////////////////////////////
 // 面试题 5 从尾到头打印链表
 // 节点定义如下:
-// struct ListNode
-// {
-//     int m_nmey;
-//     ListNode *m_pNext;
-// };
+struct ListNode
+{
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
 
 // 书解
 // 思路:  从头到尾遍历一遍节点, 将值存到栈中, 然后在从栈取出来即可.
 // void PrintListFromTailToHead(ListNode *pHead)
 // {
-//     std::stacm<ListNode *> nodes;
+//     std::stack<ListNode *> nodes;
 //     ListNode *pNode = pHead;
 //     while (pNode != nullptr)
 //     {
@@ -321,16 +332,40 @@ CMyString CMyString::operator=(const CMyString &str)
 
 // 既然栈可以实现, 那么本质来说递归就是栈结构, 我们可以访问节点的时候, 递归的输出它后面的节点, 在输出节点本身.
 
-// void PrintListFromTailToHead(ListNode *pHead)
+// 创建链表的函数
+ListNode *createLinkedList(int arr[], int n)
+{
+    if (n == 0)
+        return nullptr;
+
+    ListNode *head = new ListNode(arr[0]);
+    ListNode *current = head;
+
+    for (int i = 1; i < n; i++)
+    {
+        current->next = new ListNode(arr[i]);
+        current = current->next;
+    }
+
+    return head;
+}
+
+void PrintListFromTailToHead(ListNode *root)
+{
+    if (root == nullptr)
+        return;
+    PrintListFromTailToHead(root->next);
+    cout << root->val << " ";
+}
+
+// int main()
 // {
-//     if (pHead != nullptr)
-//     {
-//         if (pHead->m_pNext != nullptr)
-//         {
-//             PrintListFromTailToHead(pHead->next);
-//         }
-//     }
-//     cout << pHead->m_nmey << " ";
+//     int arr[] = {1, 2, 3, 4, 5};
+//     int n = sizeof(arr) / sizeof(arr[0]);
+
+//     ListNode *head = createLinkedList(arr, n);
+//     PrintListFromTailToHead(head);
+//     return 0;
 // }
 
 // 树
@@ -351,6 +386,9 @@ CMyString CMyString::operator=(const CMyString &str)
                7        8
 */
 // string Prev, Inorder;
+// 首先在中序中找到根节点, 然后在前序中找到根节点, 左边是左子树, 右边是右子树.
+// 递归的构建左子树.
+// 递归的构建右子树.
 
 // void build(int l1, int r1, int l2, int r2)
 // {
@@ -371,91 +409,162 @@ CMyString CMyString::operator=(const CMyString &str)
 //     }
 // }
 
+// 二叉树节点定义
+struct TreeNode
+{
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+};
+
+// 重建二叉树的递归函数
+TreeNode *buildTreeHelper(const vector<int> &preorder, int preStart, int preEnd,
+                          const vector<int> &inorder, int inStart, int inEnd,
+                          unordered_map<int, int> &inorderMap)
+{
+    if (preStart > preEnd || inStart > inEnd)
+    {
+        return nullptr;
+    }
+
+    // 前序遍历的第一个节点是根节点
+    int rootVal = preorder[preStart];
+    TreeNode *root = new TreeNode(rootVal);
+
+    // 找到根节点在中序遍历中的位置
+    int inRootIndex = inorderMap[rootVal];
+    int leftSubtreeSize = inRootIndex - inStart;
+
+    // 递归构建左子树
+    root->left = buildTreeHelper(preorder, preStart + 1, preStart + leftSubtreeSize,
+                                 inorder, inStart, inRootIndex - 1, inorderMap);
+
+    // 递归构建右子树
+    root->right = buildTreeHelper(preorder, preStart + leftSubtreeSize + 1, preEnd,
+                                  inorder, inRootIndex + 1, inEnd, inorderMap);
+
+    return root;
+}
+
+// 重建二叉树的主函数
+TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder)
+{
+    // 构建中序遍历的值到索引的映射，方便快速查找
+    unordered_map<int, int> inorderMap;
+    for (int i = 0; i < inorder.size(); i++)
+    {
+        inorderMap[inorder[i]] = i;
+    }
+
+    return buildTreeHelper(preorder, 0, preorder.size() - 1,
+                           inorder, 0, inorder.size() - 1, inorderMap);
+}
+
+// 打印二叉树的前序遍历（验证结果）
+void printPreOrder(TreeNode *root)
+{
+    if (root == nullptr)
+    {
+        return;
+    }
+    cout << root->val << " ";
+    printPreOrder(root->left);
+    printPreOrder(root->right);
+}
+
+// int main()
+// {
+//     vector<int> preorder = {1, 2, 4, 7, 3, 5, 6, 8};
+//     vector<int> inorder = {4, 7, 2, 1, 5, 3, 8, 6};
+
+//     TreeNode *root = buildTree(preorder, inorder);
+
+//     // 打印前序遍历结果，验证重建是否正确
+//     cout << "Result PreOrder: ";
+//     printPreOrder(root);
+//     cout << endl;
+
+//     return 0;
+// }
+
 // 栈与队列
 // 用两个栈实现队列.
-// class MyQueue
+class MyQueue
+{
+public:
+    stack<int> st1;
+    stack<int> st2;
+    MyQueue() {}
+
+    void push(int x)
+    {
+        st1.push(x);
+    }
+
+    int pop()
+    {
+        // st2 是出栈的栈, 如果为空, 那么将 st1 的元素全部压入 st2.
+        if (st2.empty())
+        {
+            while (!st1.empty())
+            {
+                int top = st1.top();
+                st1.pop();
+                st2.push(top);
+            }
+        }
+        int t = st2.top();
+        st2.pop();
+        return t;
+    }
+
+    int peek()
+    {
+        if (st2.empty())
+        {
+            while (!st1.empty())
+            {
+                st2.push(st1.top());
+                st1.pop();
+            }
+        }
+        return st2.top();
+    }
+
+    bool empty()
+    {
+        return st1.empty() && st2.empty();
+    }
+};
+
+// int main()
 // {
-// public:
-//     stack<int> st1;
-//     stack<int> st2;
-//     MyQueue() {}
+//     MyQueue q;
 
-//     void push(int x)
-//     {
-//         st1.push(x);
-//     }
+//     // 测试 1: 入队操作
+//     q.push(1);
+//     q.push(2);
+//     q.push(3);
 
-//     int pop()
-//     {
-//         if (st2.empty())
-//         {
-//             while (!st1.empty())
-//             {
-//                 int top = st1.top();
-//                 st1.pop();
-//                 st2.push(top);
-//             }
-//         }
-//         int t = st2.top();
-//         st2.pop();
-//         return t;
-//     }
+//     // 测试 2: 查看队首元素
+//     cout << "que front: " << q.peek() << endl; // 应输出 1
 
-//     int peek()
-//     {
-//         if (st2.empty())
-//         {
-//             while (!st1.empty())
-//             {
-//                 st2.push(st1.top());
-//                 st1.pop();
-//             }
-//         }
-//         return st2.top();
-//     }
+//     // 测试 3: 出队操作
+//     cout << "pop element: " << q.pop() << endl; // 应输出 1
 
-//     bool empty()
-//     {
-//         return st1.empty() && st2.empty();
-//     }
-// };
+//     // 测试 4: 再次查看队首元素
+//     cout << "que front: " << q.peek() << endl; // 应输出 2
 
-// 算法和数据结构.
+//     // 测试 5: 再次出队
+//     cout << "pop element: " << q.pop() << endl; // 应输出 2
 
-// 实现快排的关键在于先在数组选择一个数字, 接下来把数组中的数字分为两部分, 左边小于选中数字, 右边大于.
+//     // 测试 6: 检查队列是否为空
+//     cout << "isEmpty ? : " << (q.empty() ? "yes" : "no") << endl; // 应输出 no
 
-// int RandomInRange(int i, int j)
-// {
-//     srand(time(NULL));
-//     int n = (rand() % (j - i + 1)) + i;
-// }
+//     // 测试 7: 继续出队
+//     cout << "pop element: " << q.pop() << endl; // 应输出 3
 
-// int Partition(int data[], int length, int start, int end)
-// {
-//     if (data == NULL || length <= 0 || start < 0 || end >= length)
-//         return;
-//     int index = RandomInRange(start, end);
-//     swap(&data[index], &data[end]);
-
-//     int small = start - 1;
-//     for (index = start; index < end; ++index)
-//     {
-//         ++small;
-//         if (small != index)
-//             swap(&data[index], &data[small]);
-//     }
-//     ++small;
-//     swap(&data[small], &data[end]);
-//     return small;
-// }
-
-// void QuickSort(int data[], int length, int start, int end)
-// {
-//     if (start == end)
-//         return;
-//     int index = Partition(data, length, start, end);
-//     if (index > start)
-//         Partition(data, length, start, index - 1);
-//     if (index < end)
-//         Partition(data, length, index + 1, end);
+//     // 测试 8: 检查队列是否为空
+//     cout << "isEmpty ? : " << (q.empty() ? "yes" : "no") << endl; // 应输出  yes
 // }
