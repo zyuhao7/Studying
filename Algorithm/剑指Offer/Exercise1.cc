@@ -58,7 +58,7 @@ int MinInOrder(int q[], int l, int r)
     int res = q[l];
     for (int i = l + 1; i <= r; ++i)
     {
-        if (res > q[i])
+        if (res < q[i])
             res = q[i];
     }
     return res;
@@ -250,7 +250,7 @@ void Print1ToNdigits(int n)
 
 // 假如最大数超过 ll.
 // 想法: 先将最大的 n 位数 + 1 用字符串拼接出来, 比如 n = 7, 则  MaxNum = "10000000", 然后给一个空串,初始化为 1, 比较与MaxNum的
-// 大小, 如果小于的话则 string "++", 定义一个字符输出, 如果小于 8的话, 直接用下一个字符替换, 如果是 9的话需要增加一个长度,
+// 大小, 如果小于的话则 string "++", 定义一个字符输出, 如果小于 8的话, 直接用下一个字符替换, 如果是 9 的话需要增加一个长度,
 // 但是还需要将 9 替换为 1 后面拼接个0.
 void Print1ToNdigits2(int n)
 {
@@ -355,6 +355,44 @@ int main()
     return 0;
 }
 */
+
+void dfs(std::string &number, int n, int index)
+{
+    // 000 3 0
+    if (index == n)
+    {
+        // 去掉前导0
+        int pos = 0;
+        while (pos < n && number[pos] == '0')
+            ++pos;
+        if (pos != n)
+        {
+            std::cout << number.substr(pos) << " ";
+        }
+        return;
+    }
+
+    for (char c = '0'; c <= '9'; ++c)
+    {
+        number[index] = c;
+        dfs(number, n, index + 1);
+    }
+}
+
+void printNumbers(int n)
+{
+    std::string number(n, '0'); // 000
+    dfs(number, n, 0);
+    std::cout << std::endl;
+}
+
+// int main()
+// {
+//     int n;
+//     std::cin >> n;
+//     printNumbers(n);
+//     return 0;
+// }
 
 // 面试题 13 在 O(1) 时间删除链表节点
 /*
