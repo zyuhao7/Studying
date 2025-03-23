@@ -9,66 +9,63 @@ using namespace std;
 // 输入一个链表, 输出该链表的倒数第 K 个节点, 为符合大多数人的习惯, 本题从 1 开始, 即 链表的尾部是倒数第一个节点.
 // 例如一个链表有六个节点, 从头结点开始它们的值依次是 1 2 3 4 5 6 这个链表的倒数第三个节点是 值为 4 的节点.
 
-/*
-struct ListNode
-{
-    ListNode(int val)
-        : _val(val), _next(NULL)
-    {
-    }
-    int _val;
-    ListNode *_next;
-};
+// struct ListNode
+// {
+//     ListNode(int val)
+//         : _val(val), _next(NULL)
+//     {
+//     }
+//     int _val;
+//     ListNode *_next;
+// };
 
-void CountBackwardsOfKNode(ListNode **pListHead, int k)
-{
-    // 考虑特殊情况: 1. k > 链表长度 ? 该如何取？ 模链表长度然后去倒数第 k % countNode ? 还是什么应该询问面试官.
-    // 2. 长度为 负数? ...
-    if (pListHead == NULL || *pListHead == NULL || k <= 0)
-        return;
-    int cnt = 1;
-    ListNode *node = *pListHead;
-    while (node->_next != NULL)
-    {
-        node = node->_next;
-        cnt++;
-    }
-    if (k > cnt)
-        k %= cnt;
-    cnt -= k;
+// void CountBackwardsOfKNode(ListNode **pListHead, int k)
+// {
+//     // 考虑特殊情况: 1. k > 链表长度 ? 该如何取？ 模链表长度然后去倒数第 k % countNode ? 还是什么应该询问面试官.
+//     // 2. 长度为 负数? ...
+//     if (pListHead == NULL || *pListHead == NULL || k <= 0)
+//         return;
+//     int cnt = 1;
+//     ListNode *node = *pListHead;
+//     while (node->_next != NULL)
+//     {
+//         node = node->_next;
+//         cnt++;
+//     }
+//     if (k > cnt)
+//         k %= cnt;
+//     cnt -= k;
 
-    node = *pListHead;
-    while (cnt)
-    {
-        cnt--;
-        node = node->_next;
-    }
-    cout << node->_val << endl;
-    return;
-}
+//     node = *pListHead;
+//     while (cnt)
+//     {
+//         cnt--;
+//         node = node->_next;
+//     }
+//     cout << node->_val << endl;
+//     return;
+// }
 
-int main()
-{
-    ListNode *p1 = new ListNode(1);
-    ListNode *p2 = new ListNode(2);
-    ListNode *p3 = new ListNode(3);
-    ListNode *p4 = new ListNode(4);
-    ListNode *p5 = new ListNode(5);
-    ListNode *p6 = new ListNode(6);
-    p1->_next = p2;
-    p2->_next = p3;
-    p3->_next = p4;
-    p4->_next = p5;
-    p5->_next = p6;
-    ListNode **phead = &p1;
-    CountBackwardsOfKNode(phead, 8);
+// int main()
+// {
+//     ListNode *p1 = new ListNode(1);
+//     ListNode *p2 = new ListNode(2);
+//     ListNode *p3 = new ListNode(3);
+//     ListNode *p4 = new ListNode(4);
+//     ListNode *p5 = new ListNode(5);
+//     ListNode *p6 = new ListNode(6);
+//     p1->_next = p2;
+//     p2->_next = p3;
+//     p3->_next = p4;
+//     p4->_next = p5;
+//     p5->_next = p6;
+//     ListNode **phead = &p1;
+//     CountBackwardsOfKNode(phead, 8);
 
-    return 0;
-}
-*/
+//     return 0;
+// }
 
 // 面试题 16 反转链表
-/*
 struct ListNode
 {
     ListNode(int val)
@@ -79,62 +76,72 @@ struct ListNode
     ListNode *_next;
 };
 
+// ListNode *ReverseList(ListNode *pListHead)
+// {
+
+//     ListNode *pReverseHead = NULL;
+//     ListNode *node = pListHead;
+//     ListNode *prev = NULL;
+//     while (node != NULL)
+//     {
+//         ListNode *next = node->_next;
+//         if (next == NULL)
+//             pReverseHead = node;
+//         node->_next = prev;
+//         prev = node;
+//         node = next;
+//     }
+//     return pReverseHead;
+// }
+// 递归
 ListNode *ReverseList(ListNode *pListHead)
 {
-
-    ListNode *pReverseHead = NULL;
-    ListNode *node = pListHead;
-    ListNode *prev = NULL;
-    while (node != NULL)
-    {
-        ListNode *next = node->_next;
-        if (next == NULL)
-            pReverseHead = node;
-        node->_next = prev;
-        prev = node;
-        node = next;
-    }
-    return pReverseHead;
+    if (pListHead->_next == nullptr)
+        return pListHead;
+    ListNode *RHead = ReverseList(pListHead->_next);
+    pListHead->_next->_next = pListHead;
+    pListHead->_next = nullptr;
+    return RHead;
 }
 
-int main()
-{
-    ListNode *p1 = new ListNode(1);
-    ListNode *p2 = new ListNode(2);
-    ListNode *p3 = new ListNode(3);
-    ListNode *p4 = new ListNode(4);
-    ListNode *p5 = new ListNode(5);
-    ListNode *p6 = new ListNode(6);
-    p1->_next = p2;
-    p2->_next = p3;
-    p3->_next = p4;
-    p4->_next = p5;
-    p5->_next = p6;
+// int main()
+// {
+//     ListNode *p1 = new ListNode(1);
+//     ListNode *p2 = new ListNode(2);
+//     ListNode *p3 = new ListNode(3);
+//     ListNode *p4 = new ListNode(4);
+//     ListNode *p5 = new ListNode(5);
+//     ListNode *p6 = new ListNode(6);
+//     p1->_next = p2;
+//     p2->_next = p3;
+//     p3->_next = p4;
+//     p4->_next = p5;
+//     p5->_next = p6;
 
-    ListNode *head = ReverseList(p1);
-    while (head->_next != NULL)
-    {
-        cout << head->_val << "->";
-        head = head->_next;
-        if (head->_next == NULL)
-            cout << head->_val;
-    }
-    return 0;
-}
-*/
+//     ListNode *head = ReverseList(p1);
+//     while (head->_next != NULL)
+//     {
+//         cout << head->_val << "->";
+//         head = head->_next;
+//         if (head->_next == NULL)
+//             cout << head->_val;
+//     }
+//     return 0;
+// }
 
 // day-2024-8-26
 // 面试题 17 合并两个排序的链表
+
+// struct ListNode
+// {
+//     ListNode(int val)
+//         : _val(val), _next(NULL)
+//     {
+//     }
+//     int _val;
+//     ListNode *_next;
+// };
 /*
-struct ListNode
-{
-    ListNode(int val)
-        : _val(val), _next(NULL)
-    {
-    }
-    int _val;
-    ListNode *_next;
-};
 // 两个链表是两个递增的链表: 如
 // 1 -> 3 -> 5 -> 7
 // 2 -> 4 -> 6 -> 8
@@ -195,7 +202,7 @@ int main()
 
 // 面试题 18 树的子结构
 // 输入两棵二叉树 A 和 B, 判断 B 是否是 A 的子树.
-/*
+
 struct BinaryTreeNode
 {
     BinaryTreeNode(int val)
@@ -214,6 +221,8 @@ struct BinaryTreeNode
 //      8     7                     9     2
 //    9   2
 //      4   7
+// 如果根节点 B 的值 等于 A 的根节点的值, 则递归调用 DoesTree1HaveTree2 继续判断左右子树是否相等,
+// 否则递归调用左右子树继续和 B 的根节点比较.
 // B 树 是 A 树的子结构.
 
 bool DoseTreeHaveTree2(BinaryTreeNode *pRoot1, BinaryTreeNode *pRoot2)
@@ -276,7 +285,6 @@ int main()
     cout << HasSubtree(b1, b8); // 1
     return 0;
 }
-*/
 
 // 2024-8-27
 // 面试题 19   二叉树的镜像
