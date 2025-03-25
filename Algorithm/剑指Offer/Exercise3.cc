@@ -78,7 +78,6 @@ int main()
 
 // 5 7 6 9 11 10 8
 
-/*
 bool VerifySequenceOfBST(int sequence[], int length)
 {
     if (sequence == NULL || length <= 0)
@@ -111,27 +110,26 @@ bool VerifySequenceOfBST(int sequence[], int length)
     return (left && right);
 }
 
-int main()
-{
-    BinaryTreeNode *b1 = new BinaryTreeNode(8);
-    BinaryTreeNode *b2 = new BinaryTreeNode(6);
-    BinaryTreeNode *b3 = new BinaryTreeNode(10);
-    BinaryTreeNode *b4 = new BinaryTreeNode(5);
-    BinaryTreeNode *b5 = new BinaryTreeNode(7);
-    BinaryTreeNode *b6 = new BinaryTreeNode(9);
-    BinaryTreeNode *b7 = new BinaryTreeNode(11);
-    b1->_left = b2;
-    b1->_right = b3;
-    b2->_left = b4;
-    b2->_right = b5;
-    b3->_left = b6;
-    b3->_right = b7;
-    int a[] = {5, 7, 6, 9, 11, 10, 8};
-    cout << VerifySequenceOfBST(a, sizeof(a) / sizeof(a[0]));
+// int main()
+// {
+//     BinaryTreeNode *b1 = new BinaryTreeNode(8);
+//     BinaryTreeNode *b2 = new BinaryTreeNode(6);
+//     BinaryTreeNode *b3 = new BinaryTreeNode(10);
+//     BinaryTreeNode *b4 = new BinaryTreeNode(5);
+//     BinaryTreeNode *b5 = new BinaryTreeNode(7);
+//     BinaryTreeNode *b6 = new BinaryTreeNode(9);
+//     BinaryTreeNode *b7 = new BinaryTreeNode(11);
+//     b1->_left = b2;
+//     b1->_right = b3;
+//     b2->_left = b4;
+//     b2->_right = b5;
+//     b3->_left = b6;
+//     b3->_right = b7;
+//     int a[] = {5, 7, 6, 9, 11, 10, 8};
+//     cout << VerifySequenceOfBST(a, sizeof(a) / sizeof(a[0]));
 
-    return 0;
-}
-*/
+//     return 0;
+// }
 
 // 2024-8-30
 // 面试题 25 二叉树中和为某一值的路径
@@ -142,7 +140,7 @@ int main()
 // 先进入 10, 把值 求和, 和 22 比较, 大于则返回, 小于进入左右子树, 先进入左子树, 求路径和, 然后比较,如果大于 则 返回, 小于
 // 则继续进入左子树, 求路径和 然后比较,小于则进入左子树, 如果左子树为空, 则 减掉此节点值返回上一节点,然后继续进入右子树, 直到
 // 遍历完整棵树. 需要保存遍历的路径.
-/*
+
 class Solution
 {
 public:
@@ -169,41 +167,40 @@ private:
     }
 };
 
-int main()
-{
-    BinaryTreeNode *b1 = new BinaryTreeNode(10);
-    BinaryTreeNode *b2 = new BinaryTreeNode(5);
-    BinaryTreeNode *b3 = new BinaryTreeNode(12);
-    BinaryTreeNode *b4 = new BinaryTreeNode(4);
-    BinaryTreeNode *b5 = new BinaryTreeNode(7);
-    b1->_left = b2;
-    b1->_right = b3;
-    b2->_left = b4;
-    b2->_right = b5;
-    vector<vector<int>> res = Solution().pathSum(b1, 22);
-    for (int i = 0; i < res.size(); ++i)
-    {
-        for (int j = 0; j < res[i].size(); ++j)
-        {
-            cout << res[i][j] << " "; // 10 5 7
-                                      // 10 12
-        }
-        cout << endl;
-    }
+// int main()
+// {
+//     BinaryTreeNode *b1 = new BinaryTreeNode(10);
+//     BinaryTreeNode *b2 = new BinaryTreeNode(5);
+//     BinaryTreeNode *b3 = new BinaryTreeNode(12);
+//     BinaryTreeNode *b4 = new BinaryTreeNode(4);
+//     BinaryTreeNode *b5 = new BinaryTreeNode(7);
+//     b1->_left = b2;
+//     b1->_right = b3;
+//     b2->_left = b4;
+//     b2->_right = b5;
+//     vector<vector<int>> res = Solution().pathSum(b1, 22);
+//     for (int i = 0; i < res.size(); ++i)
+//     {
+//         for (int j = 0; j < res[i].size(); ++j)
+//         {
+//             cout << res[i][j] << " "; // 10 5 7
+//                                       // 10 12
+//         }
+//         cout << endl;
+//     }
 
-    return 0;
-}
-*/
+//     return 0;
+// }
 
 // 面试题 26 复杂链表的复制
 // 1、 直接复制, 然后每个节点找在链表什么位置, 置 random 指针, 时间复杂度 O(N^2)
 // 2、 存个哈希, <R,R`>, 直接找对应节点的 random指针, 空间换时间, 空间复杂度 O(N), 时间复杂度 O(N).
-// 3、 将节点复制到本节点的后面 A A` B B` 这种, 然后遍历一遍, 存一下奇数节点的 random 指针, 然后偶数节点指向 存的技术节点的下一
+// 3、 将节点复制到本节点的后面 A A` B B` 这种, 然后遍历一遍, 存一下奇数节点的 random 指针, 然后偶数节点指向 存的奇数节点的下一
 // 位置就行, 然后根据奇偶将两个链表分开.
-/*
 class Solution
 {
 public:
+    // A A` B B` C C`
     void copyNode(Node *head)
     {
         if (head == NULL)
@@ -267,27 +264,28 @@ public:
         return res;
     }
 };
-*/
 
 // 2024-9-1
 // 面试题 27 二叉搜索树与双向链表
-/*
 // Definition for a Node.
-class Node {
+class Node
+{
 public:
     int val;
-    Node* left;
-    Node* right;
+    Node *left;
+    Node *right;
 
     Node() {}
 
-    Node(int _val) {
+    Node(int _val)
+    {
         val = _val;
         left = NULL;
         right = NULL;
     }
 
-    Node(int _val, Node* _left, Node* _right) {
+    Node(int _val, Node *_left, Node *_right)
+    {
         val = _val;
         left = _left;
         right = _right;
@@ -318,12 +316,12 @@ private:
             prev->right = cur;
         else
             head = cur;
+            
         cur->left = prev;
         prev = cur;
         dfs(cur->right);
     }
 };
-*/
 
 // 面试题 28 字符串的排列
 // 输入一个字符串, 打印该字符串中字符的所有排列, 例如输入字符串 abc 则打印出 abc、acb、bac、bca、cab、cba.
