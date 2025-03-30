@@ -262,3 +262,231 @@ using namespace std;
 // {
 //     process(std::forward<T>(arg));
 // }
+
+// 有作用域枚举
+/*
+    作用域枚举（Scoped Enumeration）是 C++11 引入的一种枚举类型，使用 enum class 或 enum struct 声明。
+*/
+#include <cstdint>
+
+// enum class Color
+// {
+//     Red,
+//     Green,
+//     Blue
+// };
+// Color color = Color::Red; // 使用作用域枚举时，必须指定作用域
+
+// enum class Direction : uint8_t
+// {
+//     North = 1,
+//     South = 2,
+//     East = 3,
+//     West = 4
+// }
+/*
+   可以前向声明
+*/
+
+// enum class Month : uint8_t
+// {
+//     Jan = 1,
+//     Feb,
+//     Mar,
+//     Apr,
+//     May,
+//     Jun,
+//     Jul,
+//     Aug,
+//     Sep,
+//     Oct,
+//     Nov,
+//     Dec
+// };
+
+// void printMonth(Month m)
+// {
+//     switch (m)
+//     {
+//     case Month::Jan:
+//         std::cout << "January";
+//         break;
+//     case Month::Feb:
+//         std::cout << "February";
+//         break;
+//     // ... 其他月份
+//     default:
+//         std::cout << "Invalid month";
+//     }
+//     std::cout << " (" << static_cast<int>(m) << ")\n";
+// }
+
+// int main()
+// {
+//     Month m = Month::Apr;
+//     printMonth(m);
+
+//     // 比较
+//     if (m == Month::Apr)
+//     {
+//         std::cout << "It's April!\n";
+//     }
+
+//     // 转换为整数需要显式转换
+//     int monthNum = static_cast<int>(m);
+//     std::cout << "Month number: " << monthNum << "\n";
+
+//     return 0;
+// }
+
+// constexpr 与字面类型
+/*
+    1. constexpr 关键字
+    用于声明常量表达式，编译时求值，提升性能。
+
+    1.1 constexpr 函数
+    constexpr 函数在编译时求值，可以用于常量表达式。
+
+    与 const 的区别：
+        const 只保证运行时不修改
+        constexpr 保证值在编译时已知
+*/
+
+// 字面类
+// class Point
+// {
+// public:
+//     constexpr Point(double xVal, double yVal) : x(xVal), y(yVal) {}
+//     constexpr double getX() const { return x; }
+//     constexpr double getY() const { return y; }
+
+// private:
+//     double x, y;
+// };
+
+// constexpr Point origin(0.0, 0.0);
+// constexpr Point translated(const Point &p, double dx, double dy)
+// {
+//     return Point(p.getX() + dx, p.getY() + dy);
+// }
+
+// constexpr Point p2 = translated(origin, 1.0, 2.0);
+
+// 列表初始化
+// class Timer
+// {
+// public:
+//     Timer();
+// };
+
+// class TimeKeeper
+// {
+// public:
+//     TimeKeeper(const Timer &t);
+// };
+
+// TimeKeeper tk(Timer()); // 可能被解析为函数声明
+// TimeKeeper tk{Timer()}; // 明确表示初始化
+
+// struct Aggregate
+// {
+//     int x;
+//     double y;
+//     char z;
+// };
+
+// Aggregate a1{1, 2.5, 'c'}; // 直接初始化成员
+// Aggregate a2{};            // 值初始化，所有成员为0/null
+
+// int main()
+// {
+//     int x{5};
+//     double y{3.14};
+//     int arr[]{1, 2, 3, 4, 5};
+//     std::vector<int> v{1, 2, 3, 4, 5};
+//     int *p = new int[5]{1, 2, 3, 4, 5}; // 动态数组初始化
+
+//     return 0;
+// }
+
+// 委托与继承的构造函数
+/*
+    委托构造函数和继承构造函数，它们分别解决了类内构造函数代码重复和基类构造函数继承的问题。
+*/
+
+// class MyClass
+// {
+// public:
+//     MyClass() : MyClass(0, 0)
+//     {
+//         // 委托给下面的构造函数
+//         std::cout << "Default constructor called" << std::endl;
+//     }
+//     MyClass(int a) : MyClass(a, 0)
+//     {
+//         // 委托给下面的构造函数
+//         std::cout << "Single argument constructor called" << std::endl;
+//     }
+//     MyClass(int a, int b) : x(a), y(b)
+//     {
+//         // 直接初始化成员变量
+//         std::cout << "Two arguments constructor called" << std::endl;
+//     }
+
+// private:
+//     int x;
+//     int y;
+// };
+
+// int main()
+// {
+//     // MyClass obj1;        // 委托构造函数
+//     // MyClass obj2(5);     // 委托构造函数
+//     // MyClass obj3(5, 10); // 直接调用
+
+//     return 0;
+// }
+
+// 继承构造函数 (Inheriting Constructors)
+// class Base
+// {
+// public:
+//     Base(int);
+//     Base(int, double);
+// };
+
+// class Derived : public Base
+// {
+// public:
+//     using Base::Base; // 继承Base的所有构造函数
+// };
+
+// 相当于隐式生成：
+// Derived(int x) : Base(x) {}
+// Derived(int x, double y) : Base(x, y) {}
+
+// class Base
+// {
+// public:
+//     Base(int x) : x(x) {}
+//     Base(int x, double y) : x(x), y(y) {}
+
+// protected:
+//     int x;
+//     double y;
+// };
+
+// class Derived : public Base
+// {
+// public:
+//     using Base::Base; // 继承Base的构造函数
+
+//     // 委托构造函数
+//     Derived() : Derived(0, 0.0) {}
+
+//     // 可以添加新构造函数
+//     Derived(const std::string &s) : Base(s.length()), str(s) {}
+
+// private:
+//     std::string str;
+// };
