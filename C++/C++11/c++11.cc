@@ -490,3 +490,128 @@ using namespace std;
 // private:
 //     std::string str;
 // };
+
+// 花括号或等号初始化器
+/*
+    在 C++11 及以后，推荐优先使用花括号 {} 进行变量初始化，原因如下：
+
+    防止窄化转换（Narrowing Conversion）：即不允许 double 隐式转换为 int，或 long long 转换为 int，避免精度丢失。
+    统一初始化方式：支持内置类型、类类型、数组、容器等。
+    支持 std::initializer_list<T>，可以更灵活地初始化容器。
+
+*/
+
+// int main()
+// {
+//     int *p1 = new int(42);
+//     int *p2 = new int(); // 初始化 0
+// }
+
+// nullptr
+// #define NULL 0  // C++03 及以前
+// #include <type_traits>
+// int main()
+// {
+//     std::nullptr_t np = nullptr;
+//     std::cout << std::boolalpha << std::is_same<decltype(nullptr), std::nullptr_t>::value << std::endl;
+// }
+
+// long long
+/*
+    long long 至少 64 位（即 -2^63 到 2^63 - 1）。
+
+    unsigned long long 至少 64 位（即 0 到 2^64 - 1）。
+*/
+
+// int main()
+// {
+//     std::cout << "sizeof(int): " << sizeof(int) << " bytes\n";             // 4
+//     std::cout << "sizeof(long): " << sizeof(long) << " bytes\n";           // 4
+//     std::cout << "sizeof(long long): " << sizeof(long long) << " bytes\n"; // 8
+// }
+
+// char16_t 与 char32_t
+/*
+    char16_t	表示 UTF-16 编码单元，即 16 位字符	2 字节（16 位）
+    char32_t	表示 UTF-32 编码单元，即 32 位字符	4 字节（32 位）
+*/
+
+// 类型别名
+
+// typedef unsigned int uint;
+// using uit = unsigned int;
+
+// typedef char *pStr1;
+// using pStr2 = char *;
+
+// pStr1 a, b; // a 和 b 都是 char*
+// pStr2 c, d; // c 和 d 也是 char*
+
+// using 在模板中的应用
+// template <typename T>
+// typedef std::vector<T> Vec; // ❌ 错误，typedef 不能用于模板
+
+// template <typename T>
+// using Vec = std::vector<T>; // ✅ 正确，Vec<T> 相当于 std::vector<T>
+
+// Vec<int> numbers; // 等价于 std::vector<int>
+
+// 函数指针别名
+// typedef void (*FuncPtr)(int, double);
+// using FuncPtr = void (*)(int, double);
+
+//  复杂 STL 类型
+// using StringList = std::vector<std::string>;
+// using MapIntToStr = std::map<int, std::string>;
+
+// 变参数模板
+// template <typename... Args>
+// void print(Args... args)
+// {
+//     cout << "Argument number : " << sizeof...(args) << endl;
+// }
+
+// 变参数模板展开
+// void print()
+// {
+//     std::cout << "recursion end" << endl;
+// }
+// template <typename T, typename... Args>
+// void print(const T &val, Args... args)
+// {
+//     cout << val << " ";
+//     print(args...);
+// }
+// 通过 initializer_list 一次性展开
+// template <typename... Args>
+// void print(Args... args)
+// {
+//     (std::cout << ... << args) << endl; // C++ 17 折叠表达式
+// }
+
+// template <typename... Args>
+// void print(Args... args)
+// {
+//     int dummy[] = {(std::cout << args << " ", 0)...};
+//     (void)dummy;
+//     std::cout << endl;
+// }
+
+// 变参数模板与 std::forward（完美转发）
+// template <typename... Args>
+// void forwardCall(Args &&...args)
+// {
+//     print(std::forward<Args>(args)...); // 保持参数的原始类型
+// }
+
+// std::make_shared 使用变参数模板来完美转发构造参数。
+#include <memory>
+
+int main()
+{
+    print();
+    print(1, 2, 3);
+    print(1.0, 2.0);
+
+    return 0;
+}
