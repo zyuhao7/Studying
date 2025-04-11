@@ -140,3 +140,97 @@ using namespace std;
 //         return head->next;
 //     }
 // };
+
+// 2025-4-11
+//  160. 相交链表
+// class Solution
+// {
+// public:
+//     ListNode *getIntersectionNode(ListNode *l1, ListNode *l2)
+//     {
+//         if (!l1 || !l2)
+//             return nullptr;
+//         ListNode *t1 = l1, *t2 = l2;
+//         while (t1 != t2)
+//         {
+//             if (t1 == nullptr)
+//                 t1 = l2;
+//             else
+//                 t1 = t1->next;
+
+//             if (t2 == nullptr)
+//                 t2 = l1;
+//             else
+//                 t2 = t2->next;
+//         }
+//         return t1;
+//     }
+// };
+
+// 234  . 回文链表
+// 快慢指针 + 反转链表
+// class Solution
+// {
+// public:
+//     ListNode *reverseList(ListNode *head)
+//     {
+//         if (!head || !head->next)
+//             return head;
+//         ListNode *prev, *cur = head, *next = head->next;
+//         while (cur)
+//         {
+//             cur->next = prev;
+//             prev = cur;
+//             cur = next;
+//             if (next)
+//                 next = next->next;
+//         }
+//         return prev;
+//     }
+//     bool isPalindrome(ListNode *head)
+//     {
+//         if (!head || !head->next)
+//             return true;
+//         ListNode *fast = head, *slow = head;
+//         ListNode *prev = nullptr;
+//         while (fast && fast->next)
+//         {
+//             prev = slow;
+//             slow = slow->next;
+//             fast = fast->next->next;
+//         }
+//         prev->next = nullptr;
+//         ListNode *rhead = reverseList(slow);
+//         ListNode *cur = head;
+//         while (cur)
+//         {
+//             if (cur->val != rhead->val)
+//                 return false;
+//             cur = cur->next;
+//             rhead = rhead->next;
+//         }
+//         return true;
+//     }
+// };
+
+// 递归
+// class Solution
+// {
+// public:
+//     bool checkPalindrome(ListNode *&front, ListNode *cur)
+//     {
+//         if (cur == nullptr)
+//             return true;
+//         if (!checkPalindrome(front, cur->next))
+//             return false;
+//         if (front->val != cur->val)
+//             return false;
+//         front = front->next;
+//         return true;
+//     }
+
+//     bool isPalindrome(ListNode *head)
+//     {
+//         return checkPalindrome(head, head);
+//     }
+// };
