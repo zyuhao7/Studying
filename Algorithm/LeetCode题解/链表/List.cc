@@ -234,3 +234,94 @@ using namespace std;
 //         return checkPalindrome(head, head);
 //     }
 // };
+
+// day-2025-4-12
+//
+// 143  重排链表
+// class Solution
+// {
+// public:
+//     void reorderList(ListNode *head)
+//     {
+//         ListNode *mid = middleNode(head);
+//         ListNode *rhead = ReverseList(mid);
+//         while (rhead->next)
+//         {
+//             ListNode *tmp = head->next;
+//             ListNode *tmp2 = rhead->next;
+//             head->next = rhead;
+//             rhead->next = tmp;
+//             head = tmp;
+//             rhead = tmp2;
+//         }
+//     }
+
+//     ListNode *middleNode(ListNode *head)
+//     {
+//         ListNode *slow = head, *fast = head;
+//         while (fast && fast->next)
+//         {
+//             slow = slow->next;
+//             fast = fast->next->next;
+//         }
+//         return slow;
+//     }
+
+//     ListNode *ReverseList(ListNode *head)
+//     {
+//         ListNode *prev = nullptr, *cur = head, *next = head->next;
+//         while (cur)
+//         {
+//             cur->next = prev;
+//             prev = cur;
+//             cur = next;
+//             if (next)
+//                 next = next->next;
+//         }
+//         return prev;
+//     }
+// };
+
+
+//  86. 分隔链表
+// class Solution
+// {
+// public:
+//     ListNode *partition(ListNode *head, int x)
+//     {
+//         if (!head || !head->next)
+//             return head;
+//         ListNode *dummy = new ListNode(0);
+//         ListNode *tail = dummy;
+//         ListNode *rhead = nullptr;
+//         ListNode *high = nullptr;
+//         ListNode *cur = head;
+//         while (cur)
+//         {
+//             ListNode *next = cur->next;
+//             cur->next = nullptr;
+//             if (cur->val < x)
+//             {
+//                 tail->next = cur;
+//                 tail = cur;
+//             }
+//             else
+//             {
+//                 if (!high)
+//                 {
+//                     high = cur;
+//                     rhead = cur;
+//                 }
+//                 else
+//                 {
+//                     high->next = cur;
+//                     high = cur;
+//                 }
+//             }
+//             cur = next;
+//         }
+
+//         tail->next = rhead;
+//         return dummy->next;
+//     }
+// };
