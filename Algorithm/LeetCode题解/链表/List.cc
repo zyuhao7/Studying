@@ -282,7 +282,6 @@ using namespace std;
 //     }
 // };
 
-
 //  86. 分隔链表
 // class Solution
 // {
@@ -325,3 +324,76 @@ using namespace std;
 //         return dummy->next;
 //     }
 // };
+
+// 2025-4-13
+// 2 . 两数相加
+// class Solution
+// {
+// public:
+//     ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
+//     {
+//         int carry = 0;
+//         ListNode *dummy = new ListNode(-1);
+//         ListNode *cur = dummy;
+//         while (l1 || l2)
+//         {
+//             int t = 0;
+//             if (l1)
+//             {
+//                 t += l1->val;
+//                 l1 = l1->next;
+//             }
+//             if (l2)
+//             {
+//                 t += l2->val;
+//                 l2 = l2->next;
+//             }
+//             t += carry;
+//             carry = t / 10;
+//             ListNode *node = new ListNode(t % 10);
+//             cur->next = node;
+//             cur = node;
+//         }
+//         if (carry)
+//         {
+//             ListNode *node = new ListNode(1);
+//             cur->next = node;
+//         }
+//         return dummy->next;
+//     }
+// };
+
+// 142 . 环形链表 II
+// class Solution
+// {
+// public:
+//     ListNode *detectCycle(ListNode *head)
+//     {
+//         if (!head || !head->next)
+//             return nullptr;
+
+//         ListNode *slow = head, *fast = head;
+//         while (fast && fast->next)
+//         {
+//             slow = slow->next;
+//             fast = fast->next->next;
+//             if (slow == fast)
+//                 break;
+//         }
+//         if (slow != fast)
+//             return nullptr;
+//         ListNode *p = slow, *q = head;
+//         while (p != q)
+//         {
+//             q = q->next;
+//             p = p->next;
+//         }
+//         return p;
+//     }
+// };
+
+// f = 2s
+// f = s + nb
+// f = 2nb, s = nb
+// k = a + nb => s = nb => s 还需要 k 步
+// h 走 k 步到环入口正好和 slow 相遇
