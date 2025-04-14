@@ -359,9 +359,6 @@ using namespace std;
 //     int res = 0;
 //     int minCameraCover(TreeNode *root)
 //     {
-//         // 0 表示没有被监视
-//         // 1 表示 有摄像头
-//         // 2 表示被监控到了
 //         if (dfs(root) == 0)
 //             res++;
 //         return res;
@@ -618,6 +615,175 @@ using namespace std;
 //         }
 //         return res;
 //     }
+// };
+
+// day-2025-4-14
+//  144 二叉树的前序遍历
+//  递归
+// class Solution
+// {
+// public:
+//     vector<int> res;
+//     void preorder(TreeNode *root)
+//     {
+//         if (!root)
+//             return;
+//         res.push_back(root->val);
+//         preorder(root->left);
+//         preorder(root->right);
+//     }
+//     vector<int> preorderTraversal(TreeNode *root)
+//     {
+//         preorder(root);
+//         return res;
+//     }
+// };
+// 迭代
+// class Solution
+// {
+// public:
+//     vector<int> preorderTraversal(TreeNode *root)
+//     {
+//         if (!root)
+//             return {};
+//         stack<TreeNode *> st;
+//         vector<int> res;
+//         st.push(root);
+//         while (!st.empty())
+//         {
+//             auto t = st.top();
+//             st.pop();
+//             res.push_back(t->val);
+//             if (t->right)
+//                 st.push(t->right);
+//             if (t->left)
+//                 st.push(t->left);
+//         }
+//         return res;
+//     }
+// };
+
+// 94 二叉树的中序遍历
+// 递归
+// class Solution {
+//     public:
+//         vector<int> res;
+//         void inorder(TreeNode* root)
+//         {
+//             if(!root) return ;
+//             inorder(root->left);
+//             res.push_back(root->val);
+//             inorder(root->right);
+//         }
+//         vector<int> inorderTraversal(TreeNode* root) {
+//             inorder(root);
+//             return res;
+//         }
+//     };
+
+// 迭代
+// class Solution
+// {
+// public:
+//     vector<int> inorderTraversal(TreeNode *root)
+//     {
+//         vector<int> res;
+//         stack<TreeNode *> st;
+//         TreeNode *cur = root;
+//         while (cur || !st.empty())
+//         {
+//             while (cur)
+//             {
+//                 st.push(cur);
+//                 cur = cur->left;
+//             }
+//             auto t = st.top();
+//             st.pop();
+//             res.push_back(t->val);
+//             cur = t->right;
+//         }
+//         return res;
+//     }
+// };
+
+// 145 二叉树的后序遍历
+//// 递归
+// class Solution
+// {
+// public:
+//     vector<int> res;
+//     void postorder(TreeNode *root)
+//     {
+//         if (!root)
+//             return;
+//         postorder(root->left);
+//         postorder(root->right);
+//         res.push_back(root->val);
+//     }
+//     vector<int> postorderTraversal(TreeNode *root)
+//     {
+//         postorder(root);
+//         return res;
+//     }
+// };
+
+// class Solution {
+// public:
+// vector<int> postorderTraversal(TreeNode *root)
+// {
+//     stack<TreeNode *> st;
+//     TreeNode *prev = nullptr;
+//     TreeNode *cur = root;
+//     vector<int> res;
+//     while (cur || !st.empty())
+//     {
+//         while (cur)
+//         {
+//             st.push(cur);
+//             cur = cur->left;
+//         }
+//         auto t = st.top();
+//         if (t->right == nullptr || t->right == prev)
+//         {
+//             res.push_back(t->val);
+//             st.pop();
+//             prev = t;
+//         }
+//         else
+//         {
+//             cur = t->right;
+//         }
+//     }
+//     return res;
+// }
+// ;
+
+// 104 二叉树的最大深度
+// class Solution
+// {
+// public:
+//     int ans = 0;
+//     int dfs(TreeNode *root)
+//     {
+//         if (!root)
+//             return 0;
+//         int leftDepth = dfs(root->left);
+//         int rightDepth = dfs(root->right);
+//         ans = max(ans, max(leftDepth, rightDepth) + 1);
+//         return max(leftDepth, rightDepth) + 1;
+//     }
+//     int maxDepth(TreeNode *root)
+//     {
+//         dfs(root);
+//         return ans;
+//     }
+// };
+// class Solution {
+// public:
+// int maxDepth(TreeNode* root) {
+//     if(root == nullptr) return 0;
+//     return max(maxDepth(root->left), maxDepth(root->right)) + 1;
+// }
 // };
 int main()
 {
