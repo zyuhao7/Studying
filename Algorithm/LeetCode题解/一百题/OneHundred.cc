@@ -30,8 +30,67 @@ using namespace std;
 //     }
 // };
 
+// day-2025-4-18
+// 53 最大子序和
+// class Solution
+// {
+// public:
+//     int maxSubArray(vector<int> &nums)
+//     {
+//         int maxSum = 0;
+//         int ans = INT_MIN;
+//         for (int i = 0; i < nums.size(); ++i)
+//         {
+//             maxSum = max(nums[i], nums[i] + maxSum);
+//             ans = max(ans, maxSum);
+//         }
+
+//         return ans;
+//     }
+// };
+
+// 60 第k个排列
+// class Solution
+// {
+// public:
+//     int g = 0;
+//     string res;
+//     void Permutation(string &s, string current, vector<bool> &used, int k)
+//     {
+
+//         if (g == k)
+//             return;
+//         if (current.size() == s.size())
+//         {
+//             g++;
+//             if (g == k)
+//                 res = current;
+//             return;
+//         }
+//         for (int i = 0; i < s.size(); ++i)
+//         {
+//             if (!used[i])
+//             {
+//                 used[i] = true;
+//                 Permutation(s, current + s[i], used, k);
+//                 used[i] = false;
+//             }
+//         }
+//     }
+
+//     string getPermutation(int n, int k)
+//     {
+//         string s;
+//         for (int i = 1; i <= n; ++i)
+//         {
+//             s += i + '0';
+//         }
+//         vector<bool> used(n, false);
+//         Permutation(s, "", used, k);
+//         return res;
+//     }
+// };
+
 int main()
 {
 }
-
-
