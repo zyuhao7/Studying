@@ -86,8 +86,75 @@ using namespace std;
 //     }
 // };
 
+// day-2025-4-19
+//  135 分发糖果
+// class Solution
+// {
+// public:
+//     int candy(vector<int> &ratings)
+//     {
+//         int n = ratings.size();
+//         vector<int> candys(n, 1);
 
-int main()
-{
-    return 0;
-}
+//         for (int i = 1; i < n; ++i)
+//         {
+//             if (ratings[i] > ratings[i - 1])
+//                 candys[i] = candys[i - 1] + 1;
+//         }
+
+//         for (int i = n - 2; i >= 0; --i)
+//         {
+//             if (ratings[i] > ratings[i + 1])
+//                 candys[i] = max(candys[i], candys[i + 1] + 1);
+//         }
+//         int res = 0;
+//         for (auto c : candys)
+//             res += c;
+//         return res;
+//     }
+// };
+
+// day-2025-4-29
+// 406 根据身高重建队列
+// class Solution
+// {
+// public:
+//     vector<vector<int>> reconstructQueue(vector<vector<int>> &people)
+//     {
+//         sort(people.begin(), people.end(), [](vector<int> &u, vector<int> &v)
+//              { return u[0] > v[0] || (u[0] == v[0] && u[1] < v[1]); });
+//         // [7, 0] [7, 1] [6, 1] [5, 0] [5, 2] [4, 4]
+//         vector<vector<int>> ans;
+//         for (const vector<int> &person : people)
+//         {
+//             ans.insert(ans.begin() + person[1], person);
+//         }
+//         return ans;
+//     }
+// };
+
+// 452. 用最少数量的箭引爆气球
+// class Solution
+// {
+// public:
+//     int findMinArrowShots(vector<vector<int>> &points)
+//     {
+//         sort(points.begin(), points.end());
+//         int ans = 1;
+//         int end = points[0][1];
+//         for (int i = 1; i < points.size(); ++i)
+//         {
+//             int left = points[i][0], right = points[i][1];
+//             if (left <= end)
+//             {
+//                 end = min(end, right);
+//             }
+//             else
+//             {
+//                 end = right;
+//                 ans++;
+//             }
+//         }
+//         return ans;
+//     }
+// };
