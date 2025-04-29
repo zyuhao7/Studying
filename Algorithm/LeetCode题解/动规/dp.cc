@@ -942,3 +942,48 @@ using namespace std;
 //         return ans;
 //     }
 // };
+
+// day-2025-4-29
+// 120 三角形最小路径和
+// 自底向上
+// class Solution
+// {
+// public:
+//     int minimumTotal(vector<vector<int>> &t)
+//     {
+//         int m = t.size();
+//         vector<int> dp(m);
+//         for (int i = m - 1; i >= 0; --i)
+//         {
+//             for (int j = 0; j <= i; ++j)
+//             {
+//                 if (j == m - 1)
+//                     dp[j] = t[i][j];
+//                 else
+//                     dp[j] = min(dp[j], dp[j + 1]) + t[i][j];
+//             }
+//         }
+//         return dp[0];
+//     }
+// };
+// 自顶向下
+// class Solution
+// {
+// public:
+//     int minimumTotal(vector<vector<int>> &triangle)
+//     {
+//         int m = triangle.size();
+//         vector<int> dp(m);
+//         dp[0] = triangle[0][0];
+//         for (int i = 1; i < m; ++i)
+//         {
+//             dp[i] = dp[i - 1] + triangle[i][i];
+//             for (int j = i - 1; j > 0; --j)
+//             {
+//                 dp[j] = min(dp[j], dp[j - 1]) + triangle[i][j];
+//             }
+//             dp[0] += triangle[i][0];
+//         }
+//         return *min_element(dp.begin(), dp.end());
+//     }
+// };
