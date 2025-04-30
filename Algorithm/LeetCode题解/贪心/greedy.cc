@@ -158,3 +158,83 @@ using namespace std;
 //         return ans;
 //     }
 // };
+
+// day-2025-4-30
+// 435 无重叠区间
+// class Solution {
+//     public:
+//         int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+//             sort(intervals.begin(), intervals.end());
+//             int n = intervals.size();
+//             vector<vector<int>> ans;
+//             ans.push_back({intervals[0][0], intervals[0][1]});
+//             for(int i = 1; i < n; ++i)
+//             {
+//                 int l = intervals[i][0], r = intervals[i][1];
+//                 if(l < ans.back()[1])
+//                 {
+//                     ans.back()[1] = min(ans.back()[1], r);
+//                 }
+//                 else
+//                     ans.push_back({l, r});
+//             }
+//             return n - ans.size();
+//         }
+//     };
+
+// 121 买卖股票的最佳时机
+// class Solution
+// {
+// public:
+//     int maxProfit(vector<int> &prices)
+//     {
+//         int prev = INT_MAX, ans = 0;
+//         for (int i = 1; i < prices.size(); ++i)
+//         {
+//             prev = min(prev, prices[i - 1]);
+//             ans = max(ans, prices[i] - prev);
+//         }
+//         return ans;
+//     }
+// };
+
+// 122 买卖股票的最佳时机 II
+// class Solution
+// {
+// public:
+//     int maxProfit(vector<int> &prices)
+//     {
+//         int ans = 0;
+//         for (int i = 0; i < prices.size(); ++i)
+//         {
+//             if (i + 1 < prices.size() && prices[i + 1] > prices[i])
+//                 ans += prices[i + 1] - prices[i];
+//         }
+//         return ans;
+//     }
+// };
+
+// 763 划分字母区间
+// class Solution
+// {
+// public:
+//     vector<int> partitionLabels(string s)
+//     {
+//         vector<int> ans;
+//         vector<int> last(26);
+//         for (int i = 0; i < s.size(); ++i)
+//             last[s[i] - 'a'] = i;
+
+//         int start = 0, end = 0;
+//         for (int i = 0; i < s.size(); ++i)
+//         {
+//             end = max(end, last[s[i] - 'a']);
+//             if (i == end)
+//             {
+//                 ans.push_back(end - start + 1);
+//                 start = end + 1;
+//             }
+//         }
+//         return ans;
+//     }
+// };
