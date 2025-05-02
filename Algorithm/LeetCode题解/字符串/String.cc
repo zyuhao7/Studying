@@ -116,3 +116,94 @@ public:
     }
 };
 
+// day-2025-5-2
+//  20. 有效的括号
+class Solution
+{
+public:
+    bool isValid(string s)
+    {
+        stack<char> st;
+        if (s.size() % 2)
+            return false;
+        for (int i = 0; i < s.size(); ++i)
+        {
+            if (s[i] == '(' || s[i] == '[' || s[i] == '{')
+                st.push(s[i]);
+            else if (s[i] == ')')
+            {
+                if (!st.empty() && st.top() == '(')
+                    st.pop();
+                else
+                    return false;
+            }
+            else if (s[i] == ']')
+            {
+                if (!st.empty() && st.top() == '[')
+                    st.pop();
+                else
+                    return false;
+            }
+            else if (s[i] == '}')
+            {
+                if (!st.empty() && st.top() == '{')
+                    st.pop();
+                else
+                    return false;
+            }
+        }
+        return st.empty();
+    }
+};
+
+// 151. 翻转字符串里的单词
+class Solution
+{
+public:
+    string reverseWords(string s)
+    {
+        stringstream ss(s);
+        string word, ans = "";
+        vector<string> words;
+        while (ss >> word)
+        {
+            words.push_back(word);
+        }
+        reverse(words.begin(), words.end());
+        for (const string &w : words)
+        {
+            ans += w + " ";
+        }
+        if (!ans.empty())
+            ans.pop_back();
+        return ans;
+    }
+};
+
+// 125  验证回文串
+class Solution
+{
+public:
+    bool isPalindrome(string s)
+    {
+        int i = 0, j = s.size() - 1;
+        while (i < j)
+        {
+            while (i < j && !isalnum(s[i]))
+            {
+                i++;
+            }
+            while (i < j && !isalnum(s[j]))
+            {
+                j--;
+            }
+            if (tolower(s[i]) != tolower(s[j]))
+            {
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }
+};
