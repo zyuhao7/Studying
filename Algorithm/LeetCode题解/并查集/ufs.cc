@@ -312,3 +312,57 @@
 //         return ufs.count();
 //     }
 // };
+
+// day-2025-5-3
+// 990. 等式方程的可满足性
+// class Solution
+// {
+//     class UFS
+//     {
+//     public:
+//         vector<int> pa;
+//         UFS(int n)
+//             : pa(n)
+//         {
+//             iota(pa.begin(), pa.end(), 0);
+//         }
+//         int find(int x)
+//         {
+//             if (x == pa[x])
+//                 return x;
+//             return pa[x] = find(pa[x]);
+//         }
+
+//         void Union(int x, int y)
+//         {
+//             int rootx = find(x);
+//             int rooty = find(y);
+//             if (rootx == rooty)
+//                 return;
+//             pa[rooty] = rootx;
+//         }
+//     };
+
+// public:
+//     bool equationsPossible(vector<string> &equations)
+//     {
+//         UFS ufs(26);
+//         for (int i = 0; i < equations.size(); ++i)
+//         {
+//             int a = equations[i][0] - 'a';
+//             int b = equations[i][3] - 'a';
+//             char op = equations[i][1];
+//             if (op == '=')
+//                 ufs.Union(a, b);
+//         }
+//         for (int i = 0; i < equations.size(); ++i)
+//         {
+//             int a = equations[i][0] - 'a';
+//             int b = equations[i][3] - 'a';
+//             char op = equations[i][1];
+//             if (op == '!' && ufs.find(a) == ufs.find(b))
+//                 return false;
+//         }
+//         return true;
+//     }
+// };
