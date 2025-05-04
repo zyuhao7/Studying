@@ -366,3 +366,234 @@
 //         return true;
 //     }
 // };
+
+// 1579. 保证图可完全遍历
+// class UFS
+// {
+// public:
+//     vector<int> pa;
+//     UFS(int n) : pa(n)
+//     {
+//         iota(pa.begin(), pa.end(), 0);
+//     }
+
+//     int find(int x)
+//     {
+//         if (x == pa[x])
+//             return x;
+//         return pa[x] = find(pa[x]);
+//     }
+
+//     void Union(int x, int y)
+//     {
+//         int rootx = find(x);
+//         int rooty = find(y);
+//         if (rootx == rooty)
+//             return;
+//         pa[rooty] = rootx;
+//     }
+
+//     bool isConnect(int x, int y)
+//     {
+//         return find(x) == find(y);
+//     }
+
+//     bool IsGraphy(int n)
+//     {
+//         int sz = 0;
+//         for (int i = 1; i <= n; ++i)
+//         {
+//             if (pa[i] == i)
+//                 sz++;
+//         }
+//         return sz == 1;
+//     }
+// };
+
+// class Solution
+// {
+// public:
+//     int maxNumEdgesToRemove(int n, vector<vector<int>> &edges)
+//     {
+//         UFS ufs1(n + 1), ufs2(n + 1);
+//         int ans = 0;
+
+//         // 处理类型3的边
+//         for (int i = 0; i < edges.size(); ++i)
+//         {
+//             int type = edges[i][0], u = edges[i][1], v = edges[i][2];
+//             if (type == 3)
+//             {
+//                 if (ufs1.isConnect(u, v))
+//                 {
+//                     ans++;
+//                 }
+//                 else
+//                 {
+//                     ufs1.Union(u, v);
+//                     ufs2.Union(u, v);
+//                 }
+//             }
+//         }
+
+//         // 处理类型1和类型2的边
+//         for (int i = 0; i < edges.size(); ++i)
+//         {
+//             int type = edges[i][0], u = edges[i][1], v = edges[i][2];
+//             if (type == 1)
+//             {
+//                 if (ufs1.isConnect(u, v))
+//                     ans++;
+//                 else
+//                     ufs1.Union(u, v);
+//             }
+//             else if (type == 2)
+//             {
+//                 if (ufs2.isConnect(u, v))
+//                     ans++;
+//                 else
+//                     ufs2.Union(u, v);
+//             }
+//         }
+
+//         // 判断 Alice 和 Bob 是否都能连通
+//         if (ufs1.IsGraphy(n) && ufs2.IsGraphy(n))
+//             return ans;
+//         return -1;
+//     }
+// };
+
+// 1202. 交换字符串中的元素
+// class UFS
+// {
+// public:
+//     vector<int> parent;
+//     UFS(int n) : parent(n)
+//     {
+//         iota(parent.begin(), parent.end(), 0);
+//     }
+
+//     int find(int x)
+//     {
+//         if (x != parent[x])
+//         {
+//             parent[x] = find(parent[x]);
+//         }
+//         return parent[x];
+//     }
+
+//     void Union(int x, int y)
+//     {
+//         int rootX = find(x);
+//         int rootY = find(y);
+//         if (rootX != rootY)
+//         {
+//             parent[rootY] = rootX;
+//         }
+//     }
+// };
+// class Solution
+// {
+// public:
+//     string smallestStringWithSwaps(string s, vector<vector<int>> &pairs)
+//     {
+//         int n = s.size();
+//         UFS ufs(n);
+//         unordered_map<int, vector<int>> group;
+//         for (auto &pair : pairs)
+//         {
+//             ufs.Union(pair[0], pair[1]);
+//         }
+
+//         for (int i = 0; i < n; ++i)
+//         {
+//             int root = ufs.find(i);
+//             group[root].push_back(i);
+//         }
+
+//         for (auto &[root, indices] : group)
+//         {
+//             vector<char> chars;
+//             for (auto &idx : indices)
+//                 chars.push_back(s[idx]);
+//             sort(chars.begin(), chars.end());
+//             int i = 0;
+//             for (auto &idx : indices)
+//                 s[idx] = chars[i++];
+//         }
+//         return s;
+//     }
+// };
+
+// 1631. 最小体力消耗路径
+// class UFS
+// {
+// public:
+//     vector<int> pa;
+//     UFS(int n)
+//         : pa(n)
+//     {
+//         iota(pa.begin(), pa.end(), 0);
+//     }
+//     int find(int x)
+//     {
+//         if (x == pa[x])
+//             return x;
+//         return pa[x] = find(pa[x]);
+//     }
+//     void Union(int x, int y)
+//     {
+//         int rootx = find(x);
+//         int rooty = find(y);
+//         if (rootx == rooty)
+//             return;
+//         pa[rootx] = rooty;
+//     }
+//     bool Connected(int x, int y)
+//     {
+//         return find(x) == find(y);
+//     }
+// };
+// class Solution
+// {
+// public:
+//     int minimumEffortPath(vector<vector<int>> &heights)
+//     {
+//         int m = heights.size();
+//         int n = heights[0].size();
+//         vector<tuple<int, int, int>> edges;
+//         auto index = [&](int i, int j)
+//         {
+//             return n * i + j;
+//         };
+//         for (int i = 0; i < m; ++i)
+//         {
+//             for (int j = 0; j < n; ++j)
+//             {
+//                 int id = index(i, j);
+//                 if (i > 0)
+//                     edges.emplace_back(id - n, id, abs(heights[i][j] - heights[i - 1][j]));
+//                 if (j > 0)
+//                     edges.emplace_back(id - 1, id, abs(heights[i][j] - heights[i][j - 1]));
+//             }
+//         }
+//         sort(edges.begin(), edges.end(), [](const auto &e1, const auto &e2)
+//              {
+//              auto&& [x1, y1, v1] = e1;
+//             auto&& [x2, y2, v2] = e2;
+//             return v1 < v2; });
+
+//         UFS ufs(m * n);
+//         int ans = 0;
+//         for (const auto [x, y, v] : edges)
+//         {
+//             ufs.Union(x, y);
+//             if (ufs.Connected(0, m * n - 1))
+//             {
+//                 ans = v;
+//                 break;
+//             }
+//         }
+//         return ans;
+//     }
+// };
