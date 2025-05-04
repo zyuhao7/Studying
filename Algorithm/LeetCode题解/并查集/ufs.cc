@@ -597,3 +597,76 @@
 //         return ans;
 //     }
 // };
+
+// 778. 水位上升的泳池中游泳
+// class UFS
+// {
+// public:
+//     vector<int> pa;
+//     UFS(int n)
+//         : pa(n)
+//     {
+//         iota(pa.begin(), pa.end(), 0);
+//     }
+//     int find(int x)
+//     {
+//         if (x == pa[x])
+//             return x;
+//         return pa[x] = find(pa[x]);
+//     }
+//     void Union(int x, int y)
+//     {
+//         int rootx = find(x);
+//         int rooty = find(y);
+//         if (rootx == rooty)
+//             return;
+//         pa[rootx] = rooty;
+//     }
+//     bool Connected(int x, int y)
+//     {
+//         return find(x) == find(y);
+//     }
+// };
+// class Solution
+// {
+// public:
+//     int swimInWater(vector<vector<int>> &grid)
+//     {
+//         int m = grid.size();
+//         int n = grid[0].size();
+//         vector<tuple<int, int, int>> edges;
+//         auto index = [&](int i, int j)
+//         {
+//             return n * i + j;
+//         };
+//         for (int i = 0; i < m; ++i)
+//         {
+//             for (int j = 0; j < n; ++j)
+//             {
+//                 int id = index(i, j);
+//                 if (i > 0)
+//                     edges.emplace_back(id - n, id, max(grid[i - 1][j], grid[i][j]));
+//                 if (j > 0)
+//                     edges.emplace_back(id - 1, id, max(grid[i][j - 1], grid[i][j]));
+//             }
+//         }
+//         sort(edges.begin(), edges.end(), [](const auto &e1, const auto &e2)
+//              {
+//              auto&& [x1, y1, v1] = e1;
+//             auto&& [x2, y2, v2] = e2;
+//             return v1 < v2; });
+
+//         UFS ufs(m * n);
+//         int ans = 0;
+//         for (const auto [x, y, v] : edges)
+//         {
+//             ufs.Union(x, y);
+//             if (ufs.Connected(0, m * n - 1))
+//             {
+//                 ans = v;
+//                 break;
+//             }
+//         }
+//         return ans;
+//     }
+// };
