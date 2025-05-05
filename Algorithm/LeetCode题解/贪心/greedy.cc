@@ -238,3 +238,46 @@ using namespace std;
 //         return ans;
 //     }
 // };
+
+// day-2025-5-5
+// 55. 跳跃游戏
+// class Solution
+// {
+// public:
+//     bool canJump(vector<int> &nums)
+//     {
+//         int n = nums.size();
+//         int r = 0;
+//         for (int i = 0; i < n; ++i)
+//         {
+//             if (r < i)
+//                 return false;
+//             r = max(i + nums[i], r);
+//             if (r >= n - 1)
+//                 return true;
+//         }
+//         return false;
+//     }
+// };
+
+// 45. 跳跃游戏 II
+// class Solution
+// {
+// public:
+//     int jump(vector<int> &nums)
+//     {
+//         int n = nums.size();
+//         int hopcnt = 0;
+//         int r = 0, maxPos = 0;
+//         for (int i = 0; i < n - 1; ++i)
+//         {
+//             maxPos = max(maxPos, i + nums[i]);
+//             if (i >= r)
+//             {
+//                 r = maxPos;
+//                 hopcnt++;
+//             }
+//         }
+//         return hopcnt;
+//     }
+// };
