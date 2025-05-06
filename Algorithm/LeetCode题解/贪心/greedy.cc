@@ -281,3 +281,45 @@ using namespace std;
 //         return hopcnt;
 //     }
 // };
+
+// day-2025-5-6
+//  134 加油站
+//  class Solution
+//  {
+//  public:
+//      int canCompleteCircuit(vector<int> &gas, vector<int> &cost)
+//      {
+//          int n = gas.size();
+//          int total = 0, sum = 0, st = 0;
+//          for (int i = 0; i < n; ++i)
+//          {
+//              total += gas[i] - cost[i];
+//              sum += gas[i] - cost[i];
+//              if (sum < 0)
+//              {
+//                  st = i + 1;
+//                  sum = 0;
+//              }
+//          }
+//          return total < 0 ? -1 : st;
+//      }
+//  };
+
+// 714 买卖股票的最佳时机含手续费
+// class Solution
+// {
+// public:
+//     int maxProfit(vector<int> &prices, int fee)
+//     {
+//         int n = prices.size();
+//         vector<vector<int>> dp(n, vector<int>(2));
+//         dp[0][1] = -prices[0];
+//         // dp[i][0] 表示不持股, dp[i][1] 持股.
+//         for (int i = 1; i < n; ++i)
+//         {
+//             dp[i][0] = max(dp[i - 1][0], dp[i - 1][1] + prices[i] - fee);
+//             dp[i][1] = max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
+//         }
+//         return dp[n - 1][0];
+//     }
+// };
