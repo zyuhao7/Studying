@@ -207,3 +207,141 @@ public:
         return true;
     }
 };
+
+// day-2025-5-6
+// 678. 有效的括号字符串
+// class Solution
+// {
+// public:
+//     bool checkValidString(string s)
+//     {
+//         int l = 0, m = 0;
+//         for (int i = 0; i < s.size(); ++i)
+//         {
+//             if (s[i] == '(')
+//                 l++;
+//             else if (s[i] == ')')
+//                 l--;
+//             else
+//                 m++;
+//             if (l < 0)
+//             {
+//                 l++;
+//                 m--;
+//             }
+//             if (m < 0)
+//                 return false;
+//         }
+//         int r = 0;
+//         m = 0;
+//         for (int i = s.size() - 1; i >= 0; --i)
+//         {
+//             if (s[i] == ')')
+//                 r++;
+//             else if (s[i] == '(')
+//                 r--;
+//             else
+//                 m++;
+//             if (r < 0)
+//             {
+//                 r++;
+//                 m--;
+//             }
+//             if (m < 0)
+//                 return false;
+//         }
+//         return true;
+//     }
+// };
+
+// 67. 二进制求和
+// class Solution
+// {
+// public:
+//     string addBinary(string a, string b)
+//     {
+
+//         string res;
+//         int len1 = a.size(), len2 = b.size(), carry = 0, sum = 0;
+//         for (int i = len1 - 1, j = len2 - 1; i >= 0 || j >= 0 || carry; --i, --j)
+//         {
+//             sum = 0;
+//             if (i >= 0)
+//                 sum += a[i] - '0';
+//             if (j >= 0)
+//                 sum += b[j] - '0';
+//             if (carry)
+//                 sum += carry;
+//             res.push_back((sum % 2) + '0');
+//             carry = sum / 2;
+//         }
+//         reverse(res.begin(), res.end());
+//         return res;
+//     }
+// };
+
+// 28.  找出字符串中第一个匹配项的下标
+// class Solution
+// {
+// public:
+//     int strStr(string haystack, string needle)
+//     {
+//         int m = haystack.size();
+//         int n = needle.size();
+//         for (int i = 0; i <= m - n; ++i)
+//         {
+//             for (int j = i; j < n + i; ++j)
+//             {
+//                 if (haystack[j] != needle[j - i])
+//                     break;
+//                 if (j == n + i - 1)
+//                     return i;
+//             }
+//         }
+//         return -1;
+//     }
+// };
+
+// 392. 判断子序列
+// class Solution
+// {
+// public:
+//     bool isSubsequence(string s, string t)
+//     {
+//         if (s.empty())
+//             return true;
+//         int i = 0;
+//         for (auto c : t)
+//             if (c == s[i] && ++i == s.length())
+//                 return true;
+//         return false;
+//     }
+// };
+
+// 647  回文子串
+// class Solution
+// {
+// public:
+//     int countSubstrings(string s)
+//     {
+//         int n = s.size();
+//         int res = 0;
+//         for (int i = 0; i < s.size(); ++i)
+//         {
+//             res += extendSubstring(s, i, i);
+//             res += extendSubstring(s, i, i + 1);
+//         }
+//         return res;
+//     }
+//     int extendSubstring(string s, int l, int r)
+//     {
+//         int cnt = 0;
+//         while (l >= 0 && r < s.size() && s[l] == s[r])
+//         {
+//             cnt++;
+//             l--;
+//             r++;
+//         }
+//         return cnt;
+//     }
+// };
