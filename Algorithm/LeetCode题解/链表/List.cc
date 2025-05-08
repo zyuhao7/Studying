@@ -395,5 +395,62 @@ using namespace std;
 // f = 2s
 // f = s + nb
 // f = 2nb, s = nb
-// k = a + nb => s = nb => s 还需要 k 步
-// h 走 k 步到环入口正好和 slow 相遇
+// k = a + nb => s = nb => s 还需要 a 步
+// h 走 a 步到环入口正好和 slow 相遇
+
+// day-2025-5-8
+// 82. 删除排序链表中的重复元素 II
+// class Solution {
+//     public:
+//         ListNode* deleteDuplicates(ListNode* head) {
+//             if(!head) return nullptr;
+//             ListNode* dummyNode = new ListNode(-1);
+//             dummyNode->next = head;
+//             ListNode* prev = dummyNode;
+//             ListNode* cur = head;
+//             while(cur)
+//             {
+//                 if(cur->next && cur->val == cur->next->val)
+//                 {
+//                     int v = cur->val;
+//                     while(cur && cur->val == v)
+//                     {
+//                         ListNode* tmp = cur;
+//                         cur = cur->next;
+//                         delete tmp;
+//                     }
+//                     prev->next = cur;
+//                 }
+//                 else
+//                 {
+//                     prev  = cur;
+//                     cur = cur->next;
+//                 }
+//             }
+//             ListNode* res = dummyNode->next;
+//             delete dummyNode;
+//             return res;
+//         }
+//     };
+
+// 83. 删除排序链表中的重复元素
+// class Solution
+// {
+// public:
+//     ListNode *deleteDuplicates(ListNode *head)
+//     {
+//         if (!head)
+//             return head;
+//         ListNode *prev = head;
+//         ListNode *cur = head->next;
+//         while (cur)
+//         {
+//             if (cur->val == prev->val)
+//                 prev->next = cur->next;
+//             else
+//                 prev = cur;
+//             cur = cur->next;
+//         }
+//         return head;
+//     }
+// };
