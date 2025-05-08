@@ -670,3 +670,78 @@
 //         return ans;
 //     }
 // };
+
+// day-2025-5-8
+// 1584. 连接所有点的最小费用
+// class UFS
+// {
+// public:
+//     vector<int> pa;
+//     UFS(int n)
+//         : pa(n)
+//     {
+//         iota(pa.begin(), pa.end(), 0);
+//     }
+//     int find(int x)
+//     {
+//         if (x == pa[x])
+//             return x;
+//         return pa[x] = find(pa[x]);
+//     }
+
+//     bool Union(int x, int y)
+//     {
+//         int rootx = find(x);
+//         int rooty = find(y);
+//         if (rootx == rooty)
+//             return false;
+//         pa[rooty] = rootx;
+//         return true;
+//     }
+// };
+// struct edge
+// {
+// public:
+//     int len, x, y;
+//     edge(int _len, int _x, int _y)
+//         : len(_len), x(_x), y(_y)
+//     {
+//     }
+// };
+// class Solution
+// {
+// public:
+//     int minCostConnectPoints(vector<vector<int>> &points)
+//     {
+//         int n = points.size();
+//         UFS ufs(n);
+//         auto dist = [points](int i, int j)
+//         {
+//             return abs(points[i][0] - points[j][0]) + abs(points[i][1] - points[j][1]);
+//         };
+
+//         vector<edge> edges;
+//         for (int i = 0; i < n; ++i)
+//         {
+//             for (int j = i + 1; j < n; ++j)
+//             {
+//                 edges.emplace_back(dist(i, j), i, j);
+//             }
+//         }
+//         int ret = 0, num = 1;
+//         sort(edges.begin(), edges.end(), [](edge a, edge b)
+//              { return a.len < b.len; });
+//         for (auto &[len, x, y] : edges)
+//         {
+//             if (ufs.Union(x, y))
+//             {
+//                 ret += len;
+//                 num++;
+//             }
+//             if (num == n)
+//                 break;
+//         }
+
+//         return ret;
+//     }
+// };
