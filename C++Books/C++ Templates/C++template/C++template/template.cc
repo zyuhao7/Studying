@@ -6,26 +6,26 @@ using namespace std;
 
 // 第一部分 - 基础
 // day-2025-5-20
-template<typename T>
-inline T const& Max(T const& a, T const& b)
-{
-	return a > b ? a : b;
-}
+//template<typename T>
+//inline T const& Max(T const& a, T const& b)
+//{
+//	return a > b ? a : b;
+//}
+//
+//template<typename T>
+//inline T* const& Max(T* const& a, T* const& b)
+//{
+//	return *a > *b ? a : b;
+//}
+//
+//inline char const* const& Max(char const* const& a, char const* const& b)
+//{
+//	return std::strcmp(a, b) < 0 ? b : a;
+//}
 
-template<typename T>
-inline T* const& Max(T* const& a, T* const& b)
-{
-	return *a > *b ? a : b;
-}
 
-inline char const* const& Max(char const* const& a, char const* const& b)
-{
-	return std::strcmp(a, b) < 0 ? b : a;
-}
-
-
-int main()
-{
+//int main()
+//{
 	//int a = 7;
 	//int b = 42;
 	//cout << "Max(a,b): " << Max(a, b) << endl;
@@ -56,4 +56,73 @@ int main()
 	string s2 = "world";
 	cout << "Max(s1,s2): " << Max(s1, s2) << endl;
 	*/
-}
+//}
+
+//#include "stack1.h"
+// 类模板
+
+// 局部特化
+//template<typename T1, typename T2>
+//class MyClass{};
+//
+//template<typename T>
+//class MyClass<T, T> {};
+//
+//template<typename T>
+//class MyClass<T, int>{};
+//
+//template<typename T1, typename T2>
+//class MyClass<T1*, T2*>{};
+//
+//template<typename T>
+//class MyClass<T*, T*>{};
+//
+//
+//int main()
+//{
+//	try
+//	{
+//		Stack<int> intSt;
+//		Stack<std::string> stringSt;
+//
+//		intSt.push(7);
+//		cout << "intSt.top(): " << intSt.top() << endl;
+//
+//		stringSt.push("hello");
+//		cout << "stringSt.top(): " << stringSt.top() << endl;
+//		stringSt.pop();
+//		stringSt.pop();
+//	}
+//	catch (const std::exception& e)
+//	{
+//		std::cerr << "Exception: " << e.what() << std::endl;
+//		return EXIT_FAILURE;
+//	}
+//}
+
+//#include <deque>
+//#include "stack3.h"
+//int main()
+//{
+//	try
+//	{
+//		Stack<int> intSt;
+//		Stack<double, std::deque<double>> doubleSt;
+//		intSt.push(7);
+//		cout << "intSt.top(): " << intSt.top() << endl;
+//
+//		doubleSt.push(3.14);
+//		cout << "doubleSt.top(): " << doubleSt.top() << endl;
+//		doubleSt.pop();
+//		doubleSt.pop();
+//	}
+//	catch (const std::exception& e)
+//	{
+//		std::cerr << "Exception : " << e.what() << std::endl;
+//		return EXIT_FAILURE;
+//	}
+//}
+
+
+//2025-5-21
+// 第四章-非类型模板参数
