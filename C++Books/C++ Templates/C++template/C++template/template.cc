@@ -367,3 +367,122 @@ using namespace std;
 // day-2025-5-23
 // 第八章-深入模板基础
 
+// day-2025-5-24
+// 第九章- 模板中的名称
+//template<typename T>
+//class C
+//{
+//	friend void f();
+//	friend void f(C<T> const&);
+//};
+//
+//void g(C<int> const& c)
+//{
+//	f(c); // 错误
+//	f(); // 错误
+//}
+//
+//int main()
+//{
+//	C<int> c;
+//	f(c); // 错误
+//	f(); // 错误
+//	g(c); // 错误
+//	return 0;
+//}
+
+
+//int C;
+//class C
+//{
+//private:
+//	int i[2];
+//public:
+//	static int f()
+//	{
+//		return sizeof(C);
+//	}
+//};
+//
+//int f()
+//{
+//	return sizeof(C);
+//}
+//
+//
+//class BX
+//{
+//public:
+//	void f(int);
+//	void f(char const*);
+//	void g();
+//};
+//
+//class DX : private BX
+//{
+//public:
+//	using BX::f; // 允许访问 BX::f()
+//};
+//
+//int main()
+//{
+//	std::cout << "C::f() =  " << C::f() << std::endl;
+//	std::cout << "::f() =  " << f() << std::endl;
+//	return 0;
+//}
+
+// 非依赖性基类
+// 基类的类型不依赖于模板参数，即基类在模板定义时就已经完全确定。
+//struct Base {
+//	void foo() {}
+//};
+//
+//template <typename T>
+//struct Derived : Base  // // Base 不依赖 T，是非依赖性基类
+//{  
+//	void bar() 
+//	{
+//		foo();  // 直接调用 Base::foo()
+//	}
+//};
+//基类的成员（如 foo()）在模板定义阶段就可以被直接查找，编译器知道它的存在。
+//如果基类成员不存在，会在模板定义阶段报错（而非实例化阶段）。
+
+// 依赖性基类
+//template <typename T>
+//struct Base {
+//	void foo() { cout << "Base::foo()" << endl; }
+//};
+//
+//template <typename T>
+//struct Derived : Base<T> {  // Base<T> 依赖 T，是依赖性基类
+//	void bar() {
+//		// foo();  // 直接调用会报错！因为 foo() 是依赖性名称
+//		this->foo();  // 正确：通过 this 或 Base<T>::foo() 访问
+//	}
+//};
+//
+//int main()
+//{
+//	Derived<int> d;
+//	d.bar();  // 正确调用 Derived::bar()，间接访问 Base::foo()
+//	return 0;
+//}
+
+template <typename Derived>
+struct Base {  // 依赖性基类
+	void foo() {
+		static_cast<Derived*>(this)->impl();  // 调用派生类的实现
+	}
+};
+
+struct MyDerived : Base<MyDerived> {  // CRTP
+	void impl() {
+		std::cout << "MyDerived::impl()\n";
+	}
+};
+
+int main() {
+	MyDerived d;
+	d.foo();  // 输出 "MyDerived::impl()"
+}
