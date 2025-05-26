@@ -469,20 +469,211 @@ using namespace std;
 //	return 0;
 //}
 
-template <typename Derived>
-struct Base {  // 依赖性基类
-	void foo() {
-		static_cast<Derived*>(this)->impl();  // 调用派生类的实现
-	}
-};
+//template <typename Derived>
+//struct Base {  // 依赖性基类
+//	void foo() {
+//		static_cast<Derived*>(this)->impl();  // 调用派生类的实现
+//	}
+//};
+//
+//struct MyDerived : Base<MyDerived> {  // CRTP
+//	void impl() {
+//		std::cout << "MyDerived::impl()\n";
+//	}
+//};
+//
+//int main() {
+//	MyDerived d;
+//	d.foo();  // 输出 "MyDerived::impl()"
+//}
 
-struct MyDerived : Base<MyDerived> {  // CRTP
-	void impl() {
-		std::cout << "MyDerived::impl()\n";
-	}
-};
+// 2025-5-25
+// 第十章-实例化
+//class MyInt
+//{
+//public:
+//	MyInt(int i);
+//};
+//
+//MyInt operator-(MyInt const&);
+//bool operator>(MyInt const&, MyInt const&);
+//
+//typedef MyInt Int;
+//template<typename T>
+//void f(T i)
+//{
+//	if (i > 0)
+//	{
+//		g(-i);
+//	}
+//}
+//
+//void g(Int)
+//{
+//	f<Int>(42);
+//}
 
-int main() {
-	MyDerived d;
-	d.foo();  // 输出 "MyDerived::impl()"
-}
+//template<typename T>
+//void f(T x)
+//{
+//	g1(x);
+//}
+//
+//void g1(int)
+//{
+//
+//}
+//
+//
+//int main()
+//{
+//	f(7);
+//	return 0;
+//}
+
+// 第十一章-模板实参推演
+//template<int N>
+//class X {
+//public:
+//	typedef int I;
+//	void f(int) 
+//	{
+//		cout << "X::f(int) " << endl;
+//	}
+//};
+//
+//template<int N>
+//void fppm(void (X<N>::* p)(typename X<N>::I)) {
+//	// 这里的 p 是一个指向成员函数的指针
+//	// 你可以在这里使用 p 来调用 X<N>::f
+//	X<N> x;
+//	(x.*p)(42); // 调用成员函数
+//};
+//
+//
+//int main()
+//{
+//	fppm(&X<33>::f);
+//}
+
+//class S{};
+//
+//template<typename T>
+//class Wrapper
+//{
+//private:
+//	T object;
+//
+//public:
+//	Wrapper(T obj) :object(obj){}
+//
+//	friend void f(Wrapper<T> const& a)
+//	{
+//		cout << "f(Wrapper<T> const& a)" << endl;
+//	}
+//};
+//
+//int main()
+//{
+//	S s;	
+//	Wrapper<S> w(s); 
+//	f(w);		// f(Wrapper<T> const& a)
+//	//f(s);		// 错误：没有匹配的函数
+//}
+
+// day-2025-5-26
+// 第十二章-特化与重载
+
+//template<typename T>
+//int f(T)
+//{
+//	return 1;
+//}
+//
+//template<typename T>
+//int f(T*)
+//{
+//	return 2;
+//}
+//
+//template<typename T>
+//std::string f1(T)
+//{
+//	return "Template";
+//}
+//
+//std::string f1(int&)
+//{
+//	return "Nontemplate";
+//}
+//
+//int main()
+//{
+//	std::cout << f<int*>((int*)0) << endl; // 1
+//	std::cout << f<int>((int*)0) << endl;  // 2
+//	std::cout << f(0) << endl;			   // 1	
+//	std::cout << f((int*)0) << endl;	   // 2
+//
+//	int x = 7;
+//	std::cout << f1(x) << endl;			// Nontemplate
+//}
+
+//template<typename T>
+//class Invalid{};
+//
+//Invalid<double> x; // 显式专用化；已实例化“Invalid<double>”
+//
+//template<>
+//class Invalid<double>;
+
+//template<typename T>
+//int f(T)
+//{
+//	return 1;
+//}
+//
+//template<typename T>
+//int f(T*)
+//{
+//	return 2;
+//}
+//template<>
+//int f(int)
+//{
+//	return 3;
+//}
+//
+//template<>
+//int f(int*)
+//{
+//	return 4;
+//}
+//
+//template<typename T>
+//int f(T, T x = 42)
+//{
+//	return x;
+//}
+
+//template<>
+//int f(int, int = 35) // err f: 函数模板的显式专用化或实例化不能有任何默认参数
+//{
+//	return 0;
+//}
+
+//template<typename T>
+//int g(T, T x = 42)
+//{
+//	return x;
+//}
+//
+//template<>
+//int g(int, int y)
+//{
+//	return y / 2;
+//}
+//
+//int main()
+//{
+//	cout << g(0) << endl; // 21
+//}
