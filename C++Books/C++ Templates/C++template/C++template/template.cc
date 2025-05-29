@@ -2,6 +2,10 @@
 #include <string>
 #include <stddef.h>
 #include <cstring>
+#include <vector>
+#include <list>
+#include <stack>
+#include <typeinfo>
 using namespace std;
 
 // 第一部分 - 基础
@@ -677,3 +681,305 @@ using namespace std;
 //{
 //	cout << g(0) << endl; // 21
 //}
+
+// day-2025-5-27
+// 第十三章-未来的方向
+//typedef vector<list<int>> ListOfIntLists; // 以前是错误,尖括号不能连写.
+//
+//template<typename T>
+//class Table
+//{
+//public:
+//	typedef vector<list<T>> Type;
+//};
+//
+//int main()
+//{
+//	Table<int>::Type table; // 正确，使用 typedef 定义的类型
+//
+//	
+//	return 0;
+//}
+
+//class Base {
+//public:
+//	virtual Base* clone() const {
+//		return new Base(*this);
+//	}
+//	virtual ~Base() {}
+//};
+//
+//class Derived : public Base {
+//public:
+//	// 协变返回类型 - 返回 Derived* 而非Base*
+//	virtual Derived* clone() const override {
+//		return new Derived(*this);
+//	}
+//};
+
+//day-2025-5-28
+// 第十四章-模板的多态力量
+// 第十五章-trait 和 policy
+// s1.h
+//namespace A
+//{
+//	int f(double);
+//}
+//
+//// s2.h
+//namespace B
+//{
+//	using A::f;
+//	void g();
+//}
+//// s3.h
+//namespace A
+//{
+//	int f(int);
+//}
+//// s4.h
+//void B::g()
+//{
+//	f(1);
+//}
+
+
+
+// day-2025-5-29
+// 第十五章-trait 和 policy类
+
+//#include <iterator>
+//template<typename Iter>
+//inline typename std::iterator_traits<Iter>::value_type
+//accum(Iter st, Iter ed)
+//{
+//	typedef typename std::iterator_traits<Iter>::value_type VT;
+//	VT total = VT();
+//	while (st != ed)
+//	{
+//		total += *st;
+//		++st;
+//	}
+//	return total;
+//}
+
+// 普通指针
+//namespace std
+//{
+//	template<typename T>
+//	struct iterator_traits<T*> {
+//		typedef T									value_type;
+//		typedef ptrdiff_t							difference_type;
+//		typedef random_access_iterator_tag			iterator_category;
+//		typedef T*									pointer;
+//		typedef T&									reference;
+//	};
+//}
+
+//template<typename T>
+//class TypeSize
+//{
+//public:
+//	static size_t const value = sizeof(T);
+//};
+//int main()
+//{
+//	cout << "TypeSize<int>::value = " << TypeSize<int>::value << endl;
+//
+//}
+
+
+//template<typename T>
+//class ElementT;	// 基本模板
+//
+//template<typename T>
+//class ElementT<std::vector<T>> {	//局部特化
+//public:
+//	typedef T Type;
+//};
+//
+//template<typename T>
+//class ElementT<std::list<T>> {     // //局部特化
+//public:
+//	typedef T Type;
+//};
+//
+//template<typename T>
+//class ElementT<std::stack<T>> {     // //局部特化
+//public:
+//	typedef T Type;
+//};
+//
+//template<typename T>
+//void print_element_type(T const& c)
+//{
+//	cout << "Container of " << typeid(typename ElementT<T>::Type).name() << " elements." << endl;
+//}
+//
+//int main()
+//{
+//	stack<bool> st;
+//	print_element_type(st);
+//}
+
+//template<typename C>
+//class EelementT
+//{
+//public:
+//	typedef typename C::value_type Type;
+//};
+
+//template<typename T>
+//class IsClassT {
+//private:
+//	typedef char One;
+//	typedef struct{ char a[2]; } Two;
+//
+//	template<typename C>
+//	static One test(int C::*){}
+//	template<typename C>
+//	static Two test(...){} // ... 匹配非类类型
+//
+//public:
+//	enum { Yes = sizeof(test<T>(0)) == sizeof(One) };
+//	enum { No = !Yes };
+//};
+//
+//
+//class MyClass{};
+//struct MyStruct{};
+//union MyUnion{};
+//void myfunc() {};
+//enum E{e1}  e;
+//
+//template<typename T>
+//void check()
+//{
+//	if (IsClassT<T>::Yes)
+//	{
+//		cout << "IsClassT" << endl;
+//	}
+//	else
+//	{
+//		cout << "!IsClassT" << endl;
+//	}
+//}
+//
+//template<typename T>
+//void checkT(T)
+//{
+//	check<T>();
+//}
+//
+//int main()
+//{
+//	cout << "int: ";
+//	check<int>();
+//
+//	cout << "MyClass: ";
+//	check<MyClass>();
+//	
+//	cout << "MyStruct: ";
+//	MyStruct s;
+//	checkT(s);
+//
+//	cout << "MyUnion: ";
+//	check<MyUnion>();
+//
+//	cout << "enum: ";
+//	checkT(e);
+//
+//	cout << "myfunc():";
+//	checkT(myfunc);
+//}
+
+// 基本模板, 根据第一个实参来决定, 是选择第二个实参, 还是选择第三个实参
+//template<bool C, typename Ta, typename Tb>
+//class IfThenElse;
+//
+//// 局部特化, true的话选择第二个实参
+//template<typename Ta, typename Tb>
+//class IfThenElse<true, Ta, Tb>
+//{
+//public:
+//	typedef Ta ResultT;
+//};
+
+// 局部特化, false的话选择第三个实参
+//template<typename Ta, typename Tb>
+//class IfThenElse<false, Ta, Tb>
+//{
+//public:
+//	typedef Tb ResultT;
+//};
+
+
+// 针对类型提升的基本模板
+//template<typename T1, typename T2>
+//class Promotion {
+//public:
+//	typedef typename IfThenElse<(sizeof(T1)> sizeof(T2)),
+//		T1, typename IfThenElse<(sizeof(T1)< sizeof(T2)),
+//		T2,
+//		void
+//		>::ResultT
+//		>::ResultT ResultT;
+//};
+//
+//template<typename T>
+//class Promotion<T, T>
+//{
+//public:
+//	typedef T resultT;
+//};
+//
+//#define MK_PROMOTION(T1, T2, Tr) \
+//template<> class Promotion<T1, T2>{ \
+//	public: \
+//	typedef Tr ResultT; \
+//};	\
+//template<> class Promotion<T2, T1> {\
+//public: \
+//		typedef Tr ResultT; \
+//}; 
+//MK_PROMOTION(bool, char, int)
+//MK_PROMOTION(bool, unsigned char, int)
+//// ...
+//class Array{};
+//
+//template<typename T1, typename T2>
+//class Promotion<Array<T1>, Array<T2>>
+//{
+//public:
+//	typedef Array<typename Promotion<T1, T2>::ResultT> ResultT;
+//};
+//
+//template<typename T>
+//class Promotion<Array<T>, Array<T>>
+//{
+//public:
+//	typedef Array<typename Promotion<T, T>::ResultT> ResultT;
+//};
+
+//template<typename T>
+//class RParam
+//{
+//public:
+//	typedef typename IfThenElse<sizeof(T) <= 2 * sizeof(void*)>,
+//		T,
+//		T const& > ::ResultT Type;
+//};
+
+//template<typename T>
+//class RParam {
+//public:
+//	typedef typename IfThenElse<IsClassT<T>::No,
+//		T,
+//		Tconst&>::ResultT Type;
+//};
+
+
+int main()
+{
+
+}
