@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <string>
 #include <stddef.h>
 #include <cstring>
@@ -8,7 +8,7 @@
 #include <typeinfo>
 using namespace std;
 
-// µÚÒ»²¿·Ö - »ù´¡
+// ç¬¬ä¸€éƒ¨åˆ† - åŸºç¡€
 // day-2025-5-20
 //template<typename T>
 //inline T const& Max(T const& a, T const& b)
@@ -63,9 +63,9 @@ using namespace std;
 //}
 
 //#include "stack1.h"
-// ÀàÄ£°å
+// ç±»æ¨¡æ¿
 
-// ¾Ö²¿ÌØ»¯
+// å±€éƒ¨ç‰¹åŒ–
 //template<typename T1, typename T2>
 //class MyClass{};
 //
@@ -129,7 +129,7 @@ using namespace std;
 
 
 //2025-5-21
-// µÚËÄÕÂ-·ÇÀàĞÍÄ£°å²ÎÊı
+// ç¬¬å››ç« -éç±»å‹æ¨¡æ¿å‚æ•°
 //#include "stack4.h"
 
 //int main()
@@ -162,7 +162,7 @@ using namespace std;
 //	return 0;
 //}
 
-// ·ÇÀàĞÍµÄº¯ÊıÄ£°å²ÎÊı
+// éç±»å‹çš„å‡½æ•°æ¨¡æ¿å‚æ•°
 //template<typename T, int N>
 //T addN(T const& x)
 //{
@@ -178,11 +178,11 @@ using namespace std;
 //	return 0;
 //}
 
-// µÚÎåÕÂ-¼¼ÇÉĞÔ»ù´¡ÖªÊ¶
+// ç¬¬äº”ç« -æŠ€å·§æ€§åŸºç¡€çŸ¥è¯†
 //template<typename T>
 //class MyClass
 //{
-//	typename T::SubType* ptr; // ²»Ê¹ÓÃ typename ,»á ±»ÎóÒÔÎª T::SubType ºÍ ptr µÄ³Ë»ı
+//	typename T::SubType* ptr; // ä¸ä½¿ç”¨ typename ,ä¼š è¢«è¯¯ä»¥ä¸º T::SubType å’Œ ptr çš„ä¹˜ç§¯
 //};
 //
 //template<typename T>
@@ -222,7 +222,7 @@ using namespace std;
 //}
 // 
 //#include "stack6.h"
-//// Ä£°åµÄÄ£°å²ÎÊı
+//// æ¨¡æ¿çš„æ¨¡æ¿å‚æ•°
 //int main()
 //{
 //	Stack<int, std::deque> intSt;
@@ -266,7 +266,7 @@ using namespace std;
 //
 //}
 
-// Áã³õÊ¼»¯
+// é›¶åˆå§‹åŒ–
 //template<typename T>
 //void foo()
 //{
@@ -302,7 +302,7 @@ using namespace std;
 //}
 //
 //template<typename T, int N, int M>
-//T const* max(T const (&a)[N], T const (&b)[M]) // ÒıÓÃ
+//T const* max(T const (&a)[N], T const (&b)[M]) // å¼•ç”¨
 //{
 //	return a[0] > b[0] ? a : b;
 //}
@@ -323,7 +323,7 @@ using namespace std;
 //}
 
 
-// µÚÁùÕÂ-Ä£°åÊµÕ½
+// ç¬¬å…­ç« -æ¨¡æ¿å®æˆ˜
 //day-2025-5-22
 //#include <algorithm>
 //#include "tracer.h"
@@ -341,12 +341,12 @@ using namespace std;
 //	long assigned_at_start = SortTracer::assignments();
 //	long compared_at_start = SortTracer::comparisons();
 //
-//	//Ö´ĞĞËã·¨
+//	//æ‰§è¡Œç®—æ³•
 //	std::cerr << "---[Start std::sort() ]-------------------------" << std::endl;
 //	std::sort(&input[0], &input[9] + 1);
 //	std::cerr << "---[End std::sort() ]-------------------------" << std::endl;
 //
-//	// È·ÈÏ½á¹û
+//	// ç¡®è®¤ç»“æœ
 //	for (int i = 0; i < 10; ++i)
 //	{
 //		cerr << input[i].val() << " ";
@@ -369,10 +369,10 @@ using namespace std;
 
 
 // day-2025-5-23
-// µÚ°ËÕÂ-ÉîÈëÄ£°å»ù´¡
+// ç¬¬å…«ç« -æ·±å…¥æ¨¡æ¿åŸºç¡€
 
 // day-2025-5-24
-// µÚ¾ÅÕÂ- Ä£°åÖĞµÄÃû³Æ
+// ç¬¬ä¹ç« - æ¨¡æ¿ä¸­çš„åç§°
 //template<typename T>
 //class C
 //{
@@ -382,16 +382,16 @@ using namespace std;
 //
 //void g(C<int> const& c)
 //{
-//	f(c); // ´íÎó
-//	f(); // ´íÎó
+//	f(c); // é”™è¯¯
+//	f(); // é”™è¯¯
 //}
 //
 //int main()
 //{
 //	C<int> c;
-//	f(c); // ´íÎó
-//	f(); // ´íÎó
-//	g(c); // ´íÎó
+//	f(c); // é”™è¯¯
+//	f(); // é”™è¯¯
+//	g(c); // é”™è¯¯
 //	return 0;
 //}
 
@@ -425,7 +425,7 @@ using namespace std;
 //class DX : private BX
 //{
 //public:
-//	using BX::f; // ÔÊĞí·ÃÎÊ BX::f()
+//	using BX::f; // å…è®¸è®¿é—® BX::f()
 //};
 //
 //int main()
@@ -435,48 +435,48 @@ using namespace std;
 //	return 0;
 //}
 
-// ·ÇÒÀÀµĞÔ»ùÀà
-// »ùÀàµÄÀàĞÍ²»ÒÀÀµÓÚÄ£°å²ÎÊı£¬¼´»ùÀàÔÚÄ£°å¶¨ÒåÊ±¾ÍÒÑ¾­ÍêÈ«È·¶¨¡£
+// éä¾èµ–æ€§åŸºç±»
+// åŸºç±»çš„ç±»å‹ä¸ä¾èµ–äºæ¨¡æ¿å‚æ•°ï¼Œå³åŸºç±»åœ¨æ¨¡æ¿å®šä¹‰æ—¶å°±å·²ç»å®Œå…¨ç¡®å®šã€‚
 //struct Base {
 //	void foo() {}
 //};
 //
 //template <typename T>
-//struct Derived : Base  // // Base ²»ÒÀÀµ T£¬ÊÇ·ÇÒÀÀµĞÔ»ùÀà
+//struct Derived : Base  // // Base ä¸ä¾èµ– Tï¼Œæ˜¯éä¾èµ–æ€§åŸºç±»
 //{  
 //	void bar() 
 //	{
-//		foo();  // Ö±½Óµ÷ÓÃ Base::foo()
+//		foo();  // ç›´æ¥è°ƒç”¨ Base::foo()
 //	}
 //};
-//»ùÀàµÄ³ÉÔ±£¨Èç foo()£©ÔÚÄ£°å¶¨Òå½×¶Î¾Í¿ÉÒÔ±»Ö±½Ó²éÕÒ£¬±àÒëÆ÷ÖªµÀËüµÄ´æÔÚ¡£
-//Èç¹û»ùÀà³ÉÔ±²»´æÔÚ£¬»áÔÚÄ£°å¶¨Òå½×¶Î±¨´í£¨¶ø·ÇÊµÀı»¯½×¶Î£©¡£
+//åŸºç±»çš„æˆå‘˜ï¼ˆå¦‚ foo()ï¼‰åœ¨æ¨¡æ¿å®šä¹‰é˜¶æ®µå°±å¯ä»¥è¢«ç›´æ¥æŸ¥æ‰¾ï¼Œç¼–è¯‘å™¨çŸ¥é“å®ƒçš„å­˜åœ¨ã€‚
+//å¦‚æœåŸºç±»æˆå‘˜ä¸å­˜åœ¨ï¼Œä¼šåœ¨æ¨¡æ¿å®šä¹‰é˜¶æ®µæŠ¥é”™ï¼ˆè€Œéå®ä¾‹åŒ–é˜¶æ®µï¼‰ã€‚
 
-// ÒÀÀµĞÔ»ùÀà
+// ä¾èµ–æ€§åŸºç±»
 //template <typename T>
 //struct Base {
 //	void foo() { cout << "Base::foo()" << endl; }
 //};
 //
 //template <typename T>
-//struct Derived : Base<T> {  // Base<T> ÒÀÀµ T£¬ÊÇÒÀÀµĞÔ»ùÀà
+//struct Derived : Base<T> {  // Base<T> ä¾èµ– Tï¼Œæ˜¯ä¾èµ–æ€§åŸºç±»
 //	void bar() {
-//		// foo();  // Ö±½Óµ÷ÓÃ»á±¨´í£¡ÒòÎª foo() ÊÇÒÀÀµĞÔÃû³Æ
-//		this->foo();  // ÕıÈ·£ºÍ¨¹ı this »ò Base<T>::foo() ·ÃÎÊ
+//		// foo();  // ç›´æ¥è°ƒç”¨ä¼šæŠ¥é”™ï¼å› ä¸º foo() æ˜¯ä¾èµ–æ€§åç§°
+//		this->foo();  // æ­£ç¡®ï¼šé€šè¿‡ this æˆ– Base<T>::foo() è®¿é—®
 //	}
 //};
 //
 //int main()
 //{
 //	Derived<int> d;
-//	d.bar();  // ÕıÈ·µ÷ÓÃ Derived::bar()£¬¼ä½Ó·ÃÎÊ Base::foo()
+//	d.bar();  // æ­£ç¡®è°ƒç”¨ Derived::bar()ï¼Œé—´æ¥è®¿é—® Base::foo()
 //	return 0;
 //}
 
 //template <typename Derived>
-//struct Base {  // ÒÀÀµĞÔ»ùÀà
+//struct Base {  // ä¾èµ–æ€§åŸºç±»
 //	void foo() {
-//		static_cast<Derived*>(this)->impl();  // µ÷ÓÃÅÉÉúÀàµÄÊµÏÖ
+//		static_cast<Derived*>(this)->impl();  // è°ƒç”¨æ´¾ç”Ÿç±»çš„å®ç°
 //	}
 //};
 //
@@ -488,11 +488,11 @@ using namespace std;
 //
 //int main() {
 //	MyDerived d;
-//	d.foo();  // Êä³ö "MyDerived::impl()"
+//	d.foo();  // è¾“å‡º "MyDerived::impl()"
 //}
 
 // 2025-5-25
-// µÚÊ®ÕÂ-ÊµÀı»¯
+// ç¬¬åç« -å®ä¾‹åŒ–
 //class MyInt
 //{
 //public:
@@ -535,7 +535,7 @@ using namespace std;
 //	return 0;
 //}
 
-// µÚÊ®Ò»ÕÂ-Ä£°åÊµ²ÎÍÆÑİ
+// ç¬¬åä¸€ç« -æ¨¡æ¿å®å‚æ¨æ¼”
 //template<int N>
 //class X {
 //public:
@@ -548,10 +548,10 @@ using namespace std;
 //
 //template<int N>
 //void fppm(void (X<N>::* p)(typename X<N>::I)) {
-//	// ÕâÀïµÄ p ÊÇÒ»¸öÖ¸Ïò³ÉÔ±º¯ÊıµÄÖ¸Õë
-//	// Äã¿ÉÒÔÔÚÕâÀïÊ¹ÓÃ p À´µ÷ÓÃ X<N>::f
+//	// è¿™é‡Œçš„ p æ˜¯ä¸€ä¸ªæŒ‡å‘æˆå‘˜å‡½æ•°çš„æŒ‡é’ˆ
+//	// ä½ å¯ä»¥åœ¨è¿™é‡Œä½¿ç”¨ p æ¥è°ƒç”¨ X<N>::f
 //	X<N> x;
-//	(x.*p)(42); // µ÷ÓÃ³ÉÔ±º¯Êı
+//	(x.*p)(42); // è°ƒç”¨æˆå‘˜å‡½æ•°
 //};
 //
 //
@@ -582,11 +582,11 @@ using namespace std;
 //	S s;	
 //	Wrapper<S> w(s); 
 //	f(w);		// f(Wrapper<T> const& a)
-//	//f(s);		// ´íÎó£ºÃ»ÓĞÆ¥ÅäµÄº¯Êı
+//	//f(s);		// é”™è¯¯ï¼šæ²¡æœ‰åŒ¹é…çš„å‡½æ•°
 //}
 
 // day-2025-5-26
-// µÚÊ®¶şÕÂ-ÌØ»¯ÓëÖØÔØ
+// ç¬¬åäºŒç« -ç‰¹åŒ–ä¸é‡è½½
 
 //template<typename T>
 //int f(T)
@@ -625,7 +625,7 @@ using namespace std;
 //template<typename T>
 //class Invalid{};
 //
-//Invalid<double> x; // ÏÔÊ½×¨ÓÃ»¯£»ÒÑÊµÀı»¯¡°Invalid<double>¡±
+//Invalid<double> x; // æ˜¾å¼ä¸“ç”¨åŒ–ï¼›å·²å®ä¾‹åŒ–â€œInvalid<double>â€
 //
 //template<>
 //class Invalid<double>;
@@ -660,7 +660,7 @@ using namespace std;
 //}
 
 //template<>
-//int f(int, int = 35) // err f: º¯ÊıÄ£°åµÄÏÔÊ½×¨ÓÃ»¯»òÊµÀı»¯²»ÄÜÓĞÈÎºÎÄ¬ÈÏ²ÎÊı
+//int f(int, int = 35) // err f: å‡½æ•°æ¨¡æ¿çš„æ˜¾å¼ä¸“ç”¨åŒ–æˆ–å®ä¾‹åŒ–ä¸èƒ½æœ‰ä»»ä½•é»˜è®¤å‚æ•°
 //{
 //	return 0;
 //}
@@ -683,8 +683,8 @@ using namespace std;
 //}
 
 // day-2025-5-27
-// µÚÊ®ÈıÕÂ-Î´À´µÄ·½Ïò
-//typedef vector<list<int>> ListOfIntLists; // ÒÔÇ°ÊÇ´íÎó,¼âÀ¨ºÅ²»ÄÜÁ¬Ğ´.
+// ç¬¬åä¸‰ç« -æœªæ¥çš„æ–¹å‘
+//typedef vector<list<int>> ListOfIntLists; // ä»¥å‰æ˜¯é”™è¯¯,å°–æ‹¬å·ä¸èƒ½è¿å†™.
 //
 //template<typename T>
 //class Table
@@ -695,7 +695,7 @@ using namespace std;
 //
 //int main()
 //{
-//	Table<int>::Type table; // ÕıÈ·£¬Ê¹ÓÃ typedef ¶¨ÒåµÄÀàĞÍ
+//	Table<int>::Type table; // æ­£ç¡®ï¼Œä½¿ç”¨ typedef å®šä¹‰çš„ç±»å‹
 //
 //	
 //	return 0;
@@ -711,15 +711,15 @@ using namespace std;
 //
 //class Derived : public Base {
 //public:
-//	// Ğ­±ä·µ»ØÀàĞÍ - ·µ»Ø Derived* ¶ø·ÇBase*
+//	// åå˜è¿”å›ç±»å‹ - è¿”å› Derived* è€ŒéBase*
 //	virtual Derived* clone() const override {
 //		return new Derived(*this);
 //	}
 //};
 
 //day-2025-5-28
-// µÚÊ®ËÄÕÂ-Ä£°åµÄ¶àÌ¬Á¦Á¿
-// µÚÊ®ÎåÕÂ-trait ºÍ policy
+// ç¬¬åå››ç« -æ¨¡æ¿çš„å¤šæ€åŠ›é‡
+// ç¬¬åäº”ç« -trait å’Œ policy
 // s1.h
 //namespace A
 //{
@@ -746,7 +746,7 @@ using namespace std;
 
 
 // day-2025-5-29
-// µÚÊ®ÎåÕÂ-trait ºÍ policyÀà
+// ç¬¬åäº”ç« -trait å’Œ policyç±»
 
 //#include <iterator>
 //template<typename Iter>
@@ -763,7 +763,7 @@ using namespace std;
 //	return total;
 //}
 
-// ÆÕÍ¨Ö¸Õë
+// æ™®é€šæŒ‡é’ˆ
 //namespace std
 //{
 //	template<typename T>
@@ -790,22 +790,22 @@ using namespace std;
 
 
 //template<typename T>
-//class ElementT;	// »ù±¾Ä£°å
+//class ElementT;	// åŸºæœ¬æ¨¡æ¿
 //
 //template<typename T>
-//class ElementT<std::vector<T>> {	//¾Ö²¿ÌØ»¯
+//class ElementT<std::vector<T>> {	//å±€éƒ¨ç‰¹åŒ–
 //public:
 //	typedef T Type;
 //};
 //
 //template<typename T>
-//class ElementT<std::list<T>> {     // //¾Ö²¿ÌØ»¯
+//class ElementT<std::list<T>> {     // //å±€éƒ¨ç‰¹åŒ–
 //public:
 //	typedef T Type;
 //};
 //
 //template<typename T>
-//class ElementT<std::stack<T>> {     // //¾Ö²¿ÌØ»¯
+//class ElementT<std::stack<T>> {     // //å±€éƒ¨ç‰¹åŒ–
 //public:
 //	typedef T Type;
 //};
@@ -838,7 +838,7 @@ using namespace std;
 //	template<typename C>
 //	static One test(int C::*){}
 //	template<typename C>
-//	static Two test(...){} // ... Æ¥Åä·ÇÀàÀàĞÍ
+//	static Two test(...){} // ... åŒ¹é…éç±»ç±»å‹
 //
 //public:
 //	enum { Yes = sizeof(test<T>(0)) == sizeof(One) };
@@ -893,11 +893,11 @@ using namespace std;
 //	checkT(myfunc);
 //}
 
-// »ù±¾Ä£°å, ¸ù¾İµÚÒ»¸öÊµ²ÎÀ´¾ö¶¨, ÊÇÑ¡ÔñµÚ¶ş¸öÊµ²Î, »¹ÊÇÑ¡ÔñµÚÈı¸öÊµ²Î
+// åŸºæœ¬æ¨¡æ¿, æ ¹æ®ç¬¬ä¸€ä¸ªå®å‚æ¥å†³å®š, æ˜¯é€‰æ‹©ç¬¬äºŒä¸ªå®å‚, è¿˜æ˜¯é€‰æ‹©ç¬¬ä¸‰ä¸ªå®å‚
 //template<bool C, typename Ta, typename Tb>
 //class IfThenElse;
 //
-//// ¾Ö²¿ÌØ»¯, trueµÄ»°Ñ¡ÔñµÚ¶ş¸öÊµ²Î
+//// å±€éƒ¨ç‰¹åŒ–, trueçš„è¯é€‰æ‹©ç¬¬äºŒä¸ªå®å‚
 //template<typename Ta, typename Tb>
 //class IfThenElse<true, Ta, Tb>
 //{
@@ -905,7 +905,7 @@ using namespace std;
 //	typedef Ta ResultT;
 //};
 
-// ¾Ö²¿ÌØ»¯, falseµÄ»°Ñ¡ÔñµÚÈı¸öÊµ²Î
+// å±€éƒ¨ç‰¹åŒ–, falseçš„è¯é€‰æ‹©ç¬¬ä¸‰ä¸ªå®å‚
 //template<typename Ta, typename Tb>
 //class IfThenElse<false, Ta, Tb>
 //{
@@ -914,7 +914,7 @@ using namespace std;
 //};
 
 
-// Õë¶ÔÀàĞÍÌáÉıµÄ»ù±¾Ä£°å
+// é’ˆå¯¹ç±»å‹æå‡çš„åŸºæœ¬æ¨¡æ¿
 //template<typename T1, typename T2>
 //class Promotion {
 //public:
@@ -978,8 +978,205 @@ using namespace std;
 //		Tconst&>::ResultT Type;
 //};
 
+// day-2025-5-30
+// ç¬¬åå…­ç« -æ¨¡æ¿ä¸ç»§æ‰¿
+//class EmptyClass{
+//	typedef int Int;
+//};
+//
+//class EmptyToo : public EmptyClass{};
+//class EmptyThree : public EmptyToo {};
+//class NonEmpty : public  EmptyClass, public EmptyToo{};
+//
+//
+//int main()
+//{
+//	cout << "sizeof(EmptyClass): " << sizeof(EmptyClass) << endl;
+//	cout << "sizeof(EmptyToo): " << sizeof(EmptyToo) << endl;
+//	cout << "sizeof(EmptyThree): " << sizeof(EmptyThree) << endl;
+//	cout << "sizeof(NonEmpty): " << sizeof(NonEmpty) << endl;
+//}
 
-int main()
-{
+//template<typename T1, typename T2>
+//class Myclass
+//{
+//private:
+//	T1 a;
+//	T2 b;
+//};
+//
+//template<typename T1, typename T2>
+//class Myclass : private T1, private T2
+//{
+//
+//};
 
-}
+// CRTP å¥‡å¼‚é€’å½’æ¨¡æ¿æ¨¡å¼
+//template<typename Derived>
+//class CuriousBase{};
+//
+//class Curious : public CuriousBase<Curious>{};
+//template<typename T>
+//class CuriousTemplate : public CuriousBase<CuriousTemplate<T>>{};
+//
+//
+//template<template<typename> class Derived>
+//class MoreCuriousBase{};
+//
+//template<typename T>
+//class MoreCurious : public MoreCuriousBase<MoreCurious>{};
+
+// å‚æ•°åŒ–è™šæ‹Ÿæ€§
+//class NonVirtual{};
+//class Virtual
+//{
+//public:
+//	virtual void foo(){}
+//};
+//
+//template<typename VBase>
+//class Base : private VBase
+//{
+//public:
+//	// fooçš„è™šæ‹Ÿæ€§ä¾èµ–äºä»–åœ¨åŸºç±»VBaseä¸­çš„ç”Ÿå‘½
+//	void foo() {
+//		cout << "Base::foo()" << endl;
+//	}
+//};
+//
+//template<typename V>
+//class Derived : public Base<V>
+//{
+//public:
+//	void foo()
+//	{
+//		cout << "Derived::foo()" << endl;
+//	}
+//};
+//
+//int main()
+//{
+//	Base<NonVirtual>* p1 = new Derived<NonVirtual>;
+//	p1->foo();
+//	Base<Virtual>* p2 = new Derived<Virtual>;
+//	p2->foo();
+//}
+
+
+// day-2025-6-1
+// ç¬¬åä¸ƒç« -å…ƒç¼–ç¨‹ -metaprogram
+//template<int N>
+//class Pow3 {
+//public:
+//
+//	enum {result = 3 *  Pow3<N - 1>::result};
+//};
+//
+//template<>
+//class Pow3<0>
+//{
+//public:
+//	enum { result = 1 };
+//};
+
+//template<int N>
+//class Pow3
+//{
+//public:
+//	static int const result = 3 * Pow3<N - 1>::result;
+//};
+//
+//template<>
+//class Pow3<0>
+//{
+//public:
+//	static int const result = 1;
+//};
+
+// è®¡ç®—å¹³æ–¹æ ¹ sqrt(N)
+//template<int N, int LO = 0, int HI = N>
+//class Sqrt
+//{
+//public:
+//	enum {mid = (LO + HI + 1) / 2 };
+//
+//	enum { result = (mid * mid > N) ? Sqrt<N, LO, mid - 1>::result : Sqrt<N, mid, HI>::result};
+//};
+//
+//template<int N, int M>
+//class Sqrt<N, M, M>
+//{
+//public:
+//	enum {result = M};
+//};
+
+
+//template<bool C, typename Ta, typename Tb>
+//class IfThenElse;
+////
+////// å±€éƒ¨ç‰¹åŒ–, trueçš„è¯é€‰æ‹©ç¬¬äºŒä¸ªå®å‚
+//template<typename Ta, typename Tb>
+//class IfThenElse<true, Ta, Tb>
+//{
+//public:
+//	typedef Ta ResultT;
+//};
+//
+//// å±€éƒ¨ç‰¹åŒ–, falseçš„è¯é€‰æ‹©ç¬¬ä¸‰ä¸ªå®å‚
+//template<typename Ta, typename Tb>
+//class IfThenElse<false, Ta, Tb>
+//{
+//public:
+//	typedef Tb ResultT;
+//};
+//template<int N, int LO = 0, int HI = N>
+//class Sqrt
+//{
+//public:
+//	enum {mid = (LO + HI + 1) / 2 };
+//
+//	typedef typename IfThenElse< (mid* mid > N),
+//		Sqrt<N, LO, mid - 1>,
+//		Sqrt<N, mid, HI >>::ResultT
+//		subT;
+//	enum {result = subT::result };
+//};
+//
+//template<int N, int S>
+//class Sqrt<N, S, S> {
+//public:
+//	enum {result = S};
+//};
+
+//int main()
+//{
+	//cout << Pow3<7>::result << endl;
+	//cout << Pow3<6>::result << endl;
+	//cout << Sqrt<16>::result << endl;
+
+	//std::cout << Sqrt<16>::result << std::endl;  // è¾“å‡º 4
+	//std::cout << Sqrt<25>::result << std::endl;  // è¾“å‡º 5
+	//std::cout << Sqrt<10>::result << std::endl;  // è¾“å‡º 3ï¼ˆå› ä¸º 3Â²=9 â‰¤ 10 < 16=4Â²ï¼‰
+
+//	return 0;
+//}
+
+//template<typename T>
+//inline T dot_product(int dim, T* a, T* b)
+//{
+//	T result = T();
+//	for (int i = 0; i < dim; ++i)
+//	{
+//		result += a[i] * b[i];
+//	}
+//	return result;
+//}
+//
+//int main()
+//{
+//	int a[3] = { 1, 2, 3 };
+//	int b[3] = { 5,6,7 };
+//	cout << dot_product(3, a, b) << endl;
+//	cout << dot_product(3, a, a) << endl;
+//
+//}
