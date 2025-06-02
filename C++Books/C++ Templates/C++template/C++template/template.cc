@@ -1180,3 +1180,60 @@ using namespace std;
 //	cout << dot_product(3, a, a) << endl;
 //
 //}
+
+//day-2025-6-2 
+// 第十八章-模板表达式
+// 
+// // 一个简单的向量类
+//template<typename T>
+//class Vector {
+//	T* data;
+//	size_t size;
+//public:
+//	Vector(size_t n) : size(n), data(new T[n]) {}
+//	~Vector() { delete[] data; }
+//
+//	T operator[](size_t i) const { return data[i]; }
+//	T& operator[](size_t i) { return data[i]; }
+//	size_t getSize() const { return size; }
+//};
+//
+//// 表达式模板基类
+//template<typename E>
+//class VecExpression {
+//public:
+//	double operator[](size_t i) const {
+//		return static_cast<const E&>(*this)[i];
+//	}
+//	size_t size() const {
+//		return static_cast<const E&>(*this).size();
+//	}
+//};
+//
+//// 向量加法表达式
+//template<typename E1, typename E2>
+//class VecSum : public VecExpression<VecSum<E1, E2>> {
+//	const E1& u;
+//	const E2& v;
+//public:
+//	VecSum(const E1& u, const E2& v) : u(u), v(v) {}
+//	double operator[](size_t i) const { return u[i] + v[i]; }
+//	size_t size() const { return u.size(); }
+//};
+//
+//// 重载 + 运算符来生成表达式
+//template<typename E1, typename E2>
+//VecSum<E1, E2> operator+(const VecExpression<E1>& u,
+//	const VecExpression<E2>& v) {
+//	return VecSum<E1, E2>(static_cast<const E1&>(u),
+//		static_cast<const E2&>(v));
+//}
+//
+//// 赋值运算符，触发实际计算
+//template<typename T, typename E>
+//Vector<T>& operator<<(Vector<T>& vec, const VecExpression<E>& expr) {
+//	for (size_t i = 0; i < vec.getSize(); ++i) {
+//		vec[i] = expr[i];
+//	}
+//	return vec;
+//}
