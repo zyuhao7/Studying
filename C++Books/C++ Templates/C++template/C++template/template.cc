@@ -1237,3 +1237,151 @@ using namespace std;
 //	}
 //	return vec;
 //}
+
+// 第十九章-类型区分
+#include "type1.h"
+//template<typename T>
+//void test(T const& t)
+//{
+//	if (IsFundaT<T>::Yes)
+//	{
+//		cout << "T is fundamental type " << std::endl;
+//	}
+//	else
+//	{
+//		cout << "T is no fundamental type " << endl;
+//	}
+//}
+//class MyType
+//{
+//public:
+//	MyType();
+//	~MyType();
+//
+//};
+//
+//MyType::MyType()
+//{
+//}
+//
+//MyType::~MyType()
+//{
+//}
+//int main()
+//{
+//	test(7);
+//	test(MyType());
+//}
+
+//#include "type3.h"
+//template<typename T>
+//class IsClassT {
+//private:
+//	typedef char One;
+//	typedef struct{ char a[2]; } Two;
+//
+//	template<typename C>
+//	static One test(int C::*){}
+//	template<typename C>
+//	static Two test(...){} // ... 匹配非类类型
+//
+//public:
+//	enum { Yes = sizeof(test<T>(0)) == sizeof(One) };
+//	enum { No = !Yes };
+//};
+//
+//template<typename T>
+//class TypeT
+//{
+//public:
+//	enum {
+//		IsFundaT = IsFundaT<T>::Yes,
+//		IsPtrT = CompoundT<T>::IsPtrT,
+//		IsRefT = CompoundT<T>::IsRefT,
+//		IsArrayT = CompoundT<T>::IsArrayT,
+//		IsPtrMemT = CompoundT<T>::IsPtrMemT,
+//		IsEnumT = IsEnumT<T>::Yes,
+//		IsClassT = IsClassT<T>::Yes,
+//		IsFuncT = IsFunctionT<T>::Yes
+//	};
+//};
+//
+//class MyClass{};
+//void myfunc(){}
+//enum E{e1};
+//template<typename T>
+//void check()
+//{
+//	if (TypeT<T>::IsFundaT)
+//	{
+//		cout << "IsFundaT" << endl;
+//	}
+//	if (TypeT<T>::IsPtrT)
+//	{
+//		cout << "IsPtrT" << endl;
+//	}
+//	if (TypeT<T>::IsRefT)
+//	{
+//		cout << "IsRefT" << endl;
+//	}
+//	if (TypeT<T>::IsArrayT)
+//	{
+//		cout << "IsArrayT" << endl;
+//	}
+//	if (TypeT<T>::IsPtrMemT)
+//	{
+//		cout << "IsPtrMemT" << endl;
+//	}
+//	if (TypeT<T>::IsEnumT)
+//	{
+//		cout << "IsEnumT" << endl;
+//	}
+//	if (TypeT<T>::IsClassT)
+//	{
+//		cout << "IsClassT" << endl;
+//	}
+//	if (TypeT<T>::IsFuncT)
+//	{
+//		cout << "IsFuncT" << endl;
+//	}
+//}
+//
+//template<typename T>
+//void checkT(T)
+//{
+//	check<T>();
+//	// 对于指针类型, 要检查他们所指向的类型
+//	if (TypeT<T>::IsPtrT || TypeT<T>::IsPtrMemT)
+//	{
+//		check<typename CompoundT<T>::BaseT>();
+//	}
+//}
+//
+//int main()
+//{
+//	cout << "int: ";
+//	check<int>();
+//
+//	cout << "int&: ";
+//	check<int&>();
+//
+//	cout << "char[42]: ";
+//	check<char[42]>();
+//
+//	cout << "MyClass: ";
+//	check<MyClass>();
+//
+//	cout << "ptr to enum: ";
+//	E* ptr = 0;
+//	checkT(ptr);
+//
+//	cout << "42: ";
+//	checkT(42);
+//
+//	cout << "myfunc(): ";
+//	checkT(myfunc);
+//
+//	cout << "memptr to array: ";
+//	char(MyClass:: * memptr)[] = 0;
+//	checkT(memptr);
+//}
