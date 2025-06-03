@@ -1239,7 +1239,7 @@ using namespace std;
 //}
 
 // 第十九章-类型区分
-#include "type1.h"
+//#include "type1.h"
 //template<typename T>
 //void test(T const& t)
 //{
@@ -1289,7 +1289,7 @@ using namespace std;
 //	enum { Yes = sizeof(test<T>(0)) == sizeof(One) };
 //	enum { No = !Yes };
 //};
-//
+////
 //template<typename T>
 //class TypeT
 //{
@@ -1345,7 +1345,7 @@ using namespace std;
 //		cout << "IsFuncT" << endl;
 //	}
 //}
-//
+////
 //template<typename T>
 //void checkT(T)
 //{
@@ -1385,3 +1385,29 @@ using namespace std;
 //	char(MyClass:: * memptr)[] = 0;
 //	checkT(memptr);
 //}
+
+
+// day-2025-6-3
+// 第二十章-智能指针
+//#include "holder.h"
+//#include "trule.h"
+//
+//int main()
+//{
+//	// 1. 创建一个 Holder，管理一个 int
+//	Holder<int> h1(new int(42));
+//
+//	// 2. 使用 Trule 安全转移资源
+//	Trule<int> t(h1); // h1 现在为空
+//
+//	// 3. 使用 yield() 获取资源并交给新的 Holder
+//	Holder<int> h2(t.yield()); // t 现在为空
+//
+//	// 4. 检查资源是否转移成功
+//	std::cout << "h1.get(): " << h1.get() << std::endl; // 输出: 0 (nullptr)
+//	std::cout << "h2.get(): " << *h2.get() << std::endl; // 输出: 42
+//
+//	return 0;
+//}
+
+// 引用计数
