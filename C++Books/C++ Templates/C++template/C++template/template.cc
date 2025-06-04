@@ -1411,3 +1411,78 @@ using namespace std;
 //}
 
 // 引用计数
+
+// 第二十一章 tuple
+// duo
+//template<typename T1, typename T2>
+//class Duo
+//{
+//public:
+//	T1 v1;
+//	T2 v2;
+//
+//	Duo()
+//		: v1(),
+//		v2()
+//	{}
+//	Duo(T1 const& a, T2 const& b)
+//		:v1(a),
+//		v2(b)
+//	{}
+//};
+
+//template<typename T1, typename T2>
+//class Duo
+//{
+//public:
+//	typedef T1 Type1;
+//	typedef T2 Type2;
+//	enum {N = 2};
+//
+//	T1 v1;
+//	T2 v2;
+//
+//	Duo()
+//		: v1(),
+//		v2()
+//	{
+//	}
+//	Duo(T1 const& a, T2 const& b)
+//		:v1(a),
+//		v2(b)
+//	{
+//	}
+//};
+//
+//template<typename T1, typename T2>
+//inline Duo<T1, T2> make_duo(T1 const& a, T2 const& b)
+//{
+//	return Duo<T1, T2>(a, b);
+//}
+//
+//
+//int main()
+//{
+//	auto duo = make_duo(true, 42);
+//	auto duo2 = make_duo<bool,int>(true, 42);
+//
+//	cout << duo.v1 << " " << duo.v2 << endl;
+//	return 0;
+//}
+
+//#include "duo1.h"
+//Duo<double, int> foo()
+//{
+//	return make_duo(3.14, 42);
+//}
+//
+//int main()
+//{
+//	if (foo() == make_duo(3.14, 42))
+//	{
+//		cout << "foo() == make_duo(3.14, 42)" << endl;
+//	}
+//
+//}
+
+// 
