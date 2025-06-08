@@ -4,6 +4,7 @@
 #include <cstring>
 #include <vector>
 #include <list>
+#include <cstdlib>
 #include <stack>
 #include <typeinfo>
 using namespace std;
@@ -1485,4 +1486,227 @@ using namespace std;
 //
 //}
 
-// 
+// day-2025-6-5
+// 第二十二章 函数对象和回调
+
+//int f1(int const& r)
+//{
+//	return ++(int&)r;
+//}
+//
+//int f2(int const& r)
+//{
+//	return r;
+//}
+//
+//int f3()
+//{
+//	return 42;
+//}
+//
+//int foo()
+//{
+//	int param = 0;
+//	int ans = 0;
+//	ans = f1(param);
+//	f2(param);
+//	f3();
+//	return ans + param;
+//}
+//
+//int foo1()
+//{
+//	int param = 0;
+//	int ans = 0;
+//	ans = ++(int&)param;
+//	return ans + param;
+//}
+//
+//int main()
+//{
+//	cout << foo() << endl;
+//	cout << foo1() << endl;
+//
+//
+//	return 0;
+//}
+
+//void foo()
+//{
+//	cout << "foo() called " << endl;
+//}
+//
+//typedef void FooT(); // FooT 是一个函数类型 与函数 foo()具有相同的类型
+//
+//int main()
+//{
+//	foo();
+//	cout << "Type of foo: " << typeid(foo).name() << endl;
+//	cout << "Type of FooT: " << typeid(FooT).name() << endl;
+//
+//	FooT* pf = foo;
+//	pf();
+//	(*pf)();
+//	cout << "Type of pf: " << typeid(pf).name() << endl;
+//
+//	FooT& rf = foo;
+//	rf();
+//
+//	cout << "Type of rf: " << typeid(rf).name() << endl;
+//}
+
+//class B1
+//{
+//private:
+//	int b1;
+//public:
+//	void mf1();
+//};
+//
+//void B1::mf1()
+//{
+//	cout << "b1 = " << b1 << endl;
+//}
+//
+//class B2
+//{
+//private:
+//	int b2;
+//public:
+//	void mf2();
+//};
+//
+//void B2::mf2()
+//{
+//	cout << "b2 = " << b2 << endl;
+//}
+//
+//
+//class D : public B1, public B2
+//{
+//private:
+//	int d;
+//};
+//
+//void call_memfun(D obj, void (D::* ptm)())
+//{
+//	(obj.*ptm)();
+//}
+//
+//
+//int main()
+//{
+//	D obj;
+//	obj.mf1();
+//	obj.mf2();
+//	call_memfun(obj, &D::mf1);
+//	call_memfun(obj, &D::mf2);
+//}
+
+//class ConstantInFunctor
+//{
+//private:
+//	int val;
+//public:
+//	ConstantInFunctor(int c)
+//		:val(c)
+//	{}
+//
+//	int operator()()const
+//	{
+//		return val;
+//	}
+//};
+//
+//void Client(ConstantInFunctor const& cif)
+//{
+//	cout << "calling back functor yields " << cif() << endl;
+//}
+//
+//int main()
+//{
+//	ConstantInFunctor seven(7);
+//	ConstantInFunctor fortytwo(42);
+//	Client(seven);
+//	Client(fortytwo);
+//	return 0;
+//}
+
+
+// 用于把函数指针封装成函数对象的封装类
+//template<int (*FP)()>
+//class FunctionReturningIntWrapper {
+//public:
+//	int operator()()
+//	{
+//		return FP();
+//	}
+//};
+//
+//int random_int()
+//{
+//	return std::rand();
+//}
+//
+//template<typename FO>
+//void initialize(std::vector<int>& coll)
+//{
+//	FO fo;
+//	for (std::vector<int>::size_type i = 0; i < coll.size(); ++i)
+//	{
+//		coll[i] = fo();
+//	}
+//}
+//
+//int main()
+//{
+//	vector<int> v(10);
+//	initialize<FunctionReturningIntWrapper<random_int>> (v);
+//	for (int i = 0; i < v.size(); ++i)
+//	{
+//		cout << "coll[" << i << "]: " << v[i] << endl;
+//	}
+//}
+
+//template<typename RT, typename P1 = void,
+//					typename P2 = void,
+//					typename P3 = void>
+//class FunctionPtrT
+//{
+//public:
+//	enum {NumParams = 3};
+//	typedef RT(*Type)(P1, P2, P3);
+//};
+//
+//
+//template<typename RT, typename P1,
+//					  typename P2>
+//class FunctionPtrT<RT, P1, P2, void>
+//{
+//	enum { NumParams = 2 };
+//	typedef RT(*Type)(P1, P2);
+//};
+//
+//
+//template<typename RT, typename P1>
+//class FunctionPtrT<RT, P1, void, void>
+//{
+//	enum { NumParams = 1 };
+//	typedef RT(*Type)(P1);
+//};
+//
+//
+//template<typename RT>
+//class FunctionPtrT<RT, void, void, void>
+//{
+//	enum { NumParams = 0 };
+//	typedef RT(*Type)();
+//};
+//
+//int main()
+//{
+//
+//	return 0;
+//}
+
+
