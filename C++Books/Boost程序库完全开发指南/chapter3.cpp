@@ -9,6 +9,7 @@
 #include <boost/smart_ptr.hpp>
 #include <boost/smart_ptr/make_unique.hpp>
 #include <boost/smart_ptr/owner_less.hpp>
+#include <boost/enable_shared_from_this.hpp>
 using namespace boost;
 using std::endl;
 using std::cin;
@@ -21,27 +22,166 @@ using std::cout;
 // RAII 
 // 
 
+// intrusive_ptr
+
+
+// day-2025-6-15
+// weak_ptr
+
+// 引用计数
+//class node // 一个用于链表节点的类
+//{
+//public:
+//    ~node()
+//    {
+//        cout << "deleted" << endl;
+//    }
+//    typedef shared_ptr<node> ptr_type;
+//    ptr_type next;
+//};
+//
+//int main()
+//{
+//    auto p1 = make_shared<node>();
+//    auto p2 = make_shared<node>();
+//
+//    p1->next = p2;
+//    p2->next = p1;
+//    assert(p1.use_count() == 2);;
+//    assert(p2.use_count() == 2);
+//}
+
+//class node // 一个用于链表节点的类
+//{
+//public:
+//    ~node()
+//    {
+//        cout << "deleted" << endl;
+//    }
+//    typedef weak_ptr<node> ptr_type;
+//    ptr_type next;
+//};
+//
+//int main()
+//{
+//    auto p1 = make_shared<node>();
+//    auto p2 = make_shared<node>();
+//    p1->next = p2;
+//    p2->next = p1;
+//
+//    assert(p1.use_count() == 1);
+//    assert(p2.use_count() == 1);
+//    if (!p1->next.expired())
+//    {
+//        auto p3 = p1->next.lock();
+//    }
+//}
+
+//<boost/enable_shared_from_this.hpp>
+// enable_shared_from_this<T>
+//template<typename T>
+//class Enable_shared_from_this
+//{
+//public:
+//    shared_ptr<T> shared_from_this(); // 工厂函数, 产生 this 指针的shared_ptr
+//};
+
+// 使用 weak_ptr的时候只需要让想被 shared_ptr 管理的类继承它即可, 成员函数 shared_from_this() 会返回 this指针的 shared_ptr.
+//class Self_shared : public enable_shared_from_this<Self_shared>
+//{
+//public:
+//    Self_shared(int n)
+//        :x(n){}
+//    int x;
+//    void print()
+//    {
+//        cout << "Self_shared: " << x << endl;
+//    }
+//    
+//};
+//
+//int main()
+//{
+//    auto sp = make_shared<Self_shared>(313);
+//    sp->print();
+//
+//    auto p = sp->shared_from_this();
+//    p->x = 1000;
+//    p->print();
+//    cout << p.use_count() << endl;
+//
+//    Self_shared ss;
+//    auto p = ss.shared_from_this(); // err
+//}
+
+
+/*
+    weak_ptr 被设计为与shared_ptr 协同工作，可以从一个shared_ptr 或另一个weak_ptr 对象构造以获得资源的观测权。
+    但 weak_ptr 没有共享资源，它的构造不会引起指针引用计数的增加。同样，weak_ptr 析构时也不会导致引用计数减少
+*/
+//template<typename T>
+//class Weak_ptr
+//{
+//public:
+//    Weak_ptr();
+//    template<typename Y>
+//    Weak_ptr(boost::shared_ptr<Y> const& r);
+//    Weak_ptr(Weak_ptr const& r);
+//    ~Weak_ptr();
+//    Weak_ptr& operator=(Weak_ptr const& r);
+//
+//    long use_count() const;
+//    bool expired() const; //是否为失效指针
+//    bool empty() const;   // 是否为空指针
+//    boost::shared_ptr<T> lock() const; // 获取 shared_ptr 
+//    
+//    void reset();
+//    void swap(Weak_ptr<T>& b);
+//};
+
+//int main()
+//{
+//    shared_ptr<int> sp(new int(10));
+//    assert(sp.use_count() == 1);
+//
+//    weak_ptr<int> wp(sp);
+//    assert(wp.use_count() == 1);
+//    assert(!wp.empty());
+//
+//    if (!wp.expired())
+//    {
+//        shared_ptr<int> sp2 = wp.lock();
+//        *sp2 = 100;
+//        assert(wp.use_count() == 2);
+//    }
+//
+//    assert(wp.use_count() == 1);
+//    sp.reset();
+//    assert(wp.expired());
+//    assert(!wp.lock());
+//}
+
+
 // 对比std::shared_ptr
-// 
 
-int main()
-{
-    typedef shared_ptr<int> int_ptr;
-    // owner_less 比较的是 shared_ptr 的 控制块地址（即所有权），而不是指针指向的地址或值
-    typedef owner_less<int_ptr> int_ptr_less;
-
-    int_ptr p1(new int(10));
-    int n = 20;
-    int_ptr p2(p1, &n);
-    assert(!int_ptr_less()(p1, p2) &&
-        !int_ptr_less()(p2, p1));
-
-    typedef std::set<int_ptr> ins;
-    ins s;
-    s.insert(p1);
-    s.insert(p2);
-    assert(s.size() == 1);
-}
+//int main()
+//{
+//    typedef shared_ptr<int> int_ptr;
+//    // owner_less 比较的是 shared_ptr 的 控制块地址（即所有权），而不是指针指向的地址或值
+//    typedef owner_less<int_ptr> int_ptr_less;
+//
+//    int_ptr p1(new int(10));
+//    int n = 20;
+//    int_ptr p2(p1, &n);
+//    assert(!int_ptr_less()(p1, p2) &&
+//        !int_ptr_less()(p2, p1));
+//
+//    typedef std::set<int_ptr> ins;
+//    ins s;
+//    s.insert(p1);
+//    s.insert(p2);
+//    assert(s.size() == 1);
+//}
 
 //int main()
 //{
