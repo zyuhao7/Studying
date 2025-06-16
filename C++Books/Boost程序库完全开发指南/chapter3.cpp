@@ -1,3 +1,4 @@
+#define BOOST_POOL_NO_MT
 #include <iostream>
 #include <string>
 #include <vector>
@@ -10,6 +11,9 @@
 #include <boost/smart_ptr/make_unique.hpp>
 #include <boost/smart_ptr/owner_less.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/pool/pool.hpp>
+#include <boost/pool/object_pool.hpp>
+#include <boost/pool/singleton_pool.hpp>
 using namespace boost;
 using std::endl;
 using std::cin;
@@ -18,11 +22,147 @@ using std::cout;
 
 //day-2025-6-13
 // 第三章-内存管理
-// shared_ptr 
-// RAII 
 // 
+//day-2025-6-16
+// singleton_pool
+//template<typename Tag, unsigned RequestedSize>
+//class Singleton_pool
+//{
+//public:
+//    static bool is_from(void* ptr);
+//
+//    void* malloc();
+//    void* ordered_malloc();
+//    void* ordered_malloc(size_t n);
+//
+//    void free(void* ptr);
+//    void ordered_free(void* ptr);
+//    void free(void* chunk, size_t n);
+//    void ordered_free(void* ptr, size_t n);
+//
+//    bool release_memory();
+//    bool purge_memory();
+//};
 
-// intrusive_ptr
+//struct pool_tag{};
+//typedef singleton_pool<pool_tag, sizeof(int)> sp1;
+//
+//int main()
+//{
+//    int* p = (int*)sp1::malloc();
+//    assert(sp1::is_from(p));
+//    sp1::release_memory();
+//}
+
+// object_pool
+//template<typename T, typename UserAllocator>
+//class Object_pool : protected pool<UserAllocator>
+//{
+//public:
+//    typedef T element_type;
+//public:
+//    Object_pool();
+//    ~Object_pool();
+//
+//    element_type* malloc();
+//    void free(element_type* p);
+//    bool is_from(element_type* p) const;
+//
+//    element_type* construct(...);
+//    void destroy(element_type* p);
+//};
+ 
+
+//template<typename P, typename... Args>
+//inline typename P::element_type* construct(P& p, Args&& ... args)
+//{
+//    typename P::element_type* mem = p.malloc();
+//
+//    assert(mem != 0);
+//    new (mem) typename P::element_type(
+//        std::forward<Args>(args)...);
+//    return mem;
+//}
+//
+//struct demo_class
+//{
+//public:
+//    int a, b, c;
+//    demo_class(int x = 1, int y = 2, int z = 3)
+//        :a(x),
+//        b(y),
+//        c(z)
+//    {}
+//    demo_class(int, int, int, int)
+//    {
+//        cout << "demo_class ctor" << endl;
+//    }
+//    ~demo_class()
+//    {
+//        cout << "demo_class dtor" << endl;
+//    }
+//};
+
+//int main()
+//{
+    //object_pool<demo_class> p1;
+    //auto p = p1.malloc();
+    //assert(p1.is_from(p));
+
+    //// p指向的内存未经过初始化
+    //assert(p->a != 1 || p->b != 2 || p->c != 3);
+
+
+    //p = p1.construct(7, 8, 9);
+    //assert(p->a == 7);
+
+    //object_pool<std::string> pls;
+    //for (int i = 0; i < 10; ++i)
+    //{
+    //    std::string* ps  = pls.construct("hello object_pool");
+    //    cout << *ps << endl;
+    //}
+
+//    object_pool<demo_class> pd;
+//    auto d = construct(pd, 1, 2, 3, 5);
+//}
+
+
+// pool
+//template<typename UserAllocator = default_user_allocator_new_delete>
+//class Pool
+//{
+//public:
+//    explicit pool(size_t requested_size);
+//    ~Pool();
+//
+//    size_t get_requested_size() const;
+//
+//    void* malloc();
+//    void* ordered_malloc();
+//    void* ordered_malloc(size_t n);
+//    bool is_from(void* chunk) const;
+//
+//    void free(void* chunk);
+//    void ordered_free(void* chunk);
+//    void free(void* chunk, size_t n);
+//    void ordered_free(void* chunks, size_t n);
+//
+//    bool release_memory();
+//    bool purge_memory();
+//};
+
+//int main()
+//{
+//    pool<> p1(sizeof(int));
+//    int* p = static_cast<int*>(p1.malloc());
+//    assert(p1.is_from(p));
+//    p1.free(p);
+//    for (int i = 0; i < 100; ++i)
+//    {
+//        p1.ordered_malloc(10);
+//    }
+//}
 
 
 // day-2025-6-15
