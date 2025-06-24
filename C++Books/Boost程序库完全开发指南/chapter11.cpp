@@ -2,19 +2,348 @@
 #include <vector>
 #include <cassert>
 #include <algorithm>
+#include <numeric>
 #include <string>
 #include <set>
 #include <boost/ref.hpp>
 #include <boost/rational.hpp>
 #include <boost/bind.hpp>
-using namespace std;
+#include <boost/function.hpp>
+#include <boost/signals2.hpp>
 
+using namespace boost;
 
 // 第十一章-函数与回调.
+// day-2025-6-24
+// signals2
+// 类 signal 摘要
+//template<typename Signature,
+//	typename Combiner = boost::signals2::optional_last_value<R>,
+//	typename Group = int,
+//	typename GroupCompare = std::less<Group>>
+//	class Signal : public boost::signals2::signal_base
+//{
+//	Signal(const combiner_type & = combiner_type(),
+//		const group_compare_type & = group_compare_type());
+//	~Signal();
+//
+//	插槽的连接管理
+//	connection connect(const slot_type&, connect_position = at_back);
+//	connection connect(const group_type&, const slot_type&, connect_position = at_back);
+//
+//	void disconnect(const group_type&);
+//	template<typename S>
+//	void disConnect(const S&);
+//	void  disconnect_all_slots();
+//	bool empty() const;
+//	std::size_t num_slots() const;
+//
+//	// 调用操作符
+//	result_type operator()(...);
+//
+//	// 合并器
+//	combiner_type combiner() const;
+//	void set_combiner(const combiner_type&);
+//};
+
+void slot1()
+{
+	std::cout << "slot1 called" << std::endl;
+}
+void slot2()
+{
+	std::cout << "slot2 called" << std::endl;
+}
+template<int N>
+struct slots
+{
+	int operator()(int x)
+	{
+		std::cout << "slot" << N << "called" << std::endl;
+		return x * N;
+	}
+};
+
+template<typename T>
+class Combiner
+{
+	T v;
+public:
+	typedef std::pair<T, T> result_type;
+	Combiner(T t = T())
+		:v(t)
+	{}
+
+	template<typename InputIterator>
+	result_type operator()(InputIterator begin, InputIterator end) const
+	{
+		if (begin == end)
+		{
+			return result_type();
+		}
+		std::vector<T> vec(begin, end);
+		T sum = std::accumulate(vec.begin(), vec.end(), v);
+		T max = *std::max_element(vec.begin(), vec.end());
+
+		return result_type(sum, max);
+	}
+};
+using namespace boost::signals2;
+
+template<int N>
+bool operator==(const slots<N>&, const slots<N>&)
+{
+	return true;
+}
+
+//class Connection {
+//public:
+//	Connection();
+//	Connection(const Connection&);
+//	Connection& operator=(const Connection&);
+//
+//	void disconnect() const;
+//	bool connected() const;
+//
+//	bool blocked() const;
+//	void swap(const Connection&);
+//
+//	bool operator==(const Connection&) const;
+//	bool operator != (const Connection&) const;
+//	bool operator <(const Connection&) const;
+//};
+
+int main()
+{
+
+	//signal<int(int)> sig;
+	//assert(sig.empty());
+	//sig.connect(0, slots<10>());
+	//sig.connect(0, slots<20>());
+	//sig.connect(1, slots<30>());
+	//assert(sig.num_slots() == 3);
+	//sig.disconnect(0);
+
+	//assert(sig.num_slots() == 1);
+	//sig.disconnect(slots<30>());
+	//assert(sig.empty());
+
+
+
+	//boost::signals2::signal<int(int), Combiner<int>> sig;// 相当于 boost::signals2::signal<int(int), Combiner<int>> sig(Combiner<int>());
+	//sig.connect(slots<10>());
+	//sig.connect(slots<20>());
+	//sig.connect(slots<30>(), boost::signals2::at_front);
+
+	//auto x = sig(2);
+	//std::cout << x.first << ", " << x.second << std::endl;
+
+
+
+	//boost::signals2::signal<int(int)> sig;
+	//sig.connect(slots<10>());
+	//sig.connect(slots<20>());
+	//sig.connect(slots<50>());
+
+	//std::cout << *sig(2) << std::endl;
+
+	//boost::signals2::signal<void()> sig; // 指定插槽类型 void() 其他模板参数使用默认值
+	//// 然后我们就可以使用 connect()来连接插槽, 最后用 operator()来产生信号
+	//sig.connect(&slot1);
+	//sig.connect(slots<100>(), boost::signals2::at_front);
+
+	//sig.connect(5, slots<51>(), boost::signals2::at_back);
+	//sig.connect(5, slots<55>(), boost::signals2::at_front);
+
+	//sig.connect(3, slots<30>(), boost::signals2::at_front);
+	//sig.connect(3, slots<33>(), boost::signals2::at_back);
+
+	//sig.connect(10, slots<10>());
+	//sig();
+}
+
+
+// function
+/*
+	function是一个函数对象的"容器"，在概念上它像是C++中 `函数指针` 类型的泛化，是一种"智能函数指针".
+
+*/
+
+// function类摘要
+//template<typename Signature>
+//class Function : public boost::function_n<R, T1, T2, ..., TN>
+//{
+//public:
+//	typedef R result_type;
+//	typedef TN argN_type;
+//
+//	static const int arity = N;				//参数个数常量
+//
+//	Function();
+//	template<typename F> Function(F);
+//
+//	void swap(const Function&);
+//	void clear();
+//	void empty() const;
+//
+//	bool safe_bool() const;
+//	bool operator!() const;
+//	
+//	template<typename Functor> Functor* target();
+//	template<typename Functor> bool contains(const Functor&) const;
+//	const std::type_info& target_type() const;
+//
+//	result_type operator()(arg1_type, ...) const;
+//};
+
+//int f(int a, int b) { return a + b; }
+//struct demo_class
+//{
+//	int add(int a, int b)
+//	{
+//		return a + b;
+//	}
+//	int operator()(int x) const
+//	{
+//		return x * x;
+//	}
+//};
+//
+//template<typename T>
+//struct summary
+//{
+//	typedef void result_type;
+//	T sum;
+//
+//	summary(T v = T())
+//		:sum(v)
+//	{}
+//
+//	void operator()(T const& x)
+//	{
+//		sum += x;
+//	}
+//};
+
+//class demo_class
+//{
+//private:
+//	typedef function<void(int)> func_t; // function类型定义
+//	func_t func;
+//	int n;
+//public:
+//	demo_class(int i)
+//		:n(i)
+//	{}
+//	// 接收回调函数
+//	template<typename Cb>
+//	void accept(Cb f)
+//	{
+//		func = f;
+//	}
+//	// 调用回调函数
+//	void run()
+//	{
+//		func(n);
+//	}
+//};
+
+//void call_back_func(int i)
+//{
+//	std::cout << "call_back_func:";
+//	std::cout << i * 2 << std::endl;
+//}
+//
+//class call_back_obj
+//{
+//private:
+//	int x;
+//public:
+//	call_back_obj(int i)
+//		:x(i)
+//	{}
+//	void operator()(int i)
+//	{
+//		std::cout << "call_back_obj: ";
+//		std::cout << i * x++ << std::endl;
+//	}
+//};
+
+//class call_back_factory
+//{
+//public:
+//	void call_back_func1(int i)
+//	{
+//		std::cout << "call_back_factory1: ";
+//		std::cout << i * 2 << std::endl;
+//	}
+//	void call_back_func2(int i, int j)
+//	{
+//		std::cout << "call_back_factory2: ";
+//		std::cout << i * j * 2 << std::endl;
+//	}
+//};
+
+
+//int main()
+//{
+//	demo_class dc(10);
+//	call_back_factory cbf;
+//
+//	dc.accept(boost::bind(&call_back_factory::call_back_func1, cbf, _1));
+//	dc.run();
+//
+//	dc.accept(boost::bind(&call_back_factory::call_back_func2, cbf, _1, 5));
+//	dc.run();
+
+	//demo_class dc(10);
+	//call_back_obj cbo(2);
+	//dc.accept(ref(cbo));
+	//dc.run();
+	//dc.run();
+
+	//demo_class dc(10);
+	//dc.accept(call_back_func); // 接收回调函数
+	//dc.run();				   // 执行回调函数
+
+	//std::vector<int> v = { 1,3,5,7,9 };
+	//summary<int> s;
+	//function<void(int const&)> func(ref(s)); // function 包装引用
+
+	//std::for_each(v.begin(), v.end(), func);
+	//std::cout << s.sum << std::endl;
+
+	//function<int(demo_class&, int, int)> func1;
+	//func1 = boost::bind(&demo_class::add, _1, _2, _3);
+
+	//demo_class sc;
+	//std::cout << func1(sc, 10, 20) << std::endl;
+
+	//function<int(int, int)> func2;
+	//func2 = boost::bind(&demo_class::add, &sc, _1, _2);
+	//std::cout << func2(10, 20) << std::endl;
+
+	//demo_class sc1;
+	//function<int(int)> func3;
+	//func3 = boost::cref(sc1);
+	//std::cout << func3(10) << std::endl;
+
+	//boost::function<decltype(f)> func;
+	//assert(!func);
+
+	//func = f;
+	//assert(func.contains(&f));
+	//
+	//if(func)
+	//	std::cout << func(1, 2);
+	//func = 0;
+	//assert(func.empty());
+//	return 0;
+//}
+
+
 // day-2025-6-23
 
-// signals2
-// function
 
 // bind
 /*
