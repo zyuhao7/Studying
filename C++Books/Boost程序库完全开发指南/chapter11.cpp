@@ -10,10 +10,210 @@
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
 #include <boost/signals2.hpp>
+#include <boost/random.hpp>
 
+using namespace boost::signals2;
 using namespace boost;
 
+
 // 第十一章-函数与回调.
+// day-2025-6-27
+//class demo_class
+//{
+//public:
+//	typedef signal<void()> signal_t;
+//	shared_ptr<signal_t> sig;
+//
+//	int x;
+//	demo_class()
+//		:sig(new signal_t),
+//		x(10)
+//	{}
+//};
+//
+//void print()
+//{
+//	std::cout << "hello sig. " << std::endl;
+//}
+//// 下面的合并器当得到一个大于100的返回值就停止调用插槽:
+//class Combiner
+//{
+//public:
+//	typedef bool result_type;
+//	template<typename InputIterator>
+//	result_type operator() (InputIterator begin, InputIterator end) const
+//	{
+//		for (; begin != end; ++begin)
+//		{
+//			return true;
+//		}
+//		return false;
+//	}
+//};
+
+//typedef signal_type<int(int), keywords::mutex_type<dummy_mutex>>::type signal_t;
+//typedef signal_t::extended_slot_type slot_t;
+//signal_t sig;
+//
+//template<int N>
+//struct slots
+//{
+//	int operator()(const connection& conn, int x)
+//	{
+//		std::cout << "conn = " << conn.connected() << std::endl;
+//		return x * N;
+//	}
+//};
+//
+//void f()
+//{
+//	std::cout << "func called" << std::endl;
+//}
+
+//int main()
+//{
+	//function<void()> func;
+	//func = f;
+	//func(); // 调用函数
+	//std::cout << typeid(func()).name() << std::endl;
+
+	//signal<void()> sig;;
+
+	//sig.connect(&f);
+	//sig();	// 触发事件, 产生信号, 调用插槽
+	//std::cout << typeid(sig()).name() << std::endl;
+
+
+	// _1 是 connection 对象, _2 是插槽实际使用的参数
+	//sig.connect_extended(slot_t(&slots<10>::operator(), slots<10>(), _1, _2));
+	//sig.connect_extended(slot_t(&slots<20>::operator(), slots<20>(), _1, _2));
+	//sig(5);																	// 将整数5作为 _2 的实际参数传递给插槽
+	
+	//demo_class obj;
+	//assert(obj.sig.use_count() == 1);
+	//demo_class obj2(obj);
+	//assert(obj2.sig.use_count() == 2);
+
+	//obj.sig->connect(&print);
+	//(*obj2.sig)();
+
+//}
+
+/*
+	本节我们将使用signals2开发一个完整的观察者模式示例程序，用来演示信号/插槽的用法.
+	这个程序将模拟一个日常生活情景：访客按门铃—门铃响—护士开门—婴儿哭闹.
+*/
+
+
+//class ring
+//{
+//public:
+//	typedef signal<void()> signal_t;
+//	typedef signal_t::slot_type slot_t;
+//
+//	connection connect(const slot_t& s)
+//	{
+//		return alarm.connect(s);
+//	}
+//	void press()
+//	{
+//		std::cout << "Romg Alarm ... " << std::endl;
+//		alarm();									 // 调用 signal,发出信号, 引发插槽调用
+//	}
+//
+//
+//private:
+//	signal_t alarm;									// 信号对象
+//};
+//
+//typedef boost::variate_generator<rand48, uniform_smallint<>> bool_rand;
+//bool_rand g_rand(rand48(time(0)), uniform_smallint<>(0, 100));
+//
+//
+//// 护士类
+//extern char const nurse1[] = "Mary";
+//extern char const nurse2[] = "Kate";
+//template<char const * name>
+//class nurse
+//{
+//private:
+//	bool_rand& rand; // 随机数发生器
+//public:
+//	nurse()
+//		:rand(g_rand)
+//	{}
+//	void action()
+//	{
+//		std::cout << name;
+//		if (rand() > 30)
+//		{
+//			std::cout << " wakeup and open the door!" << std::endl;
+//		}
+//		else
+//		{
+//			std::cout << " is Sleeping..." << std::endl;
+//		}
+//	}
+//};
+//
+// // 宝宝类
+//extern char const baby1[] = "Tom";
+//extern char const baby2[] = "Jerry";
+//
+//template<char const* name>
+//class baby
+//{
+//private:
+//	bool_rand& rand;
+//
+//public:
+//	baby()
+//		:rand(g_rand)
+//	{}
+//
+//	void action()
+//	{
+//		std::cout << "Baby: " << name;
+//		if (rand() > 50)
+//		{
+//			std::cout << " wake up and crying loudly..." << std::endl;
+//		}
+//		else
+//		{
+//			std::cout << " is sleeping sweetly!..." << std::endl;
+//		}
+//	}
+//};
+//
+//class guest
+//{
+//public:
+//	void press(ring& r)
+//	{
+//		std::cout << "A guest presses the ring." << std::endl;
+//		r.press();
+//	}
+//};
+//
+//int main()
+//{
+//	ring r;
+//	nurse<nurse1> n1;
+//	nurse<nurse2> n2;
+//
+//	baby<baby1> b1;
+//	baby<baby2> b2;
+//	guest g;
+//
+//	r.connect(bind(&nurse<nurse1>::action, n1));
+//	r.connect(bind(&nurse<nurse2>::action, n2));
+//	r.connect(bind(&baby<baby1>::action, b1));
+//	r.connect(bind(&baby<baby2>::action, b2));
+//
+//	g.press(r);
+//}
+
+
 // day-2025-6-24
 // signals2
 // 类 signal 摘要
@@ -46,55 +246,55 @@ using namespace boost;
 //	void set_combiner(const combiner_type&);
 //};
 
-void slot1()
-{
-	std::cout << "slot1 called" << std::endl;
-}
-void slot2()
-{
-	std::cout << "slot2 called" << std::endl;
-}
-template<int N>
-struct slots
-{
-	int operator()(int x)
-	{
-		std::cout << "slot" << N << "called" << std::endl;
-		return x * N;
-	}
-};
-
-template<typename T>
-class Combiner
-{
-	T v;
-public:
-	typedef std::pair<T, T> result_type;
-	Combiner(T t = T())
-		:v(t)
-	{}
-
-	template<typename InputIterator>
-	result_type operator()(InputIterator begin, InputIterator end) const
-	{
-		if (begin == end)
-		{
-			return result_type();
-		}
-		std::vector<T> vec(begin, end);
-		T sum = std::accumulate(vec.begin(), vec.end(), v);
-		T max = *std::max_element(vec.begin(), vec.end());
-
-		return result_type(sum, max);
-	}
-};
-using namespace boost::signals2;
-
-template<int N>
-bool operator==(const slots<N>&, const slots<N>&)
-{
-	return true;
-}
+//void slot1()
+//{
+//	std::cout << "slot1 called" << std::endl;
+//}
+//void slot2()
+//{
+//	std::cout << "slot2 called" << std::endl;
+//}
+//template<int N>
+//struct slots
+//{
+//	int operator()(int x)
+//	{
+//		std::cout << "slot" << N << "called" << std::endl;
+//		return x * N;
+//	}
+//};
+//
+//template<typename T>
+//class Combiner
+//{
+//	T v;
+//public:
+//	typedef std::pair<T, T> result_type;
+//	Combiner(T t = T())
+//		:v(t)
+//	{}
+//
+//	template<typename InputIterator>
+//	result_type operator()(InputIterator begin, InputIterator end) const
+//	{
+//		if (begin == end)
+//		{
+//			return result_type();
+//		}
+//		std::vector<T> vec(begin, end);
+//		T sum = std::accumulate(vec.begin(), vec.end(), v);
+//		T max = *std::max_element(vec.begin(), vec.end());
+//
+//		return result_type(sum, max);
+//	}
+//};
+//using namespace boost::signals2;
+//
+//template<int N>
+//bool operator==(const slots<N>&, const slots<N>&)
+//{
+//	return true;
+//}
 
 //class Connection {
 //public:
@@ -113,8 +313,91 @@ bool operator==(const slots<N>&, const slots<N>&)
 //	bool operator <(const Connection&) const;
 //};
 
-int main()
-{
+// slot类摘要如下:
+//template<typename Signature,
+//	typename SlotFunction = boost::function<R(T1, ..., TN)>>
+//	class slot : public boost::signals2::slot_base
+//{
+//public:
+//	template<typename Slot> slot(const Slot&);
+//	template<typename Func, typename Arg...>
+//	slot(const Func&, const Arg& ...);
+//
+//	result_type operator()(...);
+//	// 跟踪功能
+//	slot& track(const boost::weak_ptr<void>&);
+//};
+
+
+
+//int main()
+//{
+	//typedef signal<int(int)> signal_t;
+	//typedef signal_t::slot_type slot_t;
+	//signal_t sig;
+	//
+	//// 声明两个 shared_ptr
+	//auto p1 = boost::make_shared<slots<10>>();
+	//auto p2 = boost::make_shared<slots<20>>();
+
+	//function<int(int)> func = ref(*p1); // function 存储引用
+	//sig.connect(slot_t(func).track(p1));
+	////使用 bind 语法, 直接绑定
+	//sig.connect(slot_t(&slots<20>::operator(), p2.get(), _1).track(p2));
+	//p1.reset();
+	//p2.reset();
+
+	//assert(sig.num_slots() == 0);
+	//sig(1);
+
+	//typedef signal<int(int)> signal_t;
+	//signal_t sig;
+
+	//sig.connect(slots<10>());
+	//auto p = boost::make_shared<slots<20>>();
+
+	//sig.connect(signal_t::slot_type(ref(*p)).track(p));
+	//p.reset();
+	//assert(sig.num_slots() == 1);
+
+	//sig(1);
+
+	//signal<int(int)> sig;
+	//sig.connect(slots<10>());
+
+	//auto p = new slots<20>;
+	//sig.connect(ref(*p));
+
+	//delete p;
+	//sig(1);
+
+	//signal<int(int)> sig;
+	//connection c1 =  sig.connect(0, slots<10>());
+	//connection c2 = sig.connect(0, slots<20>());
+	//assert(sig.num_slots() == 2);
+	//sig(2);							// 调用两个插槽
+
+	//std::cout << "begin blocking ..." << std::endl;
+	//{
+	//	shared_connection_block block(c1);
+	//	assert(sig.num_slots() == 2);
+	//	assert(c1.blocked()); 
+	//	sig(2);
+	//}
+
+	//std::cout << "end blocking ..." << std::endl;
+
+	//assert(!c1.blocked());
+	//sig(2);
+
+	//signal<int(int)> sig;
+	//sig.connect(0, slots<10>());
+	//assert(sig.num_slots() == 1);
+	//{
+	//	scoped_connection sc = sig.connect(0, slots<20>());
+	//	assert(sig.num_slots() == 2);
+	//}
+	//assert(sig.num_slots() == 1);
 
 	//signal<int(int)> sig;
 	//assert(sig.empty());
@@ -160,7 +443,7 @@ int main()
 
 	//sig.connect(10, slots<10>());
 	//sig();
-}
+//}
 
 
 // function
@@ -348,7 +631,7 @@ int main()
 // bind
 /*
 	bind 是对 C++ 标准中函数适配器 bind1st/bind2nd 的泛化和增强，可以适配任意的可调用对象.
-	包括函数指针、函数引用、成员函数指针、函数对象和lambda表达式. 
+	包括函数指针、函数引用、成员函数指针、函数对象 和 lambda 表达式. 
 */
 
 // bind 的基本形式		 参数的数量必须与 f 的参数数量相等，这些参数将被传递给f作为入参
@@ -404,7 +687,7 @@ int main()
 
 	bind同样支持绑定虚拟成员函数，其用法与非虚拟函数相同，虚函数的行为将由实际调用发生时的实例来决定.
 
-	bind的另一个对类的操作是它可以绑定public成员变量，它就像是一个选择器，其用法与绑定成员函数类似,
+	bind的另一个对类的操作是它可以绑定 public 成员变量，它就像是一个选择器，其用法与绑定成员函数类似,
 	只需要像使用一个成员函数一样去使用成员变量名.
 
 	使用bind，可以实现 SGISTL/STLport 中的非标准函数适配器 select1st 和select2nd的功能,
