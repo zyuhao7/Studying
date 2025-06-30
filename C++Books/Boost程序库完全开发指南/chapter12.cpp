@@ -14,8 +14,219 @@
 #include <boost/chrono.hpp>
 #include <ctime>
 using namespace boost;
-
 // 第十二章-并发编程
+
+// day-2025-6-30
+// thread
+// 摘要:
+//class Thread
+//{
+//public:
+//	Thread();	
+//	explicit Thread(F f);					// 传递可调用对象
+//	Thread(F f, A1 a1, A2 a2, ...);		    // 传递可调用对象及其参数
+//
+//	Thread(Thread&&) noexcept;				// 移动构造函数
+//	Thread& operator=(Thread&&) noexcept;   // 移动赋值函数
+//
+//	bool joinable() const;					// 是否 join
+//	void join();							// 等待线程
+//
+//	void detach();							// 分离线程
+//
+//	bool try_join_for(const boost::chrono::duration& rel_time); // 超时等待
+//	bool try_join_until(const boost::chrono::time_point& t);    // 超时等待
+//
+//	void interrupt();	//中断线程
+//	bool interruption_requested() const; //是否被中断
+//	
+//	class id;			// 内部类线程 id
+//	id get_id() const;  // 获得线程 id 对象
+//	native_handle_type native_handle(); //获得系统相关的操作 handle
+//
+//	static unsigned hardware_concurrency();	// 获取可并发的核心数
+//	static unsigned physical_concurrency();	// 获取真实 CPU 核心数
+//};
+//
+//namespace This_thread
+//{
+//	Thread::id get_id();
+//	void yield();										  // 允许重调度线程
+//	void sleep_until(const boost::chrono::time_point& t);
+//	void sleep_for(const boost::chrono::duration& d);
+//}
+
+//void dummy(int n)
+//{
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cout << n << std::endl;
+//	}
+//}
+
+//int main()
+//{
+
+	//thread t1, t2;
+	//std::cout << t1.get_id() << std::endl; // {Not-any-thread}
+	//assert(t1.get_id() == t2.get_id());
+
+	//std::cout << thread::hardware_concurrency() << std::endl; // 16
+	//std::cout << thread::physical_concurrency() << std::endl; // 8
+
+	//this_thread::sleep_for(boost::chrono::milliseconds(2));
+	//std::cout << this_thread::get_id(); // 6adc
+	//this_thread::yield();
+
+	//thread t1(dummy, 100);
+	//thread t2([] {dummy(500);});
+
+	//t1.try_join_for(boost::chrono::milliseconds(100));  //最多等待 100ms 后返回
+	//t2.join();											//等待 t2 线程结束后再返回, 无论 t2 线程执行多少时间
+
+	//thread t3(dummy, 300);
+	//t3.detach();
+	//assert(!t3.joinable());
+	// 临时对象
+	//thread(dummy, 100).detach();
+	//this_thread::sleep_for(boost::chrono::milliseconds(2));
+//}
+
+// thread_guard
+
+//struct detach;			 //析构时执行 detach
+//struct join_if_joinable;   // 析构时执行 join
+//template<class CallableThread = join_if_joinable>
+//class Thread_guard
+//{
+//	thread& _t;
+//public:
+//	explicit Thread_guard(thread& t);
+//	~Thread_guard();
+//};
+
+//void dummy(int n)
+//{
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cout << n << std::endl;
+//	}
+//}
+//
+//int main()
+//{
+//	thread t1(dummy, 200);
+//	thread t2(dummy, 300);
+//
+//	thread_guard<boost::detach> g1(t1);	// 析构后线程继续运行
+//	thread_guard<> g2(t2);				// 析构时等待线程结束
+//}
+
+// scoped_thread
+//template<class CallableThread = join_if_joinable>
+//class Scoped_thread
+//{};
+//
+void dummy(int n)
+{
+	for (int i = 0; i < n; ++i)
+	{
+		std::cout << n << std::endl;
+	}
+}
+//
+//int main()
+//{
+//	scoped_thread<boost::detach> t1(dummy, 100); // 析构后线程继续运行
+//	scoped_thread<> t2(dummy, 200);				 // 析构时等待线程结束
+//}
+
+//void to_interrupt(int x)
+//{
+//	try
+//	{
+//		for (int i = 0; i < x; ++i)
+//		{
+//			this_thread::sleep_for(boost::chrono::microseconds(400));
+//			std::cout << i << std::endl;
+//		}
+//	}
+//	catch (const boost::thread_interrupted&)
+//	{
+//		std::cout << "thread_interrupted " << std::endl;
+//	}
+//}
+//
+//int main()
+//{
+//	thread t(to_interrupt, 10);
+//	//this_thread::sleep_for(boost::chrono::milliseconds(10));
+//
+//	t.interrupt();
+//	assert(t.interruption_requested());
+//
+//	t.join();
+//}
+
+// 线程组
+//class Thread_group
+//{
+//public:
+//	thread* create_thread(F threadfunc); // 创建新线程
+//	void add_thread(thread* thrd);		 // 添加已有线程
+//	void remove_thread(thread* thrd);    // 删除线程
+//
+//	bool is_this_thread_in();			 // 当前线程是否在组内
+//	bool is_thread_in(thread* thrd);	 // 指定线程是否在组内
+//
+//	void join_all();					 // 等待所有线程
+//	void interrupt_all();				 // 中断所有线程
+//
+//	int size() const;					 // 获取线程数量
+//};
+
+//int main()
+//{
+//	thread_group tg;
+//
+//	tg.create_thread(bind(dummy, 100));
+//	tg.create_thread(bind(dummy, 200));
+//
+//	tg.join_all();
+//}
+
+// call_once
+/*
+		为了保证初始化函数在多线程环境中被正确调用，thread 库提供了仅调用一次的机制 call_once，
+		使多个线程在操作函数时只能有一个线程成功执行，避免多次执行线程导致错误。
+		这个机制首先需要使用一个once_flag 对象,它将作为初始化的标志，然后使用 call_once() 来调用函数，完成仅执行一次线程的初始化。
+*/
+
+// call_once() 函数的声明如下:
+//template<class Callable, class ...Args>
+//void call_once(once_flag& flag, Callable&& func, Args&&... args);
+//// 假设我们有如下的全局变量和一个初始化函数:
+//
+//int g_count;
+//void init_count(int x)
+//{
+//	std::cout << "should call once~" << std::endl;
+//	g_count = x;
+//}
+//
+//void call_func()
+//{
+//	static once_flag once;			 // 一次初始化标志
+//	call_once(once, init_count, 10); // 执行一次初始化
+//}
+//
+//int main()
+//{
+//	((scoped_thread<>(call_func)));
+//	((scoped_thread<>(call_func)));
+//}
+
+
 // day-2025-6-29
 // thread
 /*
@@ -249,6 +460,7 @@ using namespace boost;
 //		money += x;
 //	}
 //};
+
 
 //int main()
 //{
