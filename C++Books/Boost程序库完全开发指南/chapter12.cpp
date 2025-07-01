@@ -13,8 +13,226 @@
 #include <boost/noncopyable.hpp>
 #include <boost/chrono.hpp>
 #include <ctime>
+#include <stack>
 using namespace boost;
 // 第十二章-并发编程
+
+// day-2025-7-1
+// condition_variable
+/*
+	条件变量是另一种用于等待的同步机制，它可以实现线程间的通信，它必须与互斥量配合使用，
+	等待另一个线程中某个事件发生（满足某个条件），然后线程才能继续执行。
+*/
+// 类摘要
+//enum class Cv_status {  // names for wait returns
+//	no_timeout,
+//	timeout
+//};
+//
+//class Condition_variable_any
+//{
+//public:
+//	void notify_one();				// 通知一个等待中的线程
+//	void notify_all();				// 通知所有等待中的线程
+//
+//	
+//	template<typename lock_type>
+//	void wait(lock_type& m);		// 等待
+//	template<typename lock_type, typename predicate_type>
+//	void wait(lock_type& m, predicate_type pred);			// 等待条件
+//
+//	template<typename lock_type>
+//	Cv_status wait_for(										// 等待相对时间
+//		lock_type& lock, const boost::chrono::duration& d);
+//	template<typename lock_type, typename predicate_type>
+//	Cv_status wait_for(										// 条件等待相对时间
+//		lock_type& lock, const boost::chrono::duration& d, predicate_type pred);
+//
+//	template<typename lock_type>
+//	Cv_status wait_until(									// 等待绝对时间点
+//		lock_type& lock, const boost::chrono::time_point& t);  
+//	template<typename lock_type, typename predicate_type>
+//	Cv_status wait_until(									// 条件等待绝对时间点
+//		lock_type& lock, const boost::chrono::time_point& t, predicate_type pred);
+//};
+
+/*
+* 我们使用标准库的容器适配器 stack 来实现一个用于生产者 - 消费者模式的后进先出型缓冲区:
+* 缓冲区buffer使用了两个条件变量cond_put 和cond_get，分别用于处理put动作和get动作，
+* 如果缓冲区满则cond_put持续等待，当cond_put得到通知（缓冲区不满）时线程写入数据，
+* 然后通知 cond_get 条件变量可以读取数据。cond_get 的处理流程与cond_put类似，具体代码如下：
+*/ 
+
+//class Buffer
+//{
+//private:
+//	mutex mtx;
+//	condition_variable_any cond_put;
+//	condition_variable_any cond_get;
+//
+//	std::stack<int> st;
+//	int un_read, capacity;
+//
+//	bool is_full() { return un_read == capacity; }
+//	bool is_empty() { return un_read == 0; }
+//public:
+//	Buffer(size_t n)
+//		: un_read(0),
+//		capacity(n)
+//	{
+//	}
+//	void put(int x)
+//	{
+//		{
+//			auto lock = make_unique_lock(mtx);  //锁定互斥量
+//			while(is_full())
+//			{
+//				std::cout << "full_wait..." << std::endl;
+//				cond_put.wait(lock);
+//			}
+//			st.push(x);
+//			un_read++;
+//		}
+//		cond_get.notify_one();
+//	}
+//
+//	void get(int* x)
+//	{
+//		{
+//			auto lock = make_unique_lock(mtx);
+//			while (is_empty())
+//			{
+//				std::cout << "empty_wait..." << std::endl;
+//				cond_get.wait(lock);
+//			}
+//			*x = st.top();
+//			st.pop();
+//			un_read--;
+//		}
+//		cond_put.notify_one();
+//	}
+//};
+//
+//
+//Buffer buf(5);
+//void producer(int n)
+//{
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cout << "put " << i << std::endl;
+//		buf.put(i);
+//	}
+//}
+//
+//
+//void consumer(int n)
+//{
+//	int x;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		buf.get(&x);
+//
+//		std::cout << "get " << x << std::endl;
+//	}
+//}
+//
+//int main()
+//{
+//	thread_group tg;
+//	tg.create_thread(bind(producer, 20));
+//	tg.create_thread(bind(consumer, 10));
+//	tg.create_thread(bind(consumer, 10));
+//
+//	tg.join_all();
+//}
+
+// shared_mutex
+/*
+* 共享互斥量shared_mutex不同于mutex和recursive_mutex，它允许线程获取多个共享所有权和一个专享所有权，
+* 实现了读写锁的机制，即多个读线程一个写线程。
+*/
+
+//class Shared_mutex
+//{
+//public:
+//	Shared_mutex();
+//	~Shared_mutex();
+//
+//	void lock();
+//	bool try_lock();
+//	void unlock();
+//
+//	bool try_lock_for(const boost::chrono::duration& rel_time);
+//	bool try_lock_until(const boost::chrono::time_point& abs_time);
+//
+//	// shared_mutex 专有的函数
+//	bool lock_shared();
+//	bool try_lock_shared();
+//	void unlock_shared();
+//
+//	bool try_lock_shared_for(const boost::chrono::duration& rel_time);
+//	bool try_lock_shared_until(const boost::chrono::time_point& abs_time);
+//};
+
+//class rw_data
+//{
+//private:
+//	int m_x;
+//	shared_mutex rw_mtx;
+//
+//public:
+//	rw_data()
+//		:m_x(0)
+//	{}
+//
+//	void write()
+//	{
+//		unique_lock<shared_mutex> g(rw_mtx);
+//		++m_x;
+//	}
+//	void read(int* x)
+//	{
+//		shared_lock<shared_mutex> g(rw_mtx);
+//		*x = m_x;
+//	}
+//};
+//
+//void writer(rw_data& d)
+//{
+//	for (int i = 0; i < 20; ++i)
+//	{
+//		this_thread::sleep_for(boost::chrono::milliseconds(3));
+//		d.write();
+//	}
+//}
+//
+//void reader(rw_data& d)
+//{
+//	int x;
+//	for (int i = 0; i < 10; ++i)
+//	{
+//		this_thread::sleep_for(boost::chrono::milliseconds(5));
+//		d.read(&x);
+//		std::cout << "reader: " << x << std::endl;
+//	}
+//}
+//
+//int main()
+//{
+//	rw_data d;
+//	thread_group pool;
+//
+//	pool.create_thread(bind(writer, ref(d)));
+//	pool.create_thread(bind(writer, ref(d)));
+//
+//
+//	pool.create_thread(bind(reader, ref(d)));
+//	pool.create_thread(bind(reader, ref(d)));
+//	pool.create_thread(bind(reader, ref(d)));
+//	pool.create_thread(bind(reader, ref(d)));
+//
+//	pool.join_all();
+//}
 
 // day-2025-6-30
 // thread
@@ -127,13 +345,13 @@ using namespace boost;
 //class Scoped_thread
 //{};
 //
-void dummy(int n)
-{
-	for (int i = 0; i < n; ++i)
-	{
-		std::cout << n << std::endl;
-	}
-}
+//void dummy(int n)
+//{
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cout << n << std::endl;
+//	}
+//}
 //
 //int main()
 //{
