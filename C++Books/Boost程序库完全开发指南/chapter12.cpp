@@ -17,6 +17,255 @@
 using namespace boost;
 // 第十二章-并发编程
 
+// day-2025-7-2
+// future
+/*
+	很多情况下，线程不仅要执行一些工作，还可能会返回一些计算结果。thread库使用future范式提供了异步操作线程返回值的方法，
+	因为这个返回值在线程开始执行时是不可用的，该返回值是一个“未来”的“期待值”，所以它被称为future（期货）。
+*/
+// future 用来存储异步计算得到的值, 他只能持有结果的唯一的一个引用， 类摘要:
+//enum class Future_status
+//{
+//	ready,
+//	timeout,
+//	deferred
+//};
+//
+//template<typename T>
+//class Future
+//{
+//public:
+//	T get();				//获取 future的值.
+//	void wait() const;     // 等待线程完成计算
+//	Future_status wait_for(const boost::chrono::duration& rel_time) const;
+//	Future_status wait_until(const boost::chrono::time_point& abs_time) const;
+//
+//	bool valid() const;	   // 是否为有效值
+//
+//	bool is_ready() const; // 是否完成计算
+//	bool has_exception() const; // 是否发生异常
+//	bool has_value() const;
+//
+//	shared_future share();  //产生一个 shared_future 对象
+//};
+
+// async
+/*
+	async() 函数用于产生 future 对象，它异步启动一个线程运行函数，返回 future 对象，这样随后我们就可以利用future获取计算结果。
+*/
+//enum class Lanch {
+//	none = 0,					// 行为未定义
+//	async = 1,					// 立即启动线程
+//	defferred = 2,			    // 之后需要时才启动线程
+//	any = async | defferred     // 立即或需要时启动线程
+//};
+//
+//future async(Function&& f, Args&&... args); //默认策略是 any
+//future async(launch policy, Function&& f, Args&&... args);
+
+//void dummy(int n)
+//{
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cout << n << std::endl;
+//	}
+//}
+//
+//int main()
+//{
+	//async(bind(dummy, 10));
+
+	//auto f = boost::async([] {std::cout << "hello" << std::endl;}); //线程启动 lambda表达式.
+	//f.wait();
+
+	// 上面的代码相当于:
+	//thread(dummy, 10).detach();
+	//thread t([] {std::cout << "hello" << std::endl;});
+	//t.join();
+
+	//return 0;
+//}
+ 
+// future 和 async 共同计算 斐波那契数列 
+int fib(int n)
+{
+	if (n <= 1) return n;
+	return fib(n - 1) + fib(n - 2);
+}
+//
+//int main()
+//{
+//	auto f5 = async(fib, 5);				// 计算 fib(5) 时机不确定
+//	auto f7 = async(launch::async, fib, 7); // 立即计算 fib(7)
+//
+//	std::cout << f5.get() + f7.get() << std::endl;
+//	assert(!f5.valid() && !f7.valid());
+//
+//	auto f10 = async(fib, 10);
+//	auto s = f10.wait_for(boost::chrono::microseconds(100));
+//	if (f10.valid())
+//	{
+//		assert(s == future_status::ready);
+//		std::cout << f10.get() << std::endl;
+//	}
+//}
+
+//int main()
+//{
+//	std::vector<boost::future<int>> vec;
+//	for (int i = 0; i < 5; ++i)
+//	{
+//		vec.push_back(async(fib, i + 11));
+//	}
+	//wait_for_all(vec.begin(), vec.end());
+	//for (auto& x : vec)
+	//{
+	//	std::cout << x.get() << " ";
+	//}
+
+//	wait_for_any(vec[3], vec[4], vec[2]);
+//	for (auto& x : vec)
+//	{
+//		if (x.valid())
+//		{
+//			std::cout << x.get() << std::endl;
+//		}
+//	}
+//}
+
+// shared_future
+// 类摘要
+//template<typename T>
+//class Shared_future
+//{
+//public:
+//	T get();				//获取 future的值.
+//	void wait() const;     // 等待线程完成计算
+//	Future_status wait_for(const boost::chrono::duration& rel_time) const;
+//	Future_status wait_until(const boost::chrono::time_point& abs_time) const;
+//
+//	bool valid() const;	   // 是否为有效值
+//
+//	bool is_ready() const; // 是否完成计算
+//	bool has_exception() const; // 是否发生异常
+//	bool has_value() const;
+//};
+
+//int main()
+//{
+//	// async() 函数可以返回 shared_future 对象，但需要我们明确地声明类型:
+//	shared_future<int> f5 = async(fib, 5);
+//
+//	//future 的share() 函数也可以产生 shared_future 对象，这样就可以利用auto来自动推导类型，避免了手写的麻烦.
+//	auto f6 = async(fib, 6).share();	//使用工厂函数
+//	auto func = [](decltype(f5) f) {
+//		std::cout << "[" << f.get() << "]";
+//		};
+//	async(func, f5);
+//	async(func, f6);
+//
+//	this_thread::sleep_for(boost::chrono::microseconds(100));
+//	assert(f5.valid());
+//
+//}
+
+// 高级主题
+// 1.函数lock()
+//int main()
+//{
+//	mutex m1, m2;
+//	{
+//		auto g1 = make_unique_lock(m1, adopt_lock);
+//		auto g2 = make_unique_lock(m2, adopt_lock);
+//		lock(m1, m2);		//锁定两个 mutex
+//	}
+//	{
+//		auto g1 = make_unique_lock(m1, defer_lock);
+//		auto g2 = make_unique_lock(m2, defer_lock);
+//		try_lock(g1, g2);   // 锁定两个unique_lock
+//	}
+//}
+
+// 2.promise
+/*
+	promise是 future 的内部实现，也用于处理异步调用返回值，但它需要配合 thread 使用，可以作为函数的输出参数，其用法更加灵活。
+	promise 需要在线程中用 set_value() 设置要返回的值，用成员函数 get_future() 产生future对象。
+*/
+
+//int main()
+//{
+//	auto func = [](int n, promise<int>& p) { // 使用 promise作为输出参数
+//		p.set_value(fib(n));
+//		};
+//	promise<int> p;
+//	thread(func, 10, boost::ref(p)).detach();
+//	auto f = p.get_future();
+//	std::cout << f.get() << std::endl;
+//}
+
+//3. barrier
+/*
+	barrier是 thread 库基于条件变量提供的另一种同步机制，可用于多个线程同步，当线程执行到 barrier 时必须等待，
+	直到所有的线程都到达这个点时才能继续执行线程。barrier 的另一个名字rendezvous（约会地点）更形象地描述了这种行为.
+*/
+
+//int main()
+//{
+//	atomic<int> x;
+//	barrier br(5); // 5个线程的 barrier
+//
+//	auto func = [&]() {
+//		std::cout << "thread: " << ++x << "arrived barrier! " << std::endl;
+//		br.wait();		//在 barrier处等待, 必须等到五个线程都到达这里才能继续执行.
+//		std::cout << "thread run." << std::endl;
+//		};
+//
+//	thread_group tg;
+//	for (int i = 0; i < 5; ++i) tg.create_thread(func);
+//	tg.join_all();
+//}
+
+// 4.线程本地存储
+/*
+	有时候函数使用了 局部静态变量 或 全局静态变量，不能用于多线程环境，因为无法保证静态变量在多线程环境下重入时被正确操作。
+	C++引入了新的关键字thread_local，而 thread库 使用 thread_specific_ptr 实现了可移植的线程本地存储机制(thread local storage，或thread specific storage，简称tss)
+	使这样的变量用起来就像是每个线程独立拥有的，从而简化多线程应用.
+	thread_specific_ptr是一种智能指针，因此它的接口与shared_ptr相似，它重载了operator*和 operator->,
+	可以用 get() 获得真实的指针，它也有reset() 和release() 函数.
+	thread_specific_ptr 的初始值通常是空指针（nullptr），因此需要使用get() 来进行检测.
+	thread_specific_ptr 没有定义隐式的bool转换，所以不能直接在bool语境中检查是否为空.
+
+*/
+
+//int main()
+//{
+//	thread_specific_ptr<int> pi; // 线程本地存储一个整数
+//	auto func = [&] {
+//		pi.reset(new int());
+//		++(*pi);
+//		std::cout << "thread v = " << *pi << std::endl;
+//		};
+//	async(func);
+//	async(func);
+//
+//	this_thread::sleep_for(boost::chrono::microseconds(100));
+//}
+// 
+// 5.线程结束时执行操作
+
+/*
+	this_thread名字空间提供了一个at_thread_exit（func）函数，它允许“登记”一个线程在结束的时候执行可调用物func，无论线程是否被中断。
+*/
+//void end_msg(const std::string& msg)
+//{
+//	std::cout << msg << std::endl;
+//}
+//void printing()
+//{
+//	this_thread::at_thread_exit(bind(end_msg, "end"));
+//}
+
+
 // day-2025-7-1
 // condition_variable
 /*
