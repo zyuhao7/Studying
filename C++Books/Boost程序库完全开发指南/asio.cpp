@@ -15,11 +15,195 @@
 #include <boost/noncopyable.hpp>
 #include <boost/chrono.hpp>
 #include <boost/asio.hpp>
+#include <boost/asio/steady_timer.hpp>
+#include <boost/asio/system_timer.hpp>
+#include <boost/asio/high_resolution_timer.hpp>
 #include <ctime>
 #include <stack>
 using namespace boost::asio;
-
+using namespace boost::chrono;
 using namespace std;
+
+// day-2025-7-4
+// 定时器
+/*
+	在异步IO里，定时器是一个非常重要的功能，它可以在指定时刻调用函数，实现异步操作.
+	asio库提供4个定时器，分别是 deadline_timer、steady_timer、system_timer 和 high_resolution_timer。
+	类摘要:
+
+	template<typename Clock>
+	class basic_waitable_timer
+	{
+	public:
+		typedef Clock clock_type;
+		typedef typename clock_type::duration duration;
+		typedef typename clock_type::time_point time_point;
+
+		explicit basic_waitable_timer(io_service& ioc);
+		basic_waitable_timer(io_service&, const time_point& expiry_time);
+		basic_waitable_timer(io_service&, const duration& expiry_time);
+
+		time_point expires_at() const;			// 获得过期时间点
+		std::size_t expires_at(const time_point& expiry_time);
+
+		duration expires_from_now() const; //获得过期时间长度
+		std::size_t expires_from_now(const duration& expiry_time) const; //获得过期时间长度
+
+		void wait();	//同步等待
+		void async_wait(WaitHandler handler); // 异步等待
+
+		std::size_t cancel();
+		std::size_t cancel_one();
+	};
+
+	steady_timer、system_timer 和 high_resolution_timer 是 basic_waitable_timer 的模板特化typedef：
+
+	typedef basic_waitable_timer<steady_clock> steady_timer;
+	typedef basic_waitable_timer<system_clock> steady_timer;
+	typedef basic_waitable_timer<high_resolution_clock> high_resolution_timer;
+
+	定时器有3种形式的构造函数，它同signal_set一样要求必须有一个io_service对象，用于提交IO请求.
+	第二个参数是定时器的终止时间，可以是绝对时间点或是相对于当前时间点的一段时间长度.
+	一旦定时器对象被创建，它就会立即开始计时，可以使用成员函数wait() 来同步等待定时器终止,
+	或者使用async_wait() 异步等待定时器终止，当定时器终止时会调用 handler 函数
+
+	2.同步定时器
+
+	int main()
+	{
+		io_service ioc;
+		steady_timer t(ioc, milliseconds(500));
+		cout << t.expires_at() << endl;	// 查看终止的时间点
+		cout << t.expires_from_now() << endl;	//查看终止的时间长度
+		t.wait();
+
+	}
+
+	读者可以把上述代码与thread库的sleep() 函数对比研究一下，虽然两者都是等待，但它们的内部机制完全不同:
+	thread库的sleep() 使用了互斥量和条件变量，在线程中等待，而asio则调用了操作系统的异步机制，如epoll、kqueue等，没有多线程的竞争。
+
+	3.异步定时器
+	接下来介绍异步定时器，其代码与同步定时器的代码大致相同，但异步定时器使用async_wait() 方法增加了回调函数：
+	int main()
+	{
+		io_service ioc;
+		steady_timer t(ioc, milliseconds(500));
+		t.async_wait([](const error_code& ec) {
+			cout << "hello world" << endl;
+			});
+		ioc.run();
+	}
+	当定时器时间到终止时, io_service将调用被注册的 lambda 函数，输出一条消息，然后程序结束
+
+	4.使用bind
+	定时器非常有用，我们可以用它增加回调函数的参数，使它能够做更多的事情。虽然async_wait() 接收的回调函数类型是固定的，
+	但可以使用 bind 配合占位符 placeholders::error 来绑定参数来适配 bind 的接口:
+
+	class timer_with_func
+	{
+	private:
+		int m_count = 0;
+		int m_count_Max = 0;
+		function<void()> m_func;
+		steady_timer m_t;
+
+	public:
+		template<typename F>
+		timer_with_func(io_service& ioc, int x, F func)
+			:m_count(x),
+			m_func(func),
+			m_t(ioc, milliseconds(200)
+		{
+			init();
+		}
+
+	private:
+		typedef timer_with_func this_type;
+
+		void init()
+		{
+			m_t.async_wait(bind(&this_type::handler, this,
+				boost::asio::placeholders::error));
+		}
+
+		void handler()
+		{
+			if(m_count++ >= m_count_Max) return;
+			m_func();
+
+			m_t.expires_from_now(200_ms);
+			m_t.async_wait(bind(&this_type::handler, this, boost::asio::placeholders::error));
+		}
+	};
+
+	5.使用lambda
+	bind 表达式的解法很通用，用bind表达式搭配占位符 placeholders::error 可以把任意的函数或成员函数适配为 asio 要求的 handler，
+	但 bind 的写法稍显麻烦，而且当参数比较多时不易阅读。
+
+
+	 网络通信
+	 类 ip::tcp 是asio网络通信（TCP）部分主要的类，表示TCP协议.
+
+	 1.address
+
+	ip::address addr;
+
+	addr = addr.from_string("127.0.0.1");
+	assert(addr.is_v4());
+	cout << addr.to_string() << endl;
+	cout << typeid(addr).name() << endl;
+
+	addr = addr.from_string("ab::12:34:56");
+	assert(addr.is_v6());
+
+	2.endpoint
+	有了IP 地址，再加上通信用的端口号就构成了一个 socket 端点，在asio库中用 ip::tcp::endpoint 来表示。
+
+	int main()
+	{
+		ip::address addr;
+		addr = addr.from_string("127.0.0.1");
+
+		ip::tcp::endpoint ep(addr, 6680);
+		assert(ep.address() == addr);
+		assert(ep.port() == 6680);
+	}
+
+	3. socket
+	socket 可以在构造时就指定使用的协议或 endpoint，或者稍后调用成员函数connect() 
+
+	socket 读写函数的参数都是buffer 类型，可以用buffer() 函数包装各种容器适配，区别在于send() /write_some() 的参数应该是一个可读buffer，
+	而receive() /read_some() 要求参数是可写buffer。
+
+	4.acceptor
+	acceptor类对应Socket API的accept() 函数功能，它用于服务器端，在指定的端口号接收连接，acceptor必须配合socket类才能完成通信
+
+	 同步通信
+	 本节我们使用socket和acceptor来实现一对同步通信的服务器端和客户端程序
+	 1.服务器端
+	 首先我们来实现服务器端程序，它使用一个acceptor 对象在6688 端口接收连接，当有连接时使用socket对象发送一个字符串.
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // day-2025-7-3
 /*
