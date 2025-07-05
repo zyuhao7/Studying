@@ -182,27 +182,198 @@ using namespace std;
 	 本节我们使用socket和acceptor来实现一对同步通信的服务器端和客户端程序
 	 1.服务器端
 	 首先我们来实现服务器端程序，它使用一个acceptor 对象在6688 端口接收连接，当有连接时使用socket对象发送一个字符串.
+	 day-2025-7-5
+	int main()
+	{
+		try
+		{
+			typedef ip::tcp::acceptor acceptor_type;
+			typedef ip::tcp::endpoint endpoint_type;
+			typedef ip::tcp::socket socket_type;
+
+			cout << "server start." << endl;
+			io_service ioc;
+
+			acceptor_type acceptor(ioc,
+				endpoint_type(ip::tcp::v4(), 6688));
+
+			cout << acceptor.local_endpoint().address() << endl;
+
+			// 执行服务对象
+			for (;;)
+			{
+				socket_type sock(ioc);
+				acceptor.accept(sock);
+				cout << "client: ";
+				cout << sock.remote_endpoint().address() << endl;
+
+				sock.send(buffer("hello asio!"));
+			}
+		}
+		catch (const std::exception& e)
+		{
+			cout << e.what() << endl;
+		}
+	}
+
+	// 2.客户端
+	int main()
+	{
+		try
+		{
+			typedef ip::tcp::endpoint endpoint_type;
+			typedef ip::tcp::socket socket_type;
+			typedef ip::address address_type;
+
+			cout << "client start. " << endl;
+			io_service ioc;
+
+			socket_type sock(ioc);
+
+			endpoint_type ep(address_type::from_string("127.0.0.1"), 6688);
+
+			sock.connect(ep);
+			cout << sock.available() << endl;
+
+			vector<char> str(sock.available() + 1, 0);
+			sock.receive(buffer(str));
+
+			cout << "receive from " << sock.remote_endpoint().address();
+			cout << &str[0] << endl;
+
+		}
+		catch (const std::exception& e)
+		{
+			cout << e.what();
+		}
+	}
+
+	 // resolver
+	 resolver 使用内部类 query 和 iterator 共同完成查询IP地址的工作：首先使用网址和服务名（通常是端口号）创建 query 对象,
+	 然后由resolve() 成员函数生成 iterator 对象，它代表了查询到的IP端点。之后就可以使用socket对象尝试连接，直到找到一个可用的为止.
+	 在这里我们使用一个函数 resolve_connect() 来封装 resolver 的调用过程，具体代码如下:
+
+	 #include <boost/lexical_cast.hpp>
+	void resolve_connect(io_service& ioc, ip::tcp::socket& sock, const char* name, int port)
+	{
+		ip::tcp::resolver r(ioc);
+		ip::tcp::resolver::query q(
+			name, boost::lexical_cast<string>(port));
+
+		auto it = r.resolve(q);
+		decltype(it) end;
+		boost::system::error_code ec = error::host_not_found;
+		for (; ec && it != end; ++it)
+		{
+			sock.close();
+			sock.connect(*it, ec);
+		}
+		if (ec)
+		{
+			cout << "can't connect. " << endl;
+			throw system_error(ec);
+		}
+	}
+
+	int main()
+	{
+		io_service ioc;
+		ip::tcp::socket sock(ioc);
+		try
+		{
+			resolve_connect(ioc, sock, "www.boost.org", 80);
+			cout << sock.remote_endpoint() << endl;
+		}
+		catch (const std::exception& e)
+		{
+			cout << e.what() << endl;
+		}
+
+	}
+	 resolver不仅能解析域名，它也支持使用IP地址和服务名：
+	ip::tcp::resolver::query q(＂127.0.0.1＂,＂http＂);
+
+
+	使用协程
+	协程（coroutine）是泛化的例程（routine）。例程只有一个入口和多个出口，C++里的函数就是这样的,从最开始的函数入口开始，可以在某个时刻用
+	return 返回,例程就结束了.而协程则不同，它可以有多个入口和多个出口，从最开始的入口进入之后可以随时用yield调用返回，之后再调用协程就会
+	从刚才返回的地方继续执行。现代的很多编程语言都已经内置了协程支持，其中最著名的就是Go和Lua.
+
+	在Boost1.53版引入协程库 boost.coroutine 后，asio 提供了比异步回调handler 更容易理解的协程功能，能够以“同步”的方式实现异步调用。
+	asio 同时支持stackless和stackful两种形式的协程，但stackful协程更容易使用。
+	使用协程功能需要包含头文件<boost/asio/spawn.hpp>，并链接 libboost_context.a、libboost_coroutine.a和libboost_thread.a
+
+	#include <boost/asio/spawn.hpp>
+
+	//asio 的协程功能主要使用类 yield_context，它是basic_yield_context 的typedef，其类摘要如下:
+	template<typename Handler>
+	class basic_yield_context	//包装协程相关对象
+	{
+	public:
+		basic_yield_context(const detail::weak_ptr<callee_type>& coro,
+			caller_type& ca, Handler& handler);
+		basic_yield_context operator[](boost::system::error_code& ec) const;
+
+		detail::weak_ptr<callee_type> coro_; // 协程
+		caller_type& ca_;					 // 协程
+		Hanlder& handler_;					 // 完成回调函数
+		boost::system::error_code* ec_;		 // 错误码
+	};
+
+	typedef basic_yield_context<detail::wrapped_handler<io_service::strand, void(*)(), detail::is_continuation_if_running>> yield_context;
+
+	yield_context的接口很简单，它保存了协程的运行环境，交替执行主协程（caller）和从协程（callee），达到异步的目的。
+	operator[]用于外部获取发生的错误码，如果不使用operator[]则会抛出system_error异常来报告错误。
+	通常我们不直接创建yield_context对象，而是使用函数spawn() 创建yield_context对象。
+	它产生 yield_context 对象，再将其传递给使用 yield_contex t对象的函数。
+
+	spawn() 有多个重载形式，常用的是以下两种:
+	void spawn(strand s, Funcion function);
+	void spawn(io_service ioc, Funcion function);
+
+	其中的function必须符合以下函数签名:
+	void func(boost::asio::yield_context yield); 
+
+	在 asio 的协程用法里，yield_context 取代了我们之前使用的回调 handler，async_xxx()函数不需要再写回调函数，而是使用yield_context对象.
+	async_xxx() 调用后会自动交出控制权，执行其他的协程，直到异步操作完成时才会返回继续执行之后的动作,异步读写操作的字节数可以从async_xxx()
+	的返回值获取。整个程序的流程很像同步模式，但因为有协程的存在所以是异步而高效的.
+
+	协程服务器
+	int main()
+	{
+		typedef ip::tcp::acceptor acceptor_type;
+		typedef ip::tcp::endpoint endpoint_type;
+		typedef ip::tcp::socket   socket_type;
+
+		io_service ioc;
+
+		spawn(ioc, [&](yield_context yield) {
+			acceptor_type acceptor(ioc, endpoint_type(ip::tcp::v4(), 6688));
+
+			for (;;)
+			{
+				socket_type sock(ioc);
+				boost::system::error_code ec;
+
+				acceptor.async_accept(sock, yield[ec]);
+
+				if (ec)
+				{
+					return;
+				}
+				auto len = sock.async_write_some(				// 异步写数据, 无 handler
+					buffer("hello coroutine"), yield);
+
+				cout << "send " << len << " bytes " << endl;
+			}
+			});
+
+		ioc.run();
+	}
+
+
+
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // day-2025-7-3
