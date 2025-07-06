@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net"
 	"sync"
+	"time"
 )
 
 type Server struct {
@@ -60,18 +62,49 @@ func (this *Server) Handler(conn net.Conn) {
 	remoteAddr := conn.RemoteAddr().String()
 	fmt.Printf("来自 %s 的连接建立成功\n", remoteAddr)
 
-	user := NewUser(conn)
+	user := NewUser(conn, this)
 
-	// 用户上线, 将用户加入到 onlineMap中
-	this.mapLock.Lock()
-	this.OnlineMap[user.Name] = user
-	this.mapLock.Unlock()
+	user.Online()
+	
+	// 监听用户是否活跃的 channel
+	isLive := make(chan bool)
 
-	// 广播当前用户上线
-	this.BroadCst(user, "online")
+	// 接收客户端发来的数据
+	go func ()  {
+		buf := make([] byte, 4096)
+		for{
+			n, err := conn.Read(buf)
+			if n == 0{
+				user.Offline()
+				return
+			}
+			if err != nil && err != io.EOF{
+				fmt.Println("Conn Read err : ", err)
+				return
+			}
+			// 提取用户的消息, 去除 \n
+			msg := string(buf[:n - 1])
+			user.DoMessage(msg)
+
+			// 任意的消息代表当前用户是活跃状态
+			isLive <- true
+		}
+	}()
 
 	// 当前 handler 阻塞
-	select {}
+	for{
+		select {
+		case <- isLive:
+			 // 当前用户是活跃的, 重置定时器.
+			 // do nonthing 为了激活 select 更新下面的定时器
+		case <- time.After(time.Second * 300):
+			// 已经超时, 强制踢掉用户
+			user.SendMsg("超时未发送消息, 你被踢了!\n")
+			close(user.C)
+			conn.Close()
+			return
+		}
+	}
 }
 
 // 新增广播方法
@@ -82,7 +115,7 @@ func (this *Server) BroadCst(user *User, msg string) {
 	this.Message <- sendMsg
 }
 
-// 监听 Message广播消息 channel的 goroutine, 一旦有消息就发送给全部在线User
+// 监听 Message 广播消息 channel 的 goroutine, 一旦有消息就发送给全部在线User
 func (this *Server) ListenMessager() {
 	for {
 		msg := <-this.Message
