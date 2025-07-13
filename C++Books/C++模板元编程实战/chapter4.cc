@@ -206,10 +206,80 @@ auto LowerAccess(TData&& p)
 //template <typename TCategory, typename TElem, typename TDevice>
 //using PrincipalDataType = typename PrincipalDataType<TCategory, TElem, TDevice>::type;
 
-int main()
+// day-2025-7-13
+// 基于 CPU的特化版本
+template<typename TElem, typename TDevice = DeviceTags::CPU>
+class Scalar
 {
+public:
+	using ElementType = TElem;
+	using DeviceType = TDevice;
+public:
+	Scalar(ElementType elem = ElementType())
+		:m_elem(elem)
+	{}
+	auto& Value() { return m_elem; }
+	auto Value() const { return m_elem; }
 
+	bool operator==(const Scalar& val) const;
 
+	template<typename TOtherType>
+	bool operator==(const TOtherType&) const;
 
-	return 0;
-}
+	template<typename TData>
+	bool operator!=(const TData& val) const;
+
+	auto EvalRegister() const;
+
+private:
+	ElementType m_elem;
+};
+
+// 矩阵
+// 声明与接口
+template<typename TElem, typename TDevice>
+class Matrix;
+
+template<typename TElem, typename TDevice>
+constexpr bool IsMatrix<Matrix<TElem, TDevice>> = true;
+
+template<typename TElem>
+class Matrix<TElem, DeviceTags::CPU>
+{
+public:
+	using ElementType = TElem;
+	using DeviceType = DeviceTags::CPU;
+public:
+	Matrix(size_t p_rowNum = 0, size_t p_colNum = 0);
+	size_t RowNum() const { return m_rowNum; }
+	size_t ColNum() const { return m_colNum; }
+
+	void SetValue(size_t p_rowId, size_t p_colId, ElementType val);
+	const auto operator()(size_t p_rowId, size_t p_colId) const;
+	bool AvailableForWrite() const;
+	Matrix SubMatrix(size_t p_rowB, size_t p_rowE, size_t p_colB, size_t p_colE) const;
+
+private:
+	ContinuousMemory<ElementType, DeviceType> m_mem;
+	size_t m_rowNum;
+	size_t m_colNum;
+	size_t m_rowlen;
+};
+
+// 列表
+
+//IsIterator 元函数
+template<typename T>
+struct IsIterator_
+{
+	template<typename R>
+	static std::true_type Test(typename std::iterator_traits<R>::iterator_category*);
+
+	template<typename R>
+	static std::false_type Test(...);
+
+	static constexpr bool value = decltype(Test<T>(nullptr))::value;
+};
+
+template<typename T>
+constexpr bool IsIterator = IsIterator_<T>::value;
