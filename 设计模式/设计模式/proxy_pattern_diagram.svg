@@ -1,0 +1,73 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- 标题 -->
+  <text x="400" y="30" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">代理模式(Proxy Pattern)结构与关系图</text>
+
+  <!-- 代理模式核心结构 -->
+  <text x="400" y="70" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">核心结构</text>
+  
+  <!-- Subject接口 -->
+  <rect x="150" y="100" width="120" height="70" fill="#f0f0f0" stroke="#333" stroke-width="2" rx="5"/>
+  <text x="210" y="130" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Subject</text>
+  <text x="210" y="150" font-family="Arial" font-size="12" text-anchor="middle">+ display()</text>
+
+  <!-- RealSubject类 -->
+  <rect x="400" y="100" width="150" height="90" fill="#e6f7ff" stroke="#333" stroke-width="2" rx="5"/>
+  <text x="475" y="130" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">RealSubject</text>
+  <text x="475" y="150" font-family="Arial" font-size="12" text-anchor="middle">+ display()</text>
+  <text x="475" y="170" font-family="Arial" font-size="12" text-anchor="middle">- loadFromDisk()</text>
+
+  <!-- Proxy类 -->
+  <rect x="150" y="250" width="120" height="90" fill="#fff2e6" stroke="#333" stroke-width="2" rx="5"/>
+  <text x="210" y="280" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Proxy</text>
+  <text x="210" y="300" font-family="Arial" font-size="12" text-anchor="middle">+ display()</text>
+  <text x="210" y="320" font-family="Arial" font-size="12" text-anchor="middle">- realSubject: RealSubject</text>
+
+  <!-- 关系线 -->
+  <line x1="270" y1="135" x2="400" y2="135" stroke="#333" stroke-width="2" stroke-dasharray="5,5"/>
+  <polygon points="400,130 410,135 400,140" fill="#333"/>
+  <text x="335" y="125" font-family="Arial" font-size="12" text-anchor="middle">实现</text>
+
+  <line x1="210" y1="170" x2="210" y2="250" stroke="#333" stroke-dasharray="5,5"/>
+  <polygon points="205,250 210,260 215,250" fill="#333"/>
+  <text x="230" y="210" font-family="Arial" font-size="12" text-anchor="start">实现</text>
+
+  <line x1="180" y1="250" x2="180" y2="220" stroke="#333" stroke-width="2"/>
+  <line x1="180" y1="220" x2="450" y2="220" stroke="#333" stroke-width="2"/>
+  <line x1="450" y1="220" x2="450" y2="190" stroke="#333" stroke-width="2"/>
+  <polygon points="445,190 450,180 455,190" fill="#333"/>
+  <text x="315" y="210" font-family="Arial" font-size="12" text-anchor="middle">关联</text>
+
+  <!-- 与其他模式的关系 -->
+  <text x="400" y="380" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">与其他模式的关系</text>
+
+  <!-- 装饰器模式 -->
+  <rect x="100" y="420" width="140" height="60" fill="#ffe6e6" stroke="#333" stroke-width="2" rx="5"/>
+  <text x="170" y="450" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">装饰器模式</text>
+  <text x="170" y="470" font-family="Arial" font-size="10" text-anchor="middle">动态添加功能</text>
+
+  <!-- 适配器模式 -->
+  <rect x="330" y="420" width="140" height="60" fill="#e6ffe6" stroke="#333" stroke-width="2" rx="5"/>
+  <text x="400" y="450" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">适配器模式</text>
+  <text x="400" y="470" font-family="Arial" font-size="10" text-anchor="middle">接口转换</text>
+
+  <!-- 外观模式 -->
+  <rect x="560" y="420" width="140" height="60" fill="#fff0e6" stroke="#333" stroke-width="2" rx="5"/>
+  <text x="630" y="450" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">外观模式</text>
+  <text x="630" y="470" font-family="Arial" font-size="10" text-anchor="middle">简化复杂系统</text>
+
+  <!-- 关系线 -->
+  <line x1="210" y1="340" x2="170" y2="420" stroke="#666" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="210" y1="340" x2="400" y2="420" stroke="#666" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="210" y1="340" x2="630" y2="420" stroke="#666" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- 图例 -->
+  <rect x="650" y="100" width="120" height="100" fill="#ffffff" stroke="#333" stroke-width="1" rx="5"/>
+  <text x="710" y="120" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">图例</text>
+  <line x1="670" y1="140" x2="720" y2="140" stroke="#333" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="760" y="143" font-family="Arial" font-size="12" text-anchor="start">实现</text>
+  <line x1="670" y1="165" x2="720" y2="165" stroke="#333" stroke-width="2"/>
+  <polygon points="715,160 725,165 715,170" fill="#333"/>
+  <text x="760" y="168" font-family="Arial" font-size="12" text-anchor="start">关联</text>
+  <line x1="670" y1="190" x2="720" y2="190" stroke="#666" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="760" y="193" font-family="Arial" font-size="12" text-anchor="start">与其他模式关系</text>
+</svg>
