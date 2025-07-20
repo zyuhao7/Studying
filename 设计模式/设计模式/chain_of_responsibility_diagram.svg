@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+    <!-- 背景和标题 -->
+    <rect width="100%" height="100%" fill="#f8f9fa"/>
+    <text x="400" y="40" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">责任链设计模式(Chain of Responsibility)结构</text>
+    <text x="400" y="70" font-family="Arial" font-size="14" text-anchor="middle">使多个对象都有机会处理请求，将对象连成链并传递请求直到被处理</text>
+
+    <!-- 抽象处理者(Handler) -->
+    <rect x="350" y="100" width="100" height="60" rx="5" fill="#9ac3fd" stroke="#333" stroke-width="1.5"/>
+    <text x="400" y="135" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Handler</text>
+    <line x1="350" y1="160" x2="350" y2="200" stroke="#333" stroke-width="1"/>
+    <line x1="450" y1="160" x2="450" y2="200" stroke="#333" stroke-width="1"/>
+    <line x1="350" y1="200" x2="450" y2="200" stroke="#333" stroke-width="1"/>
+
+    <!-- 具体处理者1 -->
+    <rect x="150" y="220" width="120" height="60" rx="5" fill="#b7e3c4" stroke="#333" stroke-width="1.5"/>
+    <text x="210" y="255" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">ConcreteHandler1</text>
+    <text x="210" y="275" font-family="Arial" font-size="10" text-anchor="middle">处理1-10请求</text>
+
+    <!-- 具体处理者2 -->
+    <rect x="390" y="220" width="120" height="60" rx="5" fill="#b7e3c4" stroke="#333" stroke-width="1.5"/>
+    <text x="450" y="255" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">ConcreteHandler2</text>
+    <text x="450" y="275" font-family="Arial" font-size="10" text-anchor="middle">处理11-20请求</text>
+
+    <!-- 具体处理者3 -->
+    <rect x="630" y="220" width="120" height="60" rx="5" fill="#b7e3c4" stroke="#333" stroke-width="1.5"/>
+    <text x="690" y="255" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">ConcreteHandler3</text>
+    <text x="690" y="275" font-family="Arial" font-size="10" text-anchor="middle">处理21-30请求</text>
+
+    <!-- 继承关系线 -->
+    <line x1="400" y1="160" x2="210" y2="220" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+    <line x1="400" y1="160" x2="450" y2="220" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+    <line x1="400" y1="160" x2="690" y2="220" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+    <!-- 责任链关系 -->
+    <line x1="270" y1="250" x2="390" y2="250" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+    <line x1="510" y1="250" x2="630" y2="250" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+
+    <!-- 箭头标记定义 -->
+    <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+        </marker>
+    </defs>
+
+    <!-- 图例 -->
+    <rect x="50" y="350" width="15" height="15" fill="#9ac3fd" stroke="#333" stroke-width="1"/>
+    <text x="75" y="363" font-family="Arial" font-size="12">抽象处理者</text>
+
+    <rect x="200" y="350" width="15" height="15" fill="#b7e3c4" stroke="#333" stroke-width="1"/>
+    <text x="225" y="363" font-family="Arial" font-size="12">具体处理者</text>
+
+    <line x1="350" y1="360" x2="400" y2="360" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+    <text x="415" y="363" font-family="Arial" font-size="12">继承关系</text>
+
+    <line x1="550" y1="360" x2="600" y2="360" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+    <text x="615" y="363" font-family="Arial" font-size="12">责任链关系</text>
+</svg>
