@@ -1,0 +1,39 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+    <!-- 标题 -->
+    <text x="300" y="30" font-family="Arial" font-size="20" text-anchor="middle" font-weight="bold">策略模式关系图</text>
+
+    <!-- 抽象策略类 -->
+    <rect x="100" y="100" width="150" height="60" fill="#f0f0f0" stroke="#333" rx="5"/>
+    <text x="175" y="125" font-family="Arial" font-size="14" text-anchor="middle">PaymentStrategy</text>
+    <text x="175" y="145" font-family="Arial" font-size="12" text-anchor="middle">+ pay(amount: double)</text>
+
+    <!-- 具体策略类 - 信用卡 -->
+    <rect x="350" y="60" width="150" height="60" fill="#e6f7ff" stroke="#333" rx="5"/>
+    <text x="425" y="85" font-family="Arial" font-size="14" text-anchor="middle">CreditCardPayment</text>
+    <text x="425" y="105" font-family="Arial" font-size="12" text-anchor="middle">+ pay(amount: double)</text>
+
+    <!-- 具体策略类 - 支付宝 -->
+    <rect x="350" y="160" width="150" height="60" fill="#e6f7ff" stroke="#333" rx="5"/>
+    <text x="425" y="185" font-family="Arial" font-size="14" text-anchor="middle">AlipayPayment</text>
+    <text x="425" y="205" font-family="Arial" font-size="12" text-anchor="middle">+ pay(amount: double)</text>
+
+    <!-- 环境类 -->
+    <rect x="100" y="260" width="150" height="60" fill="#fff2e6" stroke="#333" rx="5"/>
+    <text x="175" y="285" font-family="Arial" font-size="14" text-anchor="middle">ShoppingCart</text>
+    <text x="175" y="305" font-family="Arial" font-size="12" text-anchor="middle">- paymentStrategy</text>
+
+    <!-- 继承关系 -->
+    <line x1="250" y1="130" x2="350" y2="90" stroke="#333" stroke-width="1.5"/>
+    <polygon points="350,90 345,95 355,95" fill="#333"/>
+
+    <line x1="250" y1="130" x2="350" y2="190" stroke="#333" stroke-width="1.5"/>
+    <polygon points="350,190 345,185 355,185" fill="#333"/>
+
+    <!-- 关联关系 -->
+    <line x1="175" y1="160" x2="175" y2="260" stroke="#333" stroke-width="1.5" stroke-dasharray="5,3"/>
+    <polygon points="175,260 170,255 180,255" fill="#333"/>
+
+    <!-- 说明文字 -->
+    <text x="300" y="350" font-family="Arial" font-size="12" text-anchor="middle">继承关系</text>
+    <text x="100" y="190" font-family="Arial" font-size="12" text-anchor="middle">关联关系</text>
+</svg>
