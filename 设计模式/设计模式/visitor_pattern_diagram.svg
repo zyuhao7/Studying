@@ -1,0 +1,64 @@
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+    <!-- 标题 -->
+    <text x="400" y="30" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">访问者模式类图</text>
+
+    <!-- 抽象访问者 -->
+    <rect x="50" y="100" width="150" height="80" fill="#f0f0f0" stroke="#333" stroke-width="2" rx="5"/>
+    <text x="125" y="130" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Visitor</text>
+    <text x="125" y="155" font-family="Arial" font-size="12" text-anchor="middle">+ visitConcreteElementA()</text>
+    <text x="125" y="175" font-family="Arial" font-size="12" text-anchor="middle">+ visitConcreteElementB()</text>
+
+    <!-- 具体访问者1 -->
+    <rect x="50" y="250" width="150" height="70" fill="#e6f7ff" stroke="#333" stroke-width="2" rx="5"/>
+    <text x="125" y="280" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">DisplayVisitor</text>
+    <text x="125" y="300" font-family="Arial" font-size="12" text-anchor="middle">+ visitConcreteElementA()</text>
+    <text x="125" y="315" font-family="Arial" font-size="12" text-anchor="middle">+ visitConcreteElementB()</text>
+
+    <!-- 具体访问者2 -->
+    <rect x="50" y="380" width="150" height="70" fill="#e6f7ff" stroke="#333" stroke-width="2" rx="5"/>
+    <text x="125" y="410" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">ProcessVisitor</text>
+    <text x="125" y="430" font-family="Arial" font-size="12" text-anchor="middle">+ visitConcreteElementA()</text>
+    <text x="125" y="445" font-family="Arial" font-size="12" text-anchor="middle">+ visitConcreteElementB()</text>
+
+    <!-- 抽象元素 -->
+    <rect x="350" y="100" width="150" height="60" fill="#f0f0f0" stroke="#333" stroke-width="2" rx="5"/>
+    <text x="425" y="135" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Element</text>
+    <text x="425" y="155" font-family="Arial" font-size="12" text-anchor="middle">+ accept(Visitor*)</text>
+
+    <!-- 具体元素A -->
+    <rect x="350" y="220" width="150" height="70" fill="#fff2e6" stroke="#333" stroke-width="2" rx="5"/>
+    <text x="425" y="250" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">ConcreteElementA</text>
+    <text x="425" y="270" font-family="Arial" font-size="12" text-anchor="middle">+ accept(Visitor*)</text>
+    <text x="425" y="285" font-family="Arial" font-size="12" text-anchor="middle">+ getData(): string</text>
+
+    <!-- 具体元素B -->
+    <rect x="350" y="350" width="150" height="70" fill="#fff2e6" stroke="#333" stroke-width="2" rx="5"/>
+    <text x="425" y="380" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">ConcreteElementB</text>
+    <text x="425" y="400" font-family="Arial" font-size="12" text-anchor="middle">+ accept(Visitor*)</text>
+    <text x="425" y="415" font-family="Arial" font-size="12" text-anchor="middle">+ getValue(): int</text>
+
+    <!-- 对象结构 -->
+    <rect x="600" y="220" width="150" height="70" fill="#ffe6e6" stroke="#333" stroke-width="2" rx="5"/>
+    <text x="675" y="250" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">ObjectStructure</text>
+    <text x="675" y="270" font-family="Arial" font-size="12" text-anchor="middle">+ addElement(Element*)</text>
+    <text x="675" y="285" font-family="Arial" font-size="12" text-anchor="middle">+ accept(Visitor*)</text>
+
+    <!-- 继承关系 -->
+    <line x1="125" y1="180" x2="125" y2="250" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="125" y1="350" x2="125" y2="380" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="425" y1="160" x2="425" y2="220" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+    <!-- 关联关系 -->
+    <line x1="200" y1="140" x2="350" y2="130" stroke="#333" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+    <text x="275" y="125" font-family="Arial" font-size="12">visits</text>
+
+    <line x1="600" y1="250" x2="500" y2="250" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <text x="550" y="240" font-family="Arial" font-size="12">contains</text>
+
+    <!-- 箭头标记定义 -->
+    <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+        </marker>
+    </defs>
+</svg>
