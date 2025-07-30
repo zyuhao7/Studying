@@ -1,0 +1,33 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+    <!-- 标题 -->
+    <text x="300" y="30" font-family="Arial" font-size="20" text-anchor="middle" font-weight="bold">模板方法模式关系图</text>
+
+    <!-- 抽象类 -->
+    <rect x="100" y="100" width="180" height="100" fill="#f0f0f0" stroke="#333" rx="5"/>
+    <text x="190" y="130" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">AbstractClass</text>
+    <text x="190" y="150" font-family="Arial" font-size="12" text-anchor="middle">+ templateMethod()</text>
+    <text x="190" y="170" font-family="Arial" font-size="12" text-anchor="middle"># step1()</text>
+    <text x="190" y="190" font-family="Arial" font-size="12" text-anchor="middle"># step2() [纯虚]</text>
+
+    <!-- 具体子类 A -->
+    <rect x="350" y="80" width="150" height="80" fill="#e6f7ff" stroke="#333" rx="5"/>
+    <text x="425" y="110" font-family="Arial" font-size="14" text-anchor="middle">ConcreteClassA</text>
+    <text x="425" y="130" font-family="Arial" font-size="12" text-anchor="middle"># step2()</text>
+    <text x="425" y="150" font-family="Arial" font-size="12" text-anchor="middle"># step3()</text>
+
+    <!-- 具体子类 B -->
+    <rect x="350" y="220" width="150" height="80" fill="#e6f7ff" stroke="#333" rx="5"/>
+    <text x="425" y="250" font-family="Arial" font-size="14" text-anchor="middle">ConcreteClassB</text>
+    <text x="425" y="270" font-family="Arial" font-size="12" text-anchor="middle"># step2()</text>
+    <text x="425" y="290" font-family="Arial" font-size="12" text-anchor="middle"># step3()</text>
+
+    <!-- 继承关系 -->
+    <line x1="280" y1="130" x2="350" y2="110" stroke="#333" stroke-width="1.5"/>
+    <polygon points="350,110 345,115 355,115" fill="#333"/>
+
+    <line x1="280" y1="170" x2="350" y2="250" stroke="#333" stroke-width="1.5"/>
+    <polygon points="350,250 345,245 355,245" fill="#333"/>
+
+    <!-- 说明文字 -->
+    <text x="300" y="350" font-family="Arial" font-size="12" text-anchor="middle">继承关系</text>
+</svg>
