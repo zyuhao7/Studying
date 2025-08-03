@@ -2,6 +2,7 @@
 ` day-2024-9-8`
 
 ## 第二章 简单动态字符串
+```c++
         1、 Redis 只会使用 C 字符串作为字面量, 在大多数情况下, Redis 使用 SDS(Simple Dynamic String, 简单动态字符串) 作为字符串表示.
 
         2、 比起 C 字符串, SDS 具有如下优点:
@@ -10,6 +11,7 @@
             3) 减少修改字符串长度时所需的内存重分配次数
             4) 二进制安全
             5) 兼容部分 C 字符串函数
+```
 
 `day-2024-9-10`
 ## 第三章 链表
@@ -175,4 +177,91 @@
     2. 压缩列表被用作列表键和哈希键的底层实现之一.
     3. 压缩列表可以包含多个节点, 每个节点可以保存一个字节数组或者整数值.
     4. 添加新节点到压缩队列, 或者从压缩队列中删除节点, 可能会引发连锁更新操作, 但这种操作出现的几率不高.
+```
+`day-2025-8-3`
+## 第八章 对象
+```c++
+typedef struct redisObject
+{
+    unsigned type : 4;
+    unsigned encoding : 4;
+    unsigned lru : LRU_BITS; 
+    int refcount;
+    void *ptr;
+} robj;
+
+字符串对象:
+    1. 字符串对象的编码可以是 REDIS_ENCODING_INT、REDIS_ENCODING_EMBSTR、REDIS_ENCODING_RAW 中的任意一种.
+    2. 字符串对象的底层实现可以是 C 语言的 long 类型、C 语言的 double 类型、C 语言的 char* 类型.
+    3. 字符串对象的长度可以是任意长度.
+
+    REDIS_ENCODING_EMBSTR与REDIS_ENCODING_RAW的区别:
+        1. 当字符串对象的长度小于等于 32 字节时, 字符串对象的编码就会被设置为 REDIS_ENCODING_EMBSTR.
+            [                redisObject          ][      sdshdr      ]
+            [  type  ][  encoding  ][  ptr  ][....][free:0][len:5][buf]
+                          EMBSTR      ↓------------------>['H']['E']['L']['L']['O']
+                            embstr编码的字符串对象
+
+        2. 当字符串对象的长度大于 32 字节时, 字符串对象的编码就会被设置为 REDIS_ENCODING_RAW.
+            [                redisObject          ][    sdshdr    ]
+            [            type(REDIS_STRING)       ][    free 0    ]
+            [    encoding(REDIS_ENCODING_RAW)     ][    len 37    ]
+            [                ptr                  ][    buf       ] ['L']['O']['N']['G'].....['\0']
+                            raw编码的字符串对象
+
+列表对象:
+    1. 列表对象的编码可以是 REDIS_ENCODING_ZIPLIST、REDIS_ENCODING_LINKEDLIST 中的任意一种.
+    2. 列表对象的底层实现可以是压缩列表、双向链表.
+    3. 列表对象的长度可以是任意长度.
+
+    如果numbers键的值对象使用的是 ziplist编码, 那么这个值对象将会是如下结构:
+            [                redisObject           ]
+            [            type(REDIS_LIST)          ]
+            [   encoding(REDIS_ENCODING_ZIPLIST)   ]
+            [                ptr                   ]=>[zlbytes][zltail][zllen][1]["three"][5][zlend]
+            [                ...                   ]
+                        ziplist编码的 numbers列表对象
+
+    如果是 linkedlist编码:
+            [                redisObject           ]
+            [            type(REDIS_LIST)          ]
+            [ encoding(REDIS_ENCODING_LINKEDLIST)  ]
+            [                ptr                   ]=>[StringObject 1][StringObject "three"][StringObject 5]
+            [                ...                   ]
+                        linkedlist编码的 numbers列表对象
+
+哈希对象:
+    1. 哈希对象的编码可以是 REDIS_ENCODING_HT、REDIS_ENCODING_ZIPLIST 中的任意一种.
+    2. 哈希对象的底层实现可以是哈希表、压缩列表.
+    3. 哈希对象的长度可以是任意长度.
+
+    127.0.0.1:6379> hset profile name "xiaoming"
+    (integer) 0
+    127.0.0.1:6379> hset hs name "张三"
+    (integer) 1
+    127.0.0.1:6379> hset hs age 25
+    (integer) 1
+    127.0.0.1:6379> hset hs  career "Programmer"
+    (integer) 1
+            [                redisObject           ]
+            [            type(REDIS_HASH)          ]
+            [ encoding(REDIS_ENCODING_ZIPLIST)     ]
+            [                ptr                   ]=>[压缩列表]
+            [                ...                   ]
+                        ziplist编码的哈希对象
+
+    [zlbytes][zltail][zllen]["name"]["张三"][5]["age"][25]["career"]["Programmer"][zlend]
+                        哈希对象 ziplist的底层实现
+
+            [                redisObject           ]
+            [            type(REDIS_HASH)          ]
+            [ encoding(REDIS_ENCODING_HT)          ]
+            [                ptr                   ]=>[       dict          ]
+            [                ...                   ]  [StringObject "age"   ] => [StringObject 25]
+                                                      [StringObject "career"] => [StringObject "Programmer"]
+                                                      [StringObject "name"  ] => [StringObject "张三"]
+                        hashtable编码的哈希对象
+    
+    
+
 ```
