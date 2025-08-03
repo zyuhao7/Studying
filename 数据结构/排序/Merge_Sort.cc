@@ -1,6 +1,17 @@
 #include <iostream>
 #include <vector>
 using namespace std;
+/*
+    归并排序 (Merge Sort)
+    - 原理 ：分治思想，将数组分成两半，分别排序后合并
+    - 时间复杂度 ：O(nlogn)
+    - 空间复杂度 ：O(n)
+    - 稳定性 ：稳定
+    - 考点 ：
+    - 递归实现
+    - 迭代实现
+    - 与快速排序的对比（平均情况下更快，最坏情况下更稳定）
+*/
 void merge(vector<int> &arr, int l, int m, int r)
 {
     vector<int> tmp(r - l + 1);
