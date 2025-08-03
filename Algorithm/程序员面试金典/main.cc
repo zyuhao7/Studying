@@ -4,6 +4,16 @@
 #include <iostream>
 #include <unordered_map>
 #include <unordered_set>
+
+struct ListNode
+{
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
 using namespace std;
 // 程序员面试金典
 // day-2025-8-1
@@ -194,5 +204,204 @@ using namespace std;
 //                 swap(mat[i][j], mat[j][i]);
 //             }
 //         }
+//     }
+// };
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// day-2025-8-3
+// 面试题 01.08. 零矩阵
+// class Solution
+// {
+// public:
+//     void setZeroes(vector<vector<int>> &matrix)
+//     {
+//         int m = matrix.size(), n = matrix[0].size();
+//         vector<int> rows(m), cols(n);
+//         for (int i = 0; i < m; ++i)
+//         {
+//             for (int j = 0; j < n; ++j)
+//             {
+//                 if (matrix[i][j] == 0)
+//                 {
+//                     rows[i] = 1;
+//                     cols[j] = 1;
+//                 }
+//             }
+//         }
+//         for (int i = 0; i < m; ++i)
+//         {
+//             for (int j = 0; j < n; ++j)
+//             {
+//                 if (rows[i] || cols[j])
+//                     matrix[i][j] = 0;
+//             }
+//         }
+//     }
+// };
+
+// 面试题 01.09. 字符串轮转
+// class Solution
+// {
+// public:
+//     bool isFlipedString(string s1, string s2)
+//     {
+//         if (s1.size() != s2.size())
+//             return false;
+//         s2 += s2;
+//         if (s2.find(s1) != std::string::npos)
+//             return true;
+//         return false;
+//     }
+// };
+
+// 面试题 02.01. 移除重复节点
+// class Solution
+// {
+// public:
+//     ListNode *removeDuplicateNodes(ListNode *head)
+//     {
+//         unordered_set<int> st;
+//         ListNode *prev = nullptr, *cur = head;
+//         while (cur)
+//         {
+//             if (st.count(cur->val))
+//                 prev->next = cur->next;
+//             else
+//             {
+//                 st.insert(cur->val);
+//                 prev = cur;
+//             }
+//             cur = cur->next;
+//         }
+//         return head;
+//     }
+// };
+
+// 面试题 02.02. 返回倒数第 k 个节点
+// class Solution
+// {
+// public:
+//     int kthToLast(ListNode *head, int k)
+//     {
+//         ListNode *fast = head;
+//         ListNode *slow = head;
+//         while (k--)
+//             fast = fast->next;
+//         while (fast)
+//         {
+//             fast = fast->next;
+//             slow = slow->next;
+//         }
+//         return slow->val;
+//     }
+// };
+
+// 面试题 02.03. 删除中间节点
+// class Solution
+// {
+// public:
+//     void deleteNode(ListNode *node)
+//     {
+//         // node是要删除的节点
+//         node->val = node->next->val;
+//         node->next = node->next->next;
+//     }
+// };
+
+// 面试题 02.04. 分割链表
+/*
+    dummyNode: 哑节点, 用于处理头节点的情况.
+    pre: 小于x的链表的前一个节点.
+    cur: 当前节点.
+*/
+// class Solution
+// {
+// public:
+//     ListNode *partition(ListNode *head, int x)
+//     {
+//         if (!head)
+//             return nullptr;
+//         ListNode *dummy = new ListNode(-1);
+//         ListNode *prev = dummy;
+//         ListNode *cur = head;
+//         ListNode *newHead = nullptr;
+//         while (cur)
+//         {
+//             if (cur->val < x)
+//             {
+//                 prev->next = cur;
+//                 prev = cur;
+//                 if (newHead)
+//                     newHead->next = cur->next;
+//             }
+//             else
+//             {
+//                 if (!newHead)
+//                 {
+//                     newHead = cur;
+//                     head = cur;
+//                 }
+//                 else
+//                 {
+//                     newHead->next = cur;
+//                     newHead = cur;
+//                 }
+//                 prev->next = cur->next;
+//             }
+//             cur = cur->next;
+//         }
+//         if (newHead)
+//             newHead->next = nullptr;
+//         if (head->val >= x)
+//             prev->next = head;
+//         else
+//             prev->next = nullptr;
+//         ListNode *res = dummy->next;
+//         delete dummy;
+//         return res;
+//     }
+// };
+
+// 面试题 02.05. 链表求和
+// class Solution
+// {
+// public:
+//     ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
+//     {
+//         if (!l1)
+//             return l2;
+//         if (!l2)
+//             return l1;
+//         ListNode *head = nullptr;
+//         ListNode *cur = nullptr;
+//         int carry = 0;
+//         while (l1 || l2 || carry)
+//         {
+//             int sum = 0;
+//             if (l1)
+//             {
+//                 sum += l1->val;
+//                 l1 = l1->next;
+//             }
+//             if (l2)
+//             {
+//                 sum += l2->val;
+//                 l2 = l2->next;
+//             }
+//             sum += carry;
+//             int val = sum % 10;
+//             carry = sum / 10;
+//             ListNode *node = new ListNode(val);
+//             if (!head)
+//             {
+//                 head = node;
+//                 cur = node;
+//             }
+//             else
+//             {
+//                 cur->next = node;
+//                 cur = node;
+//             }
+//         }
+//         return head;
 //     }
 // };
