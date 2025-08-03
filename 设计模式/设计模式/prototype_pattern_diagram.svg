@@ -1,35 +1,51 @@
-<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+<svg width="700" height="450" xmlns="http://www.w3.org/2000/svg">
   <!-- 背景和标题 -->
-  <rect width="600" height="400" fill="#f8f9fa"/>
-  <text x="300" y="40" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">原型模式(Prototype Pattern)结构</text>
+  <rect width="700" height="450" fill="#f8f9fa"/>
+  <text x="350" y="40" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">原型模式(Prototype Pattern)类结构</text>
 
   <!-- 抽象原型接口 -->
-  <rect x="250" y="80" width="100" height="60" rx="8" fill="#b3d9ff" stroke="#0066cc" stroke-width="2"/>
-  <text x="300" y="110" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Prototype</text>
-  <text x="300" y="130" font-family="Arial" font-size="12" text-anchor="middle">+clone()</text>
+  <rect x="280" y="80" width="140" height="70" rx="8" fill="#b3d9ff" stroke="#0066cc" stroke-width="2"/>
+  <text x="350" y="110" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Shape</text>
+  <text x="350" y="130" font-family="Arial" font-size="14" text-anchor="middle">+clone() : Shape*</text>
+  <text x="350" y="150" font-family="Arial" font-size="14" text-anchor="middle">+draw() : void</text>
 
-  <!-- 具体原型类 -->
-  <rect x="100" y="200" width="150" height="70" rx="8" fill="#ccffcc" stroke="#009933" stroke-width="2"/>
-  <text x="175" y="230" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">ConcretePrototype</text>
-  <text x="175" y="250" font-family="Arial" font-size="12" text-anchor="middle">+clone()</text>
-  <text x="175" y="270" font-family="Arial" font-size="12" text-anchor="middle">-data: String</text>
+  <!-- 具体原型类：Circle -->
+  <rect x="100" y="200" width="150" height="80" rx="8" fill="#ccffcc" stroke="#009933" stroke-width="2"/>
+  <text x="175" y="230" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Circle</text>
+  <text x="175" y="250" font-family="Arial" font-size="14" text-anchor="middle">-radius : int</text>
+  <text x="175" y="270" font-family="Arial" font-size="14" text-anchor="middle">+clone() : Shape*</text>
+  <text x="175" y="290" font-family="Arial" font-size="14" text-anchor="middle">+draw() : void</text>
+
+  <!-- 具体原型类：Rectangle -->
+  <rect x="450" y="200" width="150" height="80" rx="8" fill="#ccffcc" stroke="#009933" stroke-width="2"/>
+  <text x="525" y="230" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Rectangle</text>
+  <text x="525" y="250" font-family="Arial" font-size="14" text-anchor="middle">-width : int</text>
+  <text x="525" y="270" font-family="Arial" font-size="14" text-anchor="middle">-height : int</text>
+  <text x="525" y="290" font-family="Arial" font-size="14" text-anchor="middle">+clone() : Shape*</text>
+  <text x="525" y="310" font-family="Arial" font-size="14" text-anchor="middle">+draw() : void</text>
 
   <!-- 客户端 -->
-  <rect x="350" y="200" width="100" height="70" rx="8" fill="#ffd9cc" stroke="#cc6633" stroke-width="2"/>
-  <text x="400" y="230" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Client</text>
-  <text x="400" y="250" font-family="Arial" font-size="12" text-anchor="middle">+operation()</text>
+  <rect x="280" y="350" width="140" height="70" rx="8" fill="#ffd9cc" stroke="#cc6633" stroke-width="2"/>
+  <text x="350" y="380" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Client</text>
+  <text x="350" y="400" font-family="Arial" font-size="14" text-anchor="middle">+main() : int</text>
 
   <!-- 连接线 -->
-  <!-- 继承关系：ConcretePrototype 继承自 Prototype -->
-  <line x1="175" y1="200" x2="175" y2="140" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
-  <line x1="175" y1="140" x2="300" y2="140" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <!-- 继承关系：Circle 继承自 Shape -->
+  <polyline points="175,200 175,150 280,150" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
 
-  <!-- 关联关系：Client 使用 Prototype -->
-  <line x1="350" y1="235" x2="350" y2="140" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
-  <line x1="350" y1="140" x2="350" y2="140" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <!-- 继承关系：Rectangle 继承自 Shape -->
+  <polyline points="525,200 525,150 420,150" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
 
-  <!-- 创建关系：Client 通过 clone() 创建 ConcretePrototype -->
-  <path d="M450 235 Q480 180 350 235" stroke="#333" stroke-width="1.5" stroke-dasharray="5,5" fill="none" marker-end="url(#arrowhead)"/>
+  <!-- 关联关系：Client 使用 Shape -->
+  <line x1="350" y1="350" x2="350" y2="150" fill="none" stroke="#333" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+
+  <!-- 创建关系：Client 创建 Circle -->
+  <path d="M280,380 Q200,300 175,280" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="200" y="310" font-family="Arial" font-size="12" transform="rotate(-30, 200, 310)">clone()</text>
+
+  <!-- 创建关系：Client 创建 Rectangle -->
+  <path d="M420,380 Q480,300 525,280" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="480" y="310" font-family="Arial" font-size="12" transform="rotate(30, 480, 310)">clone()</text>
 
   <!-- 箭头标记 -->
   <defs>
@@ -39,12 +55,16 @@
   </defs>
 
   <!-- 图例 -->
-  <rect x="50" y="320" width="500" height="60" rx="8" fill="#e6e6e6"/>
-  <text x="300" y="340" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">图例</text>
-  <text x="150" y="360" font-family="Arial" font-size="12" text-anchor="middle">抽象原型接口</text>
-  <rect x="100" y="350" width="20" height="15" fill="#b3d9ff" stroke="#0066cc" stroke-width="2"/>
-  <text x="300" y="360" font-family="Arial" font-size="12" text-anchor="middle">具体原型类</text>
-  <rect x="250" y="350" width="20" height="15" fill="#ccffcc" stroke="#009933" stroke-width="2"/>
-  <text x="450" y="360" font-family="Arial" font-size="12" text-anchor="middle">客户端</text>
-  <rect x="400" y="350" width="20" height="15" fill="#ffd9cc" stroke="#cc6633" stroke-width="2"/>
+  <rect x="50" y="400" width="600" height="30" rx="5" fill="#e6e6e6"/>
+  <text x="150" y="420" font-family="Arial" font-size="12" text-anchor="middle">抽象原型接口</text>
+  <rect x="100" y="410" width="15" height="10" fill="#b3d9ff" stroke="#0066cc" stroke-width="1"/>
+  <text x="300" y="420" font-family="Arial" font-size="12" text-anchor="middle">具体原型类</text>
+  <rect x="250" y="410" width="15" height="10" fill="#ccffcc" stroke="#009933" stroke-width="1"/>
+  <text x="450" y="420" font-family="Arial" font-size="12" text-anchor="middle">客户端</text>
+  <rect x="400" y="410" width="15" height="10" fill="#ffd9cc" stroke="#cc6633" stroke-width="1"/>
+  <text x="600" y="420" font-family="Arial" font-size="12" text-anchor="middle">继承关系</text>
+  <line x1="550" y1="415" x2="570" y2="415" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead_small)"/>
+  <marker id="arrowhead_small" markerWidth="6" markerHeight="4" refX="0" refY="2" orient="auto">
+    <polygon points="0 0, 6 2, 0 4" fill="#333"/>
+  </marker>
 </svg>
