@@ -1,0 +1,59 @@
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+    <!-- 标题 -->
+    <text x="400" y="30" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">状态设计模式类图</text>
+
+    <!-- 环境类 -->
+    <rect x="50" y="100" width="200" height="80" fill="#ffe6e6" stroke="#333" stroke-width="2" rx="5"/>
+    <text x="150" y="130" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Context (环境类)</text>
+    <text x="150" y="155" font-family="Arial" font-size="12" text-anchor="middle">- state: State*</text>
+    <text x="150" y="175" font-family="Arial" font-size="12" text-anchor="middle">+ setState(State*)</text>
+    <text x="150" y="195" font-family="Arial" font-size="12" text-anchor="middle">+ request()</text>
+
+    <!-- 抽象状态类 -->
+    <rect x="350" y="100" width="200" height="80" fill="#f0f0f0" stroke="#333" stroke-width="2" rx="5"/>
+    <text x="450" y="130" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">State (抽象状态类)</text>
+    <text x="450" y="155" font-family="Arial" font-size="12" text-anchor="middle">- context: Context*</text>
+    <text x="450" y="175" font-family="Arial" font-size="12" text-anchor="middle">+ State(Context*)</text>
+    <text x="450" y="195" font-family="Arial" font-size="12" text-anchor="middle">+ handle() [纯虚]</text>
+
+    <!-- 具体状态类 A -->
+    <rect x="250" y="250" width="180" height="70" fill="#e6f7ff" stroke="#333" stroke-width="2" rx="5"/>
+    <text x="340" y="280" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">ConcreteStateA</text>
+    <text x="340" y="300" font-family="Arial" font-size="12" text-anchor="middle">+ ConcreteStateA(Context*)</text>
+    <text x="340" y="315" font-family="Arial" font-size="12" text-anchor="middle">+ handle() [实现]</text>
+
+    <!-- 具体状态类 B -->
+    <rect x="470" y="250" width="180" height="70" fill="#e6f7ff" stroke="#333" stroke-width="2" rx="5"/>
+    <text x="560" y="280" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">ConcreteStateB</text>
+    <text x="560" y="300" font-family="Arial" font-size="12" text-anchor="middle">+ ConcreteStateB(Context*)</text>
+    <text x="560" y="315" font-family="Arial" font-size="12" text-anchor="middle">+ handle() [实现]</text>
+
+    <!-- 具体状态类 C -->
+    <rect x="360" y="380" width="180" height="70" fill="#e6f7ff" stroke="#333" stroke-width="2" rx="5"/>
+    <text x="450" y="410" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">ConcreteStateC</text>
+    <text x="450" y="430" font-family="Arial" font-size="12" text-anchor="middle">+ ConcreteStateC(Context*)</text>
+    <text x="450" y="445" font-family="Arial" font-size="12" text-anchor="middle">+ handle() [实现]</text>
+
+    <!-- 关联关系 -->
+    <line x1="250" y1="140" x2="350" y2="140" stroke="#333" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+    <text x="300" y="135" font-family="Arial" font-size="12">has-a</text>
+
+    <!-- 继承关系 -->
+    <line x1="450" y1="180" x2="340" y2="250" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="450" y1="180" x2="560" y2="250" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <line x1="450" y1="180" x2="450" y2="380" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+    <!-- 自关联关系 -->
+    <path d="M 560 320 C 620 320, 620 400, 560 400" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+    <text x="600" y="360" font-family="Arial" font-size="12" transform="rotate(90, 600, 360)">可能转换</text>
+
+    <path d="M 340 320 C 280 320, 280 400, 340 400" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+    <text x="270" y="360" font-family="Arial" font-size="12" transform="rotate(-90, 270, 360)">可能转换</text>
+
+    <!-- 箭头标记定义 -->
+    <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+        </marker>
+    </defs>
+</svg>
