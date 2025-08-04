@@ -4,7 +4,8 @@
 #include <iostream>
 #include <unordered_map>
 #include <unordered_set>
-
+#include <stack>
+#include <queue>
 struct ListNode
 {
     int val;
@@ -403,5 +404,226 @@ using namespace std;
 //             }
 //         }
 //         return head;
+//     }
+// };
+
+// day-2025-8-4
+// 面试题 02.06. 回文链表
+// class Solution
+// {
+// public:
+//     ListNode *reverse(ListNode *head)
+//     {
+//         if (!head)
+//             return nullptr;
+
+//         ListNode *prev = nullptr;
+//         ListNode *cur = head;
+//         while (cur)
+//         {
+//             ListNode *next = cur->next;
+//             cur->next = prev;
+//             prev = cur;
+//             cur = next;
+//         }
+//         return prev;
+//     }
+//     bool isPalindrome(ListNode *head)
+//     {
+//         if (!head || !head->next)
+//             return true;
+//         ListNode *fast = head, *slow = head;
+//         while (fast && fast->next)
+//         {
+//             fast = fast->next->next;
+//             slow = slow->next;
+//         }
+//         fast = head;
+//         slow = reverse(slow);
+//         while (slow)
+//         {
+//             if (fast->val != slow->val)
+//                 return false;
+//             fast = fast->next;
+//             slow = slow->next;
+//         }
+//         return true;
+//     }
+// };
+
+// 面试题 02.07. 链表相交
+// class Solution
+// {
+// public:
+//     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB)
+//     {
+//         if (!headA || !headB)
+//             return nullptr;
+
+//         ListNode *pA = headA, *pB = headB;
+
+//         while (pA != pB)
+//         {
+//             pA = pA ? pA->next : headB;
+//             pB = pB ? pB->next : headA;
+//         }
+//         return pA;
+//     }
+// };
+
+// 面试题 02.08. 环路检测
+// class Solution
+// {
+// public:
+//     ListNode *detectCycle(ListNode *head)
+//     {
+//         if (!head || !head->next)
+//             return nullptr;
+//         ListNode *fast = head, *slow = head;
+//         while (fast && fast->next)
+//         {
+//             fast = fast->next->next;
+//             slow = slow->next;
+//             if (slow == fast)
+//                 break;
+//         }
+//         if (slow != fast)
+//             return nullptr;
+//         fast = head;
+//         while (fast != slow)
+//         {
+//             fast = fast->next;
+//             slow = slow->next;
+//         }
+//         return fast;
+//     }
+// };
+
+// 面试题 03.01. 三合一
+// class TripleInOne
+// {
+// public:
+//     vector<vector<int>> st;
+//     int Size;
+//     TripleInOne(int stackSize)
+//     {
+//         Size = stackSize;
+//         st.resize(3);
+//     }
+
+//     void push(int stackNum, int value)
+//     {
+//         if (st[stackNum].size() == Size)
+//             return;
+//         st[stackNum].push_back(value);
+//     }
+
+//     int pop(int stackNum)
+//     {
+//         if (isEmpty(stackNum))
+//             return -1;
+//         int top = st[stackNum][st[stackNum].size() - 1];
+//         st[stackNum].pop_back();
+//         return top;
+//     }
+
+//     int peek(int stackNum)
+//     {
+//         if (isEmpty(stackNum))
+//             return -1;
+//         return st[stackNum][st[stackNum].size() - 1];
+//     }
+
+//     bool isEmpty(int stackNum)
+//     {
+//         return st[stackNum].empty();
+//     }
+// };
+
+// 面试题 03.02. 栈的最小值
+// class MinStack
+// {
+// public:
+//     /** initialize your data structure here. */
+//     stack<int> st;
+//     stack<int> min;
+//     MinStack()
+//     {
+//     }
+
+//     void push(int x)
+//     {
+//         st.push(x);
+//         if (min.empty() || x < min.top())
+//             min.push(x);
+//         else
+//             min.push(min.top());
+//     }
+
+//     void pop()
+//     {
+//         st.pop();
+//         min.pop();
+//     }
+
+//     int top()
+//     {
+//         return st.top();
+//     }
+
+//     int getMin()
+//     {
+//         return min.top();
+//     }
+// };
+
+// 面试题 03.03. 堆盘子
+// class StackOfPlates
+// {
+// public:
+//     int c;
+//     int idx;
+//     vector<vector<int>> v;
+
+//     StackOfPlates(int cap)
+//     {
+//         c = cap;
+//         idx = -1;
+//     }
+
+//     void push(int val)
+//     {
+//         if (c <= 0)
+//             return;
+
+//         // 如果没有栈或者当前栈已满，创建新栈
+//         if (idx == -1 || v[idx].size() == c)
+//         {
+//             v.push_back({val});
+//             idx++;
+//         }
+//         else
+//             v[idx].push_back(val);
+//     }
+
+//     int pop()
+//     {
+//         return popAt(idx);
+//     }
+
+//     int popAt(int index)
+//     {
+//         if (index > idx || v.empty() || v[index].empty())
+//             return -1;
+
+//         int top = v[index].back();
+//         v[index].pop_back();
+//         // 如果该栈变空，删除它
+//         if (v[index].empty())
+//         {
+//             v.erase(v.begin() + index);
+//             idx--;
+//         }
+//         return top;
 //     }
 // };
