@@ -6,6 +6,7 @@
 #include <unordered_set>
 #include <stack>
 #include <queue>
+#include <functional.hpp>
 struct ListNode
 {
     int val;
@@ -625,5 +626,228 @@ using namespace std;
 //             idx--;
 //         }
 //         return top;
+//     }
+// };
+
+// day-2025-8-5
+// 面试题 03.04. 化栈为队
+// class MyQueue
+// {
+// public:
+//     /** Initialize your data structure here. */
+//     stack<int> in;
+//     stack<int> out;
+//     MyQueue()
+//     {
+//     }
+
+//     /** Push element x to the back of queue. */
+//     void push(int x)
+//     {
+//         in.push(x);
+//     }
+
+//     /** Removes the element from in front of queue and returns that element. */
+//     int pop()
+//     {
+//         if (out.empty())
+//         {
+//             while (!in.empty())
+//             {
+//                 out.push(in.top());
+//                 in.pop();
+//             }
+//         }
+//         int t = out.top();
+//         out.pop();
+//         return t;
+//     }
+
+//     /** Get the front element. */
+//     int peek()
+//     {
+//         if (out.empty())
+//         {
+//             while (!in.empty())
+//             {
+//                 out.push(in.top());
+//                 in.pop();
+//             }
+//         }
+//         return out.top();
+//     }
+
+//     /** Returns whether the queue is empty. */
+//     bool empty()
+//     {
+//         return out.empty() && in.empty();
+//     }
+// };
+
+// 面试题 03.05. 栈排序
+// class SortedStack
+// {
+// public:
+//     stack<int> st;
+//     stack<int> st2;
+//     SortedStack()
+//     {
+//     }
+
+//     void push(int val)
+//     {
+//         if (st.empty())
+//             st.push(val);
+//         else
+//         {
+//             while (!st.empty() && val > st.top())
+//             {
+//                 st2.push(st.top());
+//                 st.pop();
+//             }
+//             st.push(val);
+//             while (!st2.empty())
+//             {
+//                 st.push(st2.top());
+//                 st2.pop();
+//             }
+//         }
+//     }
+
+//     void pop()
+//     {
+
+//         if (st.empty())
+//             return;
+//         st.pop();
+//     }
+
+//     int peek()
+//     {
+//         if (st.empty())
+//             return -1;
+//         return st.top();
+//     }
+
+//     bool isEmpty()
+//     {
+//         return st.empty();
+//     }
+// };
+
+// 面试题 03.06. 动物收容所
+// class AnimalShelf
+// {
+// public:
+//     int count = 0;
+//     typedef pair<int, int> pii;
+//     queue<pii> cats;
+//     queue<pii> dogs;
+
+//     AnimalShelf()
+//     {
+//     }
+
+//     void enqueue(vector<int> animal)
+//     {
+//         if (animal[1] == 0)
+//             cats.push({animal[0], count++});
+//         else
+//             dogs.push({animal[0], count++});
+//     }
+
+//     vector<int> dequeueAny()
+//     {
+//         if (cats.empty() || (!dogs.empty() && dogs.front().second < cats.front().second))
+//             return dequeueDog();
+//         return dequeueCat();
+//         return {-1, -1};
+//     }
+
+//     vector<int> dequeueDog()
+//     {
+//         vector<int> res{-1, -1};
+//         if (dogs.empty())
+//             return res;
+//         res[1] = 1;
+//         res[0] = dogs.front().first;
+//         dogs.pop();
+//         return res;
+//     }
+
+//     vector<int> dequeueCat()
+//     {
+//         vector<int> res{-1, -1};
+//         if (cats.empty())
+//             return res;
+//         res[1] = 0;
+//         res[0] = cats.front().first;
+//         cats.pop();
+//         return res;
+//     }
+// };
+
+// 面试题 04.01. 节点间通路
+// BFS
+// class Solution
+// {
+// public:
+//     bool findWhetherExistsPath(int n, vector<vector<int>> &graph, int start, int target)
+//     {
+//         vector<vector<int>> g(n);   // 邻接表 g[i] 表示从节点 i 出发的所有邻居节点
+//         vector<bool> vis(n, false); // 初始化大小为n的访问标记数组
+
+//         for (auto &e : graph)
+//             g[e[0]].push_back(e[1]);
+
+//         queue<int> q;
+//         q.push(start);
+//         vis[start] = true;
+
+//         while (!q.empty())
+//         {
+//             auto t = q.front();
+//             q.pop();
+
+//             for (auto &ne : g[t])
+//             {
+//                 if (ne == target) // 提前检查目标节点
+//                     return true;
+
+//                 if (!vis[ne])
+//                 {
+//                     vis[ne] = true;
+//                     q.push(ne);
+//                 }
+//             }
+//         }
+
+//         return false;
+//     }
+// };
+
+// DFS
+// class Solution
+// {
+// public:
+//     bool findWhetherExistsPath(int n, vector<vector<int>> &graph, int start, int target)
+//     {
+//         vector<vector<int>> g(n);   // 邻接表 g[i] 表示从节点 i 出发的所有邻居节点
+//         vector<bool> vis(n, false); // 初始化大小为n的访问标记数组
+
+//         for (auto &e : graph)
+//             g[e[0]].push_back(e[1]);
+
+//         function<bool(int)> dfs = [&](int u) -> bool
+//         {
+//             if (u == target)
+//                 return true;
+//             vis[u] = true;
+//             for (auto &ne : g[u])
+//                 if (!vis[ne] && dfs(ne))
+//                     return true;
+//             return false;
+//         };
+//         return dfs(start);
 //     }
 // };
