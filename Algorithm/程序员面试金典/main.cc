@@ -16,6 +16,16 @@ struct ListNode
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
+struct TreeNode
+{
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
 using namespace std;
 // 程序员面试金典
 // day-2025-8-1
@@ -851,3 +861,153 @@ using namespace std;
 //         return dfs(start);
 //     }
 // };
+
+// day-2025-8-6
+// 面试题 04.02. 最小高度树
+// class Solution
+// {
+// public:
+//     TreeNode *CreateTree(vector<int> &nums, int l, int r)
+//     {
+//         if (l > r)
+//             return nullptr;
+//         int m = (l + r) >> 1;
+//         TreeNode *node = new TreeNode(nums[m]);
+//         node->left = CreateTree(nums, l, m - 1);
+//         node->right = CreateTree(nums, m + 1, r);
+//         return node;
+//     }
+//     TreeNode *sortedArrayToBST(vector<int> &nums)
+//     {
+//         if (nums.empty())
+//             return nullptr;
+//         return CreateTree(nums, 0, nums.size() - 1);
+//     }
+// };
+
+// 面试题 04.03. 特定深度节点链表
+// 等价于层序遍历
+// class Solution
+// {
+// public:
+//     vector<ListNode *> listOfDepth(TreeNode *tree)
+//     {
+//         vector<ListNode *> vec;
+//         queue<TreeNode *> q;
+//         q.push(tree);
+//         while (!q.empty())
+//         {
+//             ListNode *head = new ListNode(-1);
+//             ListNode *cur = head;
+//             int Size = q.size();
+//             for (int i = 0; i < Size; ++i)
+//             {
+//                 TreeNode *t = q.front();
+//                 q.pop();
+//                 cur->next = new ListNode(t->val);
+//                 if (t->left)
+//                     q.push(t->left);
+//                 if (t->right)
+//                     q.push(t->right);
+//                 cur = cur->next;
+//             }
+//             vec.push_back(head->next);
+//         }
+//         return vec;
+//     }
+// };
+
+// 面试题 04.04. 检查平衡性
+// class Solution
+// {
+// public:
+//     int DFS(TreeNode *root)
+//     {
+//         if (root == nullptr)
+//             return 0;
+//         int leftDepth = DFS(root->left);
+//         int rightDepth = DFS(root->right);
+//         return max(leftDepth, rightDepth) + 1;
+//     }
+//     bool isBalanced(TreeNode *root)
+//     {
+//         if (!root)
+//             return true;
+//         int leftDepth = DFS(root->left);
+//         int rightDepth = DFS(root->right);
+//         return abs(leftDepth - rightDepth) <= 1 && isBalanced(root->left) && isBalanced(root->right);
+//     }
+// };
+
+// 面试题 04.05. 合法二叉搜索树
+// 前序
+// class Solution
+// {
+// public:
+//     bool isValidBST(TreeNode *root, long long left = LONG_MIN, long long right = LONG_MAX)
+//     {
+//         if (!root)
+//             return true;
+//         int x = root->val;
+//         return left < x && x < right && isValidBST(root->left, left, x) && isValidBST(root->right, x, right);
+//     }
+// };
+
+// 中序
+// class Solution
+// {
+// public:
+//     long long prev = LONG_MIN;
+//     bool isValidBST(TreeNode *root)
+//     {
+//         if (!root)
+//             return true;
+//         if (!isValidBST(root->left) || root->val <= prev)
+//             return false;
+//         prev = root->val;
+//         return isValidBST(root->right);
+//     }
+// };
+// 后序
+// class Solution
+// {
+// public:
+//     pair<long, long> dfs(TreeNode *node)
+//     {
+//         if (!node)
+//             return {LONG_MAX, LONG_MIN};
+//         auto [l_min, l_max] = dfs(node->left);
+//         auto [r_min, r_max] = dfs(node->right);
+//         long x = node->val;
+//         if (x <= l_max || x >= r_min)
+//             return {LONG_MIN, LONG_MAX};
+//         return {min(l_min, x), max(r_max, x)};
+//     }
+//     bool isValidBST(TreeNode *root)
+//     {
+//         return dfs(root).second != LONG_MAX;
+//     }
+// };
+
+// 面试题 04.06. 后继者
+// class Solution
+// {
+// public:
+//     TreeNode *inorderSuccessor(TreeNode *root, TreeNode *p)
+//     {
+
+//         TreeNode *ans = nullptr;
+//         while (root)
+//         {
+//             if (root->val > p->val)
+//             {
+//                 ans = root;
+//                 root = root->left;
+//             }
+//             else
+//                 root = root->right;
+//         }
+//         return ans;
+//     }
+// };
+
