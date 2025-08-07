@@ -1011,3 +1011,137 @@ using namespace std;
 //     }
 // };
 
+// 面试题 04.08. 首个共同祖先 mid
+// class Solution
+// {
+// public:
+//     TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
+//     {
+//         if (!root || root == p || root == q)
+//             return root;
+//         TreeNode *left = lowestCommonAncestor(root->left, p, q);
+//         TreeNode *right = lowestCommonAncestor(root->right, p, q);
+//         if (!left)
+//             return right;
+//         if (!right)
+//             return left;
+//         return root;
+//     }
+// };
+#include <deque>
+// 面试题 04.09. 二叉搜索树序列 hard
+// class Solution
+// {
+// public:
+//     void dfs(deque<TreeNode *> &dq, vector<int> &path, vector<vector<int>> &ans)
+//     {
+//         if (dq.empty())
+//         {
+//             ans.push_back(path);
+//             return;
+//         }
+//         int Size = dq.size();
+//         for (int i = 0; i < Size; ++i)
+//         {
+//             TreeNode *t = dq.front();
+//             dq.pop_front();
+//             // 将当前值加入路径
+
+//             path.push_back(t->val);
+//             if (t->left)
+//                 dq.push_back(t->left);
+//             if (t->right)
+//                 dq.push_back(t->right);
+//             // 递归
+//             dfs(dq, path, ans);
+//             // 回溯
+//             if (t->left)
+//                 dq.pop_back();
+//             if (t->right)
+//                 dq.pop_back();
+//             dq.push_back(t);
+//             path.pop_back();
+//         }
+//     }
+//     vector<vector<int>> BSTSequences(TreeNode *root)
+//     {
+//         vector<vector<int>> ans;
+//         if (!root)
+//             return {{}};
+//         vector<int> path;
+//         deque<TreeNode *> dq;
+//         dq.push_back(root);
+
+//         dfs(dq, path, ans);
+//         return ans;
+//     }
+// };
+
+// 面试题 04.10. 检查子树 mid
+// class Solution
+// {
+// public:
+//     bool isSubTtree(TreeNode *t1, TreeNode *t2)
+//     {
+//         if (!t2 && !t1)
+//             return true;
+//         if (!t1 || !t2)
+//             return false;
+//         return t1->val == t2->val && isSubTtree(t1->left, t2->left) && isSubTtree(t1->right, t2->right);
+//     }
+//     bool checkSubTree(TreeNode *t1, TreeNode *t2)
+//     {
+//         if (!t1)
+//             return false;
+//         if (isSubTtree(t1, t2))
+//             return true;
+//         return checkSubTree(t1->left, t2) || checkSubTree(t1->right, t2);
+//     }
+// };
+
+// 面试题 04.12. 求和路径 mid
+// class Solution
+// {
+// public:
+//     int pathSum(TreeNode *root, int sum)
+//     {
+//         if (!root)
+//             return 0;
+//         return dfs(root, sum) + pathSum(root->left, sum) + pathSum(root->right, sum);
+//     }
+//     int dfs(TreeNode *root, int sum)
+//     {
+//         if (!root)
+//             return 0;
+//         sum -= root->val;
+//         return (sum == 0) + dfs(root->left, sum) + dfs(root->right, sum);
+//     }
+// };
+
+// 面试题 05.01. 插入
+// class Solution
+// {
+// public:
+//     int insertBits(int N, int M, int i, int j)
+//     {
+//         for (int k = i; k <= j; ++k)
+//         {
+//             N &= ~(1 << k);
+//         }
+//         return N | (M << i);
+//     }
+// };
+
+// class Solution
+// {
+// public:
+//     int insertBits(int N, int M, int i, int j)
+//     {
+//         for (int k = i; k <= j; ++k)
+//         {
+//             N = (N & ~(1 << k)) | (((M >> (k - i)) & 1) << k);
+//         }
+//         return N;
+//     }
+// };
+
