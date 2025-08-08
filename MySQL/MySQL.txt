@@ -64,3 +64,112 @@ DELIMITER ;
 
 -- 调用存储过程插入100,000条数据
 CALL insert_users(100000);
+
+#排序 order by 
+select *  name from user order by age ;
+select name name from user order by name ;
+
+#分组 group by
+select sex from user group by sex;
+select age,count(age) number from user where age >= 20 group by age;
+
+
+# 笔试题实践问题
+# 统计总笔数和总金额
+select count(serno),sum(amount) from bank_bill;
+
+# 按网点和日期统计每个网点每天的营业额，按营业额降序
+select amount from bank_bill group by brno，date，amount desc amount;
+select brno,data,sum(amount)  as money from bank_bill group by brno,date order by brno,money desc;
+
+
+# 连接查询
+---------------------------------
+|		 |	|		  |
+|	左	 | 内	|	右	  |
+|		 |	|		  |
+---------------------------------
+
+# 内连接查询
+student: uid  name  age  sex
+cource:  cid  cname  credit
+example: uid  cid  time  score
+create table student(
+uid int unsigned primary key not null auto_increment,
+name varchar(50) not null,
+age tinyint unsigned not null,
+sex enum("M", "W") not null);
+
+create table cource(
+cid int unsigned primary key not null auto_increment,
+cname varchar(50) not null,
+credit tinyint unsigned not null);
+
+create table example(
+uid int unsigned  not null,
+cid  int unsigned not null,
+time date not null,
+score float  not null,
+primary key(uid,cid)
+);
+
+select a.uid, a.name,a.age,a.sex from student as a where a.uid = 1;
+select c.score from example as c where c.uid = 1 and c.cid = 2; 
+select a.uid, a.name,a.age ,a.sex, c.score from student a inner join example c on a.uid = c.uid where c.uid = 1 and c.cid = 2;
+
+select b.cid,b.cname,b.credit from cource b where b.cid=2;
+
+select a.uid, a.name,a.age ,a.sex,b.cid,b.cname,b.credit, c.score from example c
+ inner join student a on c.uid = a.uid
+inner join cource b on c.cid=b.cid
+where c.uid=1 and c.cid=2;
+
+select b.cid,b.cname,b.credit, count(*) cnt from example c
+inner join cource b on b.cid = c.cid
+where c.score>=80
+group by c.cid
+order by cnt;
+
+ explain select a.id,a.email,a.password from t_user a inner join(
+ select id from t_user limit 90000,10)b on a.id=b.id;
+
+# 外连接查询
+# 左连接查询
+select a.*,b.* from student a left join example b on a.uid=b.uid;
+# 没参加考试的同学
+select * from student where uid not in(select distinct uid from example);
+
+select a.* from student a left join example b on a.uid=b.uid where b.cid is null;
+
+select a.* from student a left join example b on  a.uid = b.uid and b.cid=3 where b.cid is null;
+
+# 右连接查询
+ select a.*,b.* from student a right join example b on a.uid=b.uid;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
