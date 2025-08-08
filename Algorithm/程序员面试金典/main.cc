@@ -1145,3 +1145,141 @@ using namespace std;
 //     }
 // };
 
+// day-2025-8-8
+// 面试题 05.02. 二进制数转字符串 mid
+// class Solution
+// {
+// public:
+//     string printBin(double num)
+//     {
+//         string ans = "0.";
+//         while (num > 0 && ans.size() <= 32)
+//         {
+//             num *= 2;
+//             int t = num;
+//             ans += to_string(t);
+//             num -= t;
+//         }
+//         return ans.size() > 32 ? "ERROR" : ans;
+//     }
+// };
+
+// 面试题 05.03. 翻转数位 mid  to review
+// class Solution
+// {
+// public:
+//     int reverseBits(int num)
+//     {
+//         int current = 0, reverse = 0;
+//         int ans = 0;
+//         for (int i = 0; i < 32; ++i)
+//         {
+//             if (num & 1)
+//             {
+//                 current++;
+//                 reverse++;
+//             }
+//             else
+//             {
+//                 reverse = current + 1;
+//                 current = 0;
+//             }
+//             ans = max(ans, reverse);
+//             if (!num)
+//                 break;
+//             num >>= 1;
+//         }
+//         return ans;
+//     }
+// };
+
+// 面试题 05.04. 下一个数 mid
+// class Solution
+// {
+// public:
+//     int cntBits(long long x)
+//     {
+//         long long cnt = 0;
+//         while (x)
+//         {
+//             if (x & 1)
+//                 cnt++;
+//             x >>= 1;
+//         }
+//         return cnt;
+//     }
+//     vector<int> findClosedNumbers(int num)
+//     {
+//         vector<int> ans(2, -1);
+//         long long x = 0;
+//         if (num == INT_MAX)
+//         {
+//             ans[0] = -1;
+//         }
+//         else
+//         {
+//             x = num + 1;
+//             while (true)
+//             {
+//                 if (cntBits(x) == cntBits((long long)num))
+//                 {
+//                     ans[0] = x;
+//                     break;
+//                 }
+//                 x++;
+//             }
+//         }
+
+//         if (num == 1 || num == INT_MAX)
+//         {
+//             ans[1] = -1;
+//             return ans;
+//         }
+//         x = num - 1;
+//         while (true)
+//         {
+//             if (cntBits(x) == cntBits((long long)num))
+//             {
+//                 ans[1] = x;
+//                 break;
+//             }
+//             x--;
+//         }
+//         return ans;
+//     }
+// };
+
+// 面试题 05.06. 整数转换
+// class Solution
+// {
+// public:
+//     int convertInteger(int A, int B)
+//     {
+//         int ans = 0;
+//         for (int i = 0; i < 32; ++i)
+//         {
+//             ans += (A & 1) != (B & 1);
+//             A >>= 1;
+//             B >>= 1;
+//             if (!A && !B)
+//                 return ans;
+//         }
+//         return ans;
+//     }
+// };
+
+// 面试题 05.07. 配对交换
+// class Solution
+// {
+// public:
+//     int exchangeBits(int num)
+//     {
+//         // 奇数
+//         int odd = num & 0x55555555;
+//         // 偶数
+//         int even = num & 0xaaaaaaaa;
+//         odd = odd << 1;
+//         even = even >> 1;
+//         return odd | even;
+//     }
+// };
