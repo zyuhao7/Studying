@@ -1283,3 +1283,158 @@ using namespace std;
 //         return odd | even;
 //     }
 // };
+
+// day-2025-8-9
+// 面试题 05.08. 绘制直线 mid to review
+// class Solution
+// {
+// public:
+//     vector<int> drawLine(int length, int w, int x1, int x2, int y)
+//     {
+//         vector<int> ans(length, 0);
+//         int start = x1 + y * w;
+//         int end = x2 + y * w;
+//         for (int i = start; i <= end; ++i)
+//         {
+//             int idx = i / 32;
+//             int offset = 31 - (i % 32);
+//             ans[idx] |= (1 << offset);
+//         }
+//         return ans;
+//     }
+// };
+
+// 面试题 08.01. 三步问题
+// class Solution
+// {
+// public:
+//     int waysToStep(int n)
+//     {
+//         if (n <= 2)
+//             return n;
+//         vector<int> dp(n + 1, 0);
+//         dp[1] = 1;
+//         dp[2] = 2;
+//         dp[3] = 4;
+//         for (int i = 4; i <= n; ++i)
+//         {
+//             dp[i] = (dp[i - 1] + dp[i - 2] + dp[i - 3]) % 1000000007;
+//         }
+//         return dp[n];
+//     }
+// };
+
+// 面试题 08.02. 迷路的机器人 mid
+// class Solution
+// {
+// public:
+//     vector<vector<int>> pathWithObstacles(vector<vector<int>> &obs)
+//     {
+//         vector<vector<int>> ans;
+//         if (obs.empty() || obs[0].empty() || obs[0][0] == 1)
+//             return ans;
+//         int m = obs.size(), n = obs[0].size();
+//         vector<vector<bool>> dp(m, vector<bool>(n, false)); // dp[i][j] 表示 (i,j) 是否可达
+//         dp[0][0] = true;                                    // 起点可达
+//         // 初始化第一行和第一列
+//         for (int j = 1; j < n && !obs[0][j]; ++j)
+//             dp[0][j] = dp[0][j - 1];
+//         for (int i = 1; i < m && !obs[i][0]; ++i)
+//             dp[i][0] = dp[i - 1][0];
+//         for (int i = 1; i < m; ++i)
+//         {
+//             for (int j = 1; j < n; ++j)
+//             {
+//                 if (obs[i][j] == 0)
+//                 {
+//                     dp[i][j] = dp[i - 1][j] || dp[i][j - 1];
+//                 }
+//             }
+//         }
+//         if (!dp[m - 1][n - 1])
+//             return ans; // 终点不可达
+//         // 回溯路径
+//         int i = m - 1, j = n - 1;
+//         stack<pair<int, int>> st;
+//         while (i >= 0 && j >= 0)
+//         {
+//             st.push({i, j});
+//             if (i == 0 && j == 0)
+//                 break;
+//             if (i > 0 && dp[i - 1][j])
+//                 --i; // 优先向上走
+//             else
+//                 --j; // 否则向左走
+//         }
+//         while (!st.empty())
+//         {
+//             ans.push_back({st.top().first, st.top().second});
+//             st.pop();
+//         }
+//         return ans;
+//     }
+// };
+
+// 面试题 08.03. 魔术索引
+// class Solution
+// {
+// public:
+//     int findMagicIndex(vector<int> &nums)
+//     {
+//         for (int i = 0; i < nums.size(); ++i)
+//             if (nums[i] == i)
+//                 return i;
+//         return -1;
+//     }
+// };
+
+// class Solution
+// {
+// public:
+//     int findMagicIndex(vector<int> &nums)
+//     {
+//         function<int(int, int)> dfs = [&](int i, int j)
+//         {
+//             if (i > j)
+//                 return -1;
+//             int m = i + j >> 1;
+//             int l = dfs(i, m - 1);
+//             if (l != -1)
+//                 return l;
+//             if (nums[m] == m)
+//                 return m;
+//             return dfs(m + 1, j);
+//         };
+//         return dfs(0, nums.size() - 1);
+//     }
+// };
+
+// 面试题 08.04. 幂集 mid
+// class Solution
+// {
+// public:
+//     vector<vector<int>> ans;
+//     vector<int> path;
+//     void dfs(vector<int> &nums, int index, int n)
+//     {
+//         if (index >= n)
+//         {
+//             if (!path.empty())
+//                 ans.push_back(path);
+//             return;
+//         }
+//         ans.push_back(path);
+
+//         for (int i = index; i < n; ++i)
+//         {
+//             path.push_back(nums[i]);
+//             dfs(nums, i + 1, n);
+//             path.pop_back();
+//         }
+//     }
+//     vector<vector<int>> subsets(vector<int> &nums)
+//     {
+//         dfs(nums, 0, nums.size());
+//         return ans;
+//     }
+// };
