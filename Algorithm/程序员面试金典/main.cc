@@ -1438,3 +1438,206 @@ using namespace std;
 //         return ans;
 //     }
 // };
+
+// day-2025-8-10
+// 面试题 08.05. 递归乘法 mid
+// class Solution
+// {
+// public:
+//     int multiply(int A, int B)
+//     {
+//         if (A == 0 || B == 0)
+//             return 0;
+//         if (A == 1)
+//             return B;
+//         if (B == 1)
+//             return A;
+//         int ans = 0;
+//         for (int i = 0; i < A; ++i)
+//             ans += B;
+//         return ans;
+//     }
+// };
+// class Solution
+// {
+// public:
+//     int multiply(int A, int B)
+//     {
+//         if (B == 1)
+//             return A;
+//         // 如果 B 为奇数, 将 B 右移一位, 然后递归调用函数, 将最后结果左移一位加上 A
+//         if (B & 1)
+//             return (multiply(A, B >> 1) << 1) + A * 1;
+//         else // 否则不需要加 A
+//             return multiply(A, B >> 1) << 1;
+//     }
+// };
+
+// 面试题 08.06. 汉诺塔问题
+// class Solution {
+// public:
+//     void hanota(vector<int>& A, vector<int>& B, vector<int>& C) {
+//         int n = A.size();
+//         dfs(n, A, B, C);
+//     }
+//     void dfs(int n, vector<int>& A, vector<int>& B, vector<int>& C)
+//     {
+//         // 如果 A柱上只有一个值, 直接移到 C
+//         if(n == 1)
+//         {
+//             C.push_back(A.back());
+//             A.pop_back();
+//             return;
+//         }
+//         // 否则, 先用 B 存放 A 的值
+//         dfs(n - 1,A, C, B);
+//         // 将 A 的值加入到 C
+//         C.push_back(A.back());
+//         A.pop_back();
+//         // 将 B 作为 A, 继续
+//         dfs(n - 1, B, A, C);
+//     }
+// };
+
+// 面试题 08.07. 无重复字符串的排列组合 mid
+// 需要 vis 数组
+// class Solution
+// {
+// public:
+//     vector<string> ans;
+//     string str;
+//     void dfs(string &S, int index, vector<bool> &vis, int n)
+//     {
+//         if (index == n)
+//         {
+//             ans.emplace_back(str);
+//             return;
+//         }
+//         for (int i = 0; i < n; ++i)
+//         {
+//             if (vis[i])
+//                 continue;
+//             vis[i] = true;
+//             str += S[i];
+//             dfs(S, index + 1, vis, n);
+//             str.pop_back();
+//             vis[i] = false;
+//         }
+//     }
+//     vector<string> permutation(string S)
+//     {
+//         vector<bool> vis(S.size(), 0);
+//         dfs(S, 0, vis, S.size());
+//         return ans;
+//     }
+// };
+
+// 交换代替 vis 数组
+// class Solution
+// {
+// public:
+//     vector<string> permutation(string S)
+//     {
+//         vector<string> res;
+//         backtrack(res, S, 0);
+//         return res;
+//     }
+
+//     void backtrack(vector<string> &res, string &S, int start)
+//     {
+//         if (start == S.size())
+//         {
+//             res.push_back(S);
+//             return;
+//         }
+//         for (int i = start; i < S.size(); i++)
+//         {
+//             swap(S[start], S[i]);
+//             backtrack(res, S, start + 1);
+//             swap(S[start], S[i]);
+//         }
+//     }
+// };
+
+// 面试题 08.08. 有重复字符串的排列组合 mid
+// class Solution
+// {
+// public:
+//     vector<string> ans;
+//     string str;
+//     void backtrack(string &S, vector<bool> &vis, int n)
+//     {
+//         if (str.size() == n)
+//         {
+//             ans.emplace_back(str);
+//             return;
+//         }
+//         for (int i = 0; i < n; ++i)
+//         {
+//             // 剪枝条件：
+//             // 1. 如果当前字符已被使用，跳过
+//             // 2. 如果当前字符与前一个字符相同，且前一个字符未被使用，跳过（避免重复）
+//             if (vis[i] || (i > 0 && S[i] == S[i - 1] && !vis[i - 1]))
+//                 continue;
+//             vis[i] = true;
+//             str += S[i];
+//             backtrack(S, vis, n);
+//             str.pop_back();
+//             vis[i] = false;
+//         }
+//     }
+//     vector<string> permutation(string S)
+//     {
+//         sort(S.begin(), S.end());
+//         vector<bool> vis(S.size(), 0);
+//         backtrack(S, vis, S.size());
+//         return ans;
+//     }
+// };
+
+// 面试题 08.09. 括号 mid
+// class Solution {
+// public:
+//     vector<string> ans;
+//     void backTrack(int n, string path, int left, int right)
+//     {
+//         if(path.size() == n * 2)
+//         {
+//             ans.push_back(path);
+//             return;
+//         }
+
+//         if(left > 0)
+//           backTrack(n, path + '(', left - 1, right);
+//          if(right > left)
+//           backTrack(n, path + ')', left, right - 1);
+
+//     }
+//     vector<string> generateParenthesis(int n) {
+//         backTrack(n, "", n, n);
+//         return ans;
+//     }
+// };
+
+// class Solution
+// {
+// public:
+//     vector<string> res;
+//     vector<string> generateParenthesis(int n)
+//     {
+//         backtrack("", 0, 0, n);
+//         return res;
+//     }
+//     void backtrack(string str, int left, int right, int n)
+//     {
+//         if (str.size() == n * 2)
+//         {
+//             res.emplace_back(str);
+//             return;
+//         }
+//         if (left < n)
+//             backtrack(str + '(', left + 1, right, n);
+//         if (right < left)
+//             backtrack(str + ')', left, right + 1, n);
+//     }
+// };
