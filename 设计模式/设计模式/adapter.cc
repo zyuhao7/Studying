@@ -3,7 +3,6 @@
 
 using namespace std;
 
-
 // day-2025-7-12
 /*
 	适配器模式是一种结构型设计模式，它允许将一个类的接口转换成客户端所期望的另一个接口。
@@ -15,50 +14,86 @@ using namespace std;
 	Adapter	通过继承或组合的方式，把 Adaptee 转换为 Target
 	Client	使用 Target 接口的类
 
-		 +-----------+         +----------------+
-		 |  Client   |-------> |    Target      |
-		 +-----------+         +----------------+
-						^  ▲
-						|  ||
-			+-----------+  +-------------+
-			|                            |
-	 +--------------+         +-----------------+
-	 |  Adapter     |-------> |    Adaptee      |
-	 +--------------+         +-----------------+
+	对象适配器 UML图
+┌───────────────────┐       ┌───────────────────┐
+│     Target        				   │       │     			Adaptee               │
+├───────────────────┤       ├───────────────────┤
+│ 	+request()        				   │       │			 +specificRequest()		  │
+└───────────────────┘       └───────────────────┘
+		 ▲                                                           ▲
+		 │                                                           │
+		 │                                                           │
+┌───────────────────┐                            │
+│     Adapter       				   │                            │
+├───────────────────┤                            │
+│ -adaptee: Adaptee 				   │──────────────┘
+│ +request()        			       │
+└───────────────────┘
+	类适配器 UML (C++特有)
+	┌───────────────────┐
+	│     	     Target        			   │
+	├───────────────────┤
+	│ 		  	+request()      	       │
+	└───────────────────┘
+					▲
+					│
+					│
+	┌───────────────────┐
+	│     		 Adapter     		       │
+	├───────────────────┤
+	│ 		  	+request()        	       │
+	└───────────────────┘
+					▲
+					│
+					│
+	┌───────────────────┐
+	│     		Adaptee       		       │
+	├───────────────────┤
+	│		   +specificRequest()		   │
+	└───────────────────┘
 
 
-	优点						说明
-	解耦			客户端和被适配类解耦，只依赖接口
-	可复用			可以复用已有类
-	符合开闭原则	不修改已有类，扩展适配器即可
+	优点
+	单一职责原则：将接口转换代码与业务逻辑分离
+	开闭原则：无需修改现有代码就能引入新适配器
+	解决现有类与目标接口不兼容的问题
+	可以适配多个不同的类
+
+	缺点
+	增加代码复杂度
+	过多使用会使系统变得凌乱
 
 */
 
 // 1. Target 接口:Shape
-class Shape {
+class Shape
+{
 public:
 	virtual void draw() const = 0;
 	virtual ~Shape() = default;
 };
 
-//2. Adaptee 类:TextView
-class TextView {
+// 2. Adaptee 类:TextView
+class TextView
+{
 public:
-	void displayText() const {
+	void displayText() const
+	{
 		std::cout << "Drawing a TextView!" << std::endl;
 	}
 };
 
-//3. Adapter 类: TextShapeAdapter
+// 3. Adapter 类: TextShapeAdapter
 class TextShapeAdapter : public Shape
 {
 private:
-	TextView* textView;
+	TextView *textView;
 
 public:
-	explicit TextShapeAdapter(TextView* tv)
-		:textView(tv)
-	{}
+	explicit TextShapeAdapter(TextView *tv)
+		: textView(tv)
+	{
+	}
 
 	void draw() const override
 	{
@@ -66,14 +101,16 @@ public:
 	}
 };
 
-class Circle : public Shape {
+class Circle : public Shape
+{
 public:
-	void draw() const override {
+	void draw() const override
+	{
 		std::cout << "Drawing a Circle!" << std::endl;
 	}
 };
 
-//int main()
+// int main()
 //{
 //	std::vector<std::shared_ptr<Shape>> shapes;
 //
@@ -88,6 +125,6 @@ public:
 //		sp->draw();
 //	}
 //	delete tv;
-//	
+//
 //	return 0;
-//}
+// }
