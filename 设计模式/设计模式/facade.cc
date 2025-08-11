@@ -74,10 +74,20 @@ private:
     Memory mem;
     HardDrive hd;
 };
-
+// 客户端类
+class Client
+{
+public:
+    void useComputer()
+    {
+        ComputeFacade facade;
+        facade.Start();
+    }
+};
+// 测试
 int main()
 {
-    ComputeFacade facade;
-    facade.Start();
+    Client client;
+    client.useComputer();
     return 0;
 }
