@@ -1506,9 +1506,9 @@ using namespace std;
 // public:
 //     vector<string> ans;
 //     string str;
-//     void dfs(string &S, int index, vector<bool> &vis, int n)
+//     void dfs(string &S,  vector<bool> &vis, int n)
 //     {
-//         if (index == n)
+//         if (str.size() == n)
 //         {
 //             ans.emplace_back(str);
 //             return;
@@ -1519,7 +1519,7 @@ using namespace std;
 //                 continue;
 //             vis[i] = true;
 //             str += S[i];
-//             dfs(S, index + 1, vis, n);
+//             dfs(S, vis, n);
 //             str.pop_back();
 //             vis[i] = false;
 //         }
@@ -1527,7 +1527,7 @@ using namespace std;
 //     vector<string> permutation(string S)
 //     {
 //         vector<bool> vis(S.size(), 0);
-//         dfs(S, 0, vis, S.size());
+//         dfs(S, vis, S.size());
 //         return ans;
 //     }
 // };
@@ -1639,5 +1639,273 @@ using namespace std;
 //             backtrack(str + '(', left + 1, right, n);
 //         if (right < left)
 //             backtrack(str + ')', left, right + 1, n);
+//     }
+// };
+
+// 2025.8.11
+// 面试题 08.10. 颜色填充
+// BFS
+// class Solution
+// {
+// public:
+//     vector<vector<int>> dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+//     vector<vector<int>> floodFill(vector<vector<int>> &image, int sr, int sc, int newColor)
+//     {
+//         queue<pair<int, int>> q;
+//         int m = image.size(), n = image[0].size();
+//         vector<vector<bool>> vis(m, vector<bool>(n, false));
+//         q.push({sr, sc});
+//         int color = image[sr][sc];
+//         while (!q.empty())
+//         {
+//             auto t = q.front();
+//             q.pop();
+//             int x = t.first;
+//             int y = t.second;
+//             vis[x][y] = true;
+//             image[x][y] = newColor;
+
+//             for (int i = 0; i < 4; ++i)
+//             {
+//                 int dx = t.first + dirs[i][0];
+//                 int dy = t.second + dirs[i][1];
+//                 if (dx >= 0 && dx < m && dy >= 0 && dy < n && !vis[dx][dy] && image[dx][dy] == color)
+//                 {
+//                     q.push({dx, dy});
+//                 }
+//             }
+//         }
+//         return image;
+//     }
+// };
+
+// DFS
+// class Solution {
+// public:
+//     vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+//         int m = image.size(), n = image[0].size();
+//         int color = image[sr][sc];
+//         int dirs[5] = {-1, 0, 1, 0, -1};
+//         function<void(int, int)> dfs = [&](int i, int j){
+//             if(i < 0 || i >= m || j < 0 || j >= n || image[i][j] != color || image[i][j] == newColor)
+//                 return;
+
+//             image[i][j] = newColor;
+//             for(int k = 0; k < 4; ++k)
+//             {
+//                 dfs(i + dirs[k], j + dirs[k + 1]);
+//             }
+//         };
+//         dfs(sr, sc);
+//         return image;
+//     }
+// };
+
+// 面试题 08.11. 硬币 mid
+// class Solution
+// {
+// public:
+//     int waysToChange(int n)
+//     {
+//         int mod = 1000000007;
+//         vector<int> dp(n + 1);
+//         vector<int> coins = {25, 10, 5, 1};
+//         dp[0] = 1;
+//         for (auto coin : coins)
+//         {
+//             for (int j = coin; j <= n; ++j)
+//                 dp[j] = (dp[j] + dp[j - coin]) % mod;
+//         }
+//         return dp[n];
+//     }
+// };
+
+// 面试题 08.12. 八皇后 hard
+// class Solution
+// {
+// public:
+//     vector<vector<string>> ans;
+//     vector<string> board;
+//     vector<vector<string>> solveNQueens(int n)
+//     {
+//         board.resize(n, string(n, '.'));
+//         backtrack(0, n);
+//         return ans;
+//     }
+//     void backtrack(int r, int n)
+//     {
+//         if (r == n)
+//         {
+//             ans.push_back(board);
+//             return;
+//         }
+//         for (int c = 0; c < n; ++c)
+//         {
+//             if (isValid(board, r, c, n))
+//             {
+//                 board[r][c] = 'Q';
+//                 backtrack(r + 1, n);
+//                 board[r][c] = '.';
+//             }
+//         }
+//     }
+
+//     bool isValid(vector<string> &board, int r, int c, int n)
+//     {
+//         //[. . . .]
+//         //[. . . .]
+//         //[. . Q .]
+//         //[. . . .]
+//         // 先检查 Q 同列前面行的数据
+//         for (int i = 0; i < r; ++i)
+//         {
+//             if (board[i][c] == 'Q')
+//                 return false;
+//         }
+//         // 再检查正对角线
+//         for (int i = r - 1, j = c - 1; i >= 0 && j >= 0; --j, --i)
+//         {
+//             if (board[i][j] == 'Q')
+//                 return false;
+//         }
+//         // 反对角线
+//         for (int i = r - 1, j = c + 1; i >= 0 && j < n; ++j, --i)
+//         {
+//             if (board[i][j] == 'Q')
+//                 return false;
+//         }
+//         return true;
+//     }
+// };
+
+// 面试题 08.13. 堆箱子 hard
+// class Solution
+// {
+// public:
+//     int pileBox(vector<vector<int>> &box)
+//     {
+//         // 按照体积排序
+//         int n = box.size();
+//         sort(box.begin(), box.end(), [&](auto &a, auto &b)
+//              { return a[0] + a[1] + a[2] < b[0] + b[1] + b[2]; });
+//         vector<int> dp(3001, 0);
+//         int res = 0;
+//         for (int i = 0; i < n; ++i)
+//         {
+//             dp[i] = box[i][2];
+//             for (int j = 0; j < i; ++j)
+//             {
+//                 if (box[i][0] > box[j][0] && box[i][1] > box[j][1] && box[i][2] > box[j][2])
+//                 {
+//                     dp[i] = max(dp[i], dp[j] + box[i][2]);
+//                 }
+//             }
+//             res = max(res, dp[i]);
+//         }
+//         return res;
+//     }
+// };
+
+// 面试题 08.14. 布尔运算 mid
+/*
+    使用三维动态规划数组 dp[i][j][k] ：
+    - i 和 j 表示子表达式的起始和结束索引
+    - k 表示计算结果（0 或 1）
+    - dp[i][j][k] 表示从索引 i 到 j 的子表达式计算结果为 k 的方法数
+*/
+// class Solution
+// {
+// public:
+//     int countEval(string s, int result)
+//     {
+//         int n = s.size();
+//         vector<vector<vector<int>>> dp(n, vector<vector<int>>(n, vector<int>(2, 0)));
+//         for (int i = 0; i < n; i += 2)
+//         {
+//             // // 单个数字的情况
+//             dp[i][i][s[i] - '0'] = 1;
+//         }
+//         // 子表达式长度
+//         for (int len = 3; len <= n; len += 2)
+//         {
+//             // 子表达式起始位置
+//             for (int i = 0; i + len - 1 < n; ++i)
+//             {
+//                 int j = i + len - 1;               // 子表达式结束位置
+//                 for (int k = i + 1; k < j; k += 2) // 运算符位置
+//                 {
+//                     if (s[k] == '&')
+//                     {
+//                         // // 与运算：只有两边都是1时结果才是1 （1 & 1）
+//                         dp[i][j][1] += dp[i][k - 1][1] * dp[k + 1][j][1];
+//                         dp[i][j][0] += dp[i][k - 1][0] * dp[k + 1][j][0] +
+//                                        dp[i][k - 1][0] * dp[k + 1][j][1] +
+//                                        dp[i][k - 1][1] * dp[k + 1][j][0];
+//                     }
+//                     else if (s[k] == '|')
+//                     {
+//                         dp[i][j][1] += dp[i][k - 1][1] * dp[k + 1][j][1] +
+//                                        dp[i][k - 1][0] * dp[k + 1][j][1] +
+//                                        dp[i][k - 1][1] * dp[k + 1][j][0];
+//                         dp[i][j][0] += dp[i][k - 1][0] * dp[k + 1][j][0];
+//                     }
+//                     else if (s[k] == '^')
+//                     {
+//                         dp[i][j][1] += dp[i][k - 1][0] * dp[k + 1][j][1] +
+//                                        dp[i][k - 1][1] * dp[k + 1][j][0];
+//                         dp[i][j][0] += dp[i][k - 1][0] * dp[k + 1][j][0] +
+//                                        dp[i][k - 1][1] * dp[k + 1][j][1];
+//                     }
+//                 }
+//             }
+//         }
+//         return dp[0][n - 1][result];
+//     }
+// };
+
+// class Solution
+// {
+// public:
+//     unordered_map<string, vector<int>> memo;
+
+//     int countEval(string s, int result)
+//     {
+//         vector<int> ans = dfs(s);
+//         return result == 0 || result == 1 ? ans[result] : 0;
+//     }
+
+//     vector<int> dfs(string s)
+//     {
+//         if (memo.count(s))
+//             return memo[s];
+//         vector<int> res(2);
+//         if (s.size() == 1)
+//         {
+//             res[s[0] - '0'] = 1;
+//             return res;
+//         }
+//         for (int k = 0; k < s.size(); ++k)
+//         {
+//             if (s[k] == '0' || s[k] == '1')
+//                 continue;
+//             vector<int> left = dfs(s.substr(0, k));
+//             vector<int> right = dfs(s.substr(k + 1, s.size() - k));
+//             for (int i = 0; i < 2; ++i)
+//             {
+//                 for (int j = 0; j < 2; ++j)
+//                 {
+//                     int v = 0;
+//                     if (s[k] == '&')
+//                         v = i & j;
+//                     else if (s[k] == '|')
+//                         v = i | j;
+//                     else if (s[k] == '^')
+//                         v = i ^ j;
+//                     res[v] += left[i] * right[j];
+//                 }
+//             }
+//         }
+//         memo[s] = res;
+//         return res;
 //     }
 // };
