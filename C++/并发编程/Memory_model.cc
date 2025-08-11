@@ -7,6 +7,7 @@
 #include <vector>
 using namespace std;
 // day-2025-3-12
+// review 2025-8-11
 // 原子操作和内存模型
 
 // 实现自旋锁
@@ -15,20 +16,33 @@ using namespace std;
 class SpinLock
 {
 public:
+    /**
+     * @brief 获取锁的函数
+     * 使用自旋锁实现，通过原子操作 test_and_set 来实现锁的获取
+     * 当锁被占用时，线程会自旋等待直到锁被释放
+     */
     void lock()
     {
         // 自旋等待，直到成功获取到锁
+        // test_and_set 会将 flag 设置为 true，并返回 flag 之前的值
+        // 如果之前的值是 false，表示锁未被占用，当前线程成功获取到锁
+        // 如果之前的值是 true，表示锁已被占用，当前线程需要继续自旋等待
         while (flag.test_and_set(memory_order_acquire))
             ;
     }
 
     void unlock()
     {
+        // 释放锁，将 flag 设置为 false
         flag.clear(memory_order_release);
     }
 
 private:
     std::atomic_flag flag = ATOMIC_FLAG_INIT;
+    /*
+        `std::atomic_flag` 是 C++ 标准库中提供的一种简单的原子类型，主要用于实现低级别的同步操作。
+        它是一个布尔类型的原子标志，只有两种状态：`true` 和 `false`。`atomic_flag` 通常用于实现锁、信号量等同步机制。
+    */
 };
 
 void TestSpinLock()
@@ -56,6 +70,37 @@ void TestSpinLock()
     t1.join();
     t2.join();
 }
+/*
+    在 C++ 的原子操作中，std::memory_order 是一个枚举类型，用于指定原子操作的内存顺序模型。
+    它定义了线程间操作的可见性和同步规则，帮助开发者控制内存访问的顺序，从而避免数据竞争。
+
+    常见的内存顺序选项
+        std::memory_order_relaxed
+            最弱的内存顺序模型。
+            不保证操作的顺序，仅保证操作是原子的。
+            适用于不需要线程间同步的场景，通常用于性能优化。
+
+        std::memory_order_consume
+            保证依赖关系的内存顺序。
+            目前大多数实现将其视为 memory_order_acquire。
+
+        std::memory_order_acquire
+            保证当前线程对该原子变量的读取操作之前的所有操作都不会被重排序到读取之后。
+            常用于加载操作，确保读取到的值是最新的。
+
+        std::memory_order_release
+            保证当前线程对该原子变量的写入操作之后的所有操作都不会被重排序到写入之前。
+            常用于存储操作，确保写入的值对其他线程可见。
+
+        std::memory_order_acq_rel
+            结合了 memory_order_acquire 和 memory_order_release 的语义。
+            常用于读-改-写操作（如 fetch_add）。
+
+        std::memory_order_seq_cst
+            最强的内存顺序模型。
+            保证全局的顺序一致性，所有线程都以相同的顺序观察原子操作。
+            默认的内存顺序，适用于需要严格同步的场景。
+*/
 
 // std::memory_order_relaxed
 // std::atomic<bool> x, y;
@@ -216,7 +261,7 @@ void ReleasAcquireDanger2()
     std::thread t1([&]()
                    {
                        xd.store(1, std::memory_order_release); // (1)
-                       yd.store(1, std::memory_order_release); //  (2)
+                       yd.store(1, std::memory_order_release); // (2)
                    });
 
     std::thread t2([&]()
@@ -235,7 +280,37 @@ void ReleasAcquireDanger2()
     t2.join();
     t3.join();
 }
+/*
+  std::atomic::compare_exchange_strong 是 C++ 标准库中提供的一种原子操作，用于实现无锁编程中的比较和交换操作。
+  它是 std::atomic 类型的成员函数，主要用于在多线程环境下安全地更新共享变量。
 
+功能
+    compare_exchange_strong 会比较原子变量的当前值与预期值（expected）。如果两者相等，
+    则将原子变量更新为指定的新值（desired）；否则，将原子变量的当前值存储到 expected 中，并返回 false。
+
+bool compare_exchange_strong(T& expected, T desired,
+                             std::memory_order success,
+                             std::memory_order failure) noexcept;
+
+bool compare_exchange_strong(T& expected, T desired) noexcept;
+    expected
+    输入：表示期望的值。
+    输出：如果比较失败，expected 会被更新为原子变量的当前值
+
+    desired
+    如果 expected 和原子变量的值相等，则将原子变量更新为 desired
+
+    success 和 failure（可选）
+    指定内存顺序模型：
+    success：当比较成功时使用的内存顺序。
+    failure：当比较失败时使用的内存顺序（不能是 memory_order_release 或 memory_order_acq_rel）。
+
+    返回值
+    true：比较成功，原子变量被更新为 desired。
+    false：比较失败，expected 被更新为原子变量的当前值。
+
+
+*/
 void ReleaseSequence()
 {
     std::vector<int> data;
