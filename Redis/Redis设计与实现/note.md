@@ -262,6 +262,249 @@ typedef struct redisObject
                                                       [StringObject "name"  ] => [StringObject "张三"]
                         hashtable编码的哈希对象
     
+集合对象:
+    1. 集合对象的编码可以是 intset或者hashtable
+    2. 集合对象的底层实现可以是整数集合、哈希表.
+    3. 集合对象的长度可以是任意长度.
+
+            [                redisObject           ]
+            [            type(REDIS_SET)           ]
+            [ encoding(REDIS_ENCODING_INTSET)      ]
+            [                ptr                   ]=>[       intset            ]
+            [                ...                   ]  [encoding INTSET_ENC_INT16]
+                                                      [       length 3          ]
+                                                      [       contents          ] => [1][3][5]
+                        intset编码的 numbers集合对象
+
+            [                redisObject           ]
+            [            type(REDIS_SET)           ]
+            [ encoding(REDIS_ENCODING_HASHTABLE)   ]
+            [                ptr                   ]=>[       dict          ]
+            [                ...                   ]  [StringObject "cherry"] => NULL
+                                                      [StringObject "apple" ] => NULL
+                                                      [StringObject "banana"] => NULL
+                        hashtable编码的 fruits 集合对象
+
+有序集合:
+    1. 有序集合对象的编码可以是 REDIS_ENCODING_ZIPLIST、REDIS_ENCODING_SKIPLIST 中的任意一种.
+    2. 有序集合对象的底层实现可以是压缩列表、跳表.
+    3. 有序集合对象的长度可以是任意长度.
     
+    skiplist编码的有序集合使用 zset 结构作为底层实现，一个 zset结构同时包含一个字典和一个跳跃表:
+    typedef struct zset{
+        zskiplist* zsl;
+        dict* dict;
+    } zset;
+
 
 ```
+`day-2025-8-12`
+## 第九章 数据库
+### 9.1 Redis服务器中的数据库
+`Redis服务器将所有数据库都保存在服务器状态redis.h/redisServer结构的db数组中：`
+
+```c
+struct redisServer {
+    // ...
+    redisDb *db;        // 数据库数组
+    int dbnum;          // 数据库数量
+    // ...
+};
+/*
+    dbnum属性由服务器配置的databases选项决定，默认值为16
+    每个Redis客户端都有自己的目标数据库，默认使用0号数据库
+    使用SELECT命令可以切换数据库
+*/
+```
+
+### 9.2 数据库键空间
+`Redis数据库使用redis.h/redisDb结构表示：`
+
+```c
+typedef struct redisDb {
+    // ...
+    dict *dict;                 // 键空间，保存所有键值对
+    dict *expires;              // 过期字典，保存键的过期时间
+    // ...
+} redisDb;
+
+/*
+    键空间操作
+    添加新键：将新键值对添加到键空间字典
+    删除键：从键空间字典删除键值对
+    更新键：更新键空间字典中键对应的值
+    取值：从键空间字典获取键对应的值
+
+    键空间维护操作
+    读取键后：
+    更新键的命中(hit)或不命中(miss)次数
+    更新键的LRU时间
+    检查键是否过期(惰性删除)
+
+    写入键前：
+    检查键是否过期
+    必要时删除过期键
+
+    其他操作：
+    如果服务器开启了通知功能，操作后会发送相应通知
+*/
+```
+
+### 9.3 键的过期处理
+```c++
+/*
+    Redis通过expires字典保存键的过期时间：
+        键：指向键空间中的某个键对象
+        值：long long类型的UNIX时间戳(毫秒精度)
+
+    设置过期时间
+        Redis提供四种方式设置键的过期时间：
+        EXPIRE <key> <ttl>：设置键的生存时间为ttl秒
+        PEXPIRE <key> <ttl>：设置键的生存时间为ttl毫秒
+        EXPIREAT <key> <timestamp>：设置键的过期时间为timestamp秒
+        PEXPIREAT <key> <timestamp>：设置键的过期时间为timestamp毫秒
+        实际上前三个命令都会转换为PEXPIREAT命令执行。
+
+    过期键删除策略
+        Redis使用两种策略结合的方式删除过期键：
+            惰性删除(lazy expiration)：
+                在访问键时检查是否过期，过期则删除
+                优点：对CPU友好
+                缺点：可能造成内存浪费
+
+        定期删除(active expiration)：
+            每隔一段时间主动检查并删除过期键
+            采用自适应算法，根据情况调整检查频率和时长
+
+        Redis定期删除策略实现
+        每次从一定数量的数据库中随机检查一定数量的键
+        删除所有发现的过期键
+        如果检查的键中过期比例超过10%，则重复检查过程
+*/
+```
+### 9.4 AOF、RDB和复制对过期键的处理
+```c++
+/*
+
+    RDB持久化
+    生成RDB文件时：已过期的键不会被保存到RDB文件
+    载入RDB文件时：
+        主服务器模式：检查键是否过期，过期则不载入
+        从服务器模式：全部载入，等待主服务器同步删除
+
+    AOF持久化
+    AOF写入：键过期后会追加一条DEL命令到AOF文件
+    AOF重写：已过期的键不会被写入重写后的AOF文件
+
+    复制模式
+    从服务器不会主动删除过期键，等待主服务器发来DEL命令
+    主服务器删除过期键后，会显式向所有从服务器发送DEL命令
+*/
+```
+### 9.5 数据库通知
+`Redis 2.8引入通知功能，客户端可以订阅特定频道或模式来接收数据库变化。`
+
+**通知类型**
+1. **键空间通知(key-space notification)**：关注某个键执行了什么命令
+    * 频道名：__keyspace@<db>__:<key>
+    * 例如：__keyspace@0__:message
+2. **键事件通知(key-event notification)**：关注某个命令被什么键执行了
+    * 频道名：__keyevent@<db>__:<event>
+    * 例如：__keyevent@0__:del
+
+**配置通知**
+```bash
+notify-keyspace-events [options]
+```
+选项:
+* K：启用键空间通知
+* E：启用键事件通知
+* g：通用命令通知(如DEL、EXPIRE等)
+* $：字符串命令通知
+* l：列表命令通知
+* s：集合命令通知
+* h：哈希命令通知
+* z：有序集合命令通知
+* x：过期事件(键过期时产生的事件)
+* e：驱逐事件(键因内存不足被驱逐时产生的事件)
+* A：所有类型(g$lshzxe的别名)
+
+
+
+### 9.6 数据库相关命令实现
+**SELECT命令实现**
+```c
+void selectCommand(redisClient *c) {
+    int id = atoi(c->argv[1]->ptr);
+    
+    if (server.cluster_enabled && id != 0) {
+        addReplyError(c,"SELECT is not allowed in cluster mode");
+        return;
+    }
+    
+    if (selectDb(c,id) == REDIS_ERR) {
+        addReplyError(c,"invalid DB index");
+    } else {
+        addReply(c,shared.ok);
+    }
+}
+```
+**FLUSHDB/FLUSHALL命令实现**
+* FLUSHDB：清空当前数据库
+* FLUSHALL：清空所有数据库
+
+实现方式：
+1. 直接删除所有键空间中的键
+2. 如果开启了AOF，会记录这些命令
+3. 从Redis 4.0开始支持异步删除(避免阻塞)
+
+**SWAPDB命令实现(REDIS 4.0+)**
+```c
+void swapdbCommand(redisClient *c) {
+    int id1, id2;
+    
+    if (getIntFromObjectOrReply(c,c->argv[1],&id1,NULL) != C_OK) return;
+    if (getIntFromObjectOrReply(c,c->argv[2],&id2,NULL) != C_OK) return;
+    // 检查数据库索引是否有效
+    if (id1 < 0 || id1 >= server.dbnum ||
+        id2 < 0 || id2 >= server.dbnum) {
+        addReplyError(c,"DB index is out of range");
+        return;
+    }
+    
+    if (id1 == id2) {
+        addReply(c,shared.ok);
+        return;
+    }
+    
+    swapDb(id1, id2);
+    addReply(c,shared.ok);
+}
+```
+
+### 9.7 数据库内部操作
+**键空间维护操作**
+1. 键过期检查：
+   * 每次访问键时检查expires字典
+   * 定期随机检查并删除过期键
+
+2. 内存回收：
+   * 使用引用计数管理键对象
+   * 当引用计数为0时释放内存
+
+3. 键重命名：  
+   * RENAME命令先检查新键是否存在，存在则先删除
+   * 复制过期时间到新键
+
+**数据库统计信息**
+Redis提供**INFO**命令获取数据库统计信息，包括：
+
+* keyspace_hits：键成功查找次数
+* keyspace_misses：键失败查找次数
+* expired_keys：已过期的键数量
+* evicted_keys：因内存不足被驱逐的键数量
+* db0：0号数据库的键数量和设置过期时间的键数量
+
+`day-2025-8-13`
+## 第十章 RDB 持久化
+
