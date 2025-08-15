@@ -1909,3 +1909,415 @@ using namespace std;
 //         return res;
 //     }
 // };
+
+// day-2025-8-13
+// 面试题 10.01. 合并排序的数组
+// class Solution {
+// public:
+//     void merge(vector<int> &A, int m, vector<int> &B, int n) {
+//         // 处理特殊情况
+//         if (n == 0) return;
+//         if (m == 0) {
+//             A = B;  // 直接将 B 赋值给 A
+//             return;
+//         }
+
+//         // 确保 A 有足够空间
+//         A.resize(m + n);
+
+//         // 从后往前合并
+//         int k = m + n - 1;  // 正确的最后一个元素位置
+//         int i = m - 1, j = n - 1;
+
+//         while (i >= 0 && j >= 0) {
+//             if (A[i] >= B[j]) {
+//                 A[k--] = A[i--];
+//             } else {
+//                 A[k--] = B[j--];
+//             }
+//         }
+
+//         // 处理剩余元素
+//         while (j >= 0) {
+//             A[k--] = B[j--];
+//         }
+//         // 无需处理 A 的剩余元素，因为它们已经在正确位置
+//     }
+// };
+
+// 面试题 10.02. 变位词组 MID
+// class Solution
+// {
+// public:
+//     vector<vector<string>> groupAnagrams(vector<string> &strs)
+//     {
+//         vector<vector<string>> res;
+//         unordered_map<string, vector<string>> map;
+//         for (int i = 0; i < strs.size(); ++i)
+//         {
+//             string s = strs[i];
+//             sort(strs[i].begin(), strs[i].end());
+//             map[strs[i]].push_back(s);
+//         }
+//         for (auto it = map.begin(); it != map.end(); ++it)
+//         {
+//             vector<string> tmp;
+//             for (string s : it->second)
+//                 tmp.push_back(s);
+//             res.push_back(tmp);
+//         }
+//         return res;
+//     }
+// };
+
+// 面试题 10.03. 搜索旋转数组 mid
+// class Solution
+// {
+// public:
+//     int search(vector<int> &nums, int target)
+//     {
+//         int l = 0, r = nums.size() - 1;
+//         if (r == -1)
+//             return -1;
+//         while (l < r)
+//         {
+//             int m = l + (r - l) / 2;
+//             if (nums[l] < nums[m]) // 左半边有序
+//             {
+//                 if (target >= nums[l] && target <= nums[m])
+//                     r = m;
+//                 else
+//                     l = m + 1;
+//             }
+//             else if (nums[l] > nums[m]) // 左半边无序, 右半边有序
+//             {
+//                 if (target >= nums[l] || target <= nums[m])
+//                     r = m;
+//                 else
+//                     l = m + 1;
+//             }
+//             else if (nums[l] == nums[m])
+//             {
+//                 if (nums[l] != target)
+//                     l++;
+//                 else
+//                     r = l;
+//             }
+//         }
+//         return (nums[l] == target) ? l : -1;
+//     }
+// };
+
+// 面试题 10.05. 稀疏数组搜索 Nb
+// class Solution
+// {
+// public:
+//     int findString(vector<string> &words, string s)
+//     {
+//         function<int(int, int)> dfs = [&](int i, int j)
+//         {
+//             if (i > j)
+//                 return -1;
+//             int m = i + j >> 1;
+//             int l = dfs(i, m - 1);
+//             if (l != -1)
+//                 return l;
+//             if (words[m] == s)
+//                 return m;
+//             return dfs(m + 1, j);
+//         };
+//         return dfs(0, words.size() - 1);
+//     }
+// };
+
+// 面试题 10.05. 稀疏数组搜索
+// class Solution
+// {
+// public:
+//     bool searchMatrix(vector<vector<int>> &matrix, int target)
+//     {
+//         if (matrix.empty() || matrix[0].empty())
+//             return false;
+//         int m = matrix.size(), n = matrix[0].size();
+//         int i = 0, j = n - 1;
+//         while (i < m && j >= 0)
+//         {
+//             if (matrix[i][j] == target)
+//                 return true;
+//             else if (matrix[i][j] < target)
+//                 i++;
+//             else
+//                 j--;
+//         }
+//         return false;
+//     }
+// };
+
+// 法2.
+// class Solution
+// {
+// public:
+//     bool searchMatrix(vector<vector<int>> &matrix, int target)
+//     {
+//         for (auto &row : matrix)
+//         {
+//             auto j = lower_bound(row.begin(), row.end(), target) - row.begin();
+//             if (j < matrix[0].size() && row[j] == target)
+//                 return true;
+//         }
+//         return false;
+//     }
+// };
+#include <memory>
+// day-2025-8-14
+// 10.10. 数字流的秩 mid
+// class BIT
+// {
+// public:
+//     vector<int> tree;
+//     int n;
+//     BIT(int n)
+//         : n(n), tree(n + 1) {}
+//     int lowbit(int x)
+//     {
+//         return x & (-x);
+//     }
+//     int query(int x)
+//     {
+//         int ans = 0;
+//         for (int i = x; i; i -= lowbit(i))
+//             ans += tree[i];
+//         return ans;
+//     }
+//     void add(int x, int val)
+//     {
+//         for (int i = x; i <= n; i += lowbit(i))
+//             tree[i] += val;
+//     }
+//     int query(int l, int r)
+//     {
+//         return query(r) - query(l - 1);
+//     }
+// };
+// class StreamRank
+// {
+// public:
+//     StreamRank()
+//     {
+//     }
+
+//     void track(int x)
+//     {
+//         tree->add(x + 1, 1);
+//     }
+
+//     int getRankOfNumber(int x)
+//     {
+//         return tree->query(x + 1);
+//     }
+
+// private:
+//     BIT *tree = new BIT(50010);
+// };
+
+// 面试题 10.11. 峰与谷 mid
+// class Solution
+// {
+// public:
+//     void wiggleSort(vector<int> &nums)
+//     {
+//         // 偶数为峰, 奇数为谷.
+//         for (int i = 1; i < nums.size(); ++i)
+//         {
+//             if (i % 2)
+//             {
+//                 if (nums[i] > nums[i - 1])
+//                     swap(nums[i - 1], nums[i]);
+//             }
+//             else
+//             {
+//                 if (nums[i] < nums[i - 1])
+//                     swap(nums[i - 1], nums[i]);
+//             }
+//         }
+//     }
+// };
+
+// 面试题 16.01. 交换数字 mid
+// class Solution {
+// public:
+//     vector<int> swapNumbers(vector<int>& numbers) {
+//         numbers[0] ^= numbers[1];
+//         numbers[1] ^= numbers[0];
+//         numbers[0] ^= numbers[1];
+//         return numbers;
+//     }
+// };
+
+// day-2025-8-15
+// 面试题 16.02. 单词频率 mid
+// 法1 字典树
+// class TrieNode
+// {
+// public:
+//     TrieNode *child[26];
+//     bool isEnd;
+//     int n;
+//     TrieNode()
+//         : isEnd(false),
+//           n(0)
+//     {
+//         for (int i = 0; i < 26; ++i)
+//             child[i] = nullptr;
+//     }
+// };
+
+// class Trie
+// {
+// public:
+//     TrieNode *root;
+//     Trie()
+//         : root(new TrieNode)
+//     {
+//     }
+//     void insert(string word)
+//     {
+//         TrieNode *cur = root;
+//         for (int i = 0; i < word.size(); ++i)
+//         {
+//             char c = word[i] - 'a';
+//             if (cur->child[c] == nullptr)
+//             {
+//                 cur->child[c] = new TrieNode();
+//             }
+//             cur = cur->child[c];
+//         }
+//         cur->n++;
+//         cur->isEnd = true;
+//     }
+//     int get(string word)
+//     {
+//         TrieNode *cur = root;
+//         for (int i = 0; i < word.size(); ++i)
+//         {
+//             char c = word[i] - 'a';
+//             if (cur->child[c] == nullptr)
+//                 return false;
+//             cur = cur->child[c];
+//         }
+//         return cur->n;
+//     }
+// };
+// class WordsFrequency
+// {
+// public:
+//     Trie trie;
+
+//     WordsFrequency(vector<string> &book)
+//     {
+//         for (int i = 0; i < book.size(); ++i)
+//             trie.insert(book[i]);
+//     }
+
+//     int get(string word)
+//     {
+//         return trie.get(word);
+//     }
+// };
+
+// 法 2 哈希
+// class WordsFrequency
+// {
+// public:
+//     unordered_map<string, int> cnt;
+//     WordsFrequency(vector<string> &book)
+//     {
+//         for (auto &bk : book)
+//             cnt[bk]++;
+//     }
+
+//     int get(string word)
+//     {
+//         return cnt[word];
+//     }
+// };
+
+// 16.03. 交点 hard dnt do liao
+
+// 16.04. 井字游戏 mid
+// 可以将 O 和 X 优化成 1和 -1.
+// class Solution
+// {
+// public:
+//     string tictactoe(vector<string> &board)
+//     {
+//         bool Empty = false;
+//         int m = board.size();
+//         vector<int> rows(m * 2), cols(m * 2);
+//         vector<int> diagonal(4, 0);
+//         for (int i = 0; i < m; ++i)
+//         {
+//             for (int j = 0; j < m; ++j)
+//             {
+//                 if (!Empty && board[i][j] == ' ')
+//                     Empty = true;
+//                 if (board[i][j] == 'O')
+//                 {
+//                     rows[i]++, cols[j]++;
+//                     if (i == j)
+//                         diagonal[0]++;
+//                     if (i + j == m - 1)
+//                         diagonal[1]++;
+//                 }
+//                 if (board[i][j] == 'X')
+//                 {
+//                     rows[i + m]++, cols[j + m]++;
+//                     if (i == j)
+//                         diagonal[2]++;
+//                     if (i + j == m - 1)
+//                         diagonal[3]++;
+//                 }
+//             }
+//         }
+//         for (int i = 0; i < 2 * m; ++i)
+//         {
+//             if (i < m && rows[i] == m)
+//                 return "O";
+//             else if (i > m && rows[i] == m)
+//                 return "X";
+//         }
+//         for (int i = 0; i < 2 * m; ++i)
+//         {
+//             if (i < m && cols[i] == m)
+//                 return "O";
+//             else if (i >= m && cols[i] == m)
+//                 return "X";
+//         }
+//         for (int i = 0; i < 4; ++i)
+//         {
+//             if (i < 2 && diagonal[i] == m)
+//                 return "O";
+//             else if (i >= 2 && diagonal[i] == m)
+//                 return "X";
+//         }
+//         if (Empty)
+//             return "Pending";
+//         return "Draw";
+//     }
+// };
+
+// 面试题 16.05. 阶乘尾数
+// class Solution
+// {
+// public:
+//     int trailingZeroes(int n)
+//     {
+//         int ans = 0;
+//         while (n)
+//         {
+//             n /= 5;
+//             ans += n;
+//         }
+//         return ans;
+//     }
+// };
