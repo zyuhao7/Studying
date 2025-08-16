@@ -2321,3 +2321,81 @@ using namespace std;
 //         return ans;
 //     }
 // };
+
+// 2025-8-16
+// 面试题 16.06. 最小差 mid
+// class Solution
+// {
+// public:
+//     int smallestDifference(vector<int> &a, vector<int> &b)
+//     {
+//         sort(b.begin(), b.end());
+//         long long ans = LONG_LONG_MAX;
+//         for (int x : a)
+//         {
+//             auto it = lower_bound(b.begin(), b.end(), x);
+//             if (it != b.end())
+//                 ans = min(ans, (long long)*it - x);
+//             if (it != b.begin())
+//                 ans = min(ans, x - (long long)*prev(it));
+//         }
+//         return ans;
+//     }
+// };
+
+// 面试题 16.07. 最大数值
+// class Solution
+// {
+// public:
+//     int maximum(int a, int b)
+//     {
+//         return a > b ? a : b;
+//     }
+// };
+
+// 面试题 16.10. 生存人数 mid
+// class Solution
+// {
+// public:
+//     int maxAliveYear(vector<int> &birth, vector<int> &death)
+//     {
+//         // 差分思想
+//         vector<int> a(105);
+//         for (int i = 0; i < birth.size(); ++i)
+//         {
+//             int x = birth[i] - 1900, y = death[i] - 1900;
+//             a[x]++;
+//             a[y + 1]--;
+//         }
+//         int mx = 0, idx = 0, sum = 0;
+//         for (int i = 1900; i <= 2000; ++i)
+//         {
+//             sum += a[i - 1900];
+//             if (sum > mx)
+//             {
+//                 mx = sum;
+//                 idx = i;
+//             }
+//         }
+//         return idx;
+//     }
+// };
+
+// 面试题 16.11. 跳水板
+// class Solution
+// {
+// public:
+//     vector<int> divingBoard(int shorter, int longer, int k)
+//     {
+//         vector<int> ans;
+//         if (k == 0)
+//             return {};
+//         if (shorter == longer)
+//             return {shorter * k};
+//         for (int i = 0; i < k + 1; ++i)
+//         {
+//             ans.push_back(longer * i + (k - i) * shorter);
+//         }
+//         return ans;
+//     }
+// };
