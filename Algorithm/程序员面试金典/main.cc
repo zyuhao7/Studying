@@ -2399,3 +2399,212 @@ using namespace std;
 //         return ans;
 //     }
 // };
+
+// day-2025-8-17
+// 面试题 16.14. 最佳直线 mid
+// class Solution
+// {
+// public:
+//     vector<int> bestLine(vector<vector<int>> &points)
+//     {
+//         int n = points.size();
+//         // 保存最大的数量和对应的序号数组
+//         int maxCnt = 0;
+//         vector<int> res(2, 0);
+//         for (int i = 0; i < n; ++i)
+//         {
+//             for (int j = i + 1; j < n; ++j)
+//             {
+//                 int cnt = 2;
+//                 // 坑： 这里计算需要用long避免乘法时候的溢出
+//                 long x1 = points[i][0] - points[j][0];
+//                 long y1 = points[i][1] - points[j][1];
+//                 for (int k = j + 1; k < n; ++k)
+//                 {
+//                     long x2 = points[i][0] - points[k][0];
+//                     long y2 = points[i][1] - points[k][1];
+//                     if (x1 * y2 == x2 * y1)
+//                     {
+//                         ++cnt;
+//                     }
+//                 }
+//                 if (cnt > maxCnt)
+//                 {
+//                     maxCnt = cnt;
+//                     res[0] = i;
+//                     res[1] = j;
+//                 }
+//             }
+//         }
+//         return res;
+//     }
+// };
+
+// 面试题 16.15. 珠玑妙算
+// class Solution
+// {
+// public:
+//     vector<int> masterMind(string solution, string guess)
+//     {
+//         vector<int> ans(2, 0);
+
+//         unordered_map<char, int> cnt;
+//         for (int i = 0; i < solution.size(); ++i)
+//         {
+//             if (solution[i] == guess[i])
+//             {
+//                 ans[0]++;
+//                 solution[i] = ' ';
+//                 guess[i] = ' ';
+//             }
+//         }
+//         for (int i = 0; i < solution.size(); ++i)
+//             cnt[solution[i]]++;
+//         for (int i = 0; i < guess.size(); ++i)
+//         {
+//             if (guess[i] != ' ')
+//             {
+//                 if (cnt[guess[i]] > 0)
+//                 {
+//                     ans[1] += 1;
+//                     cnt[guess[i]]--;
+//                 }
+//             }
+//         }
+//         return ans;
+//     }
+// };
+
+// 面试题 16.16. 部分排序 mid
+// class Solution
+// {
+// public:
+//     vector<int> subSort(vector<int> &array)
+//     {
+//         vector<int> ans(2, -1);
+//         int n = array.size();
+//         int mx = INT_MIN, mn = INT_MAX;
+//         for (int i = n - 1; i >= 0; --i)
+//         {
+//             if (array[i] > mn)
+//                 ans[0] = i;
+//             else
+//                 mn = array[i];
+//         }
+//         for (int i = 0; i < n; ++i)
+//         {
+//             if (array[i] < mx)
+//                 ans[1] = i;
+//             else
+//                 mx = array[i];
+//         }
+//         return ans;
+//     }
+// };
+
+// 面试题 16.17. 连续数列
+// class Solution
+// {
+// public:
+//     int maxSubArray(vector<int> &nums)
+//     {
+//         int sum = 0;
+//         int ans = INT_MIN;
+//         for (int i = 0; i < nums.size(); ++i)
+//         {
+//             sum = max(nums[i], nums[i] + sum);
+//             ans = max(ans, sum);
+//         }
+//         return ans;
+//     }
+// };
+
+// 面试题 16.19. 水域大小 mid
+// class Solution BFS
+// {
+// public:
+//     int dirs[8][2] = {{-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {0, -1}, {1, 1}, {1, 0}, {1, -1}};
+//     void bfs(vector<vector<int>> &land, vector<vector<bool>> &vis, vector<int> &pools, int i, int j)
+//     {
+//         int m = land.size(), n = land[0].size();
+//         queue<pair<int, int>> q;
+//         q.push({i, j});
+//         vis[i][j] = true;
+//         int pool = 1;
+//         while (!q.empty())
+//         {
+//             auto t = q.front();
+//             q.pop();
+//             for (int k = 0; k < 8; ++k)
+//             {
+//                 auto x = t.first + dirs[k][0];
+//                 auto y = t.second + dirs[k][1];
+//                 if (x >= 0 && x < m && y >= 0 && y < n && !vis[x][y] && land[x][y] == 0)
+//                 {
+//                     pool++;
+//                     q.push({x, y});
+//                     vis[x][y] = true;
+//                 }
+//             }
+//         }
+//         pools.push_back(pool);
+//     }
+
+//     vector<int> pondSizes(vector<vector<int>> &land)
+//     {
+//         vector<int> pools;
+//         int m = land.size();
+//         if (m == 0)
+//             return pools;
+//         int n = land[0].size();
+//         vector<vector<bool>> vis(m, vector<bool>(n, false));
+//         for (int i = 0; i < m; ++i)
+//         {
+//             for (int j = 0; j < n; ++j)
+//             {
+//                 if (!vis[i][j] && land[i][j] == 0)
+//                 {
+//                     bfs(land, vis, pools, i, j);
+//                 }
+//             }
+//         }
+//         sort(pools.begin(), pools.end());
+//         return pools;
+//     }
+// };
+
+// class Solution DFS
+// {
+// public:
+//     vector<int> pondSizes(vector<vector<int>> &land)
+//     {
+//         int m = land.size(), n = land[0].size();
+//         function<int(int, int)> dfs = [&](int i, int j)
+//         {
+//             land[i][j] = 1;
+//             int res = 1;
+//             for (int x = i - 1; x <= i + 1; x++)
+//             {
+//                 for (int y = j - 1; y <= j + 1; y++)
+//                 {
+//                     if (x >= 0 && x < m && y >= 0 && y < n && land[x][y] == 0)
+//                     {
+//                         res += dfs(x, y);
+//                     }
+//                 }
+//             }
+//             return res;
+//         };
+//         vector<int> ans;
+//         for (int i = 0; i < m; ++i)
+//         {
+//             for (int j = 0; j < n; ++j)
+//             {
+//                 if (land[i][j] == 0)
+//                     ans.push_back(dfs(i, j));
+//             }
+//         }
+//         sort(ans.begin(), ans.end());
+//         return ans;
+//     }
+// };
