@@ -2608,3 +2608,325 @@ using namespace std;
 //         return ans;
 //     }
 // };
+
+// day-2025-8-18
+// 面试题 16.20. T9键盘 mid
+// class Solution {
+// public:
+//     vector<string> getValidT9Words(string num, vector<string>& words) {
+//         unordered_map<char,int> hash{
+//             {'a', 2}, {'b', 2}, {'c', 2},
+//             {'d', 3}, {'e', 3}, {'f', 3},
+//             {'g', 4}, {'h', 4}, {'i', 4},
+//             {'j', 5}, {'k', 5}, {'l', 5},
+//             {'m', 6}, {'n', 6}, {'o', 6},
+//             {'p', 7}, {'q', 7}, {'r', 7},{'s',7},
+//             {'t', 8}, {'u', 8}, {'v', 8},
+//             {'w', 9}, {'x', 9}, {'y', 9},{'z',9}
+//         };
+//         vector<string> ans;
+//         for(int i = 0; i < words.size(); ++i)
+//         {
+//             int j = 0;
+//             for(; j < words[i].size(); ++j)
+//             {
+//                 if(hash[words[i][j]] != (num[j] - '0'))
+//                     break;
+//             }
+//             if(j == words[i].size())
+//                 ans.push_back(words[i]);
+//         }
+//         return ans;
+//     }
+// };
+
+// 面试题 16.21. 交换和 mid
+// class Solution
+// {
+// public:
+//     vector<int> findSwapValues(vector<int> &array1, vector<int> &array2)
+//     {
+//         long long sum1 = accumulate(array1.begin(), array1.end(), 0LL);
+//         long long sum2 = accumulate(array2.begin(), array2.end(), 0LL);
+//         long long dif = sum1 - sum2;
+//         if (dif & 1)
+//             return {};
+//         // x - y = diff / 2;
+//         // x = y + dif / 2
+//         dif >>= 1;
+//         unordered_set<int> set(array2.begin(), array2.end());
+//         for (auto &x : array1)
+//         {
+//             int y = x - dif;
+//             if (set.count(y))
+//                 return {x, y};
+//         }
+//         return {};
+//     }
+// };
+
+// 面试题 16.22. 兰顿蚂蚁 mid
+// #include <set>
+// class Solution
+// {
+// public:
+//     vector<string> printKMoves(int K)
+//     {
+//         // 最小的坐标       最大的坐标
+//         int x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+//         int x = 0, y = 0, p = 0; // 当前位置和方向 p
+//         int dirs[5] = {0, 1, 0, -1, 0};
+//         string d = "RDLU";
+//         set<pair<int, int>> black;
+//         while (K--)
+//         {
+//             auto t = make_pair(x, y);
+//             if (black.count(t))
+//             {
+//                 black.erase(t);
+//                 p = (p + 3) % 4; // 顺时针走三步, 相当于逆时针走一步
+//             }
+//             else
+//             {
+//                 black.insert(t);
+//                 p = (p + 1) % 4;
+//             }
+//             x += dirs[p];
+//             y += dirs[p + 1];
+//             x1 = min(x1, x);
+//             y1 = min(y1, y);
+//             x2 = max(x2, x);
+//             y2 = max(y2, y);
+//         }
+//         int m = x2 - x1 + 1, n = y2 - y1 + 1;
+//         vector<string> g(m, string(n, '_'));
+//         for (auto &[a, b] : black)
+//         {
+//             g[a - x1][b - y1] = 'X';
+//         }
+//         g[x - x1][y - y1] = d[p];
+//         return g;
+//     }
+// };
+
+// 面试题 16.24. 数对和 mid
+// class Solution
+// {
+// public:
+//     vector<vector<int>> pairSums(vector<int> &nums, int target)
+//     {
+//         vector<vector<int>> ans;
+//         int n = nums.size();
+//         unordered_map<int, int> mp;
+//         for (auto &x : nums)
+//         {
+//             int y = target - x;
+//             if (mp[y])
+//             {
+//                 --mp[y];
+//                 ans.push_back({x, y});
+//             }
+//             else
+//                 ++mp[x];
+//         }
+//         return ans;
+//     }
+// };
+
+// day-2025-8-19
+// 面试题 16.25. LRU缓存 mid
+// struct Node
+// {
+//     int k;
+//     int v;
+//     Node* next;
+//     Node* prev;
+//     Node(){}
+//     Node(int key, int value)
+//     :k(key), v(value){}
+// };
+
+// class LRUCache {
+// public:
+//     LRUCache(int capacity)
+//     :cap(capacity),
+//     size(0) {
+//         head = new Node();
+//         tail = new Node();
+//         head->next = tail;
+//         tail->prev = head;
+//     }
+
+//     int get(int key) {
+//         if(!cache.count(key)) return -1;
+//         Node* node = cache[key];
+//         moveToHead(node);
+//         return node->v;
+//     }
+
+//     void put(int key, int value) {
+//         if(cache.count(key)) // cunzai
+//         {
+//             Node* node = cache[key];
+//             node->v = value;
+//             moveToHead(node);
+//         }
+//         else
+//         {
+//             Node* node = new Node(key, value);
+//             addToHead(node);
+//             ++size;
+//             cache[key] = node;
+//             if(size > cap)
+//             {
+//                 node = removeTail();
+//                 cache.erase(node->k);
+//                 --size;
+//             }
+//         }
+//     }
+//     unordered_map<int, Node*> cache;
+//     Node* head;
+//     Node* tail;
+//     int cap;
+//     int size;
+//      void moveToHead(Node* node)
+//      {
+//         removeNode(node);
+//         addToHead(node);
+//      }
+//     void removeNode(Node* node)
+//     {
+//         // prev node  next
+//         node->prev->next = node->next;
+//         node->next->prev = node->prev;
+//     }
+//     void addToHead(Node* node) {
+//         // head node next
+//         node->next = head->next;
+//         node->prev = head;
+//         head->next->prev = node;
+//         head->next = node;
+//     }
+//     Node* removeTail()
+//     {
+//         // node tail
+//         Node* node = tail->prev;
+//         removeNode(node);
+//         return node;
+//     }
+// };
+
+// 面试题 16.26. 计算器 mid
+// class Solution
+// {
+// public:
+//     int calculate(string s)
+//     {
+//         stack<int> st;
+//         int n = s.size();
+//         int x = 0;
+//         char sign = '+';
+//         for (int i = 0; i < n; ++i)
+//         {
+//             char c = s[i];
+//             if (isdigit(c))
+//             {
+//                 x = x * 10 + (c - '0');
+//             }
+//             if (i == n - 1 || !isdigit(c) && !isspace(c))
+//             {
+//                 if (sign == '+')
+//                     st.push(x);
+//                 else if (sign == '-')
+//                     st.push(-x);
+//                 else if (sign == '*')
+//                 {
+//                     int t = st.top();
+//                     st.pop();
+//                     st.push(t * x);
+//                 }
+//                 else if (sign == '/')
+//                 {
+//                     int t = st.top();
+//                     st.pop();
+//                     st.push(t / x);
+//                 }
+//                 x = 0;
+//                 sign = c;
+//             }
+//         }
+//         int ans = 0;
+//         while (!st.empty())
+//         {
+//             ans += st.top();
+//             st.pop();
+//         }
+//         return ans;
+//     }
+// };
+
+// 面试题 17.01. 不用加号的加法
+// class Solution
+// {
+// public:
+//     int add(int a, int b)
+//     {
+//         while (b != 0)
+//         {
+//             unsigned int carry = (unsigned int)(a & b) << 1;
+//             a = a ^ b;
+//             b = carry;
+//         }
+//         return a;
+//     }
+// };
+
+// 面试题 17.04. 消失的数字
+// class Solution
+// {
+// public:
+//     int missingNumber(vector<int> &nums)
+//     {
+//         int x = 0;
+//         int i;
+//         for (int i = 0; i <= nums.size(); ++i)
+//         {
+//             x ^= i;
+//         }
+//         for (int i = 0; i < nums.size(); ++i)
+//         {
+//             x ^= nums[i];
+//         }
+//         return x;
+//     }
+// };
+
+// 面试题 17.05. 字母与数字 mid
+// class Solution
+// {
+// public:
+//     vector<string> findLongestSubarray(vector<string> &array)
+//     {
+//         unordered_map<int, int> vis{{0, -1}};
+//         int s = 0, mx = 0, k = 0;
+//         for (int i = 0; i < array.size(); ++i)
+//         {
+//             s += array[i][0] >= 'A' ? 1 : -1;
+//             if (vis.count(s))
+//             {
+//                 int j = vis[s];
+//                 if (mx < i - j)
+//                 {
+//                     mx = i - j;
+//                     k = j + 1;
+//                 }
+//             }
+//             else
+//             {
+//                 vis[s] = i;
+//             }
+//         }
+//         return vector<string>(array.begin() + k, array.begin() + k + mx);
+//     }
+// };
