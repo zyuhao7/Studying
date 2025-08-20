@@ -61,7 +61,7 @@ public:
     threadsafe_stack() {}
     threadsafe_stack(const threadsafe_stack &other)
     {
-        std::lock_guard<std::mutex> lock(m);
+        std::lock_guard<std::mutex> lock(other.m);
         data = other.data;
     }
 
@@ -102,6 +102,7 @@ private:
     std::stack<T> data;
     mutable std::mutex m;
 };
+
 
 // 为了解决栈为空就抛出异常的问题，我们可以做如下优化
 template <typename T>
