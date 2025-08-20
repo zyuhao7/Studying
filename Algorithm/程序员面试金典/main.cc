@@ -2930,3 +2930,48 @@ using namespace std;
 //         return vector<string>(array.begin() + k, array.begin() + k + mx);
 //     }
 // };
+
+// #include <memory>
+// day-2025-8-20
+// 面试题 17.06. 2出现的次数 hard
+// class Solution
+// {
+// public:
+//     int numberOf2sInRange(int n)
+//     {
+//         auto s = to_string(n); // 将数字转换为字符串，方便逐位处理
+//         int m = s.length();
+//         int dp[m][m];               // dp[i][j]表示处理到第i位时，已出现j个2的方案数
+//         memset(dp, -1, sizeof(dp)); // 初始化为-1，表示未计算过
+
+//         // 递归函数：i表示当前处理的位置，cnt2表示已统计的2的个数，is_limit表示当前位是否受限于原数的上界
+//         function<int(int, int, bool)> f = [&](int i, int cnt2, bool is_limit) -> int
+//         {
+//             if (i == m)      // 处理完所有位
+//                 return cnt2; // 返回统计的2的个数
+
+//             // 如果当前位不受限制且该状态已计算过，直接返回缓存结果
+//             if (!is_limit && dp[i][cnt2] >= 0)
+//                 return dp[i][cnt2];
+
+//             int res = 0;
+//             // 确定当前位可以填的最大数字
+//             int up = is_limit ? (s[i] - '0') : 9;
+
+//             // 枚举当前位可能的数字
+//             for (int d = 0; d <= up; ++d)
+//             {
+//                 // 递归处理下一位，更新2的计数，并判断下一位是否受限
+//                 res += f(i + 1, cnt2 + (d == 2), is_limit && (d == up));
+//             }
+
+//             // 如果当前位不受限制，缓存结果
+//             if (!is_limit)
+//                 dp[i][cnt2] = res;
+
+//             return res;
+//         };
+//         // 从第0位开始处理，初始2的计数为0，初始状态受限制
+//         return f(0, 0, true);
+//     }
+// };
