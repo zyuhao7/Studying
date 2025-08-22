@@ -2975,3 +2975,91 @@ using namespace std;
 //         return f(0, 0, true);
 //     }
 // };
+
+// day-2025-8-22
+// 面试题 17.07. 婴儿名字 mid
+// class Solution
+// {
+// public:
+//     vector<string> trulyMostPopular(vector<string> &names, vector<string> &synonyms)
+//     {
+//         unordered_map<string, vector<string>> g;
+//         unordered_map<string, int> cnt;
+//         for (auto &sy : synonyms)
+//         {
+//             auto i = sy.find(',');
+//             string a = sy.substr(1, i - 1);
+//             string b = sy.substr(i + 1, sy.size() - i - 2);
+//             g[a].emplace_back(b);
+//             g[b].emplace_back(a);
+//         }
+//         unordered_set<string> s;
+//         for (auto &e : names)
+//         {
+//             auto i = e.find('(');
+//             string name = e.substr(0, i);
+//             s.insert(name);
+//             cnt[name] = stoi(e.substr(i + 1, e.size() - i - 2));
+//         }
+//         unordered_set<string> vis;
+//         int freq = 0;
+//         function<string(string)> dfs = [&](string a) -> string
+//         {
+//             string res = a;
+//             vis.insert(a);
+//             freq += cnt[a];
+//             for (auto &b : g[a])
+//             {
+//                 if (!vis.count(b))
+//                 {
+//                     string t = dfs(b);
+//                     if (t < res)
+//                         res = move(t);
+//                 }
+//             }
+//             return move(res);
+//         };
+
+//         vector<string> ans;
+//         for (auto &name : s)
+//         {
+//             if (!vis.count(name))
+//             {
+//                 freq = 0;
+//                 string x = dfs(name);
+//                 ans.emplace_back(x + "(" + to_string(freq) + ")");
+//             }
+//         }
+//         return ans;
+//     }
+// };
+
+// 面试题 17.08. 马戏团人塔 mid
+// class Solution
+// {
+// public:
+//     int bestSeqAtIndex(vector<int> &height, vector<int> &weight)
+//     {
+//         // 1. 将身高和体重配对
+//         vector<pair<int, int>> tmp;
+//         for (int i = 0; i < height.size(); i++)
+//             tmp.push_back({height[i], weight[i]});
+
+//         // 2. 排序：先按身高升序，身高相同时按体重降序
+//         sort(tmp.begin(), tmp.end(), [](const pair<int, int> &a, const pair<int, int> &b)
+//              { return a.first == b.first ? a.second > b.second : a.first < b.first; });
+
+//         // 3. 求解最长递增子序列（LIS）
+//         vector<int> dp; // dp[i]表示长度为i+1的子序列中，末尾元素的最小值
+//         for (const auto &[h, w] : tmp)
+//         {
+//             // 二分查找第一个大于等于w的位置
+//             auto p = lower_bound(dp.begin(), dp.end(), w);
+//             if (p == dp.end())
+//                 dp.push_back(w); // 找到更长的子序列
+//             else
+//                 *p = w; // 优化现有长度的子序列
+//         }
+//         return dp.size(); // dp的长度即为最长递增子序列的长度
+//     }
+// };
