@@ -3063,3 +3063,65 @@ using namespace std;
 //         return dp.size(); // dp的长度即为最长递增子序列的长度
 //     }
 // };
+
+// 面试题 17.09. 第 k 个数 mid
+// class Solution {
+//     const vector<int> vec{3, 5, 7};
+// public:
+//     int getKthMagicNumber(int k) {
+//         priority_queue<long, vector<long>, greater<long>> pq;
+//         unordered_set<long> vis;
+//         pq.push(1L);
+//         vis.insert(1L);
+//         for(int i = 0; i < k - 1; ++i)
+//         {
+//             auto t = pq.top(); pq.pop();
+//             for(auto& v : vec)
+//             {
+//                 long n = v * t;
+//                 if(!vis.count(n))
+//                 {
+//                     vis.insert(n);
+//                     pq.push(n);
+//                 }
+//             }
+//         }
+//         return (int)pq.top();
+//     }
+// };
+
+// 面试题 17.10. 主要元素
+// class Solution {
+// public:
+//     int majorityElement(vector<int>& nums) {
+//         sort(nums.begin(), nums.end());
+//         int mainElement = nums[nums.size() / 2];
+//         int n = 0;
+//         for(int i = 0; i < nums.size(); ++i)
+//         {
+//             if(nums[i] == mainElement) n++;
+//         }
+//         return n > nums.size() / 2 ? mainElement : -1;
+//     }
+// };
+
+// 面试题 17.11. 单词距离 mid
+// class Solution
+// {
+// public:
+//     int findClosest(vector<string> &words, string word1, string word2)
+//     {
+//         int i = -1, j = -1;
+//         int ans = INT_MAX;
+//         for (int k = 0; k < words.size(); ++k)
+//         {
+//             if (words[k] == word1)
+//                 i = k;
+//             if (words[k] == word2)
+//                 j = k;
+//             if (i != -1 && j != -1)
+//                 ans = min(ans, abs(i - j));
+//         }
+//         return ans == INT_MAX ? -1 : ans;
+//     }
+// };
