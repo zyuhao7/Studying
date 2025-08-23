@@ -1,0 +1,25 @@
+#ifndef SENDFILE_H
+#define SENDFILE_H
+
+#include <QObject>
+#include <QTcpSocket>
+
+class SendFile : public QObject
+{
+    Q_OBJECT
+public:
+    explicit SendFile(QObject *parent = nullptr);
+    // 连接服务器
+    void connectServer(unsigned short port, QString ip);
+
+    // 发送文件
+    void sendFile(QString path);
+signals:
+    void connectOK();
+    void gameOver();
+    void currentPercent(int num);
+private:
+    QTcpSocket* m_sock;
+};
+
+#endif // SENDFILE_H
