@@ -3125,3 +3125,123 @@ using namespace std;
 //         return ans == INT_MAX ? -1 : ans;
 //     }
 // };
+
+// day-2025-8-23
+// 面试题 17.12. BiNode
+// class Solution
+// {
+// public:
+//     TreeNode *convertBiNode(TreeNode *root)
+//     {
+//         TreeNode *ans = new TreeNode(0), *cur = ans;
+//         stack<TreeNode *> st;
+//         while (!st.empty() || root)
+//         {
+//             while (root)
+//             {
+//                 st.push(root);
+//                 root = root->left;
+//             }
+//             root = st.top();
+//             st.pop();
+//             root->left = nullptr;
+//             cur->right = root;
+//             cur = root;
+//             root = root->right;
+//         }
+//         return ans->right;
+//     }
+// };
+
+// 面试题 17.13. 恢复空格 mid
+
+// class Solution
+// {
+// public:
+//     int respace(vector<string> &dictionary, string sentence)
+//     {
+//         unordered_set<string> s(dictionary.begin(), dictionary.end());
+//         int n = sentence.size();
+//         vector<int> dp(n + 1);
+//         for (int i = 1; i <= n; ++i)
+//         {
+//             dp[i] = dp[i - 1] + 1;
+//             for (int j = 0; j < i; ++j)
+//             {
+//                 if (s.count(sentence.substr(j, i - j)))
+//                     dp[i] = min(dp[i], dp[j]);
+//             }
+//         }
+//         return dp[n];
+//     }
+// };
+
+// class Trie
+// {
+// public:
+//     Trie *next[26] = {nullptr};
+//     bool isEnd;
+
+//     Trie()
+//     {
+//         isEnd = false;
+//     }
+
+//     void insert(string s)
+//     {
+//         Trie *curPos = this;
+
+//         for (int i = s.length() - 1; i >= 0; --i)
+//         {
+//             int t = s[i] - 'a';
+//             if (curPos->next[t] == nullptr)
+//             {
+//                 curPos->next[t] = new Trie();
+//             }
+//             curPos = curPos->next[t];
+//         }
+//         curPos->isEnd = true;
+//     }
+// };
+
+// class Solution
+// {
+// public:
+//     int respace(vector<string> &dictionary, string sentence)
+//     {
+//         int n = sentence.length(), inf = 0x3f3f3f3f;
+
+//         Trie *root = new Trie();
+//         for (auto &word : dictionary)
+//         {
+//             root->insert(word);
+//         }
+
+//         vector<int> dp(n + 1, inf);
+//         dp[0] = 0;
+//         for (int i = 1; i <= n; ++i)
+//         {
+//             dp[i] = dp[i - 1] + 1;
+
+//             Trie *curPos = root;
+//             for (int j = i; j >= 1; --j)
+//             {
+//                 int t = sentence[j - 1] - 'a';
+//                 if (curPos->next[t] == nullptr)
+//                 {
+//                     break;
+//                 }
+//                 else if (curPos->next[t]->isEnd)
+//                 {
+//                     dp[i] = min(dp[i], dp[j - 1]);
+//                 }
+//                 if (dp[i] == 0)
+//                 {
+//                     break;
+//                 }
+//                 curPos = curPos->next[t];
+//             }
+//         }
+//         return dp[n];
+//     }
+// };
