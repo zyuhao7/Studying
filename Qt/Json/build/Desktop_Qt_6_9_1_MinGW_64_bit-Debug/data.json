@@ -1,0 +1,14 @@
+{
+    "address": {
+        "city": "北京",
+        "street": "朝阳区"
+    },
+    "age": 25,
+    "hobbies": [
+        "阅读",
+        "游泳",
+        "编程"
+    ],
+    "isStudent": false,
+    "name": "张三"
+}
