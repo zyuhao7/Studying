@@ -3245,3 +3245,185 @@ using namespace std;
 //         return dp[n];
 //     }
 // };
+
+// day-2025-8-24
+//  面试题 17.14. 最小K个数 mid
+// class Solution {
+// public:
+//     int partition(vector<int>& nums, int l, int r)
+//     {
+//         int pivot = nums[r];
+//         int i = l - 1;
+//         for(int j = l; j < r; ++j)
+//         {
+//             if(nums[j] <= pivot)
+//                 swap(nums[++i], nums[j]);
+//         }
+//         swap(nums[i + 1], nums[r]);
+//         return i + 1;
+//     }
+
+//     int randomize_partition(vector<int>& nums, int l, int r)
+//     {
+//         int i = rand() % (r - l + 1) + l;
+//         swap(nums[i], nums[r]);
+//         return partition(nums, l, r);
+//     }
+
+//     void randomize_selected(vector<int>& nums, int l, int r, int k)
+//     {
+//         if(l >= r) return;
+//         int pos = randomize_partition(nums, l, r);
+//         int n = pos - l + 1;
+//         if(n == k)
+//             return;
+//         else if(n < k)
+//              randomize_selected(nums, pos + 1, r, k - n);
+//         else
+//              randomize_selected(nums, l, pos - 1, k);
+
+//     }
+//     vector<int> smallestK(vector<int>& arr, int k) {
+//         srand(time(0));
+//         randomize_selected(arr, 0, arr.size() - 1, k);
+//         vector<int> res;
+//         for(int i=0;i<k;++i)
+//             res.push_back(arr[i]);
+//         return res;
+//     }
+// };
+
+// class Solution {
+// public:
+//     vector<int> smallestK(vector<int>& arr, int k) {
+//         priority_queue<int> pq;
+//         for(int i = 0; i < arr.size(); ++i)
+//         {
+//             pq.push(arr[i]);
+//             if(pq.size() > k)
+//                 pq.pop();
+//         }
+//         vector<int> ans;
+//         while(!pq.empty())
+//         {
+//             ans.push_back(pq.top());
+//             pq.pop();
+//         }
+//         return ans;
+//     }
+// };
+// 面试题 17.15. 最长单词 mid
+// class Solution
+// {
+// public:
+//     string longestWord(vector<string> &words)
+//     {
+//         unordered_set<string> s(words.begin(), words.end());
+//         ranges::sort(words.begin(), words.end(), [&](const string &a, const string &b)
+//                      { return a.size() > b.size() || (a.size() == b.size() && a < b); });
+
+//         auto dfs = [&](this auto &&dfs, string w) -> bool
+//         {
+//             if (w.empty())
+//                 return true;
+//             for (int i = 1; i <= w.size(); ++i)
+//             {
+//                 if (s.contains(w.substr(0, i)) && dfs(w.substr(i)))
+//                     return true;
+//             }
+//             return false;
+//         };
+//         for (auto &word : words)
+//         {
+//             s.erase(word);
+//             if (dfs(word))
+//                 return word;
+//         }
+//         return "";
+//     }
+// };
+
+// 面试题 17.16. 按摩师
+// class Solution {
+// public:
+//     int massage(vector<int>& nums) {
+//         if(nums.size() == 0) return 0;
+//         if(nums.size() == 1) return nums[0];
+//         if(nums.size() == 2) return max(nums[0], nums[1]);
+//         int n = nums.size();
+//         vector<int> dp(n + 1);
+//         dp[1] = nums[0];
+//         dp[2] = nums[1];
+//         for(int i = 2; i <= n; ++i)
+//         {
+//             dp[i] = max(dp[i - 2] + nums[i - 1], dp[i - 1]);
+//         }
+//         return dp[n];
+//     }
+// };
+
+// 面试题 17.17. 多次搜索 mid
+// class trieNode
+// {
+// public:
+//     trieNode *child[26] = {nullptr};
+//     int idx = -1;
+//     trieNode() {}
+// };
+
+// class Trie
+// {
+// public:
+//     trieNode *root;
+//     Trie()
+//         : root(new trieNode) {}
+//     void insert(string &words, int idx)
+//     {
+//         trieNode *cur = root;
+//         for (auto &c : words)
+//         {
+//             if (cur->child[c - 'a'] == nullptr)
+//             {
+//                 cur->child[c - 'a'] = new trieNode();
+//             }
+//             cur = cur->child[c - 'a'];
+//         }
+//         cur->idx = idx;
+//     }
+//     void searchFromPosition(string &big, int start, vector<vector<int>> &ans)
+//     {
+//         trieNode *cur = root;
+//         for (int i = start; i < big.size(); ++i)
+//         {
+//             char c = big[i];
+//             if (cur->child[c - 'a'] == nullptr)
+//                 break;
+
+//             cur = cur->child[c - 'a'];
+//             if (cur->idx != -1)
+//             {
+//                 ans[cur->idx].push_back(start);
+//             }
+//         }
+//     }
+// };
+
+// class Solution
+// {
+// public:
+//     vector<vector<int>> multiSearch(string big, vector<string> &smalls)
+//     {
+//         Trie trie;
+//         for (int i = 0; i < smalls.size(); ++i)
+//         {
+//             trie.insert(smalls[i], i);
+//         }
+//         vector<vector<int>> ans(smalls.size());
+
+//         for (int i = 0; i < big.size(); ++i)
+//         {
+//             trie.searchFromPosition(big, i, ans);
+//         }
+//         return ans;
+//     }
+// };
