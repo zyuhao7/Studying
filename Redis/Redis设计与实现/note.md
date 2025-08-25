@@ -725,14 +725,14 @@ Sentinel是Redis的**高可用性（High Availability）解决方案**：它由�
 
 ------
 
-### 三、重要特性与注意事项（总结自实现细节）
+### 三、重要特性与注意事项
 
 - **最终一致性**：Sentinel系统本身是分布式的，其状态通过心跳和Gossip协议最终达成一致，而非强一致。
 - **“少数派服从多数派”原则**：无论是客观下线判断还是Leader选举，都依赖多数派同意，这保证了在网络分区等复杂情况下系统的健壮性。
 - **配置的传播**：一个Sentinel对配置的修改（如故障转移后的新主服务器信息），会通过 `PUBLISH` 命令发布到所有服务器的 `__sentinel__:hello` 频道，从而自动传播到整个Sentinel系统。
 - **客户端集成**：客户端需要是“Sentinel-aware”的，即能够连接Sentinel节点来查询当前的主节点地址，并在连接断开时重新向Sentinel查询。
 
-## 图示
+### 总结图示
 ```cpp
     [Sentinel A]  [Sentinel B]  [Sentinel C]  <- Sentinel集群，相互自动发现
         \           |           /
