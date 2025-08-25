@@ -3427,3 +3427,128 @@ using namespace std;
 //         return ans;
 //     }
 // };
+
+// day-2025-8-25
+// 面试题 17.18. 最短超串 mid
+// class Solution
+// {
+// public:
+//     vector<int> shortestSeq(vector<int> &big, vector<int> &small)
+//     {
+//         int cnt = small.size();
+//         unordered_map<int, int> mp;
+//         for (int sm : small)
+//             mp[sm]++;
+
+//         int minLen = INT_MAX, st = -1, end = -1;
+//         int l = 0;
+//         int req = mp.size();
+//         int hasFound = 0;
+//         for (int r = 0; r < big.size(); ++r)
+//         {
+//             int n = big[r];
+//             if (mp.count(n))
+//             {
+//                 mp[n]--;
+//                 if (mp[n] == 0)
+//                     hasFound++;
+//             }
+//             while (hasFound == req)
+//             {
+//                 if (r - l + 1 < minLen)
+//                 {
+//                     minLen = r - l + 1;
+//                     st = l;
+//                     end = r;
+//                 }
+//                 int left = big[l];
+//                 mp[left]++;
+//                 if (mp[left] > 0)
+//                     hasFound--;
+//                 l++;
+//             }
+//         }
+//         if (st == -1)
+//             return {};
+
+//         return {st, end};
+//     }
+// };
+
+// 面试题 17.19. 消失的两个数字 hard
+// class Solution
+// {
+// public:
+//     vector<int> missingTwo(vector<int> &nums)
+//     {
+//         int ans = 0, n = nums.size();
+//         for (int i = 1; i <= n + 2; i++)
+//             ans ^= i;
+//         for (auto x : nums)
+//             ans ^= x;
+//         // ans = one ^ two;
+//         int one = 0;
+//         int diff = ans & -ans;
+//         for (int i = 1; i <= n + 2; i++)
+//             if (diff & i)
+//                 one ^= i; // ?
+//         for (auto x : nums)
+//             if (diff & x)
+//                 one ^= x;
+//         return {one, one ^ ans};
+//     }
+// };
+
+// 面试题 17.20. 连续中值 hard
+// 建两个堆, 一个大根堆一个小根堆。
+// class MedianFinder
+// {
+// public:
+//     /** initialize your data structure here. */
+//     MedianFinder()
+//     {
+//         maxHeap.push(INT_MIN);
+//         minHeap.push(INT_MAX);
+//     }
+
+//     void addNum(int num)
+//     {
+//         if (num <= maxHeap.top())
+//         {
+//             maxHeap.push(num);
+//         }
+//         else
+//         {
+//             minHeap.push(num);
+//         }
+//         if (maxHeap.size() > minHeap.size() + 1)
+//         {
+//             minHeap.push(maxHeap.top());
+//             maxHeap.pop();
+//         }
+//         else if (minHeap.size() > maxHeap.size() + 1)
+//         {
+//             maxHeap.push(minHeap.top());
+//             minHeap.pop();
+//         }
+//     }
+
+//     double findMedian()
+//     {
+//         if (maxHeap.size() == minHeap.size())
+//         {
+//             return (maxHeap.top() + minHeap.top()) / 2.0;
+//         }
+//         else if (maxHeap.size() > minHeap.size())
+//         {
+//             return maxHeap.top();
+//         }
+//         else
+//         {
+//             return minHeap.top();
+//         }
+//     }
+
+//     priority_queue<int> maxHeap;
+//     priority_queue<int, vector<int>, greater<int>> minHeap;
+// };
