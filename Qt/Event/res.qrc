@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>build/ghost1.png</file>
+        <file>build/ghost2.png</file>
+        <file>build/ghost3.png</file>
+    </qresource>
+</RCC>
