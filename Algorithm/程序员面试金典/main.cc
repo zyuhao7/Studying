@@ -3552,3 +3552,142 @@ using namespace std;
 //     priority_queue<int> maxHeap;
 //     priority_queue<int, vector<int>, greater<int>> minHeap;
 // };
+
+// day-2025-8-27
+// 面试题 17.21. 直方图的水量 hard
+// class Solution
+// {
+// public:
+//     int trap(vector<int> &height)
+//     {
+//         if (height.size() == 0)
+//             return 0;
+//         int n = height.size();
+//         vector<int> left(n);
+//         vector<int> right(n);
+//         left[0] = height[0];
+//         right[n - 1] = height[n - 1];
+//         for (int i = 1; i < n; ++i)
+//             left[i] = max(left[i - 1], height[i]);
+//         for (int i = n - 2; i >= 0; --i)
+//             right[i] = max(right[i + 1], height[i]);
+//         int ans = 0;
+//         for (int i = 0; i < n; ++i)
+//             ans += min(left[i], right[i]) - height[i];
+//         return ans;
+//     }
+// };
+
+// 面试题 17.22. 单词转换 mid
+// class Solution
+// {
+// public:
+//     vector<string> findLadders(string beginWord, string endWord, vector<string> &wordList)
+//     {
+//         unordered_set<string> wordSet(wordList.begin(), wordList.end());
+//         // 检查终点是否在字典中
+//         if (wordSet.find(endWord) == wordSet.end())
+//         {
+//             return {};
+//         }
+
+//         queue<vector<string>> q;       // 队列中存储路径
+//         unordered_set<string> visited; // 记录已访问的单词
+
+//         q.push({beginWord});
+//         visited.insert(beginWord);
+
+//         while (!q.empty())
+//         {
+//             int size = q.size();
+//             for (int i = 0; i < size; ++i)
+//             {
+//                 vector<string> path = q.front();
+//                 q.pop();
+//                 string cur = path.back();
+
+//                 // 找到终点，返回路径
+//                 if (cur == endWord)
+//                 {
+//                     return path;
+//                 }
+
+//                 // 尝试修改每个字符
+//                 for (int j = 0; j < cur.size(); ++j)
+//                 {
+//                     char original = cur[j];
+//                     for (char c = 'a'; c <= 'z'; ++c)
+//                     {
+//                         cur[j] = c;
+//                         // 如果修改后的单词在字典中且未访问过
+//                         if (wordSet.count(cur) && !visited.count(cur))
+//                         {
+//                             vector<string> newPath = path;
+//                             newPath.push_back(cur);
+//                             q.push(newPath);
+//                             visited.insert(cur); // 标记为已访问
+//                         }
+//                     }
+//                     cur[j] = original; // 恢复原字符
+//                 }
+//             }
+//         }
+
+//         return {}; // 无法找到路径
+//     }
+// };
+
+// 面试题 17.23. 最大黑方阵 mid
+// class Solution {
+// public:
+//     vector<int> findSquare(vector<vector<int>> &matrix) {
+//         vector<int> ans;
+//         int n = matrix.size();
+//         if (n == 0) return ans;
+
+//         // 两个二维数组分别记录每个位置向右和向下连续0的个数
+//         vector<vector<int>> right(n, vector<int>(n, 0));
+//         vector<vector<int>> down(n, vector<int>(n, 0));
+
+//         // 初始化边界
+//         for (int i = 0; i < n; ++i) {
+//             right[i][n-1] = (matrix[i][n-1] == 0) ? 1 : 0;
+//             down[n-1][i] = (matrix[n-1][i] == 0) ? 1 : 0;
+//         }
+
+//         // 从右到左，从下到上填充right和down数组
+//         for (int i = 0; i < n; ++i) {
+//             for (int j = n - 2; j >= 0; --j) {
+//                 right[i][j] = (matrix[i][j] == 0) ? (right[i][j+1] + 1) : 0;
+//             }
+//         }
+
+//         for (int i = n - 2; i >= 0; --i) {
+//             for (int j = 0; j < n; ++j) {
+//                 down[i][j] = (matrix[i][j] == 0) ? (down[i+1][j] + 1) : 0;
+//             }
+//         }
+
+//         int maxSize = 0;
+//         int startX = -1, startY = -1;
+
+//         // 从大到小尝试正方形边长
+//         for (int size = n; size > 0; --size) {
+//             for (int i = 0; i <= n - size; ++i) {
+//                 for (int j = 0; j <= n - size; ++j) {
+//                     // 检查以(i,j)为左上角，边长为size的正方形是否全为0
+//                     // 检查四个角点的right和down是否满足条件
+//                     if (right[i][j] >= size && down[i][j] >= size &&
+//                         right[i + size - 1][j] >= size && down[i][j + size - 1] >= size) {
+//                         startX = i;
+//                         startY = j;
+//                         maxSize = size;
+//                         return {startX, startY, maxSize};
+//                     }
+//                 }
+//             }
+//         }
+
+//         return ans;
+//     }
+// };
