@@ -3691,3 +3691,148 @@ using namespace std;
 //         return ans;
 //     }
 // };
+
+// day-2025-8-28
+// 面试题 17.24. 最大子矩阵 hard
+// 超时
+// class Solution
+// {
+// public:
+//     vector<int> getMaxMatrix(vector<vector<int>> &matrix)
+//     {
+//         int m = matrix.size(), n = matrix[0].size();
+//         vector<vector<int>> prefix(m + 1, vector<int>(n + 1));
+//         for (int i = 1; i <= m; ++i)
+//         {
+//             for (int j = 1; j <= n; ++j)
+//             {
+//                 prefix[i][j] = prefix[i - 1][j] + prefix[i][j - 1] + matrix[i - 1][j - 1] - prefix[i - 1][j - 1];
+//             }
+//         }
+//         for (int i = 1; i <= m; ++i)
+//         {
+//             for (int j = 1; j <= n; ++j)
+//             {
+//                 for (int k = i; k <= m; ++k)
+//                 {
+//                     for (int l = j; l <= n; ++l)
+//                     {
+//                         int sum = prefix[k][l] - prefix[k][j - 1] - prefix[i - 1][l] + prefix[i - 1][j - 1];
+//                         if (sum > maxSum)
+//                         {
+//                             maxSum = sum;
+//                             ans = {i - 1, j - 1, k - 1, l - 1};
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+
+//         return ans;
+//     }
+
+// private:
+//     int maxSum = INT_MIN;
+//     vector<int> ans;
+// };
+
+// 二维前缀和 + Kadane算法
+// - 1. 固定上下边界(i和k)
+// - 2. 将这两行之间的每一列元素累加，转化为一维数组
+// - 3. 对这个一维数组应用Kadane算法找最大子数组
+// - 4. 记录下最大子数组的和以及其左右边界
+// - 5. 枚举所有可能的上下边界，重复以上步骤
+// - 6. 返回最大子数组的和以及其上下左右边界
+// class Solution
+// {
+// public:
+//     vector<int> getMaxMatrix(vector<vector<int>> &matrix)
+//     {
+//         int m = matrix.size(), n = matrix[0].size();
+//         int maxSum = INT_MIN;
+//         vector<int> ans(4, 0);
+//         // 遍历所有可能的上边界
+//         for (int top = 0; top < m; ++top)
+//         {
+//             vector<int> colSum(n, 0); // 每列的和
+
+//             // 遍历所有可能的下边界
+//             for (int bottom = top; bottom < m; ++bottom)
+//             {
+//                 // 计算当前上下边界内每列的和
+//                 for (int j = 0; j < n; ++j)
+//                 {
+//                     colSum[j] += matrix[bottom][j];
+//                 }
+
+//                 // 应用Kadane算法找最大子数组
+//                 int currentSum = 0;
+//                 int startCol = 0;
+//                 for (int j = 0; j < n; ++j)
+//                 {
+//                     if (currentSum <= 0)
+//                     {
+//                         currentSum = colSum[j];
+//                         startCol = j;
+//                     }
+//                     else
+//                     {
+//                         currentSum += colSum[j];
+//                     }
+
+//                     if (currentSum > maxSum)
+//                     {
+//                         maxSum = currentSum;
+//                         ans[0] = top;
+//                         ans[1] = startCol;
+//                         ans[2] = bottom;
+//                         ans[3] = j;
+//                     }
+//                 }
+//             }
+//         }
+
+//         return ans;
+//     }
+// };
+
+// 面试题 17.26. 稀疏相似度 hard
+// class Solution
+// {
+// public:
+//     using PII = pair<int, int>;
+//     vector<string> computeSimilarities(vector<vector<int>> &docs)
+//     {
+//         double eps = 1e-9;
+//         unordered_map<int, vector<int>> d;
+//         for (int i = 0; i < docs.size(); ++i)
+//         {
+//             for (auto v : docs[i])
+//                 d[v].emplace_back(i);
+//         }
+
+//         map<PII, int> cnt;
+//         for (auto &[_, ids] : d)
+//         {
+//             int n = ids.size();
+//             for (int i = 0; i < n; ++i)
+//             {
+//                 for (int j = i + 1; j < n; ++j)
+//                 {
+//                     cnt[{ids[i], ids[j]}]++;
+//                 }
+//             }
+//         }
+//         vector<string> ans;
+//         for (auto &[k, v] : cnt)
+//         {
+//             auto [i, j] = k;
+//             int tot = docs[i].size() + docs[j].size() - v;
+//             double x = (double)v / tot + eps;
+//             char t[20];
+//             sprintf(t, "%d,%d: %0.4lf", i, j, x);
+//             ans.push_back(t);
+//         }
+//         return ans;
+//     }
+// };
