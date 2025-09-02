@@ -95,3 +95,29 @@ $\sin^2(x) + \cos^2(x) = 1$
 $ \mathbf{a} \cdot \mathbf{b} = \|\mathbf{a}\| \, \|\mathbf{b}\| \cos \theta $
 
 $ \theta = \arccos \left( \frac{\mathbf{a} \cdot \mathbf{b}}{\|\mathbf{a}\| \, \|\mathbf{b}\|} \right) $
+
+
+
+## 矩阵
+
+### 3D旋转公式 - Rodrigues 公式（3×3）
+
+![image-20250902134002664](C:\Users\徐浩\AppData\Roaming\Typora\typora-user-images\image-20250902134002664.png)
+
+
+
+### 缩放
+
+![image-20250902134814244](C:\Users\徐浩\AppData\Roaming\Typora\typora-user-images\image-20250902134814244.png)
+
+
+
+### 投影
+
+![image-20250902135201597](C:\Users\徐浩\AppData\Roaming\Typora\typora-user-images\image-20250902135201597.png)
+
+
+
+### 镜像
+
+![image-20250902135413088](C:\Users\徐浩\AppData\Roaming\Typora\typora-user-images\image-20250902135413088.png)
