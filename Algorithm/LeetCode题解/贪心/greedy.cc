@@ -323,3 +323,27 @@ using namespace std;
 //         return dp[n - 1][0];
 //     }
 // };
+
+// day-2025-9-4
+// 3633. 最早完成陆地和水上游乐设施的时间 I II
+// class Solution
+// {
+// public:
+//     int solove(vector<int> &firstTime, vector<int> &firstDuration, vector<int> &secondTime, vector<int> &secondDuration)
+//     {
+//         int Minfirstend = INT_MAX;
+//         int ans = INT_MAX;
+//         for (int i = 0; i < firstTime.size(); ++i)
+//             Minfirstend = min(Minfirstend, firstTime[i] + firstDuration[i]);
+
+//         for (int i = 0; i < secondTime.size(); ++i)
+//             ans = min(ans, max(Minfirstend, secondTime[i]) + secondDuration[i]);
+//         return ans;
+//     }
+//     int earliestFinishTime(vector<int> &landStartTime, vector<int> &landDuration, vector<int> &waterStartTime, vector<int> &waterDuration)
+//     {
+//         int earliest1 = solove(landStartTime, landDuration, waterStartTime, waterDuration);
+//         int earliest2 = solove(waterStartTime, waterDuration, landStartTime, landDuration);
+//         return min(earliest1, earliest2);
+//     }
+// };
