@@ -10,6 +10,7 @@ class RotationMatrix;
 
 class Matrix4x3
 {
+public:
 	// 公共数据
 
 	// 矩阵的值
