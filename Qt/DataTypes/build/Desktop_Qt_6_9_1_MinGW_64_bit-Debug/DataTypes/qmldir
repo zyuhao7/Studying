@@ -1,0 +1,5 @@
+module DataTypes
+typeinfo appDataTypes.qmltypes
+prefer :/qt/qml/DataTypes/
+Main 1.0 Main.qml
+

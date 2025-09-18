@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="/qt/qml/DataTypes">G:/resource/QML/DataTypes/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/DataTypes</file>
+
+  </qresource>
+</RCC>
