@@ -1,0 +1,5 @@
+module QML_Start
+typeinfo appQML_Start.qmltypes
+prefer :/qt/qml/QML_Start/
+Main 1.0 Main.qml
+
