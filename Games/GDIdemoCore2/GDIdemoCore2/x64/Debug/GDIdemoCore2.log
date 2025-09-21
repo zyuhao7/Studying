@@ -1,0 +1,5 @@
+﻿  GDIdemoCore2.cpp
+G:\resource\Games\GDIdemoCore2\GDIdemoCore2.cpp(137,42): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+G:\resource\Games\GDIdemoCore2\GDIdemoCore2.cpp(141,39): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+G:\resource\Games\GDIdemoCore2\GDIdemoCore2.cpp(145,40): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  GDIdemoCore2.vcxproj -> G:\resource\Games\GDIdemoCore2\x64\Debug\GDIdemoCore2.exe
