@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36327.8 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GDIdemo11", "GDIdemo11.vcxproj", "{274EFD49-8713-4021-87DA-15B5C68A3E59}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{274EFD49-8713-4021-87DA-15B5C68A3E59}.Debug|x64.ActiveCfg = Debug|x64
+		{274EFD49-8713-4021-87DA-15B5C68A3E59}.Debug|x64.Build.0 = Debug|x64
+		{274EFD49-8713-4021-87DA-15B5C68A3E59}.Debug|x86.ActiveCfg = Debug|Win32
+		{274EFD49-8713-4021-87DA-15B5C68A3E59}.Debug|x86.Build.0 = Debug|Win32
+		{274EFD49-8713-4021-87DA-15B5C68A3E59}.Release|x64.ActiveCfg = Release|x64
+		{274EFD49-8713-4021-87DA-15B5C68A3E59}.Release|x64.Build.0 = Release|x64
+		{274EFD49-8713-4021-87DA-15B5C68A3E59}.Release|x86.ActiveCfg = Release|Win32
+		{274EFD49-8713-4021-87DA-15B5C68A3E59}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {75F8BACA-CAEC-4BC9-BF07-C3F133229270}
+	EndGlobalSection
+EndGlobal

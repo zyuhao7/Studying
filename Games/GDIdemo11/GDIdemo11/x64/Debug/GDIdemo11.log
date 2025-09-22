@@ -1,0 +1,4 @@
+﻿  GDIdemo11.cpp
+G:\resource\Games\GDIdemo11\GDIdemo11.cpp(305,34): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+G:\resource\Games\GDIdemo11\GDIdemo11.cpp(307,35): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  GDIdemo11.vcxproj -> G:\resource\Games\GDIdemo11\x64\Debug\GDIdemo11.exe
