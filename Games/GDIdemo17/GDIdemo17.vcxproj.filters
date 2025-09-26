@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GDIdemo17.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GDIdemo17.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GDIdemo17.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GDIdemo17.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\bg.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\gameover.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\hero.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\herocritical.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\heromagic.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\heroslash.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\monster.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\monstercritical.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\monstermagic.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\monsterslash.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\recover.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\skillbutton1.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\skillbutton2.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\skillbutton3.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\skillbutton4.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\snow.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="GameMedia\victory.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="GameMedia\failure.wav">
+      <Filter>资源文件</Filter>
+    </Media>
+    <Media Include="GameMedia\victory.wav">
+      <Filter>资源文件</Filter>
+    </Media>
+    <Media Include="GameMedia\梦幻西游原声-战斗1-森林.wav">
+      <Filter>资源文件</Filter>
+    </Media>
+  </ItemGroup>
+</Project>
