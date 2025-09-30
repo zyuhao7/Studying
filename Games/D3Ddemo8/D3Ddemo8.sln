@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36327.8 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "D3Ddemo8", "D3Ddemo8.vcxproj", "{9D3DB575-F0F5-47D3-A0D0-FEE2D7926B32}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9D3DB575-F0F5-47D3-A0D0-FEE2D7926B32}.Debug|x64.ActiveCfg = Debug|x64
+		{9D3DB575-F0F5-47D3-A0D0-FEE2D7926B32}.Debug|x64.Build.0 = Debug|x64
+		{9D3DB575-F0F5-47D3-A0D0-FEE2D7926B32}.Debug|x86.ActiveCfg = Debug|Win32
+		{9D3DB575-F0F5-47D3-A0D0-FEE2D7926B32}.Debug|x86.Build.0 = Debug|Win32
+		{9D3DB575-F0F5-47D3-A0D0-FEE2D7926B32}.Release|x64.ActiveCfg = Release|x64
+		{9D3DB575-F0F5-47D3-A0D0-FEE2D7926B32}.Release|x64.Build.0 = Release|x64
+		{9D3DB575-F0F5-47D3-A0D0-FEE2D7926B32}.Release|x86.ActiveCfg = Release|Win32
+		{9D3DB575-F0F5-47D3-A0D0-FEE2D7926B32}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {12E7CC2C-B1D4-407A-8A3B-CF4DD7A381BB}
+	EndGlobalSection
+EndGlobal
