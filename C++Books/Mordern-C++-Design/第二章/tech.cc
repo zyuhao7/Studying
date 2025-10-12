@@ -161,14 +161,93 @@ struct Select<false, T, U>
     typedef U Result;
 };
 
-template <typename T, bool isPolymorphic>
-class NiftyContainer
+// template <typename T, bool isPolymorphic>
+// class NiftyContainer
+// {
+//     typedef Select<isPolymorphic, T *, T>::Result ValueType;
+// };
+
+#include <vector>
+template <class T, class U>
+class Conversion
 {
-    typedef Select<isPolymorphic, T *, T>::Result ValueType;
+    typedef char Small;
+    class Big
+    {
+        char dummy[2];
+    };
+    static Small Test(U);
+    static Big Test(...);
+    static T MakeT();
+
+public:
+    enum
+    {
+        exists = sizeof(Test(MakeT())) == sizeof(Small)
+    };
+};
+
+class TypeInfo
+{
+public:
+    TypeInfo();
+    TypeInfo(const std::type_info &);
+    TypeInfo(const TypeInfo &);
+    TypeInfo &operator=(const TypeInfo &);
+    bool before(const TypeInfo &) const;
+    const char *name() const;
+
+private:
+    const std::type_info *pInfo_;
+};
+// 只是一个有声明但无定义的类
+class NullType;
+
+struct EmptyType
+{
+};
+
+template <typename T>
+class TypeTraits
+{
+private:
+    template <class U>
+    struct PointerTraits
+    {
+        enum
+        {
+            result = false
+        };
+        typedef NullType PointeeType;
+    };
+
+    template <class U>
+    struct PointerTraits<U *>
+    {
+        enum
+        {
+            result = true
+        };
+        typedef U PointeeType;
+    };
+
+public:
+    enum
+    {
+        isPointer = PointerTraits<T>::result
+    };
+    typedef typename PointerTraits<T>::PointeeType PointeeType;
 };
 
 int main()
 {
     // void *somePtr = NULL;
     // char *c = safe_reinterpret_cast<char *>(somePtr);
+
+    // cout << Conversion<double, int>::exists << " "
+    //      << Conversion<char, char *>::exists << " "
+    //      << Conversion<size_t, vector<int>>::exists << endl; // 100
+
+    const bool iterIsPtr = TypeTraits<vector<int>::iterator>::isPointer;
+    cout << "vector<int>::iterator is " << iterIsPtr << endl;
 }
