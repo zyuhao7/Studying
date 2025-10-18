@@ -89,5 +89,7 @@ void Delete(T *pObj)
 
 int main()
 {
+
     std::atexit(foo); // void bar()
+    return 0;
 }
