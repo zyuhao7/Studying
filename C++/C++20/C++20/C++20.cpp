@@ -1,16 +1,606 @@
-#include <iostream>
-#include <compare>
+ï»¿#include <iostream>
 #include <vector>
-#include <algorithm>
-#include <map>
-#include <concepts>
+#include <queue>
+#include <cctype>
+#include <cmath>
 #include <string>
-
+#include <cstdint>
+#include <chrono>
+#include <map>
+#include <list>
+#include <unordered_map>
+#include <string.h>
+#include <algorithm>
+#include <stack>
+#include <type_traits>
+#include <initializer_list>
 using namespace std;
-//ÈıÂ·±È½ÏÔËËã·û <=> and operator==() = default
+
+// day-2025-12-11
+// å¼ºç±»å‹æšä¸¾
+//template<typename T>
+//std::ostream& operator<<(typename std::enable_if<std::is_enum<T>::value, std::ostream>::type& stream, const T& e)
+//{
+//    return stream << static_cast<typename std::underlying_type<T>::type>(e);
+//}
+//
+//enum Left
+//{
+//    val1 = 1,
+//    val2 = 2
+//};
+//
+//enum Right
+//{
+//    val3 = 1,
+//    val4 = 2
+//};
+//
+//enum class new_enum : unsigned int
+//{
+//    value1,
+//    value2,
+//    value3 = 100,
+//    value4 = 100
+//};
+
+//int main()
+//{
+//    if (Left::val1 == Right::val3)
+//        cout << "Left::val1 == Right::val3" << endl;
+
+    // compile err
+    //if (new_enum::value3 == 100)
+    //{
+    //    cout << "true" << endl;
+    //}
+
+//    if (new_enum::value3 == new_enum::value4)
+//        std::cout << "new_enum::value3 == new_enum::value4" << endl;
+//    cout << new_enum::value2 << endl;
+//}
+
+// å§”æ‰˜æ„é€ 
+//class Base
+//{
+//public:
+//    std::string str;
+//    int val;;
+//    Base() = delete;
+//    Base(std::string s)
+//    {
+//        str = s;
+//    }
+//    Base(std::string s, int v)
+//        :Base(s)
+//    {
+//        val = v;
+//    }
+//    virtual void foo() final
+//    {
+//        return;
+//    }
+//
+//    virtual void foo(int v)
+//    {
+//        val = v;
+//    }
+//};
+//
+//class Subclass final : public Base
+//{
+//public:
+//    double floating;
+//    Subclass() = delete;
+//
+//    Subclass(double f, int v, std::string s) : Base(s, v)
+//    {
+//        floating = f;
+//    }
+//
+//    virtual void foo(int v) override
+//    {
+//        std::cout << v << endl;
+//        val = v;
+//    }
+//};
+//
+//int main()
+//{
+//    Subclass s(1.2, 3, "abc");
+//    s.foo(1);
+//}
+
+// éç±»å‹æ¨¡æ¿
+//template <auto value> void foo() {
+//    std::cout << value << std::endl;
+//    return;
+//}
+//
+//int main() {
+//    foo<10>(); // value is deduced as type int
+//}
+
+// å¯å˜æ¨¡æ¿å‚æ•°
+// szieof...
+//template<typename... Ts>
+//void magic(Ts... args)
+//{
+//    cout << sizeof...(args) << endl;
+//}
+//
+//template<typename T0>
+//void printf1(T0 value)
+//{
+//    cout << value << endl;
+//}
+//
+//template<typename T, typename... Ts>
+//void printf1(T value, Ts... args)
+//{
+//    std::cout << value << std::endl;
+//    printf1(args...);
+//}
+//
+//template<typename T0, typename... T>
+//void printf2(T0 t0, T... t)
+//{
+//    cout << t0 << endl;
+//    if constexpr (sizeof...(t) > 0) printf2(t...);
+//}
+//
+//template<typename T, typename... Ts>
+//auto printf3(T value, Ts... args)
+//{
+//    cout << value << endl;
+//    (void)std::initializer_list<T>{([&args] {
+//        std::cout << args << endl;
+//        }(), value)...};
+//}
+//
+//int main()
+//{
+//    magic();
+//    magic(1);
+//    magic(1, "");
+//
+//    printf1(1, 2, "123", 1.1);
+//    printf2(1, 2.3, "abc");
+//    printf3(111, 123, "alpha", 1.2);
+//}
+
+//template<typename T = int, typename U = int>
+//auto add(T x, U y) -> decltype(x + y) {
+//    return x + y;
+//}
+//
+//int main() {
+//    std::cout << add(1, 2) << std::endl;
+//}
+
+
+// alias template
+//template<typename T, typename U>
+//class MagicType
+//{
+//public:
+//    T dark;
+//    U magic;
+//};
+
+// ä¸åˆæ³•, typedef ä¸æ”¯æŒæ¨¡æ¿åˆ«å.
+//template<typename T>
+//typedef MagicType<std::vector<T>, std::string> FakeDarkMagic;
+
+//typedef int(*process)(void*);
+//using NewProcess = int(*)(void*);
+//template<typename T>
+//using TrueDarkMagic = MagicType<vector<T>, std::string>;
+//
+//int main()
+//{
+//    TrueDarkMagic<bool> you;
+//}
+
+
+// external template
+//template class std::vector<bool>;
+//extern template class std::vector<double>;
+//
+//template<bool T>
+//class MagicType
+//{
+//    bool magic = T;
+//};
+//
+//int main()
+//{
+//    std::vector<vector<int>> matrix;
+//    std::vector<MagicType<(1 > 2)>> magic;
+//}
+
+
+//template<int i>
+//struct Int{};
+//
+//constexpr auto iter(Int<0>) -> Int<0>;
+//
+//template<int i>
+//constexpr auto iter(Int<i>) {
+//    return iter(Int<i - 1>{});
+//}
+//
+//int main()
+//{
+//    decltype(iter(Int<10>{})) a;
+//}
+
+
+//tail return type 
+// before c++11
+//template< typename R, typename T, typename U>
+//R add(T x, U y)
+//{
+//    return x + y;
+//}
+//
+//// after 11
+//template<typename T, typename U>
+//auto add2(T x, U y) -> decltype(x + y)
+//{
+//    return x + y;
+//}
+//
+//// after C++14
+//
+//template<typename T, typename U>
+//auto add3(T x, U y)
+//{
+//    return x + y;
+//}
+//
+//int main()
+//{
+//    int z = add<int, int, int>(1, 2);
+//    cout << z << endl;
+//
+//    auto w = add2<int, double>(1, 2.0);
+//    if (is_same<decltype(w), double>::value)
+//    {
+//        cout << "w is double: " << w << endl;
+//    }
+//    else
+//        cout << "w is int: " << w << endl;
+//
+//    auto q = add3<double, int>(1.0, 2);
+//    cout << "q: " << q << endl;
+//}
+
+// initializer_list
+//class Foo 
+//{
+//public:
+//    int m_a;
+//    int m_b;
+//    Foo(int a, int b)
+//        :m_a(a),
+//        m_b(b)
+//    {
+//    }
+//};
+//
+//class MagicFoo
+//{
+//public:
+//    std::vector<int> vec;
+//    MagicFoo(std::initializer_list<int> list)
+//    {
+//        for (std::initializer_list<int>::iterator it = list.begin(); it != list.end(); ++it)
+//        {
+//            vec.push_back(*it);
+//        }
+//    }
+//    void foo(std::initializer_list<int> list)
+//    {
+//        for (std::initializer_list<int>::iterator it = list.begin(); it != list.end(); ++it)
+//        {
+//            vec.push_back(*it);
+//        }
+//    }
+//};
+//
+//int main()
+//{
+//    int arr[3] = { 1,2,3 };
+//    Foo foo(1, 2);
+//    std::vector<int> vec = { 1,2,3,4,5 };
+//
+//    MagicFoo magicFoo = { 1,2,3,4,5 };
+//    magicFoo.foo({ 6,7,8,9 });
+//    Foo foo2{ 3,4 };
+//
+//    std::cout << "arr[0]: " << arr[0] << endl;
+//    std::cout << "foo: " << foo.m_a << ", " << foo.m_b << endl;
+//    std::cout << "vec: ";
+//    for (auto it = vec.begin(); it != vec.end(); ++it) cout << *it << " ";
+//    cout << endl;
+//
+//    std::cout << "magicFoo: ";
+//    for (auto it = magicFoo.vec.begin(); it != magicFoo.vec.end(); it++)
+//        cout << *it << " ";
+//    cout << endl;
+//
+//    cout << "foo2: " << foo2.m_a << ", " << foo2.m_b << endl;
+//}
+
+// nullptr
+//void foo(char*);
+//void foo(int);
+//
+//int main()
+//{
+//    if (std::is_same<decltype(NULL), decltype(0)>::value)
+//    {
+//        cout << "NULL == 0" << endl;
+//    }
+//    if (is_same<decltype(NULL), decltype((void*)0)>::value)
+//    {
+//        cout << "NULL == (void*)0" << endl;
+//    }
+//    if (is_same<decltype(NULL), std::nullptr_t>::value)
+//    {
+//        cout << "NULL ==  nullptr" << endl;
+//    }
+//    foo(0);
+//    foo(NULL);
+//    foo(nullptr);
+//}
+//
+//void foo(char*)
+//{
+//    std::cout << "void foo(char*)" << endl;
+//}
+//void foo(int i)
+//{
+//    std::cout << "void foo(int i)" << endl;
+//}
+
+
+
+//template <typename T>
+//int compare(const T& v1, const T& v2)
+//{
+//    cout << "use compare T&" << endl;
+//    if (v1 < v2)
+//        return -1;
+//    if (v2 < v1)
+//        return 1;
+//    return 0;
+//}
+//
+////å¸¦å­—é¢å¸¸é‡çš„æ¯”è¾ƒå‡½æ•°
+//template <size_t N, size_t M>
+//int compare(const char(&a1)[N], const char(&a2)[M])
+//{
+//    cout << "use const char (&)[N]" << endl;
+//    return strcmp(a1, a2);
+//}
+//
+//
+//void testcompare()
+//{
+//    const char* p1 = "h1";
+//    const char* p2 = "mom";
+//    //è°ƒç”¨ç‰¹ä¾‹åŒ–ç‰ˆæœ¬
+//    compare(p1, p2);
+//    //è°ƒç”¨ç¬¬äºŒä¸ªç‰ˆæœ¬
+//    compare("hi", "mom");
+//}
+//
+//int main()
+//{
+//    testcompare();
+//}
+
+
+//template<typename T>
+//void print(T val) {
+//    if constexpr (std::is_integral<T>::value)
+//        std::cout << "int\n";
+//    else
+//        std::cout << "not int\n";
+//}
+
+//template<typename T>
+//typename std::enable_if<std::is_integral<T>::value>::type
+//print(T) {
+//    std::cout << "Integral\n";
+//}
+//
+//template<typename T>
+//typename std::enable_if<std::is_floating_point<T>::value>::type
+//print(T) {
+//    std::cout << "Floating Point\n";
+//}
+
+//template<typename T>
+//struct IsPointer {
+//    static constexpr bool value = false;
+//};
+//
+//template<typename T>
+//struct IsPointer<T*> {
+//    static constexpr bool value = true;
+//};
+
+//template<int N>
+//struct Factorial {
+//    static constexpr int value = N * Factorial<N - 1>::value;
+//};
+//
+//template<>
+//struct Factorial<0> {
+//    static constexpr int value = 1;
+//};
+
+
+//uint64_t reverse_bits_simple(uint64_t x)
+//{
+//    uint64_t res = 0;
+//    for (int i = 0; i < 64; ++i)
+//    {
+//        res <<= 1;
+//        res |= (x & 1);
+//        x >>= 1;
+//    }
+//    return res;
+//}
+//
+//int main() {
+//    const int N = 10'000'000;
+//
+//    auto start = std::chrono::high_resolution_clock::now();
+//
+//    for (uint64_t i = 0; i < N; ++i) {
+//        reverse_bits_simple(i);
+//    }
+//
+//    auto end = std::chrono::high_resolution_clock::now();
+//
+//    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+//
+//    std::cout << "Time: " << elapsed << " ms\n";
+//    return 0;
+//}
+
+//double strtod(const char* str)
+//{
+//    if (str == nullptr) return 0.0;
+//    //è·³è¿‡ç©ºæ ¼
+//    while (isspace(*str)) str++;
+//
+//	//å¤„ç†æ­£è´Ÿå·
+//    bool flag = true;
+//    if(*str == '-')
+//    {
+//        flag = false;
+//        str++;
+//    }
+//    else if (*str == '+')
+//    {
+//        str++;
+//    }
+//
+//	//å¤„ç†æ•´æ•°éƒ¨åˆ†
+//    double res = 0.0;
+//    while (isdigit(*str))
+//    {
+//        res = res * 10 + (*str - '0');
+//        str++;
+//    }
+//
+//	//å¤„ç†å°æ•°éƒ¨åˆ†
+//    if (*str == '.')
+//    {
+//        ++str;
+//        double decimal = 1.0;
+//        while (isdigit(*str))
+//        {
+//            decimal /= 10;
+//            res += (*str - '0') * decimal;
+//			++str;
+//        }
+//    }
+//    //å¤„ç†æŒ‡æ•°éƒ¨åˆ†
+//    if (*str == 'e' || *str == 'E')
+//    {
+//        ++str;
+//        bool exp_flag = true;
+//        if (*str == '-')
+//        {
+//            exp_flag = false;
+//            ++str;
+//        }
+//        else if (*str == '+')
+//        {
+//            ++str;
+//        }
+//        int exp = 0;
+//        while (isdigit(*str))
+//        {
+//            exp = exp * 10 + (*str - '0');
+//            ++str;
+//        }
+//        if (exp_flag)
+//            res *= pow(10, exp);
+//        else
+//			res /= pow(10, exp);
+//    }
+//	return flag ? res : -res;
+//}
+//int main() {
+//    const char* inputs[] = {
+//        "123.456",
+//        "  -0.00123",
+//        "1.23e3",
+//        "-5.67E-2",
+//        "invalid123",
+//        "   +42"
+//    };
+//
+//    for (const auto& s : inputs) {
+//        std::cout << "Input: \"" << s << "\" -> " << strtod(s) << '\n';
+//    }
+//
+//    return 0;
+//}
+
+
+//const int N = 200005;
+//int a[N];
+//
+//int main() {
+//    int n, k;
+//    cin >> n >> k;
+//
+//    auto cmp = [](const pair<int, int>& a, const pair<int, int>& b) {
+//        return a.first < b.first; // å¤§æ ¹å †ï¼Œå¿«ä¹å€¼é«˜ä¼˜å…ˆ
+//        };
+//    priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(cmp)> pq(cmp);
+//
+//    long long ans = 0;
+//    int day = k + 1; // ç¬¬ k+1 å¤©å¼€å§‹æ¥å¾…
+//    vector<int> res(n + 1); // ä¿å­˜æ¯ä¸ªäººçš„æ¥å¾…å¤©æ•°ï¼ˆå¦‚æœè¦è¾“å‡ºï¼‰
+//
+//    for (int i = 1; i <= n; ++i) {
+//        cin >> a[i];
+//        pq.push({ a[i], i });
+//
+//        if (i >= k + 1) {
+//            auto t = pq.top(); pq.pop();
+//            ans += 1LL * t.first * (day - t.second);
+//            res[t.second] = day;
+//            day++;
+//        }
+//    }
+//
+//    while (!pq.empty()) {
+//        auto t = pq.top(); pq.pop();
+//        ans += 1LL * t.first * (day - t.second);
+//        res[t.second] = day;
+//        day++;
+//    }
+//
+//    cout << ans << endl;
+//    return 0;
+//}
+
+
+
+//ä¸‰è·¯æ¯”è¾ƒè¿ç®—ç¬¦ <=> and operator==() = default
 
 /*
-   µ±¶¨Òå <=> Ê±£¬±àÒëÆ÷»á×Ô¶¯Éú³ÉÒÔÏÂÔËËã·û£¨³ı·ÇÏÔÊ½¶¨Òå£©£º
+   å½“å®šä¹‰ <=> æ—¶ï¼Œç¼–è¯‘å™¨ä¼šè‡ªåŠ¨ç”Ÿæˆä»¥ä¸‹è¿ç®—ç¬¦ï¼ˆé™¤éæ˜¾å¼å®šä¹‰ï¼‰ï¼š
             ==, !=
            <, <=, >, >=
 */
@@ -19,7 +609,7 @@ using namespace std;
 //{
 //    int x, y;
 //
-//    // ×Ô¶¯Éú³É ==, <, >, <=, >=, !=
+//    // è‡ªåŠ¨ç”Ÿæˆ ==, <, >, <=, >=, !=
 //    auto operator<=>(const Point&) const = default;
 //};
 //
@@ -28,9 +618,9 @@ using namespace std;
 //    Point p1{ 1, 2 }, p2{ 1, 3 };
 //
 //    if (p1 < p2)
-//        std::cout << "p1 Ğ¡ÓÚ p2\n";
+//        std::cout << "p1 å°äº p2\n";
 //    if (p1 == p2)
-//        std::cout << "p1 µÈÓÚ p2\n";
+//        std::cout << "p1 ç­‰äº p2\n";
 //
 //    return 0;
 //}
@@ -43,7 +633,7 @@ using namespace std;
 //
 //    auto operator<=>(const Employee&) const = default;
 //
-//    // Ò²¿ÉÒÔµ¥¶À¶¨Òå±È½Ï·½Ê½
+//    // ä¹Ÿå¯ä»¥å•ç‹¬å®šä¹‰æ¯”è¾ƒæ–¹å¼
 //    std::strong_ordering operator<=>(int other_id) const {
 //        return id <=> other_id;
 //    }
@@ -56,10 +646,10 @@ using namespace std;
 //        {102, "Charlie", 82000.0}
 //    };
 //
-//    // Ê¹ÓÃ×Ô¶¯Éú³ÉµÄ < ÔËËã·ûÅÅĞò
+//    // ä½¿ç”¨è‡ªåŠ¨ç”Ÿæˆçš„ < è¿ç®—ç¬¦æ’åº
 //    std::sort(staff.begin(), staff.end());
 //
-//    // Ê¹ÓÃ×Ô¶¨ÒåµÄ±È½Ï
+//    // ä½¿ç”¨è‡ªå®šä¹‰çš„æ¯”è¾ƒ
 //    Employee e{ 101, "Bob", 65000.0 };
 //    if (e == 101) {
 //        std::cout << "Found employee with ID 101\n";
@@ -68,7 +658,7 @@ using namespace std;
 //    return 0;
 //}
 
-// ·¶Î§ for ÖĞµÄ³õÊ¼»¯Óï¾äºÍ³õÊ¼»¯Æ÷
+// èŒƒå›´ for ä¸­çš„åˆå§‹åŒ–è¯­å¥å’Œåˆå§‹åŒ–å™¨
 //std::vector<int> get_data() {
 //    return { 1, 2, 3, 4, 5 };
 //}
@@ -109,45 +699,45 @@ using namespace std;
 //    return 0;
 //}
 
-// Ô¼ÊøÓë¸ÅÄî
+// çº¦æŸä¸æ¦‚å¿µ
 /*
-     1. ¸ÅÄî(Concepts)
-    ¶¨Òå£º¸ÅÄîÊÇ¶ÔÄ£°å²ÎÊıµÄÒ»×éÒªÇó/Ô¼Êø
+     1. æ¦‚å¿µ(Concepts)
+    å®šä¹‰ï¼šæ¦‚å¿µæ˜¯å¯¹æ¨¡æ¿å‚æ•°çš„ä¸€ç»„è¦æ±‚/çº¦æŸ
 
-    ×÷ÓÃ£ºÖ¸¶¨Ä£°å²ÎÊı±ØĞëÂú×ãµÄÊôĞÔ
+    ä½œç”¨ï¼šæŒ‡å®šæ¨¡æ¿å‚æ•°å¿…é¡»æ»¡è¶³çš„å±æ€§
 
-    ³£ÓÃ±ê×¼¸ÅÄî
-    std::integral<T>      // TÊÇÕûĞÍ
-    std::floating_point<T> // TÊÇ¸¡µãĞÍ
-    std::derived_from<T, U> // TÅÉÉú×ÔU
-    std::convertible_to<T, U> // T¿É×ª»»ÎªU
-    std::invocable<F, Args...> // F¿ÉÊ¹ÓÃArgsµ÷ÓÃ
+    å¸¸ç”¨æ ‡å‡†æ¦‚å¿µ
+    std::integral<T>      // Tæ˜¯æ•´å‹
+    std::floating_point<T> // Tæ˜¯æµ®ç‚¹å‹
+    std::derived_from<T, U> // Tæ´¾ç”Ÿè‡ªU
+    std::convertible_to<T, U> // Tå¯è½¬æ¢ä¸ºU
+    std::invocable<F, Args...> // Få¯ä½¿ç”¨Argsè°ƒç”¨
 
-    Óï·¨£ºtemplate<typename T> concept Name = constraint;
+    è¯­æ³•ï¼štemplate<typename T> concept Name = constraint;
 
-    2. Ô¼Êø(Constraints)
-    ¶¨Òå£º¶ÔÄ£°å²ÎÊıµÄ¾ßÌåÏŞÖÆÌõ¼ş
+    2. çº¦æŸ(Constraints)
+    å®šä¹‰ï¼šå¯¹æ¨¡æ¿å‚æ•°çš„å…·ä½“é™åˆ¶æ¡ä»¶
 
-    ĞÎÊ½£º¿ÉÒÔÊÇÂß¼­×éºÏµÄ¶à¸öÒªÇó
+    å½¢å¼ï¼šå¯ä»¥æ˜¯é€»è¾‘ç»„åˆçš„å¤šä¸ªè¦æ±‚
 */
 
 
-// ¶¨Òå×Ô¶¨Òå¸ÅÄî
+// å®šä¹‰è‡ªå®šä¹‰æ¦‚å¿µ
 //template<typename T>
 //concept Addable = requires(T a, T b) {
-//    { a + b } -> std::same_as<T>; // ÒªÇóa+b·µ»ØTÀàĞÍ
+//    { a + b } -> std::same_as<T>; // è¦æ±‚a+bè¿”å›Tç±»å‹
 //};
 //
 //template<typename T>
 //concept Printable = requires(std::ostream & os, T t) {
-//    { os << t } -> std::same_as<std::ostream&>; // ÒªÇóÖ§³Ö<<²Ù×÷
+//    { os << t } -> std::same_as<std::ostream&>; // è¦æ±‚æ”¯æŒ<<æ“ä½œ
 //};
 //
-////// a) ¼òĞ´º¯ÊıÄ£°å
+////// a) ç®€å†™å‡½æ•°æ¨¡æ¿
 ////void print(const Printable auto& value) {
 ////    std::cout << value << '\n';
 ////}
-////// b) ´«Í³Ä£°åÓï·¨
+////// b) ä¼ ç»Ÿæ¨¡æ¿è¯­æ³•
 ////template<Printable T>
 ////void print(const T& value) {
 ////    std::cout << value << '\n';
@@ -161,7 +751,7 @@ using namespace std;
 //    return sum;
 //}
 //
-//// ×éºÏ¸ÅÄî
+//// ç»„åˆæ¦‚å¿µ
 //template<typename T>
 //concept Numeric = std::integral<T> || std::floating_point<T>;
 //
@@ -169,16 +759,16 @@ using namespace std;
 //concept AddableAndPrintable = Addable<T> && Printable<T>;
 //
 //
-//// requires ±í´ïÊ½ÓÃÓÚ¶¨Òå¸ü¸´ÔÓµÄÒªÇó
+//// requires è¡¨è¾¾å¼ç”¨äºå®šä¹‰æ›´å¤æ‚çš„è¦æ±‚
 //template<typename T>
 //concept Container = requires(T c) {
-//    c.begin();      // ±ØĞëÓĞbegin()·½·¨
-//    c.end();        // ±ØĞëÓĞend()·½·¨
+//    c.begin();      // å¿…é¡»æœ‰begin()æ–¹æ³•
+//    c.end();        // å¿…é¡»æœ‰end()æ–¹æ³•
 //    c.clear();
 //    typename T::iterator;
-//	{ c.size() } -> std::same_as<size_t>; // size()·µ»Øsize_tÀàĞÍ
-//	{ c.push_back(std::declval<typename T::value_type>()) }; // push_back()·½·¨
-//    typename T::value_type; // ±ØĞëÓĞvalue_type³ÉÔ±ÀàĞÍ
+//	{ c.size() } -> std::same_as<size_t>; // size()è¿”å›size_tç±»å‹
+//	{ c.push_back(std::declval<typename T::value_type>()) }; // push_back()æ–¹æ³•
+//    typename T::value_type; // å¿…é¡»æœ‰value_typeæˆå‘˜ç±»å‹
 //};
 
 
@@ -194,7 +784,7 @@ using namespace std;
 //	return 0;
 //}
 // 
-// ÅÅĞòËã·¨Ô¼Êø
+// æ’åºç®—æ³•çº¦æŸ
 //template<typename Iter>
 //concept RadomAccessIterator = requires(Iter it)
 //{
