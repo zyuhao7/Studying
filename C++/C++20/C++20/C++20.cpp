@@ -14,7 +14,205 @@
 #include <stack>
 #include <type_traits>
 #include <initializer_list>
+#include <utility>
+#include <memory>
+#include <functional>
 using namespace std;
+
+// day-2025-12-14
+
+//void reference(int& v)
+//{
+//    cout << "lvalue reference" << endl;
+//}
+//
+//void reference(int&& v)
+//{
+//    cout << "rvalue reference" << endl;
+//}
+//
+//template<typename T>
+//void pass(T&& v)
+//{
+//    cout << "normal param passing: ";
+//    reference(v);
+//
+//    cout << "std::move param passing: ";
+//    reference(std::move(v));
+//
+//    std::cout << "std::forward param passing: ";
+//    reference(std::forward<T>(v));
+//
+//    cout << "static_cast<T&&> param passing: ";
+//    reference(static_cast<T&&>(v));
+//}
+//
+//int main()
+//{
+//    cout << "rvalue pass: " << endl;
+//    pass(1);
+//
+//    cout << "lvalue pass: " << endl;
+//    int l = 1;
+//    pass(l);
+//}
+
+//class A
+//{
+//public:
+//    int* pointer;
+//    A() :pointer(new int(1))
+//    {
+//        cout << "construct " << pointer << endl;
+//    }
+//    A(A& a) :pointer(new int(*a.pointer))
+//    {
+//        cout << "copy " << pointer << endl;
+//    }
+//    A(A&& a) :pointer(a.pointer)
+//    {
+//        a.pointer = nullptr;
+//        cout << "move " << pointer << endl;
+//    }
+//    ~A()
+//    {
+//        cout << "destruct " << pointer << endl;
+//        delete pointer;
+//    }
+//};
+//
+//A return_rvalue(bool test)
+//{
+//    A a, b;
+//    if (test) return a;
+//    else
+//        return b;
+//}
+//int main()
+//{
+//    A obj = return_rvalue(false);
+//    cout << "obj:" << " ";
+//    cout << obj.pointer << " " << *obj.pointer << endl;
+//}
+
+
+//void reference(std::string& str)
+//{
+//    cout << "lvalue " << endl;
+//}
+//
+//void reference(std::string&& str)
+//{
+//    cout << "rvalue" << endl;
+//}
+//
+//int main()
+//{
+//    string lv1 = "string ";
+//    string&& rv1 = std::move(lv1);
+//    cout << rv1 << endl;
+//
+//    const std::string& lv2 = lv1 + lv1;
+//    cout << lv2 << endl;
+//
+//    std::string&& rv2 = lv1 + lv2;
+//
+//    reference(rv2);
+//
+//    rv2 += "string";
+//    cout << rv2 << endl;
+//
+//    reference(rv2);
+//
+//
+//}
+
+//using foo = void(int);
+//void functional(foo f)
+//{
+//    f(1);
+//}
+//
+//int foo2(int para)
+//{
+//    return para;
+//}
+//
+//int foo3(int a, int b, int c)
+//{
+//    return 0;
+//}
+//
+//int main()
+//{
+//    auto f = [](int val)
+//        {
+//            std::cout << val << endl;
+//        };
+//    functional(f);
+//    f(1);
+//
+//    std::function<int(int)> func = foo2;
+//    int important = 10;
+//    std::function<int(int)> func2 = [&](int val) ->int
+//        {
+//            return 1 + val + important;
+//        };
+//    cout << func(10) << endl;
+//    cout << func2(10) << endl;
+//
+//    auto bindFoo = std::bind(foo3, std::placeholders::_1, 1, 2);
+//    bindFoo(1);
+//}
+
+
+//void lambda_value_capture() {
+//    int value = 1;
+//    auto copy_value = [value] {
+//        return value;
+//        };
+//    value = 100;
+//    auto stored_value = copy_value();
+//    std::cout << "stored_value = " << stored_value << std::endl;
+//}
+//
+//void lambda_reference_capture() {
+//    int value = 1;
+//    auto copy_value = [&value] {
+//        return value;
+//        };
+//    value = 100;
+//    auto stored_value = copy_value();
+//    std::cout << "stored_value = " << stored_value << std::endl;
+//    // At this moment, stored_value == 100, value == 100.
+//    // Because copy_value stores reference
+//}
+//
+//void lambda_expression_capture() {
+//    auto important = std::make_unique<int>(1);
+//    auto add = [v1 = 1, v2 = std::move(important)](int x, int y) -> int {
+//        return x + y + v1 + (*v2);
+//        };
+//    std::cout << add(3, 4) << std::endl;
+//}
+//
+//void lambda_generic() {
+//    auto generic = [](auto x, auto y) {
+//        return x + y;
+//        };
+//
+//    std::cout << generic(1, 2) << std::endl;
+//    std::cout << generic(1.1, 2.2) << std::endl;
+//}
+//
+//int main()
+//{
+//    lambda_value_capture();
+//    lambda_reference_capture();
+//    lambda_expression_capture();
+//    lambda_generic();
+//}
+
 
 // day-2025-12-11
 // 强类型枚举
