@@ -17,7 +17,145 @@
 #include <utility>
 #include <memory>
 #include <functional>
+#include <tuple>
+#include <variant>
+#include <array>
 using namespace std;
+
+// day-2025-12-15
+
+//auto get_student(int id)
+//{
+//    if (id == 0)
+//        return std::make_tuple(3.8, 'A', "John");
+//    if (id == 1)
+//        return std::make_tuple(2.9, 'C', "Jack");
+//    if (id == 2)
+//        return std::make_tuple(1.7, 'B', "Ive");
+//    return std::make_tuple(0.0, 'D', "null");
+//}
+//
+//template<size_t n, typename... T>
+//constexpr std::variant<T...> _tuple_index(const std::tuple<T...>& tpl, size_t i)
+//{
+//    if constexpr (n >= sizeof...(T))
+//        throw out_of_range("out of range.");
+//    if (i == n)
+//        return variant<T...>{in_place_index<n>, get<n>(tpl)};
+//    return _tuple_index<(n < sizeof...(T) - 1 ? n + 1 : 0)> (tpl, i);
+//}
+//
+//template<typename... T>
+//constexpr std::variant<T...> tuple_index(const std::tuple<T...>& tpl, size_t i)
+//{
+//    return _tuple_index<0>(tpl, i);
+//}
+//
+//template<typename T>
+//auto tuple_len(T& tpl)
+//{
+//    return std::tuple_size<T>::value;
+//}
+//
+//template<typename T0, typename... Ts>
+//std::ostream& operator<<(std::ostream& s, std::variant<T0, Ts...> const& v)
+//{
+//    std::visit([&](auto&& x) {s << x;}, v);
+//    return s;
+//}
+//
+//int main()
+//{
+//    auto student = get_student(0);
+//    std::cout << "ID: 0, "
+//        << "GPA: " << std::get<0>(student) << ", "
+//        << "Grade: " << std::get<1>(student) << ", "
+//        << "Name: " << std::get<2>(student) << '\n';
+//
+//    double gpa;
+//    char grade;
+//    std::string name;
+//
+//    std::tie(gpa, grade, name) = get_student(1);
+//    std::cout << "ID: 1, "
+//        << "GPA: " << gpa << ", "
+//        << "Grade: " << grade << ", "
+//        << "Name: " << name << '\n';
+//
+//    std::tuple<std::string, double, double, int> t("123", 4.5, 6.7, 8);
+//    std::cout << std::get<std::string>(t) << std::endl;
+//    // std::cout << std::get<double>(t) << std::endl;   // illegal, runtime error
+//    std::cout << std::get<3>(t) << std::endl;
+//
+//    // concat
+//    auto new_tuple = std::tuple_cat(get_student(1), std::move(t));
+//
+//    // iteration
+//    for (int i = 0; i != tuple_len(new_tuple); ++i) {
+//        std::cout << tuple_index(new_tuple, i) << std::endl; // runtime indexing
+//    }
+//}
+//int main()
+//{
+//    unordered_map<int, string> u = {
+//        {1, "1"},
+//        {3, "3"},
+//        {2, "2"}
+//    };
+//    map<int, string> v = {
+//    {1, "1"},
+//    {3, "3"},
+//    {2, "2"}
+//    };
+//
+//    cout << "unordered_map: " << endl;
+//    for (const auto& n : u)
+//        cout << "Key:[" << n.first << "] Value:[" << n.second << "]\n";
+//    cout << endl;
+//    
+//    cout << "map: " << endl;
+//    for(const auto& n : v)
+//        cout << "Key:[" << n.first << "] Value:[" << n.second << "]\n";
+//
+//}
+
+//void foo(int* p, int len)
+//{
+//    for (int i = 0; i < len; ++i)
+//        cout << p[i] << endl;
+//}
+//
+//int main()
+//{
+//    vector<int> v;
+//    cout <<"size:"<< v.size() << endl; // 0
+//    cout << "capacity:" << v.capacity() << endl;  // 0
+//
+//    v.push_back(1);
+//    v.push_back(2);
+//    v.push_back(3);
+//    v.push_back(4);
+//    v.push_back(4);
+//
+//    cout << "size:" << v.size() << endl; // 3
+//    cout << "capacity:" << v.capacity() << endl;  // 4
+//
+//    v.clear();
+//    cout << "size:" << v.size() << endl; // 0
+//    cout << "capacity:" << v.capacity() << endl;  // 6
+//    
+//    v.shrink_to_fit();
+//    cout << "size:" << v.size() << endl; // 0
+//    cout << "capacity:" << v.capacity() << endl;  // 0
+//
+//    array<int, 4> arr = { 1,4,3,2 };
+//    foo(&arr[0], arr.size());
+//    foo(arr.data(), arr.size());
+//    
+//    sort(arr.begin(), arr.end());
+//    for (auto& i : arr)
+//        cout << i << endl;
+//}
 
 // day-2025-12-14
 
