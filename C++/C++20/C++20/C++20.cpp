@@ -20,7 +20,119 @@
 #include <tuple>
 #include <variant>
 #include <array>
+#include <regex>
 using namespace std;
+
+//day-2025-12-16
+//int main()
+//{
+//    string fanmes[] = { "foo.txt", "bar.txt", "test", "a0.txt", "AAA.txt" };
+//    regex txt_regex("[a-z]+\\.txt");
+//    for (const auto& fname : fanmes)
+//    {
+//        cout << fname << ": " << regex_match(fname, txt_regex) << endl;
+//    }
+//
+//    std::regex base_regex("([a-z]+)\\.txt");
+//    std::smatch base_match;
+//    for (const auto& fname : fanmes) {
+//        if (std::regex_match(fname, base_match, base_regex)) {
+//            // the first element of std::smatch matches the entire string
+//            // the second element of std::smatch matches the first expression with brackets
+//            if (base_match.size() == 2) {
+//                std::string base = base_match[1].str();
+//                std::cout << "sub-match[0]: " << base_match[0].str() << std::endl;
+//                std::cout << fname << " sub-match[1]: " << base << std::endl;
+//            }
+//        }
+//    }
+//}
+//class A;
+//class B;
+//
+//class A
+//{
+//public:
+//    shared_ptr<B> pointer;
+//    ~A() {
+//        cout << "~A" << endl;
+//    }
+//};
+//class B
+//{
+//public:
+//    weak_ptr<A> pointer;
+//    ~B()
+//    {
+//        cout << "~B" << endl;
+//    }
+//};
+//
+//int main()
+//{
+//    shared_ptr<A> a = make_shared<A>();
+//    shared_ptr<B> b = make_shared<B>();
+//    a->pointer = b;
+//    b->pointer = a;
+//
+//}
+
+//struct Foo
+//{
+//    Foo() { cout << "Foo::Foo" << endl; }
+//    ~Foo() { cout << "Foo::~Foo"<<endl; }
+//    void foo() { cout << "Foo::foo" << endl; }
+//};
+//
+//void f(const Foo&)
+//{
+//    cout << "f(const Foo&)" << endl;
+//}
+//
+//int main()
+//{
+//    unique_ptr<Foo> p1(std::make_unique<Foo>());
+//    if (p1)
+//        p1->foo();
+//    {
+//        std::unique_ptr<Foo> p2(std::move(p1));
+//        f(*p2);
+//        if (p2)
+//            p2->foo();
+//        if (p1)
+//            p1->foo();
+//        p1 = std::move(p2);
+//        if (p2)
+//            p2->foo();
+//        cout << "p2 was destroyed" << endl;
+//    }
+//    if (p1) p1->foo();
+//}
+
+//void foo(std::shared_ptr<int> i)
+//{
+//    (*i)++;
+//}
+//
+//int main()
+//{
+//    auto ptr1 = std::make_shared<int>(10);
+//    auto ptr2 = ptr1;
+//    auto ptr3 = ptr1;
+//
+//    foo(ptr1);
+//    cout << *ptr1 << endl;
+//    int* p = ptr1.get();
+//    cout << ptr1.use_count() << " " << ptr2.use_count() << " " << ptr3.use_count() << endl;
+//
+//    ptr2.reset();
+//    cout << ptr1.use_count() << " " << ptr2.use_count() << " " << ptr3.use_count() << endl;
+//
+//    ptr3.reset();
+//    cout << ptr1.use_count() << " " << ptr2.use_count() << " " << ptr3.use_count() << endl;
+//
+//}
+
 
 // day-2025-12-15
 
