@@ -21,7 +21,243 @@
 #include <variant>
 #include <array>
 #include <regex>
+#include <thread>
+#include <mutex>
+#include <future>
+#include <condition_variable>
+#include <atomic>
+
 using namespace std;
+//day-2025-12-17
+//struct Storage {
+//    char      a;
+//    int       b;
+//    double    c;
+//    long long d;
+//};
+//
+//struct alignas(std::max_align_t) AlignasStorage {
+//    char      a;
+//    int       b;
+//    double    c;
+//    long long d;
+//};
+//
+//int main() {
+//    std::cout << alignof(Storage) << std::endl;
+//    std::cout << alignof(AlignasStorage) << std::endl;
+//    return 0;
+//}
+
+//std::string operator"" _wow1(const char* wow1, size_t len) {
+//    return std::string(wow1) + "woooooooooow, amazing";
+//}
+//
+//std::string operator""_wow2(unsigned long long i) {
+//    return std::to_string(i) + "woooooooooow, amazing";
+//}
+//
+//int main() {
+//    std::string str = R"(C:\\File\\To\\Path)";
+//    std::cout << str << std::endl;
+//
+//    int value = 0b1001010101010;
+//    std::cout << value << std::endl;
+//
+//
+//    auto str2 = "abc"_wow1;
+//    auto num = 1_wow2;
+//    std::cout << str2 << std::endl;
+//    std::cout << num << std::endl;
+//    return 0;
+//}
+
+
+
+//void may_throw()
+//{
+//    throw true;
+//}
+//
+//auto non_block_throw = []() {
+//    may_throw();
+//    };
+//
+//void no_throw() noexcept
+//{
+//    return;
+//}
+//
+//auto block_throw = []() noexcept
+//{
+//    no_throw();
+// };
+//
+//int main()
+//{
+//    cout<<boolalpha
+//        << "may_throw() noexcept? " << noexcept(may_throw()) << std::endl
+//        << "no_throw() noexcept? " << noexcept(no_throw()) << std::endl
+//        << "lmay_throw() noexcept? " << noexcept(non_block_throw()) << std::endl
+//        << "lno_throw() noexcept? " << noexcept(block_throw()) << std::endl;
+//
+//    try {
+//        may_throw();
+//    }
+//    catch (...)
+//    {
+//        cout << "exception captured from may_throw()" << endl;
+//    }
+//    try {
+//        non_block_throw();
+//    }
+//    catch (...) {
+//        std::cout << "exception captured from non_block_throw()" << std::endl;
+//    }
+//
+//    try {
+//        block_throw();
+//    }
+//    catch (...) {
+//        std::cout << "exception captured from block_throw()" << std::endl;
+//    }
+//}
+
+//struct A
+//{
+//    float x;
+//    int y;
+//    long long z;
+//};
+//
+//int main()
+//{
+//    atomic<A> a;
+//    cout << boolalpha << a.is_lock_free() << endl;
+//    std::cout << "atomic<bool>: " << std::atomic<bool>{}.is_lock_free() << std::endl;
+//}
+
+//atomic<int> cnt = { 0 };
+
+//int main()
+//{
+//    int a = 0;
+//    volatile int flag = 0;
+//
+//    std::thread t1([&]() {
+//        while (flag != 1);
+//
+//        int b = a;
+//        std::cout << "b = " << b << std::endl;
+//        });
+//
+//    std::thread t2([&]() {
+//        a = 5;
+//        flag = 1;
+//        });
+//
+//    t1.join();
+//    t2.join();
+    
+    //thread t1([]() {
+    //    cnt.fetch_add(1);
+    //    });
+    //thread t2([]() {
+    //    cnt++;
+    //    cnt += 1;
+    //    });
+    //t1.join();
+    //t2.join();
+    //cout << cnt << endl;
+//}
+
+//int main()
+//{
+//    queue<int> produced_nums;
+//    mutex mtx;
+//    condition_variable cv;
+//    bool notified = false;
+//
+//    auto Producer = [&]() {
+//        for (int i = 0; ; i++)
+//        {
+//            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+//            std::unique_lock<mutex> lock(mtx);
+//            cout << "producting: " << i << endl;
+//            produced_nums.push(i);
+//            notified = true;
+//            cv.notify_all();
+//        }
+//    };
+//
+//    auto Consumer = [&]() {
+//        while (true)
+//        {
+//            std::unique_lock<mutex> lock(mtx);
+//            cv.wait(lock, [&]() {
+//                return !produced_nums.empty() || notified;
+//                });
+//            if (notified && produced_nums.empty()) break;
+//
+//            cout << "consuming: " << produced_nums.front() << endl;
+//            produced_nums.pop();
+//            lock.unlock();
+//
+//            notified = false;
+//            std::this_thread::sleep_for(chrono::milliseconds(1000));
+//        }
+//    };
+//
+//    thread p(Producer);
+//    thread cs[2];
+//    for (int i = 0; i < 2; ++i)
+//        cs[i] = thread(Consumer);
+//    p.join();
+//    for (int i = 0; i < 2; ++i) cs[i].join();
+//}
+
+//int main()
+//{
+//    std::packaged_task<int()> task([]() {return 7;});
+//
+//    std::future<int> result = task.get_future();
+//    std::thread(std::move(task)).detach();
+//    cout << "waiting ...";
+//    
+//    result.wait();
+//    cout << "done!" << endl << "future result is : " << result.get() << endl;
+//}
+
+//int v = 1;
+//void critical_section(int change_v)
+//{
+//    static std::mutex mtx;
+//    // lock_guard<mutex> lock(mtx);
+//    unique_lock<mutex> lock(mtx);
+//    v = change_v;
+//    cout << v << endl;
+//    lock.unlock();
+//
+//
+//    lock.lock();
+//    v += 1;
+//    cout << v << endl;
+//}
+//
+//int main()
+//{
+//    //std::thread t([]() {
+//    //    cout << "hello world!" << endl;
+//    //    });
+//    //t.join();
+//    
+//    std::thread t1(critical_section, 2), t2(critical_section, 3);
+//    t1.join();
+//    t2.join();
+//    //cout << v << endl; // 2 | 3
+//
+//    return 0;
+//}
 
 //day-2025-12-16
 //int main()
