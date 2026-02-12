@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -5,6 +6,9 @@
 #include <ranges>
 #include <algorithm>
 #include <cassert>
+#include <cstdio>
+#include <filesystem>
+#include <stdexcept>
 #include "Document.h"
 #include "Report.h"
 #include "Note.h"
@@ -380,6 +384,9 @@
 //		{
 //			return lhs->getTitle() == rhs->getTitle();
 //		});
+//		std::cout << "===========" << std::endl;
+//		for (auto it = first; it != last; ++it)
+//			std::cout << (*it)->title_ << " ";
 //		open_docs.erase(first, last);
 //		std::println("\n Unique");
 //		DisplayTitle(open_docs);
@@ -426,111 +433,275 @@
 //	}
 //}
 
-namespace RawPtrToVector
-{
-	class Application
-	{
-		std::vector<Document*> m_Documents{};
-	public:
-		void List()
-		{
-			for (auto& d : m_Documents)
-			{
-				d->Display();
-				std::println();
-			}
-		}
-		void Add(Document* p)
-		{
-			m_Documents.emplace_back(p);
-		}
-		void Remove(size_t index)
-		{
-			auto to_delete = m_Documents[index];
-			m_Documents.erase(m_Documents.begin() + index);
-			delete to_delete;
-		}
-		Document* GetAt(size_t index)
-		{
-			assert(index < m_Documents.size());
-			return m_Documents[index];
-		}
-		size_t Count() const
-		{
-			return m_Documents.size();
-		}
-		~Application()
-		{
-			for (auto doc : m_Documents)
-				delete doc;
-		}
-		
-	};
-	void ShowProperties(const Document* p)
-	{
-		std::println("====== PROPERTIES =====");
-		auto pDoc = const_cast<Document*>(p);
+//namespace RawPtrToVector
+//{
+//	class Application
+//	{
+//		std::vector<Document*> m_Documents{};
+//	public:
+//		void List()
+//		{
+//			for (auto& d : m_Documents)
+//			{
+//				d->Display();
+//				std::println();
+//			}
+//		}
+//		void Add(Document* p)
+//		{
+//			m_Documents.emplace_back(p);
+//		}
+//		void Remove(size_t index)
+//		{
+//			auto to_delete = m_Documents[index];
+//			m_Documents.erase(m_Documents.begin() + index);
+//			delete to_delete;
+//		}
+//		Document* GetAt(size_t index)
+//		{
+//			assert(index < m_Documents.size());
+//			return m_Documents[index];
+//		}
+//		size_t Count() const
+//		{
+//			return m_Documents.size();
+//		}
+//		~Application()
+//		{
+//			for (auto doc : m_Documents)
+//				delete doc;
+//		}
+//		
+//	};
+//	void ShowProperties(const Document* p)
+//	{
+//		std::println("====== PROPERTIES =====");
+//		auto pDoc = const_cast<Document*>(p);
+//
+//		if (auto report = dynamic_cast<Report*>(pDoc); report)
+//		{
+//			std::println("[Report:{}", pDoc->getTitle());
+//			std::println("[Author:{}", report->getAuthor());
+//		}
+//		else if (auto note = dynamic_cast<Note*>(pDoc); note)
+//		{
+//			std::println("[Report:{}", note->getTitle());
+//			std::println("[Author:{}", note->GetTags());
+//		}
+//		else
+//			std::println("[Document: {}", pDoc->getTitle());
+//	}
+//
+//	void Init(Application& app)
+//	{
+//		Document* p1 = new Document{ "C++ Best Practices" };
+//		p1->addContent("Prefer smart pointers over raw ptrs");
+//		Report* rp1 = new Report{ "Expenses",  "Umar" };
+//		rp1->addContent("Fuel - 1200 \n");
+//		rp1->addContent("Food - 800");
+//		Note* n1 = new Note{ "Groceries" };
+//		n1->addContent("Milk");
+//		n1->addContent("Eggs");
+//		n1->addContent("Bread");
+//		n1->addContent("Apple");
+//		n1->AddTag("personal");
+//		n1->AddTag("todo");
+//		app.Add(p1);
+//		app.Add(rp1);
+//		app.Add(n1);
+//	}
+//	void Main()
+//	{
+//		Application app{};
+//		Init(app);
+//		app.List();
+//		app.Remove(1);
+//		ShowProperties(app.GetAt(1));
+//	}
+//}
+//namespace SmartPtrToVector
+//{
+//	class Application
+//	{
+//		std::vector<std::shared_ptr<Document>> m_Documents{};
+//	public:
+//		void List()
+//		{
+//			for (auto& d : m_Documents)
+//			{
+//				d->Display();
+//				std::println();
+//			}
+//		}
+//		void Add(std::shared_ptr<Document> p)
+//		{
+//			m_Documents.emplace_back(std::move(p));
+//		}
+//		void Remove(size_t index)
+//		{
+//			m_Documents.erase(m_Documents.begin() + index);
+//		}
+//		std::shared_ptr<Document> GetAt(size_t index)
+//		{
+//			assert(index < m_Documents.size());
+//			return m_Documents[index];
+//		}
+//		size_t Count() const
+//		{
+//			return m_Documents.size();
+//		}
+//	};
+//	void ShowProperties(const std::shared_ptr<Document> p)
+//	{
+//		std::println("====== PROPERTIES =====");
+//		auto pDoc = std::const_pointer_cast<Document>(p);
+//
+//		if (auto report = std::dynamic_pointer_cast<Report>(pDoc); report)
+//		{
+//			std::println("[Report:{}", pDoc->getTitle());
+//			std::println("[Author:{}", report->getAuthor());
+//		}
+//		else if (auto note = std::dynamic_pointer_cast<Note>(pDoc); note)
+//		{
+//			std::println("[Report:{}", note->getTitle());
+//			std::println("[Author:{}", note->GetTags());
+//		}
+//		else
+//			std::println("[Document: {}", pDoc->getTitle());
+//	}
+//
+//	void Init(Application& app)
+//	{
+//		std::shared_ptr<Document>p1{ new Document{ "C++ Best Practices" } };
+//		p1->addContent("Prefer smart pointers over raw ptrs");
+//		std::shared_ptr<Report> rp1{ new Report{ "Expenses",  "Umar" } };
+//		rp1->addContent("Fuel - 1200 \n");
+//		rp1->addContent("Food - 800");
+//		std::shared_ptr<Note> n1{ new Note{ "Groceries" } };
+//		n1->addContent("Milk");
+//		n1->addContent("Eggs");
+//		n1->addContent("Bread");
+//		n1->addContent("Apple");
+//		n1->AddTag("personal");
+//		n1->AddTag("todo");
+//		app.Add(p1);
+//		app.Add(rp1);
+//		app.Add(n1);
+//	}
+//	void Main()
+//	{
+//		Application app{};
+//		Init(app);
+//		app.List();
+//		app.Remove(1);
+//		ShowProperties(app.GetAt(1));
+//	}
+//}
 
-		if (auto report = dynamic_cast<Report*>(pDoc); report)
-		{
-			std::println("[Report:{}", pDoc->getTitle());
-			std::println("[Author:{}", report->getAuthor());
-		}
-		else if (auto note = dynamic_cast<Note*>(pDoc); note)
-		{
-			std::println("[Report:{}", note->getTitle());
-			std::println("[Author:{}", note->GetTags());
-		}
-		else
-			std::println("[Document: {}", pDoc->getTitle());
-	}
 
-	void Init(Application& app)
-	{
-		Document* p1 = new Document{ "C++ Best Practices" };
-		p1->addContent("Prefer smart pointers over raw ptrs");
-		Report* rp1 = new Report{ "Expenses",  "Umar" };
-		rp1->addContent("Fuel - 1200 \n");
-		rp1->addContent("Food - 800");
-		Note* n1 = new Note{ "Groceries" };
-		n1->addContent("Milk");
-		n1->addContent("Eggs");
-		n1->addContent("Bread");
-		n1->addContent("Apple");
-		n1->AddTag("personal");
-		n1->AddTag("todo");
-		app.Add(p1);
-		app.Add(rp1);
-		app.Add(n1);
-	}
-	void Main()
-	{
-		Application app{};
-		Init(app);
-		app.List();
-		app.Remove(1);
-		ShowProperties(app.GetAt(1));
-	}
-}
-int main()
-{
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	//SimpleUsage::Raw::Main();
-	//SimpleUsage::Smart::Main();
-	//Sharing::Raw::Main();
+//int main()
+//{
+//	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+//
+//	//SimpleUsage::Raw::Main();
+//	//SimpleUsage::Smart::Main();
+//	//Sharing::Raw::Main();
+//
+//	//ReturnType::Raw::Main();
+//	//Argument::Raw::Main();
+//	//Argument::Smart::Main();
+//
+//	//Raw::Main();
+//
+//	//Example::Raw::Main();
+//	//Example::Smart::Main();
+//
+//	//Raw::Main();
+//	//Smart::Main();
+//
+//	//RawPtrToVector::Main();
+//	//SmartPtrToVector::Main();
+//}
 
-	//ReturnType::Raw::Main();
-	//Argument::Raw::Main();
-	//Argument::Smart::Main();
 
-	//Raw::Main();
+//int main()
+//{
+//	std::shared_ptr<int> p1{ new int{5} };
+//	std::println("Use count:{}", p1.use_count());
+//	{
+//		auto p2 = p1;
+//		std::println("Use count:{}", p2.use_count());
+//	}
+//	std::println("Use count:{}", p1.use_count());
+//
+//}
 
-	//Example::Raw::Main();
-	//Example::Smart::Main();
+//namespace Raw
+//{
+//	void Main(const char* filename)
+//	{
+//		FILE* fp = std::fopen(filename, "r");
+//		if (!fp)
+//			throw std::logic_error{ "Could not open file" };
+//
+//		auto file_len = std::filesystem::file_size(filename);
+//		char* file_content = new char[file_len + 1] {};
+//		if (!fread(file_content, 1, file_len, fp))
+//		{
+//			throw std::logic_error("could not read from file");
+//		}
+//		std::println("{}", file_content);
+//		delete[] file_content;
+//		fclose(fp);
+//	}
+//}
 
-	//Raw::Main();
-	//Smart::Main();
+//int main()
+//{
+//	try
+//	{
+//		Raw::Main("main.cc");
+//	}
+//	catch (const std::exception& e)
+//	{
+//		std::println("Exception -> {}", e.what());
+//	}
+//}
 
-	//RawPtrToVector::Main();
-}
+
+//int main()
+//{
+//	//std::shared_ptr<Document>pDoc{ new Document[2]{} ,[](Document* p) {
+//	//	delete[] p;
+//	//	}};
+//	std::shared_ptr<Document[]>pDoc{new Document[2]{} }; //c++17
+//	pDoc[0].setTitle("1");
+//
+//	pDoc.get()[0].setTitle("First");
+//	pDoc.get()[1].setTitle("Second");
+//
+//	std::println("{}", pDoc.get()[0].getTitle());
+//	std::println("{}", pDoc.get()[1].getTitle());
+//
+//}
+
+//void* operator new(size_t size)
+//{
+//	void* ptr = malloc(size);
+//	printf("  new : %p\n", ptr);
+//	return ptr;
+//}
+//void operator delete(void* ptr) noexcept
+//{
+//	printf(" delete : %p\n", ptr);
+//	free(ptr);
+//}
+//
+//int main()
+//{
+//	std::shared_ptr<int>p{ new int{3} };
+//	printf("%d\n", *p);
+//}
+
+
