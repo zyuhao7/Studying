@@ -689,7 +689,7 @@
 //void* operator new(size_t size)
 //{
 //	void* ptr = malloc(size);
-//	printf("  new : %p\n", ptr);
+//	printf("    new : %p\n", ptr);
 //	return ptr;
 //}
 //void operator delete(void* ptr) noexcept
@@ -704,4 +704,297 @@
 //	printf("%d\n", *p);
 //}
 
+//template<typename T>
+//class ControlBlockBase
+//{
+//	int m_RefCount{ 1 };
+//	int m_WeakCount{ 1 };
+//
+//public:
+//	virtual void Destroy() = 0;
+//};
+//
+//template<typename T>
+//class ControlBlockRegular : public ControlBlockBase<T>
+//{
+//	T* m_Resource;
+//public:
+//	 ControlBlockRegular(T* pResource)
+//		 :m_Resource(pResource)
+//	 {}
+//	 void Destroy() override
+//	 {
+//		 delete m_Resource;
+//	 }
+//};
+//
+//template<typename T>
+//class ControlBlockEfficient : public ControlBlockBase<T>
+//{
+//public:
+//	union
+//	{
+//		T m_Resource;
+//	};
+//
+//	template<typename... Args>
+//	ControlBlockEfficient(Args... args)
+//	{
+//		new (&m_Resource) T{ std::forward<Args>(args)... };
+//	}
+//	void Destroy() override
+//	{
+//		m_Resource.~T();
+//	}
+//};
+//template<typename T>
+//class SharedPtr;
+//
+//template<typename T, typename... Args>
+//SharedPtr<T> MakeShared(Args&&... args);
+//
+//template<typename T>
+//class SharedPtr
+//{
+//	ControlBlockBase<T>* m_pControlBlock;
+//	T* m_pResource;
+//public:
+//	SharedPtr(T* ptr = nullptr)
+//		:m_pResource(ptr)
+//	{
+//		if (ptr)
+//		{
+//			m_pControlBlock = new ControlBlockRegular<T>{ ptr };
+//		}
+//		else
+//			m_pControlBlock = nullptr;
+//	}
+//	~SharedPtr()
+//	{
+//		if (m_pControlBlock)
+//		{
+//			m_pControlBlock->Destroy();
+//			delete m_pControlBlock;
+//		}
+//	}
+//	T& operator*()
+//	{
+//		return *m_pResource;
+//	}
+//	template<typename U, typename ...Args>
+//	friend SharedPtr<U> MakeShared(Args&&... args);
+//};
+//
+//template<typename T, typename... Args>
+//SharedPtr<T> MakeShared(Args&&... args)
+//{
+//	SharedPtr<T> sp{};
+//	sp.m_pControlBlock = new ControlBlockEfficient<T>{ std::forward<Args>(args)... };
+//	sp.m_pResource = &static_cast<ControlBlockEfficient<T>*>(sp.m_pControlBlock)->m_Resource;
+//	return sp;
+//}
+//
+//int main()
+//{
+//	//SharedPtr<int> p{ new int{3} };
+//	auto p = MakeShared<int>(3);
+//	printf("%d\n", *p);
+//}
 
+//void Modify(std::shared_ptr<int>& p)
+//{
+//	++(*p);
+//	++(*p);
+//	++(*p);
+//}
+//
+//void InitArray(std::shared_ptr<int[]>& arr)
+//{
+//	for (int i = 0; i < 5; ++i)
+//		arr[i] = i * 2;
+//}
+//
+//int main()
+//{
+//	//std::shared_ptr<int> p1{ new int{2} };
+//	//Modify(p1);
+//
+//	//std::shared_ptr<int> p1{ new int(2)};
+//	//Modify(p1);
+//
+//	//auto p2 = std::make_shared<int>(2);
+//	//Modify(p2);
+//
+//	//std::shared_ptr<int[]> arr1{ new int[5] {} };
+//	//InitArray(arr1);
+//
+//	//auto arr2 = std::make_shared<int[]>(5);
+//	//InitArray(arr2);
+//}
+
+
+#include <thread>
+//void DebugDisplay(const std::string& msg)
+//{
+//	_RPT0(_CRT_WARN, msg.c_str());
+//}
+//
+//void DebugDisplayLn(const std::string& msg)
+//{
+//	DebugDisplay(msg);
+//	_RPT0(_CRT_WARN, "\n");
+//}
+//
+//class Resource
+//{
+//	std::string m_Data{};
+//public:
+//	Resource(const std::string& data) :m_Data(data)
+//	{
+//		DebugDisplayLn("++ Resource allocated ++");
+//	}
+//	~Resource()
+//	{
+//		DebugDisplayLn("-- Resource destoryed --\n");
+//	}
+//	const std::string& GetData() const { return m_Data; }
+//	void SetData(const std::string& data) { m_Data = data; }
+//};
+//
+//class PrettyPrinter {
+//	Resource* m_pResource{};
+//	std::jthread m_UpdateThread{};
+//
+//public:
+//	PrettyPrinter(Resource* pResource)
+//		:m_pResource(pResource)
+//	{
+//		m_UpdateThread = std::jthread{ [this](std::stop_token stoken) {
+//			DebugDisplayLn("~~~ Update thread started ~~~");
+//			while (!stoken.stop_requested())
+//			{
+//				Update();
+//				std::this_thread::sleep_for(std::chrono::seconds{ 1 });
+//			}
+//			DebugDisplayLn("~~~ Update thread stopped ~~~");
+//		} };
+//	}
+//	void Update()
+//	{
+//		system("cls");
+//		const auto& text = m_pResource->GetData();
+//		auto printLine = [&text] {
+//			for (int i = 0; i < text.length() + 4; ++i)
+//			{
+//				std::print("*");
+//			}
+//			};
+//		printLine();
+//		std::print("\n* {} *\n", text);
+//		printLine();
+//	}
+//	void Stop()
+//	{
+//		m_UpdateThread.request_stop();
+//	}
+//	~PrettyPrinter()
+//	{
+//		Stop();
+//	}
+//};
+//
+//int main()
+//{
+//	//std::shared_ptr<int> p{ new int{5} };
+//	//auto ob = p;
+//	//p.reset();
+//	//if (ob)
+//	//{
+//	//	std::println("{}", *ob);
+//	//}
+//	//else
+//	//	std::println("Resource not Available");
+//
+//	Resource* r = new Resource{ "Hello world" };
+//	PrettyPrinter printer{ r };
+//	DebugDisplayLn("[Press enter to change the title]");
+//	std::cin.get();
+//	r->SetData("Using raw pointers");
+//	DebugDisplayLn("[Press enter to delete the resource]");
+//
+//	std::cin.get();
+//	delete r;
+//	DebugDisplayLn("[Press enter to exit the application]");
+//	std::cin.get();
+//
+//
+//}
+
+//int main()
+//{
+//	std::shared_ptr<int> p{ new int{ 5 } };
+//	std::weak_ptr<int> ob = p;
+//	p.reset();
+//	if (ob.expired())
+//		std::println("Expired");
+//	if (auto obserber = ob.lock(); obserber)
+//	{
+//		std::println("{}", *p);
+//	}
+//	else 
+//	{
+//		std::println("Resource not available");
+//	}
+//
+//}
+
+#include <source_location>
+
+
+void* operator new(size_t size)
+{
+	void* ptr = malloc(size);
+	printf("    new : %p\n", ptr);
+	return ptr;
+}
+void operator delete(void* ptr) noexcept
+{
+	printf(" delete : %p\n", ptr);
+	free(ptr);
+}
+
+constexpr bool LOGGING = true;
+void Log(std::source_location loc = std::source_location::current())
+{
+	if (LOGGING)
+		std::printf("[ %s ] \n", loc.function_name());
+}
+
+class Document2
+{
+	char m_FileName[255]{};
+	double m_Version{};
+	size_t m_Size{};
+
+public:
+	Document2()
+	{
+		Log();
+	}
+	~Document2()
+	{
+		Log();
+	}
+};
+
+int main()
+{
+	std::puts(">>> MAIN SCOPE BEGINS <<<");
+	std::shared_ptr<Document2> doc{ new Document2{} };
+	std::puts("\n Object constructed");
+	std::puts("Press enter to release");
+	std::getchar();
+	doc.reset();
+	std::puts(">>> MAIN SCOPE ENDS <<<");
+
+}
