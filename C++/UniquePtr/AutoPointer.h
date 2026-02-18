@@ -7,14 +7,63 @@ struct  DefaultDeleter
 		delete p;
 	}
 };
+
+template<typename Resource, typename Deleter, bool IsPointer = false>
+class PointerInfo : public Deleter
+{
+	Resource m_ptr{};
+public:
+	PointerInfo(Resource ptr, Deleter): m_ptr{ptr}{
+	}
+	void setResource(Resource ptr)
+	{
+		m_ptr = ptr;
+	}
+	Resource getResource() const 
+	{
+		return m_ptr;
+	}
+	Deleter getDeleter() const
+	{
+		return *this;
+	}
+};
+
+// Æ«ÌØ»¯
+template<typename Resource, typename Deleter>
+class PointerInfo<Resource, Deleter, true>
+{
+	Resource m_ptr{};
+	Deleter m_Deleter{};
+public:
+	PointerInfo(Resource ptr, Deleter deleter)
+		: m_ptr{ ptr },
+		m_Deleter(deleter){
+	
+	}
+	void setResource(Resource ptr)
+	{
+		m_ptr = ptr;
+	}
+	Resource getResource() const
+	{
+		return m_ptr;
+	}
+	Deleter getDeleter() const
+	{
+		return m_Deleter;
+	}
+};
+
+
 template<typename T, typename Deleter = DefaultDeleter<T>>
-class AutoPtr
+class AutoPtr : Deleter
 {
 	T* m_ptr{};
-	Deleter m_deleter{};
+	//[[msvc::no_unique_address]] Deleter m_deleter{};
 public:
 	AutoPtr() = default;
-	AutoPtr(T* ptr, Deleter deleter) : m_ptr{ ptr }, m_deleter{ deleter } {
+	AutoPtr(T* ptr, Deleter deleter) : Deleter(deleter), m_ptr{ptr} {
 
 	}
 	explicit AutoPtr(T* ptr) noexcept : AutoPtr{ptr ,{} } {
@@ -33,6 +82,8 @@ public:
 		}
 		return *this;
 	}
+	AutoPtr(const AutoPtr&) = delete;
+	AutoPtr& operator=(const AutoPtr&) = delete;
 
 	~AutoPtr()
 	{	
@@ -66,7 +117,7 @@ public:
 	{
 		if (m_ptr)
 		{
-			m_deleter(m_ptr);
+			(*this)(m_ptr);
 		}
 		m_ptr = p;
 	}

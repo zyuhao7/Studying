@@ -1,4 +1,5 @@
 #include <iostream>
+#include <tuple>
 #include "Document.h"
 #include "AutoPointer.h"
 // day-2025-2-17
@@ -69,12 +70,18 @@ int main()
 	//std::cout << p1->GetContent() << std::endl;
 	//docs[0]->AddContent("end");
 
-	AutoPtr<Document> pDoc{ new Document{"Memory Management"} };
-	if (pDoc == nullptr)
-	{
+	//AutoPtr<Document> pDoc{ new Document{"Memory Management"} };
+	//if (pDoc == nullptr)
+	//{
 		// pDoc = new Document{};
-	}
-	pDoc->AddContent("C++");
-	Save(pDoc.release());
+	//}
+	//pDoc->AddContent("C++");
+	//Save(pDoc.release());
+	//int* p = nullptr;
+	//std::cout << "原始指针大小: " << sizeof(p) << std::endl;
+	//std::cout << "AutoPtr指针大小: " << sizeof(AutoPtr<int>) << std::endl;
+	//std::cout << "DefaultDeleter指针大小: " << sizeof(DefaultDeleter<int>) << std::endl;
 
+	//std::tuple<int, DefaultDeleter<int>> tp1;
+	//std::cout << sizeof(tp1) << std::endl;
 }
