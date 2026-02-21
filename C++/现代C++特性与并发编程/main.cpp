@@ -81,40 +81,85 @@
 
 #include <type_traits>
 // Compile-Time if
-template<typename T>
-void print(const T& v)
+//template<typename T>
+//void print(const T& v)
+//{
+//	if constexpr (std::is_pointer_v<T>)
+//	{
+//		std::cout << *v << std::endl;
+//	}
+//	else if constexpr (std::is_array_v<T>)
+//	{
+//		for (auto& x : v) std::cout << x << " ";
+//	}
+//	else
+//	{
+//		std::cout << v << std::endl;
+//	}
+//}
+//template<typename T>
+//std::string ToString(T value)
+//{
+//	if constexpr (std::is_arithmetic_v<T>) {
+//		return std::to_string(value);
+//	}
+//	else {
+//		return std::string{ value };
+//	}
+//}
+//
+//int main()
+//{
+//	int value{ 5 };
+//	print(value);
+//	print(&value);
+//	int arr[] = { 1,2,3 };
+//	auto s = ToString(value);
+//	std::cout << s << std::endl;
+//	//print(arr);
+//}
+
+// ²¢ÐÐËã·¨
+#include <string_view>
+#include <vector>
+#include <random>
+#include <execution>
+class Timer
 {
-	if constexpr (std::is_pointer_v<T>)
+	std::chrono::steady_clock::time_point m_start;
+public:
+	Timer() :m_start{ std::chrono::steady_clock::now() } {}
+	void ShowResult(std::string_view msg = "")
 	{
-		std::cout << *v << std::endl;
+		auto end = std::chrono::steady_clock::now();
+		auto difference = end - m_start;
+		std::cout << msg
+			<< ":"
+			<< std::chrono::duration_cast<std::chrono::milliseconds>(difference).count()
+			<< "ms \n";
 	}
-	else if constexpr (std::is_array_v<T>)
-	{
-		for (auto& x : v) std::cout << x << " ";
-	}
-	else
-	{
-		std::cout << v << std::endl;
-	}
-}
-template<typename T>
-std::string ToString(T value)
-{
-	if constexpr (std::is_arithmetic_v<T>) {
-		return std::to_string(value);
-	}
-	else {
-		return std::string{ value };
-	}
+};
+
+constexpr unsigned VEC_SIZE{ 100000000 };
+std::vector<long> CreateVector() {
+	std::vector<long> vec;
+	vec.reserve(VEC_SIZE);
+	std::default_random_engine engine{ std::random_device{}() };
+	std::uniform_int_distribution<long> dist{ 0, VEC_SIZE };
+	for (unsigned i = 0; i < VEC_SIZE; ++i)
+		vec.push_back(dist(engine));
+	return vec;
 }
 
 int main()
 {
-	int value{ 5 };
-	print(value);
-	print(&value);
-	int arr[] = { 1,2,3 };
-	auto s = ToString(value);
-	std::cout << s << std::endl;
-	//print(arr);
+	auto dataSet = CreateVector();
+	Timer t;
+	std::sort(dataSet.begin(), dataSet.end());
+	t.ShowResult("normal Sorting time");
+
+	Timer t2;
+	std::sort(std::execution::par, dataSet.begin(), dataSet.end());
+	t2.ShowResult("parallel Sorting time");
+
 }
