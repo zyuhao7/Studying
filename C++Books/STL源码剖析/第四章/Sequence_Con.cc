@@ -10,6 +10,7 @@
 #include <unordered_set>
 #include <queue>
 using namespace std;
+// Line 247
 
 // vector
 
@@ -45,9 +46,8 @@ using namespace std;
 
 // 双向链表节点.
 //  __list_node<T> node
-//          [prev] ->
-//          [next] ->
-//          [data]
+//  <- [prev]   [next] ->
+//         [data]
 
 // list 的迭代器.  Bidirectionaliterators
 // list 有一个重要性质: 插入操作(insert) 和 接合操作(splice) 都不会造成原来的 list 迭代器失效.
@@ -242,7 +242,7 @@ using namespace std;
 //	iterator first = begin();
 //	iterator last = end();
 //	if (first == last) return; //空链表, 什么不用做.
-//	iterator next = last;
+//	iterator next = first;
 //	while (++next != last)
 //	{
 //		if (*first == *next) erase(next);
@@ -446,3 +446,154 @@ using namespace std;
 //		cout << *it << " ";  // 0 2 3 4 5 6 7 8 9 99
 //	cout << endl;
 // }
+
+// day-2026-2-28
+// deque 
+//class alloc {};
+//template<typename T, class Alloc = alloc, size_t BufSiz = 0>
+//class Deque
+//{
+//public:
+//	typedef T value_type;
+//	typedef value_type* pointer;
+//	typedef size_t size_type;
+//	typedef T& reference;
+//	typedef ptrdiff_t difference_type;
+//	
+//public:
+//	typedef __Deque_iterator<T, T&, T*, BufSiz> iterator;
+//protected:
+//	typedef pointer* map_pointer;
+//protected:
+//	iterator start; //第一块 buffer
+//	iterator finish; // 最后一块
+//
+//	map_pointer map; //指向 map,map 是一块连续空间, 其内的每个元素都是一个指针, 指向一块缓冲区
+//	size_type map_size; // map 可容纳多少指针
+//
+//public:
+//	iterator begin() { return start; }
+//	iterator end() { return finish; }
+//	reference operator[](size_type n)
+//	{
+//		return start[difference_type(n)];
+//	}
+//	reference front() { return *start; }
+//	reference back() {
+//		iterator tmp = finish;
+//		--tmp;
+//		return *tmp;
+//	}
+//	size_type size() const { return finish - start; }
+//	size_type max_size() const { return size_type(-1); }
+//	bool empty() const { return finish == start; }
+//};
+//
+//inline size_t __Deque_buf_size(size_t n, size_t sz)
+//{
+//	return n != 0 ? n : (sz < 512 ? size_t(512 / sz) : size_t(1));
+//}
+//
+//template<class T, class Ref, class Ptr, size_t BufSiz>
+//struct __Deque_iterator {
+//	typedef __Deque_iterator<T, T&, T*, BufSiz> iterator;
+//	typedef __Deque_iterator<T, const T&, const T*, BufSiz> const_iterator;
+//	static size_t buffer_size() { return __Deque_buf_size(BufSiz, sizeof(T)); }
+//
+//	typedef random_access_iterator_tag iterator_category;
+//	typedef T value_type;
+//	typedef Ptr pointer;
+//	typedef Ref reference;
+//	typedef size_t size_type;
+//	typedef ptrdiff_t difference_type;
+//	typedef T** map_pointer;
+//	
+//	typedef __Deque_iterator self;
+//
+//	// 保持与容器的联结
+//	T* cur;		// 此迭代器所指缓冲区的现行
+//	T* first;	// 迭代器所指缓冲区的头
+//	T* last;	// 迭代器所指缓冲区的尾
+//
+//	map_pointer node; // 指向管控中心
+//
+//	void set_node(map_pointer new_node)
+//	{
+//		node = new_node;
+//		first = *new_node;
+//		last = first + difference_type(buffer_size());
+//	}
+//
+//	reference operator*() const { return *cur; }
+//	pointer operator->() const { return &(operator*()); }
+//	difference_type operator-(const self& x) const
+//	{
+//		return difference_type(buffer_size()) * (node - x.node - 1) +
+//			(cur - first) + (x.last - x.cur);
+//	}
+//
+//	self& operator++()
+//	{
+//		++cur;
+//		if (cur == last)
+//		{
+//			set_node(node + 1);
+//			cur = first;
+//		}
+//		return *this;
+//	}
+//	self operator++(int)
+//	{
+//		self tmp = *this;
+//		++*this;
+//		return tmp;
+//	}
+//	self& operator--()
+//	{
+//		if (cur == first)
+//		{
+//			set_node(node - 1);
+//			cur = last;
+//		}
+//		--cur;
+//		return *this;
+//	}
+//	self operator--(int)
+//	{
+//		self tmp = *this;
+//		--*this;
+//		return tmp;
+//	}
+//	// .......
+//};
+
+//#include <deque>
+//#include <iostream>
+//#include <algorithm>
+//using namespace std;
+//int main()
+//{
+//	deque<int, std::allocator<int>> deq(20, 9);
+//	std::cout << "size = " << deq.size() << std::endl;
+//
+//	for (int i = 0; i < deq.size(); ++i)
+//		deq[i] = i;
+//	for (int i = 0; i < deq.size(); ++i)
+//		cout << deq[i] << " ";
+//	cout << endl;
+//
+//	for (int i = 0; i < 3; i++)
+//		deq.push_back(i);
+//	for (int i = 0; i < deq.size(); i++)
+//		cout << deq[i] << " ";
+//	cout << endl;
+//	cout << "size = " << deq.size() << endl;
+//
+//	deq.push_back(3);
+//	deq.push_front(99);
+//
+//	deque<int, std::allocator<int>>::iterator it;
+//	it = find(deq.begin(), deq.end(), 99);
+//	cout << *it << endl;
+//	cout << *(it.operator*()) << endl;
+//}
