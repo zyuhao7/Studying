@@ -46,8 +46,7 @@ using namespace std;
 
 // 双向链表节点.
 //  __list_node<T> node
-//          [prev] ->
-//          [next] ->
+//   <- [prev]  [next] ->       
 //          [data]
 
 // list 的迭代器.  Bidirectionaliterators
@@ -446,4 +445,5 @@ using namespace std;
 //	for (it = ilist.begin();it != ilist.end();++it)
 //		cout << *it << " ";  // 0 2 3 4 5 6 7 8 9 99
 //	cout << endl;
+
 // }
