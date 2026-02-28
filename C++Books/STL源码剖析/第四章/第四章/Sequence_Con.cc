@@ -57,9 +57,10 @@ using namespace std;
 // template<class T, class Ref, class Ptr>
 // struct __list_iterator
 //{
-//	typedef __list_iterator<T, T&, T*> iterator;
-//	typedef __list_iterator<T, Ref, Ptr> self;
-//
+//	typedef __list_iterator<T, T&, T*> iterator;  用来给 list 对外暴露的 "标准迭代器类型"
+//	typedef __list_iterator<T, Ref, Ptr> self;    用来在 迭代器内部，表示 "我自己这个类型"
+//  typdef __list_iterator<T, const T&, const T*> const_iterator; 
+
 //	typedef bidirectional_iterator_tag iterator_category;
 //	typedef T value_type;
 //	typedef Ptr pointer;
@@ -447,3 +448,4 @@ using namespace std;
 //	cout << endl;
 
 // }
+
