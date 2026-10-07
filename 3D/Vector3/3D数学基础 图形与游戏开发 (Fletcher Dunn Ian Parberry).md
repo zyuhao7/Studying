@@ -267,3 +267,15 @@ $q^{t} = \left[\cos(t\omega),\ \sin(t\omega)\, n\right]$，其中 $\omega = \arc
 | `EulerAngles.h/.cpp` | heading-pitch-bank、`canonize`、四元数/矩阵 → 欧拉角 |
 | `Quaternion.h/.cpp` | 四元数旋转、乘法、归一化、`slerp`、共轭、幂 |
 | `Matrix4x3.h/.cpp` | 4×3 变换矩阵、平移/旋转/缩放/切变/投影/镜像、行列式与逆 |
+| `main.cpp` | 演示驱动，逐项打印各类的运算结果 |
+
+## 构建与运行
+
+`main.cpp` 中 `main()` 依次演示向量的点/叉乘、欧拉角转旋转矩阵、四元数乘法与 `slerp`、4×3 变换矩阵的点变换与求逆。
+
+```bash
+cmake -S . -B build
+cmake --build build
+./build/demo
+```
+
