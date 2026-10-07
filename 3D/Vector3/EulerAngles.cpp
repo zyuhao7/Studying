@@ -6,26 +6,26 @@
 #include <math.h>
 
 
-// È«¾Ö¡°µ¥Î»¡±Å·À­½Ç³£Á¿
-// ÏÖÔÚÎÒÃÇ»¹²»ÖªµÀ¹¹ÔìËüµÄÈ·ÇÐÊ±»ú£¬ÕâÒªÈ¡¾öÓÚÆäËû¶ÔÏó£¬ Òò´ËÓÐ¿ÉÄÜÔÚ¸Ã¶ÔÏó±»³õÊ¼»¯Ö®Ç°¾ÍÒýÓÃËü£¬²»¹ý
-// ÔÚ´ó¶àÊýÊµÏÖÖÐ£¬ Ëü½«ÔÚ³ÌÐò¿ªÊ¼Ê±±»³õÊ¼»¯»¯Îª0£¬ ¼´·¢ÉúÔÚÆäËû¶ÔÏó±»¹¹ÔìÖ®Ç°¡£
-// ±ä»»Îª "ÏÞÖÆ¼¯" Å·À­½Ç
+// å…¨å±€â€œå•ä½â€æ¬§æ‹‰è§’å¸¸é‡
+// çŽ°åœ¨æˆ‘ä»¬è¿˜ä¸çŸ¥é“æž„é€ å®ƒçš„ç¡®åˆ‡æ—¶æœºï¼Œè¿™è¦å–å†³äºŽå…¶ä»–å¯¹è±¡ï¼Œ å› æ­¤æœ‰å¯èƒ½åœ¨è¯¥å¯¹è±¡è¢«åˆå§‹åŒ–ä¹‹å‰å°±å¼•ç”¨å®ƒï¼Œä¸è¿‡
+// åœ¨å¤§å¤šæ•°å®žçŽ°ä¸­ï¼Œ å®ƒå°†åœ¨ç¨‹åºå¼€å§‹æ—¶è¢«åˆå§‹åŒ–åŒ–ä¸º0ï¼Œ å³å‘ç”Ÿåœ¨å…¶ä»–å¯¹è±¡è¢«æž„é€ ä¹‹å‰ã€‚
+// å˜æ¢ä¸º "é™åˆ¶é›†" æ¬§æ‹‰è§’
 
 const EulerAngles kEulerAnglesIdentity(0.0f, 0.0f, 0.0f);
 
 
 //--------------------------------------------------------------
 // EulerAngles::canonize
-// ½«Å·À­½Ç×ª»»µ½ÏÞÖÆ¼¯ÖÐ
-// ¾Í±íÊ¾3D·¶Î§µÄÄ¿µÄ¶øÑÔ£¬ Ëü²»»á¸Ä±äÅ·À­½ÇµÄÖµ
-// µ«¶ÔÓÚÆäËû±íÊ¾¶ÔÏóÈç¼ÓËÙ¶ÈµÈ£¬Ôò»á²úÉúÓ°Ïì¡£
+// å°†æ¬§æ‹‰è§’è½¬æ¢åˆ°é™åˆ¶é›†ä¸­
+// å°±è¡¨ç¤º3DèŒƒå›´çš„ç›®çš„è€Œè¨€ï¼Œ å®ƒä¸ä¼šæ”¹å˜æ¬§æ‹‰è§’çš„å€¼
+// ä½†å¯¹äºŽå…¶ä»–è¡¨ç¤ºå¯¹è±¡å¦‚åŠ é€Ÿåº¦ç­‰ï¼Œåˆ™ä¼šäº§ç”Ÿå½±å“ã€‚
 
 void EulerAngles::canonize()
 {
-	// Ê×ÏÈ½«pitch ±ä»»µ½-pi µ½ piÖ®¼ä
+	// é¦–å…ˆå°†pitch å˜æ¢åˆ°-pi åˆ° piä¹‹é—´
 	pitch = wrapPi(pitch);
 
-	// ÏÖÔÚ½« pitch±ä»»µ½ -pi/2 µ½ pi/2 Ö®¼ä
+	// çŽ°åœ¨å°† pitchå˜æ¢åˆ° -pi/2 åˆ° pi/2 ä¹‹é—´
 	if (pitch < -kPiOver2) {
 		pitch = -kPi - pitch; 
 		heading += kPi;
@@ -38,52 +38,52 @@ void EulerAngles::canonize()
 		bank += kPi;
 	}
 
-	// ÏÖÔÚ¼ì²éÍòÏòËøµÄÇé¿ö£¬ÔÊÐíÒ»¶¨µÄÎó²î
+	// çŽ°åœ¨æ£€æŸ¥ä¸‡å‘é”çš„æƒ…å†µï¼Œå…è®¸ä¸€å®šçš„è¯¯å·®
 	if (fabs(pitch) > kPiOver2 - 1e-4)
 	{
-		// ÔÚÍòÏòËøÖÐ£¬ ËùÓÐ´¹Ö±ÖáµÄÐý×ª¸³¸øheading
+		// åœ¨ä¸‡å‘é”ä¸­ï¼Œ æ‰€æœ‰åž‚ç›´è½´çš„æ—‹è½¬èµ‹ç»™heading
 		heading += bank;
 		bank = 0.0f;
 	}
 	else 
 	{
-		// ·ÇÍòÏòËø£¬½«bank×ª»»µ½ÏÞÖÆ¼¯ÖÐ
+		// éžä¸‡å‘é”ï¼Œå°†bankè½¬æ¢åˆ°é™åˆ¶é›†ä¸­
 		bank = wrapPi(bank);
 	}
-	// ½«heading×ª»»µ½ÏÞÖÆ¼¯ÖÐ
+	// å°†headingè½¬æ¢åˆ°é™åˆ¶é›†ä¸­
 	heading = wrapPi(heading);
 }
 
 //-----------------------------------------------------------------------
 // EurlerAngles::fromWorldToObjectMatrix
-// ´ÓÊÀ½ç-ÎïÌå×ø±êÏµ±ä»»¾ØÕóµ½Å·À­½Ç
+// ä»Žä¸–ç•Œ-ç‰©ä½“åæ ‡ç³»å˜æ¢çŸ©é˜µåˆ°æ¬§æ‹‰è§’
 //
-// ¼ÙÉè¾ØÕóÊÇÕý½»µÄ£¬ ºöÂÔÆ½ÒÆ²¿·Ö
+// å‡è®¾çŸ©é˜µæ˜¯æ­£äº¤çš„ï¼Œ å¿½ç•¥å¹³ç§»éƒ¨åˆ†
 
 
 //-------------------------------------------------------------------
 // EulerAngles::fromObjectToInertialQuaternion
 //
-// ´ÓÎïÌå-¹ßÐÔËÄÔªÊý µ½Å·À­½Ç
+// ä»Žç‰©ä½“-æƒ¯æ€§å››å…ƒæ•° åˆ°æ¬§æ‹‰è§’
 
 void EulerAngles::fromObjectToInertialQuternion(const Quaternion& q)
 {
-	// ¼ÆËã sin(pitch)
+	// è®¡ç®— sin(pitch)
 	float sp = -2.0f * (q.y * q.z - q.w * q.x);
 
-	// ¼ì²éÍòÏòËø£¬ÔÊÐí´æÔÚÒ»¶¨Îó²î
+	// æ£€æŸ¥ä¸‡å‘é”ï¼Œå…è®¸å­˜åœ¨ä¸€å®šè¯¯å·®
 	if (fabs(sp) > 0.99999f)
 	{
-		// ÏòÉÏ·½»òÕýÏÂ·½¿´
+		// å‘ä¸Šæ–¹æˆ–æ­£ä¸‹æ–¹çœ‹
 		pitch = kPiOver2 * sp;
 
-		// bank ÖÃÁã£¬ ¼ÆËãheading
+		// bank ç½®é›¶ï¼Œ è®¡ç®—heading
 		heading = atan2f(q.w * q.y - q.x * q.z, 0.5f - q.y * q.y - q.z * q.z);
 		bank = 0.0f;
 	}
 	else {
 
-		// ¼ÆËã½Ç¶È
+		// è®¡ç®—è§’åº¦
 		pitch = asinf(sp);
 		heading = atan2f(q.x * q.z + q.w * q.y, 0.5f - q.x * q.x - q.y * q.y);
 		bank = atan2f(q.x * q.y + q.w * q.z, 0.5f - q.x * q.x - q.z * q.z);
@@ -94,26 +94,26 @@ void EulerAngles::fromObjectToInertialQuternion(const Quaternion& q)
 //-----------------------------------------------------------------------
 // EulerAngles::fromInertialToObjectQuaternion
 //
-// ´Ó¹ßÐÔ-ÎïÌåËÄÔªÊý µ½Å·À­½Ç
+// ä»Žæƒ¯æ€§-ç‰©ä½“å››å…ƒæ•° åˆ°æ¬§æ‹‰è§’
 
 void EulerAngles::fromInertialToObjectQuaternion(const Quaternion& q)
 {
-	// ¼ÆËã sin(pitch)
+	// è®¡ç®— sin(pitch)
 	float sp = -2.0f * (q.y * q.z + q.w * q.x);
 
-	// ¼ì²éÍòÏòËø£¬ÔÊÐí´æÔÚÒ»¶¨Îó²î
+	// æ£€æŸ¥ä¸‡å‘é”ï¼Œå…è®¸å­˜åœ¨ä¸€å®šè¯¯å·®
 	if (fabs(sp) > 0.99999f)
 	{
-		// ÏòÉÏ·½»òÕýÏÂ·½¿´
+		// å‘ä¸Šæ–¹æˆ–æ­£ä¸‹æ–¹çœ‹
 		pitch = kPiOver2 * sp;
 
-		// bank ÖÃÁã£¬ ¼ÆËãheading
+		// bank ç½®é›¶ï¼Œ è®¡ç®—heading
 		heading = atan2f(-q.x * q.z - q.w * q.y, 0.5f - q.y * q.y - q.z * q.z);
 		bank = 0.0f;
 	}
 	else {
 
-		// ¼ÆËã½Ç¶È
+		// è®¡ç®—è§’åº¦
 		pitch = asinf(sp);
 		heading = atan2f(q.x * q.z - q.w * q.y, 0.5f - q.x * q.x - q.y * q.y);
 		bank = atan2f(q.x * q.y - q.w * q.z, 0.5f - q.x * q.x - q.z * q.z);
@@ -122,28 +122,28 @@ void EulerAngles::fromInertialToObjectQuaternion(const Quaternion& q)
 
 //----------------------------------------------------------------------
 // EulerAngles::fromObjectToWorldMatrix
-// ´ÓÎïÌå-ÊÀ½ç×ø±êÏµ±ä»»¾ØÕóµ½Å·À­½Ç
-// ¼ÙÉè¾ØÕóÊÇÕý½»µÄ£¬ºöÂÔÆ½ÒÆ²¿·Ö
+// ä»Žç‰©ä½“-ä¸–ç•Œåæ ‡ç³»å˜æ¢çŸ©é˜µåˆ°æ¬§æ‹‰è§’
+// å‡è®¾çŸ©é˜µæ˜¯æ­£äº¤çš„ï¼Œå¿½ç•¥å¹³ç§»éƒ¨åˆ†
 
 void EulerAngles::fromObjectToWorldMatrix(const Matrix4x3& m)
 {
-	//Í¨¹ým32¼ÆËãsin(pitch).
+	//é€šè¿‡m32è®¡ç®—sin(pitch).
 	float sp = -m.m32;
 
-	//¼ì²éÍòÏòËø
+	//æ£€æŸ¥ä¸‡å‘é”
 	if (fabsf(sp) > 9.99999f)
 	{
 
-		// ÏòÕýÉÏ»òÕýÏÂ·½¿´
+		// å‘æ­£ä¸Šæˆ–æ­£ä¸‹æ–¹çœ‹
 		pitch = kPiOver2 * sp;
 
-		// bank ÖÃÁã£¬ ¼ÆËãheading
+		// bank ç½®é›¶ï¼Œ è®¡ç®—heading
 		heading = atan2f(-m.m13, m.m11);
 		bank = 0.0f;
 	}
 	else
 	{
-		// ¼ÆËã½Ç¶È
+		// è®¡ç®—è§’åº¦
 		heading = atan2f(m.m31, m.m33);
 		pitch = asinf(sp);
 		bank = atan2f(m.m12, m.m22);
@@ -152,27 +152,27 @@ void EulerAngles::fromObjectToWorldMatrix(const Matrix4x3& m)
 
 //-----------------------------------------------------------------------
 // EurlerAngles::fromWorldToObjectMatrix
-// ´ÓÊÀ½ç-ÎïÌå×ø±êÏµ±ä»»¾ØÕóµ½Å·À­½Ç
-// ¼ÙÉè¾ØÕóÊÇÕý½»µÄ£¬ ºöÂÔÆ½ÒÆ²¿·Ö
+// ä»Žä¸–ç•Œ-ç‰©ä½“åæ ‡ç³»å˜æ¢çŸ©é˜µåˆ°æ¬§æ‹‰è§’
+// å‡è®¾çŸ©é˜µæ˜¯æ­£äº¤çš„ï¼Œ å¿½ç•¥å¹³ç§»éƒ¨åˆ†
 
 void EulerAngles::fromWorldToObjectMatrix(const Matrix4x3& m)
 {
-	// ¸ù¾Ým23 ¼ÆËãsin(pitch)
+	// æ ¹æ®m23 è®¡ç®—sin(pitch)
 	float sp = -m.m23;
 
-	// ¼ì²éÍòÏòËø
+	// æ£€æŸ¥ä¸‡å‘é”
 	if (fabs(sp) > 9.99999f) {
 
-		// ÏòÉÏ·½»òÕßÏÂ·½¿´
+		// å‘ä¸Šæ–¹æˆ–è€…ä¸‹æ–¹çœ‹
 		pitch = kPiOver2 * sp;
 
-		// bank ÖÃ0£¬ ¼ÆËãheading
+		// bank ç½®0ï¼Œ è®¡ç®—heading
 		heading = atan2f(-m.m31, m.m11);
 		bank = 0.0f;
 	}
 	else {
 
-		// ¼ÆËã½Ç¶È
+		// è®¡ç®—è§’åº¦
 		heading = atan2f(m.m13, m.m33);
 		pitch = asinf(sp);
 		bank = atan2f(m.m21, m.m22);
@@ -184,26 +184,26 @@ void EulerAngles::fromWorldToObjectMatrix(const Matrix4x3& m)
 //-------------------------------------------------------------------
 // EulerAngles::fromRotationMatrix(const RotationMatrix &m)
 // 
-// ¸ù¾ÝÐý×ª¾ØÕó¹¹ÔìÅ·À­½Ç
+// æ ¹æ®æ—‹è½¬çŸ©é˜µæž„é€ æ¬§æ‹‰è§’
 
 void EulerAngles::fromRotationMatrix(const RotationMatrix& m)
 {
-	// ¸ù¾Ým23 ¼ÆËãsin(pitch)
+	// æ ¹æ®m23 è®¡ç®—sin(pitch)
 	float sp = -m.m23;
 
-	// ¼ì²éÍòÏòËø
+	// æ£€æŸ¥ä¸‡å‘é”
 	if (fabs(sp) > 9.99999f) {
 
-		// ÏòÉÏ·½»òÕßÏÂ·½¿´
+		// å‘ä¸Šæ–¹æˆ–è€…ä¸‹æ–¹çœ‹
 		pitch = kPiOver2 * sp;
 
-		// bank ÖÃ0£¬ ¼ÆËãheading
+		// bank ç½®0ï¼Œ è®¡ç®—heading
 		heading = atan2f(-m.m31, m.m11);
 		bank = 0.0f;
 	}
 	else {
 
-		// ¼ÆËã½Ç¶È
+		// è®¡ç®—è§’åº¦
 		heading = atan2f(m.m13, m.m33);
 		pitch = asinf(sp);
 		bank = atan2f(m.m21, m.m22);

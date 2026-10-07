@@ -7,11 +7,11 @@
 
 ////////////////////////////////////////////////////////
 //
-// È«¾ÖÊı¾İ
+// å…¨å±€æ•°æ®
 //
 ////////////////////////////////////////////////////////
-//È«¾Öµ¥Î»ËÄÔªÊı¡£×¢ÒâQuaternionÀàÃ»ÓĞ¹¹Ôìº¯Êı£¬ÒòÎªÎÒÃÇ²¢²»ĞèÒª¡£
-//ÒòÎªQuaternionÀàÊÇ¾ÛºÏÀà£¬ËùÒÔ¿ÉÒÔÊ¹ÓÃ = {1.0f, 0.0f, 0.0f, 0.0f} ³õÊ¼»¯¡£
+//å…¨å±€å•ä½å››å…ƒæ•°ã€‚æ³¨æ„Quaternionç±»æ²¡æœ‰æ„é€ å‡½æ•°ï¼Œå› ä¸ºæˆ‘ä»¬å¹¶ä¸éœ€è¦ã€‚
+//å› ä¸ºQuaternionç±»æ˜¯èšåˆç±»ï¼Œæ‰€ä»¥å¯ä»¥ä½¿ç”¨ = {1.0f, 0.0f, 0.0f, 0.0f} åˆå§‹åŒ–ã€‚
 
 const Quaternion kQuaternionIdentity = { 1.0f, 0.0f, 0.0f, 0.0f };
 
@@ -19,7 +19,7 @@ const Quaternion kQuaternionIdentity = { 1.0f, 0.0f, 0.0f, 0.0f };
 
 ////////////////////////////////////////////////////////
 //
-// Quaternion Àà³ÉÔ±
+// Quaternion ç±»æˆå‘˜
 //
 ////////////////////////////////////////////////////////
 
@@ -29,13 +29,13 @@ const Quaternion kQuaternionIdentity = { 1.0f, 0.0f, 0.0f, 0.0f };
 // Quaternion::setToRotateAboutZ
 // Quaternion::setToRotateAboutAxis
 
-//¹¹ÔìÈÆÖ¸¶¨ÖáĞı×ªµÄËÄÔªÊı
+//æ„é€ ç»•æŒ‡å®šè½´æ—‹è½¬çš„å››å…ƒæ•°
 
 void Quaternion::setToRotateAboutX(float theta)
 {
-	// ¼ÆËã°ë½Ç
+	// è®¡ç®—åŠè§’
 	float thetaOver2 = theta * 0.5f;
-	// ¸³Öµ
+	// èµ‹å€¼
 	w = cosf(thetaOver2);
 	x = sinf(thetaOver2);
 	y = 0.0f;
@@ -44,9 +44,9 @@ void Quaternion::setToRotateAboutX(float theta)
 
 void Quaternion::setToRotateAboutY(float theta)
 {
-	// ¼ÆËã°ë½Ç
+	// è®¡ç®—åŠè§’
 	float thetaOver2 = theta * 0.5f;
-	// ¸³Öµ
+	// èµ‹å€¼
 	w = cosf(thetaOver2);
 	x = 0.0f;
 	y = sinf(thetaOver2);
@@ -55,9 +55,9 @@ void Quaternion::setToRotateAboutY(float theta)
 
 void Quaternion::setToRotateAboutZ(float theta)
 {
-	// ¼ÆËã°ë½Ç
+	// è®¡ç®—åŠè§’
 	float thetaOver2 = theta * 0.5f;
-	// ¸³Öµ
+	// èµ‹å€¼
 	w = cosf(thetaOver2);
 	x = 0.0f;
 	y = 0.0f;
@@ -66,12 +66,12 @@ void Quaternion::setToRotateAboutZ(float theta)
 
 void Quaternion::setToRotateAboutAxis(const Vector3& axis, float theta)
 {
-	// Ğı×ªÖá±ØĞë±ê×¼»¯
+	// æ—‹è½¬è½´å¿…é¡»æ ‡å‡†åŒ–
 	assert(fabs(vectorMag(axis) - 1.0f) < 0.01f);
-	// ¼ÆËã°ë½ÇºÍsinÖµ
+	// è®¡ç®—åŠè§’å’Œsinå€¼
 	float thetaOver2 = theta * 0.5f;
 	float sinThetaOver2 = sinf(thetaOver2);
-	// ¸³Öµ
+	// èµ‹å€¼
 	w = cosf(thetaOver2);
 	x = axis.x * sinThetaOver2;
 	y = axis.y * sinThetaOver2;
@@ -81,19 +81,19 @@ void Quaternion::setToRotateAboutAxis(const Vector3& axis, float theta)
 
 //----------------------------------------------------------
 // Quaternion::setToRotateObjectToInertial
-//¹¹ÔìÎïÌå-¹ßĞÔĞı×ªµÄËÄÔªÊı
+//æ„é€ ç‰©ä½“-æƒ¯æ€§æ—‹è½¬çš„å››å…ƒæ•°
 //
-//·½Î»²ÎÊıÓÉÅ·À­½ÇĞÎÊ½¸ø³ö
+//æ–¹ä½å‚æ•°ç”±æ¬§æ‹‰è§’å½¢å¼ç»™å‡º
 
 void Quaternion::setToRotateObjectToInertial(const EulerAngles& orientation)
 {
-	// ¼ÆËã°ë½ÇµÄ sinºÍcosÖµ
+	// è®¡ç®—åŠè§’çš„ sinå’Œcoså€¼
 	float sp, sb, sh;
 	float cp, cb, ch;
 	sinCos(&sp, &cp, orientation.pitch * 0.5f);
 	sinCos(&sb, &cb, orientation.bank * 0.5f);
 	sinCos(&sh, &ch, orientation.heading * 0.5f);
-	// ¼ÆËã½á¹û
+	// è®¡ç®—ç»“æœ
 	w = ch * cp * cb - sh * sp * sb;
 	x = ch * sp * cb + sh * cp * sb;
 	y = -ch * sp * sb + sh * cp * cb;
@@ -105,19 +105,19 @@ void Quaternion::setToRotateObjectToInertial(const EulerAngles& orientation)
 //----------------------------------------------------------------------
 //Quaternion::setToRotateInertialToObject
 //
-//¹¹ÔìÖ´ĞĞ¹ßĞÔ-ÎïÌåĞı×ªµÄËÄÔªÊı
-//·½Î»ÓÉÅ·À­½ÇĞÎÊ½¸ø³ö
+//æ„é€ æ‰§è¡Œæƒ¯æ€§-ç‰©ä½“æ—‹è½¬çš„å››å…ƒæ•°
+//æ–¹ä½ç”±æ¬§æ‹‰è§’å½¢å¼ç»™å‡º
 
 void Quaternion::setToRotateInertialToObject(const EulerAngles& orientation)
 {
-	// ¼ÆËã°ë½ÇµÄsinºÍcosÖµ
+	// è®¡ç®—åŠè§’çš„sinå’Œcoså€¼
 	float sp, sb, sh;
 	float cp, cb, ch;
 	sinCos(&sp, &cp, orientation.pitch * 0.5f);
 	sinCos(&sb, &cb, orientation.bank * 0.5f);
 	sinCos(&sh, &ch, orientation.heading * 0.5f);
 
-	// ¼ÆËã½á¹û
+	// è®¡ç®—ç»“æœ
 	w = ch * cp * cb + sh * sp * sb;
 	x = -ch * sp * cb - sh * cp * sb;
 	y = ch * sp * sb - sh * cp * cb;
@@ -127,9 +127,9 @@ void Quaternion::setToRotateInertialToObject(const EulerAngles& orientation)
 //------------------------------------------------------------------------------
 // Quaternion::operator *
 //
-//ËÄÔªÊı²æ³ËÔËËã£¬ ÓÃÒÔÁ¬½Ó¶à¸ö½ÇÎ»ÒÆ
-//³ËµÄË³ĞòÊÇ´Ó×óÏòÓÒ
-//ÕâºÍËÄÔªÊı²æ³ËµÄ¡°±ê×¼¡±¶¨ÒåÏà·´
+//å››å…ƒæ•°å‰ä¹˜è¿ç®—ï¼Œ ç”¨ä»¥è¿æ¥å¤šä¸ªè§’ä½ç§»
+//ä¹˜çš„é¡ºåºæ˜¯ä»å·¦å‘å³
+//è¿™å’Œå››å…ƒæ•°å‰ä¹˜çš„â€œæ ‡å‡†â€å®šä¹‰ç›¸å
 
 Quaternion Quaternion::operator*(const Quaternion& a) const
 {
@@ -146,7 +146,7 @@ Quaternion Quaternion::operator*(const Quaternion& a) const
 //------------------------------------------------------------------------------
 // Quaternion::operator*=
 //
-// ²æ³Ë²¢¸³Öµ£¬ÕâÊÇ·ûºÏc++Ï°¹ßµÄĞ´·¨
+// å‰ä¹˜å¹¶èµ‹å€¼ï¼Œè¿™æ˜¯ç¬¦åˆc++ä¹ æƒ¯çš„å†™æ³•
 
 
 Quaternion& Quaternion::operator*=(const Quaternion& a)
@@ -158,20 +158,20 @@ Quaternion& Quaternion::operator*=(const Quaternion& a)
 //--------------------------------------------------------------------------
 // Quaternion::normalize
 //
-//ÕıÔò»¯ËÄÔªÊı
-//Í¨³££¬ËÄÔªÊı¶¼ÊÇÕıÔò»¯µÄ
+//æ­£åˆ™åŒ–å››å…ƒæ•°
+//é€šå¸¸ï¼Œå››å…ƒæ•°éƒ½æ˜¯æ­£åˆ™åŒ–çš„
 //
-//Ìá¹©Õâ¸öº¯ÊıÖ÷ÒªÊÇÎªÁË·ÀÖ¹Îó²îÀ©´ó£¬Á¬Ğø¶à¸öËÄÔªÊı²Ù×÷¿ÉÄÜµ¼ÖÂÎó²îÀ©´ó¡£
+//æä¾›è¿™ä¸ªå‡½æ•°ä¸»è¦æ˜¯ä¸ºäº†é˜²æ­¢è¯¯å·®æ‰©å¤§ï¼Œè¿ç»­å¤šä¸ªå››å…ƒæ•°æ“ä½œå¯èƒ½å¯¼è‡´è¯¯å·®æ‰©å¤§ã€‚
 //
 
 void Quaternion::normalize()
 {
-	// ¼ÆËãËÄÔªÊıµÄÄ£
+	// è®¡ç®—å››å…ƒæ•°çš„æ¨¡
 	float mag = (float)sqrtf(w * w + x * x + y * y + z * z);
-	// ¼ì²â³¤¶È, ·ÀÖ¹³ıÁã´íÎó
+	// æ£€æµ‹é•¿åº¦, é˜²æ­¢é™¤é›¶é”™è¯¯
 	if (mag > 0.0f)
 	{
-		// ÕıÔò»¯
+		// æ­£åˆ™åŒ–
 		float oneOverMag = 1.0f / mag;
 		w *= oneOverMag;
 		x *= oneOverMag;
@@ -180,9 +180,9 @@ void Quaternion::normalize()
 	}
 	else
 	{
-		// ÓĞÂé·³ÁË
+		// æœ‰éº»çƒ¦äº†
 		assert(false);
-		// ÔÚ·¢²¼°æ±¾ÖĞ, ·µ»Øµ¥ÔªËÄÔªÊı
+		// åœ¨å‘å¸ƒç‰ˆæœ¬ä¸­, è¿”å›å•å…ƒå››å…ƒæ•°
 		identity();
 	}
 }
@@ -190,49 +190,49 @@ void Quaternion::normalize()
 //------------------------------------------------------------
 // Quaternion::getRotationAngle
 // 
-//·µ»ØĞı×ª½Ç
+//è¿”å›æ—‹è½¬è§’
 
 float Quaternion::getRotationAngle() const
 {
-	// ¼ÆËã°ë½Ç, w = cos(theta / 2);
+	// è®¡ç®—åŠè§’, w = cos(theta / 2);
 	float thetaOver2 = safeAcos(w);
-	// ·µ»ØĞı×ª½Ç
+	// è¿”å›æ—‹è½¬è§’
 	return thetaOver2 * 2.0f;
 }
 
 //-----------------------------------------------------------------
 // Quaternion::getRotationAxis
-//ÌáÈ¡Ğı×ªÖá
+//æå–æ—‹è½¬è½´
 
 Vector3 Quaternion::getRotationAxis() const
 {
-	// ¼ÆËãsin^2(theta/2), ¼Ç×¡ w = cos(theta/2). sin^2(x) + cos^2(x) = 1;
+	// è®¡ç®—sin^2(theta/2), è®°ä½ w = cos(theta/2). sin^2(x) + cos^2(x) = 1;
 	float sinThetaOver2Sq = 1.0f - w * w;
-	// ×¢Òâ±£Ö¤¾«È·¶È
+	// æ³¨æ„ä¿è¯ç²¾ç¡®åº¦
 	if (sinThetaOver2Sq <= 0.0f)
 	{
-		// µ¥Î»ËÄÔªÊıÊÇ²»¾«È·µÄÊıÖµ, Ö»Òª·µ»ØÓĞĞ§µÄÏòÁ¿¼´¿É
+		// å•ä½å››å…ƒæ•°æ˜¯ä¸ç²¾ç¡®çš„æ•°å€¼, åªè¦è¿”å›æœ‰æ•ˆçš„å‘é‡å³å¯
 		return Vector3(1.0f, 0.0f, 0.0f);
 	}
 	
-	// ¼ÆËã 1/sin(theta/2)
+	// è®¡ç®— 1/sin(theta/2)
 	float oneOverSinThetaOver2 = 1.0f / sqrtf(sinThetaOver2Sq);
 
-	//·µ»ØĞı×ªÖá
+	//è¿”å›æ—‹è½¬è½´
 	return Vector3(x * oneOverSinThetaOver2, y * oneOverSinThetaOver2, z * oneOverSinThetaOver2);
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //
-// ·Ç³ÉÔ±º¯Êı
+// éæˆå‘˜å‡½æ•°
 //
 ///////////////////////////////////////////////////////////////////////////////////////
 
 //-------------------------------------------------------------------------------------
 // dotProduct
-// ËÄÔªÊıµã³Ë
-// ÓÃ·Ç³ÉÔ±º¯ÊıÊµÏÖËÄÔªÊıµã³ËÒÔ±ÜÃâÔÚ±í´ïÊ½ÖĞÊ¹ÓÃ "¹ÖÒìµÄÓï·¨"
+// å››å…ƒæ•°ç‚¹ä¹˜
+// ç”¨éæˆå‘˜å‡½æ•°å®ç°å››å…ƒæ•°ç‚¹ä¹˜ä»¥é¿å…åœ¨è¡¨è¾¾å¼ä¸­ä½¿ç”¨ "æ€ªå¼‚çš„è¯­æ³•"
 
 float dotProduct(const Quaternion& a, const Quaternion& b)
 {
@@ -242,19 +242,19 @@ float dotProduct(const Quaternion& a, const Quaternion& b)
 
 //--------------------------------------------------------------------------------------
 //slerp
-//ÇòÃæÏßĞÔ²åÖµ
+//çƒé¢çº¿æ€§æ’å€¼
 
 Quaternion slerp(const Quaternion& p, const Quaternion& q, float t)
 {
-	// ¼ì²â³ö½çµÄ²ÎÊı, Èç¹û¼ì²âµ½, ·µ»Ø±ß½çµã
+	// æ£€æµ‹å‡ºç•Œçš„å‚æ•°, å¦‚æœæ£€æµ‹åˆ°, è¿”å›è¾¹ç•Œç‚¹
 	if (t <= 0.0f) return p;
 	if (t >= 1.0f) return q;
 
-	// ÓÃµã³Ë¼ÆËãËÄÔªÊı¼Ğ½ÇµÄ cosÖµ
+	// ç”¨ç‚¹ä¹˜è®¡ç®—å››å…ƒæ•°å¤¹è§’çš„ coså€¼
 	float cosOmega = dotProduct(p, q);
 
-	// Èç¹ûµã³ËÎª¸º, Ê¹ÓÃ q
-	// ËÄÔªÊı q ºÍ -q ´ú±íÏàÍ¬µÄĞı×ª, µ«¿ÉÄÜ²úÉú²»Í¬µÄ slerp ÔËËã, Òò´ËÒªÑ¡ÕıÈ·µÄÒ»¸öÒÔ±ãÊ¹ÓÃÈñ½Ç½øĞĞĞı×ª
+	// å¦‚æœç‚¹ä¹˜ä¸ºè´Ÿ, ä½¿ç”¨ q
+	// å››å…ƒæ•° q å’Œ -q ä»£è¡¨ç›¸åŒçš„æ—‹è½¬, ä½†å¯èƒ½äº§ç”Ÿä¸åŒçš„ slerp è¿ç®—, å› æ­¤è¦é€‰æ­£ç¡®çš„ä¸€ä¸ªä»¥ä¾¿ä½¿ç”¨é”è§’è¿›è¡Œæ—‹è½¬
 	float qw = q.w;
 	float qx = q.x;
 	float qy = q.y;
@@ -267,54 +267,54 @@ Quaternion slerp(const Quaternion& p, const Quaternion& q, float t)
 		qz = -q.z;
 		cosOmega = -cosOmega;
 	}
-	// ÎÒÃÇÓÃµÄÊÇÁ½¸öµ¥ÔªËÄÔªÊı, ËùÒÔµã³Ë½á¹ûÓ¦¸Ã <= 1.0
+	// æˆ‘ä»¬ç”¨çš„æ˜¯ä¸¤ä¸ªå•å…ƒå››å…ƒæ•°, æ‰€ä»¥ç‚¹ä¹˜ç»“æœåº”è¯¥ <= 1.0
 	assert(cosOmega < 1.1f);
 
-	// ¼ÆËã²åÖµÆ¬, ×¢Òâ¼ì²é·Ç³£½Ó½üµÄÇé¿ö
+	// è®¡ç®—æ’å€¼ç‰‡, æ³¨æ„æ£€æŸ¥éå¸¸æ¥è¿‘çš„æƒ…å†µ
 	float k0, k1;
 	if (cosOmega > 0.99999f)
 	{
-		// ·Ç³£½Ó½ü, ¼´ÏßĞÔ²åÖµ, ·ÀÖ¹³ıÁã
+		// éå¸¸æ¥è¿‘, å³çº¿æ€§æ’å€¼, é˜²æ­¢é™¤é›¶
 		k0 = 1.0f - t;
 		k1 = t;
 	}
 	else
 	{
-		// ÓÃÈı½Ç¹«Ê½sin^2(omega) + cos^2(omega) = 1 ¼ÆËãsinÖµ
+		// ç”¨ä¸‰è§’å…¬å¼sin^2(omega) + cos^2(omega) = 1 è®¡ç®—sinå€¼
 		float sinOmega = sqrtf(1.0f - cosOmega * cosOmega);
-		// ¸ù¾İ sin ºÍ cosÖµ ¼ÆËã½Ç¶È
+		// æ ¹æ® sin å’Œ coså€¼ è®¡ç®—è§’åº¦
 		float omega = atan2f(sinOmega, cosOmega);
-		// ¼ÆËã·ÖÄ¸µÄµ¹Êı, ÕâÑùÖ»ĞèÒª³ıÒ»´Î
+		// è®¡ç®—åˆ†æ¯çš„å€’æ•°, è¿™æ ·åªéœ€è¦é™¤ä¸€æ¬¡
 		float oneOverSinOmega = 1.0f / sinOmega;
-		// ¼ÆËã²åÖµ±äÁ¿
+		// è®¡ç®—æ’å€¼å˜é‡
 		k0 = sinf((1.0f - t) * omega) * oneOverSinOmega;
 		k1 = sinf(t * omega) * oneOverSinOmega;
 	}
-	// ²åÖµ
+	// æ’å€¼
 	Quaternion result;
-	result.x = k0 * p.x + k1 * q.x;
-	result.y = k0 * p.y + k1 * q.y;
-	result.z = k0 * p.z + k1 * q.z;
-	result.w = k0 * p.w + k1 * q.w;
+	result.x = k0 * p.x + k1 * qx;
+	result.y = k0 * p.y + k1 * qy;
+	result.z = k0 * p.z + k1 * qz;
+	result.w = k0 * p.w + k1 * qw;
 
-	// µ¥Î»»¯
+	// å•ä½åŒ–
 	result.normalize();
-	// ·µ»Ø
+	// è¿”å›
 	return result;
 }
 
 //---------------------------------------------------------------------------
 // conjugate
 //
-//ËÄÔªÊı¹²éî£¬¼´ÓëËÄÔªÊıĞı×ª·½ÏòÏà·´µÄËÄÔªÊı
+//å››å…ƒæ•°å…±è½­ï¼Œå³ä¸å››å…ƒæ•°æ—‹è½¬æ–¹å‘ç›¸åçš„å››å…ƒæ•°
 
 Quaternion conjugate(const Quaternion& q)
 {
 	Quaternion result;
-	// Ğı×ªÁ¿ÏàÍ¬
+	// æ—‹è½¬é‡ç›¸åŒ
 	result.w = q.w;
 
-	// Ğı×ªÖáÏà·´
+	// æ—‹è½¬è½´ç›¸å
 	result.x = -q.x;
 	result.y = -q.y;
 	result.z = -q.z;
@@ -325,25 +325,25 @@ Quaternion conjugate(const Quaternion& q)
 //----------------------------------------------------------------------------
 // pow
 //
-// ËÄÔªÊıÃİ
+// å››å…ƒæ•°å¹‚
 
 Quaternion pow(const Quaternion& q, float exponent)
 {
-	// ¼ì²éµ¥Î»ËÄÔªÊı, ·ÀÖ¹³ıÁã
+	// æ£€æŸ¥å•ä½å››å…ƒæ•°, é˜²æ­¢é™¤é›¶
 	if (fabs(q.w) > 0.99999f)
 		return q;
 
-	// ÌáÈ¡°ë½Çalpha(alpha = theta/2)
+	// æå–åŠè§’alpha(alpha = theta/2)
 	float alpha = acosf(q.w);
 
-	// ¼ÆËãĞÂ alpha Öµ
+	// è®¡ç®—æ–° alpha å€¼
 	float newAlpha = alpha * exponent;
 
-	// ¼ÆËãĞÂwÖµ
+	// è®¡ç®—æ–°wå€¼
 	Quaternion result;
 	result.w = cosf(newAlpha);
 
-	// ¼ÆËãĞÂ xyz Öµ
+	// è®¡ç®—æ–° xyz å€¼
 	float mult = sinf(newAlpha) / sinf(alpha);
 	result.x = q.x * mult;
 	result.y = q.y * mult;

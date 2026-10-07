@@ -1,57 +1,57 @@
 #pragma once
 //----------------------------------------------------------------
-// Quaternion Àà
-// ÊµÏÖÔÚ 3D ÖĞ±íÊ¾½ÇÎ»ÒÆµÄËÄÔªÊı
+// Quaternion ç±»
+// å®ç°åœ¨ 3D ä¸­è¡¨ç¤ºè§’ä½ç§»çš„å››å…ƒæ•°
 class Vector3;
 class EulerAngles;
 
 class Quaternion
 {
 public:
-	// ¹«¹²Êı¾İ
+	// å…¬å…±æ•°æ®
 	float w, x, y, z;
 
-	// ¹«¹²²Ù×÷
+	// å…¬å…±æ“ä½œ
 
-	// ÖÃÎªµ¥Î»ËÄÔªÊı
+	// ç½®ä¸ºå•ä½å››å…ƒæ•°
 	void identity() { w = 1.0f; x = y = z = 0.0f; }
 
-	// ¹¹ÔìÖ´ĞĞĞı×ªµÄËÄÔªÊı
+	// æ„é€ æ‰§è¡Œæ—‹è½¬çš„å››å…ƒæ•°
 	void setToRotateAboutX(float theta);
 	void setToRotateAboutY(float theta);
 	void setToRotateAboutZ(float theta);
 	void setToRotateAboutAxis(const Vector3& axis, float theta);
 
-	// ¹¹ÔìÖ´ĞĞ ÎïÌå-¹ßĞÔĞı×ªµÄËÄÔªÊı, ·½Î»²ÎÊıÓÃÅ·À­½ÇĞÎÊ½¸ø³ö
+	// æ„é€ æ‰§è¡Œ ç‰©ä½“-æƒ¯æ€§æ—‹è½¬çš„å››å…ƒæ•°, æ–¹ä½å‚æ•°ç”¨æ¬§æ‹‰è§’å½¢å¼ç»™å‡º
 	void setToRotateObjectToInertial(const EulerAngles& orientation);
 	void setToRotateInertialToObject(const EulerAngles& orientation);
 
-	// ²æ³Ë
+	// å‰ä¹˜
 	Quaternion operator* (const Quaternion& a) const;
 
-	// ¸³Öµ³Ë·¨
+	// èµ‹å€¼ä¹˜æ³•
 	Quaternion& operator *= (const Quaternion& a);
 
-	//½«ËÄÔªÊıÕıÔò»¯
+	//å°†å››å…ƒæ•°æ­£åˆ™åŒ–
 	void normalize();
 
-	//ÌáÈ¡Ğı×ª½ÇºÍĞı×ªÖá
+	//æå–æ—‹è½¬è§’å’Œæ—‹è½¬è½´
 	float getRotationAngle() const;
 	Vector3 getRotationAxis() const;
 
 };
 
-// È«¾Ö "µ¥Î»" ËÄÔªÊı
+// å…¨å±€ "å•ä½" å››å…ƒæ•°
 extern const Quaternion kQuaternionIdentity;
 
-// ËÄÔªÊıµã³Ë
+// å››å…ƒæ•°ç‚¹ä¹˜
 extern float dotProduct(const Quaternion& a, const Quaternion& b);
 
-// ÇòÃæÏßĞÔ²åÖµ
+// çƒé¢çº¿æ€§æ’å€¼
 extern	Quaternion slerp(const Quaternion& p, const Quaternion& q, float t);
 
-// ËÄÔªÊı¹²éî
+// å››å…ƒæ•°å…±è½­
 extern Quaternion conjugate(const Quaternion& q);
 
-// ËÄÔªÊıÃİ
+// å››å…ƒæ•°å¹‚
 extern Quaternion pow(const Quaternion& q, float exponent);

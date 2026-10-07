@@ -1,8 +1,9 @@
 #pragma once
 #include <iostream>
+#include <math.h>
 using namespace std;
 //////////////////////////////////////////////////////////////////////////////
-//  Vector3 Àà ¼òµ¥µÄ 3D ÏòÁ¿Àà
+//  Vector3 ç±» ç®€å•çš„ 3D å‘é‡ç±»
 //////////////////////////////////////////////////////////////////////////////
 class Vector3
 {
@@ -26,7 +27,7 @@ public:
 		z(nz)
 	{}
 
-	// ¼á³Ö C ÓïÑÔ·ç¸ñ, ÖØÔØ¸³ÖµÔËËã·û, È»ºó·µ»ØÒıÓÃ, À´ÊµÏÖ×óÖµ
+	// åšæŒ C è¯­è¨€é£æ ¼, é‡è½½èµ‹å€¼è¿ç®—ç¬¦, ç„¶åè¿”å›å¼•ç”¨, æ¥å®ç°å·¦å€¼
 	Vector3& operator=(const Vector3& v3)
 	{
 		x = v3.x;
@@ -40,14 +41,14 @@ public:
 		return x == v3.x && y == v3.y && z == v3.z;
 	}
 
-	//ÏòÁ¿ÔËËã
-	// ÖÃÎªÁãÏòÁ¿
+	//å‘é‡è¿ç®—
+	// ç½®ä¸ºé›¶å‘é‡
 	void zero() { x = y = z = 0.0f; }
 
-	// ÖØÔØÒ»Ôª `-` ÔËËã·û
+	// é‡è½½ä¸€å…ƒ `-` è¿ç®—ç¬¦
 	Vector3 operator-() const { return Vector3{ -x, -y, -z }; }
 
-	// ÖØÔØ¶şÔª `+` ºÍ `-` ÔËËã·û
+	// é‡è½½äºŒå…ƒ `+` å’Œ `-` è¿ç®—ç¬¦
 	Vector3 operator+(const Vector3& v3) const
 	{
 		return Vector3(x + v3.x, y + v3.y, z + v3.z);
@@ -57,18 +58,18 @@ public:
 		return Vector3(x - v3.x, y - v3.y, z - v3.z);
 	}
 
-	// Óë±êÁ¿µÄ³Ë¡¢³ı·¨
+	// ä¸æ ‡é‡çš„ä¹˜ã€é™¤æ³•
 	Vector3 operator* (float a) const
 	{
 		return Vector3(x * a, y * a, z * a);
 	}
 	Vector3 operator/ (float a) const
 	{
-		float oneOverA = 1.0f / a;			// ÕâÀï²»¶Ô "³ıÁã" ½øĞĞ¼ì²é
+		float oneOverA = 1.0f / a;			// è¿™é‡Œä¸å¯¹ "é™¤é›¶" è¿›è¡Œæ£€æŸ¥
 		return Vector3(x * oneOverA, y * oneOverA, z * oneOverA);
 	}
 
-	// ÖØÔØ×Ô·´ÔËËã·û
+	// é‡è½½è‡ªåè¿ç®—ç¬¦
 	Vector3& operator +=(const Vector3& v3)
 	{
 		x += v3.x; y += v3.y; z += v3.z;
@@ -91,11 +92,11 @@ public:
 		return *this;
 	}
 
-	// ÏòÁ¿±ê×¼»¯
+	// å‘é‡æ ‡å‡†åŒ–
 	void normalize()
 	{
 		float magSq = x * x + y * y + z * z;
-		if (magSq > 0.0f) // ¼ì²é³ıÁã
+		if (magSq > 0.0f) // æ£€æŸ¥é™¤é›¶
 		{
 			float oneOverMag = 1.0f / sqrt(magSq);
 			x *= oneOverMag;
@@ -103,7 +104,7 @@ public:
 			z *= oneOverMag;
 		}
 	}
-	// ÏòÁ¿µã³Ë, ÖØÔØ±ê×¼µÄ³Ë·¨ÔËËã·û
+	// å‘é‡ç‚¹ä¹˜, é‡è½½æ ‡å‡†çš„ä¹˜æ³•è¿ç®—ç¬¦
 	float operator*(const Vector3& v3) const
 	{
 		return x * v3.x + y * v3.y + z * v3.z;
@@ -111,16 +112,16 @@ public:
 };
 
 //////////////////////////////////////////////////////////////////////////////
-// ·Ç³ÉÔ±º¯Êı
+// éæˆå‘˜å‡½æ•°
 //////////////////////////////////////////////////////////////////////////////
 
-// ÇóÏòÁ¿Ä£
+// æ±‚å‘é‡æ¨¡
 inline float vectorMag(const Vector3& v3)
 {
 	return sqrt(v3.x * v3.x + v3.y * v3.y + v3.z * v3.z);
 }
 
-// ¼ÆËãÁ½ÏòÁ¿µÄ²æ³Ë
+// è®¡ç®—ä¸¤å‘é‡çš„å‰ä¹˜
 inline Vector3 crossProduct(const Vector3& a, const Vector3& b)
 {
 	return Vector3(a.y * b.z - a.z * b.y,
@@ -129,13 +130,13 @@ inline Vector3 crossProduct(const Vector3& a, const Vector3& b)
 	);
 }
 
-// ÊµÏÖ±êÁ¿×ó³Ë
+// å®ç°æ ‡é‡å·¦ä¹˜
 inline Vector3 operator*(float k, const Vector3& v3)
 {
 	return Vector3(k * v3.x, k * v3.y, k * v3.z);
 }
 
-// ¼ÆËãÁ½µã¼äµÄ¾àÀë
+// è®¡ç®—ä¸¤ç‚¹é—´çš„è·ç¦»
 inline float distance(const Vector3& a, const Vector3& b)
 {
 	float dx = a.x - b.x;
@@ -145,8 +146,8 @@ inline float distance(const Vector3& a, const Vector3& b)
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//È«¾Ö±äÁ¿
+//å…¨å±€å˜é‡
 //////////////////////////////////////////////////////////////////////////////
 
-// Ìá¹©Ò»¸öÈ«¾ÖÁãÏòÁ¿
+// æä¾›ä¸€ä¸ªå…¨å±€é›¶å‘é‡
 extern const Vector3 kZeroVector;

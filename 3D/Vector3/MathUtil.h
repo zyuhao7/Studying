@@ -2,19 +2,19 @@
 #define __MATHUTIL_H_INCLUDED__
 #include <math.h>
 //////////////////////////////////////////////////////////////////////////////
-// ³£ÓÃÊıÑ§¹«Ê½
+// å¸¸ç”¨æ•°å­¦å…¬å¼
 //////////////////////////////////////////////////////////////////////////////
 
-// ¶¨ÒåºÍ pi ÓĞ¹ØµÄ³£Á¿
+// å®šä¹‰å’Œ pi æœ‰å…³çš„å¸¸é‡
 const float kPi = 3.14159265f;
 const float k2Pi = kPi * 2.0f;
 const float kPiOver2 = kPi / 2.0f;
 const float k1Over2Pi = 1.0f / k2Pi;
-// Í¨¹ıÔö¼ÓÊÊµ±µÄ 2pi±¶Êı½Ç¶ÈÏŞÖÆÔÚ -pi µ½ pi µÄÇø¼äÖĞ
+// é€šè¿‡å¢åŠ é€‚å½“çš„ 2piå€æ•°è§’åº¦é™åˆ¶åœ¨ -pi åˆ° pi çš„åŒºé—´ä¸­
 extern float wrapPi(float  theta);
-//"°²È«" ·´Èı½Çº¯Êı
+//"å®‰å…¨" åä¸‰è§’å‡½æ•°
 extern float safeAcos(float x);
-// ¼ÆËã½Ç¶ÈµÄ sin ºÍ cos Öµ
+// è®¡ç®—è§’åº¦çš„ sin å’Œ cos å€¼
 inline void sinCos(float* returnSin, float* returnCos, float theta)
 {
 	*returnSin = sin(theta);

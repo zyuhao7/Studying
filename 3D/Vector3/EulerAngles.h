@@ -2,10 +2,10 @@
 #define __EULERANGLES_H_INCLUDED__
 
 //////////////////////////////////////////////////////////////////////////////
-//  Å·À­½Ç
+//  æ¬§æ‹‰è§’
 //////////////////////////////////////////////////////////////////////////////
 
-// Ô¤ÉùÃ÷
+// é¢„å£°æ˜
 class Quaternion;
 class Matrix4x3;
 class RotationMatrix;
@@ -13,44 +13,44 @@ class RotationMatrix;
 //--------------------------------------------------------
 // class EulerAngles
 //
-// ¸ÃÀàÓÃÓÚ±íÊ¾heading-pitch-bank Å·À­½ÇÏµÍ³
+// è¯¥ç±»ç”¨äºè¡¨ç¤ºheading-pitch-bank æ¬§æ‹‰è§’ç³»ç»Ÿ
 // heading +y, pitch +x, bank +z
 
 class EulerAngles
 {
 public:
-	// ¹«¹²Êı¾İ
-	// Ö±½ÓµÄ1±íÊ¾·½Ê½
-	// ÓÃ»¡¶È±£´æÈı¸ö½Ç¶È
+	// å…¬å…±æ•°æ®
+	// ç›´æ¥çš„1è¡¨ç¤ºæ–¹å¼
+	// ç”¨å¼§åº¦ä¿å­˜ä¸‰ä¸ªè§’åº¦
 	float heading;
 	float pitch;
 	float bank;
 
-	// ¹«¹²²Ù×÷
+	// å…¬å…±æ“ä½œ
 	// 
-	// È±Ê¡¹¹Ôìº¯Êı
+	// ç¼ºçœæ„é€ å‡½æ•°
 	EulerAngles(){}
 	EulerAngles(float h, float p, float b)
 		:heading(h), pitch(p), bank(b){}
 	
-	// ÖÃÁã
+	// ç½®é›¶
 	void identity() { pitch = bank = heading = 0.0f; }
 
-	// ±ä»»Îª "ÏŞÖÆ¼¯" Å·À­½Ç
+	// å˜æ¢ä¸º "é™åˆ¶é›†" æ¬§æ‹‰è§’
 	void canonize();
 
-	// ´ÓËÄÔªÊı×ª»»µ½Å·À­½Ç¡£
-	// ÊäÈëµÄËÄÔªÊı¼ÙÉèÎª ÎïÌå-ÊÀ½ç »ò ÊÀ½ç-ÎïÌå ËÄÔªÊı¡£
+	// ä»å››å…ƒæ•°è½¬æ¢åˆ°æ¬§æ‹‰è§’ã€‚
+	// è¾“å…¥çš„å››å…ƒæ•°å‡è®¾ä¸º ç‰©ä½“-ä¸–ç•Œ æˆ– ä¸–ç•Œ-ç‰©ä½“ å››å…ƒæ•°ã€‚
 	void fromObjectToInertialQuternion(const Quaternion& q);
 	void fromInertialToObjectQuaternion(const Quaternion& q);
 
-	// ´Ó¾ØÕó×ª»»µ½Å·À­½Ç
-	// ÊäÈë¾ØÕó¼ÙÉèÎª ÎïÌå-ÊÀ½ç »òÊÀ½ç-ÎïÌå ×ª»»¾ØÕó
-	// Æ½ÒÆ²¿·Ö±»ºöÂÔ£¬²¢ÇÒ¼ÙÉè¾ØÕóÊÇÕı½»µÄ
+	// ä»çŸ©é˜µè½¬æ¢åˆ°æ¬§æ‹‰è§’
+	// è¾“å…¥çŸ©é˜µå‡è®¾ä¸º ç‰©ä½“-ä¸–ç•Œ æˆ–ä¸–ç•Œ-ç‰©ä½“ è½¬æ¢çŸ©é˜µ
+	// å¹³ç§»éƒ¨åˆ†è¢«å¿½ç•¥ï¼Œå¹¶ä¸”å‡è®¾çŸ©é˜µæ˜¯æ­£äº¤çš„
 	void fromObjectToWorldMatrix(const Matrix4x3& m);
 	void fromWorldToObjectMatrix(const Matrix4x3& m);
 
-	// ´Ó×ª»»¾ØÕóµ½Å·À­½Ç
+	// ä»è½¬æ¢çŸ©é˜µåˆ°æ¬§æ‹‰è§’
 	void fromRotationMatrix(const RotationMatrix& m);
 };
 

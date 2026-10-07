@@ -5,31 +5,31 @@ class EulerAngles;
 class Quaternion;
 
 //-------------------------------------------------------------------------------
-// RotationMatrix Àà
-// ÊµÏÖÁËÒ»¸ö¼òµ¥µÄ3x3 ¾ØÕó£¬ ½öÓÃ×÷Ğı×ª
-// ¾ØÕó¼ÙÉèÎªÕı½»µÄ£¬ ÔÚ±ä»»Ê±Ö¸¶¨·½Ïò
+// RotationMatrix ç±»
+// å®ç°äº†ä¸€ä¸ªç®€å•çš„3x3 çŸ©é˜µï¼Œ ä»…ç”¨ä½œæ—‹è½¬
+// çŸ©é˜µå‡è®¾ä¸ºæ­£äº¤çš„ï¼Œ åœ¨å˜æ¢æ—¶æŒ‡å®šæ–¹å‘
 
 class RotationMatrix
 {
 public:
-	// ¹«¹²Êı¾İ
-	//¾ØÕóµÃ9¸öÖµ
+	// å…¬å…±æ•°æ®
+	//çŸ©é˜µå¾—9ä¸ªå€¼
 	float m11, m12, m13;
 	float m21, m22, m23;
 	float m31, m32, m33;
 
-	//¹«¹²²Ù×÷
-	//ÖÃÎªµ¥Î»¾ØÕó
+	//å…¬å…±æ“ä½œ
+	//ç½®ä¸ºå•ä½çŸ©é˜µ
 	void identity();
 
-	//¸ù¾İÖ¸¶¨µÄ·½Î»¹¹Ôì¾ØÕó
+	//æ ¹æ®æŒ‡å®šçš„æ–¹ä½æ„é€ çŸ©é˜µ
 	void setup(const EulerAngles& orientation);
 
-	// ¸ù¾İËÄÔªÊı¹¹Ôì¾ØÕó£¬¼ÙÉè¸ÃËÄÔªÊı²ÎÊı´ú±íÖ¸¶¨·½ÏòµÄ±ä»»
+	// æ ¹æ®å››å…ƒæ•°æ„é€ çŸ©é˜µï¼Œå‡è®¾è¯¥å››å…ƒæ•°å‚æ•°ä»£è¡¨æŒ‡å®šæ–¹å‘çš„å˜æ¢
 	void fromInertialToObjectQuaternion(const Quaternion& q);
 	void fromObjectToInertialQuaternion(const Quaternion& q);
 
-	// Ö´ĞĞĞı×ª
+	// æ‰§è¡Œæ—‹è½¬
 	Vector3 inertialToObject(const Vector3& v) const;
 	Vector3 objectToInertial(const Vector3& v) const;
 };

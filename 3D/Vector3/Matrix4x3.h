@@ -5,83 +5,83 @@ class Quaternion;
 class RotationMatrix;
 
 //--------------------------------------------------------------------------------------
-//Matrix4*3Àà
-// ÊµÏÖ3*4×ª»»¾ØÕó£¬ÄÜ¹»±í´ïÈÎºÎ3D·ÂÉä±ä»»
+//Matrix4*3ç±»
+// å®ç°3*4è½¬æ¢çŸ©é˜µï¼Œèƒ½å¤Ÿè¡¨è¾¾ä»»ä½•3Dä»¿å°„å˜æ¢
 
 class Matrix4x3
 {
 public:
-	// ¹«¹²Êı¾İ
+	// å…¬å…±æ•°æ®
 
-	// ¾ØÕóµÄÖµ
-	//Ç°3ĞĞ°üº¬ÏßĞÔ±ä»»£¬×îºóÒ»ĞĞ°üº¬Æ½ÒÆ
+	// çŸ©é˜µçš„å€¼
+	//å‰3è¡ŒåŒ…å«çº¿æ€§å˜æ¢ï¼Œæœ€åä¸€è¡ŒåŒ…å«å¹³ç§»
 	float m11, m12, m13;
 	float m21, m22, m23;
 	float m31, m32, m33;
 	float tx, ty, tz;
 
-	// ¹«¹²²Ù×÷
+	// å…¬å…±æ“ä½œ
 
-	//ÖÃÎªµ¥Î»¾ØÕó
+	//ç½®ä¸ºå•ä½çŸ©é˜µ
 	void identity();
 
-	// Ö±½Ó·ÃÎÊÆ½ÒÆ²¿·Ö
+	// ç›´æ¥è®¿é—®å¹³ç§»éƒ¨åˆ†
 	void zeroTranslation();
 	void setTranslation(const Vector3& d);
 	void setupTranslation(const Vector3& d);
 
-	// ¹¹ÔìÖ´ĞĞ¸¸¿Õ¼ä <->¾Ö²¿¿Õ¼ä±ä»»µÄ¾ØÕó£¬¼Ù¶¨¾Ö²¿¿Õ¼äÔÚÖ¸¶¨µÄÎ»ÖÃºÍ·½Î»£¬ ¸Ã·½Î»¿ÉÄÜÊÇÊ¹ÓÃÅ·À­½Ç»òĞı×ª¾ØÕó±íÊ¾µÄ¡£
+	// æ„é€ æ‰§è¡Œçˆ¶ç©ºé—´ <->å±€éƒ¨ç©ºé—´å˜æ¢çš„çŸ©é˜µï¼Œå‡å®šå±€éƒ¨ç©ºé—´åœ¨æŒ‡å®šçš„ä½ç½®å’Œæ–¹ä½ï¼Œ è¯¥æ–¹ä½å¯èƒ½æ˜¯ä½¿ç”¨æ¬§æ‹‰è§’æˆ–æ—‹è½¬çŸ©é˜µè¡¨ç¤ºçš„ã€‚
 	void setupLocalToParent(const Vector3& pos, const EulerAngles& orient);
 	void setupLocalToParent(const Vector3& pos, const RotationMatrix& orient);
 	void setupParentToLocal(const Vector3& pos, const EulerAngles& orient);
 	void setupParentToLocal(const Vector3& pos, const RotationMatrix& orient);
 
-	// ¹¹ÔìÈÆ×ø±êÖáĞı×ªµÄ¾ØÕó
+	// æ„é€ ç»•åæ ‡è½´æ—‹è½¬çš„çŸ©é˜µ
 	void setupRotate(int axis, float theta);
 
-	// ¹¹ÔìÈÆÈÎÒâÖáĞı×ªµÄ¾ØÕó
+	// æ„é€ ç»•ä»»æ„è½´æ—‹è½¬çš„çŸ©é˜µ
 	void setupRotate(const Vector3& axis, float theta);
 
-	//¹¹ÔìĞı×ª¾ØÕó£¬½ÇÎ»ÒÆÓÉËÄÔªÊıĞÎÊ½¸ø³ö
+	//æ„é€ æ—‹è½¬çŸ©é˜µï¼Œè§’ä½ç§»ç”±å››å…ƒæ•°å½¢å¼ç»™å‡º
 	void fromQuaternion(const Quaternion& q);
 
-	// ¹¹ÔìÑØ×ø±êÖáËõ·ÅµÄ¾ØÕó
+	// æ„é€ æ²¿åæ ‡è½´ç¼©æ”¾çš„çŸ©é˜µ
 	void setupScale(const Vector3& s);
 
-	// ¹¹ÔìÑØÈÎÒâÖáËõ·ÅµÄ¾ØÕó
+	// æ„é€ æ²¿ä»»æ„è½´ç¼©æ”¾çš„çŸ©é˜µ
 	void setupScaleAlongAxis(const Vector3& axis, float k);
 
-	// ¹¹ÔìÇĞ±ä¾ØÕó
+	// æ„é€ åˆ‡å˜çŸ©é˜µ
 	void setupShear(int axis, float s, float t);
 
-	// ¹¹ÔìÍ¶Ó°¾ØÕó£¬ Í¶Ó°Æ½Ãæ¹ıÔ­µã
+	// æ„é€ æŠ•å½±çŸ©é˜µï¼Œ æŠ•å½±å¹³é¢è¿‡åŸç‚¹
 	void setupProject(const Vector3& n);
 
-	// ¹¹Ôì·´Éä¾ØÕó
+	// æ„é€ åå°„çŸ©é˜µ
 	void setupReflect(int axis, float k = 0.0f);
 
-	// ¹¹ÔìÑØÈÎÒâÆ½Ãæ·´ÉäµÄ¾ØÕó
+	// æ„é€ æ²¿ä»»æ„å¹³é¢åå°„çš„çŸ©é˜µ
 	void setupReflect(const Vector3& n);
 };
 
-// ÔËËã·û* ÓÃÀ´±ä»»µã»òÁ¬½Ó¾ØÕó£¬³Ë·¨µÄË³Ğò´Ó×óÏòÓÒ£¬Óë±ä»»Ë³ĞòÏàÍ¬¡£
+// è¿ç®—ç¬¦* ç”¨æ¥å˜æ¢ç‚¹æˆ–è¿æ¥çŸ©é˜µï¼Œä¹˜æ³•çš„é¡ºåºä»å·¦å‘å³ï¼Œä¸å˜æ¢é¡ºåºç›¸åŒã€‚
 Vector3 operator*(const Vector3& p, const Matrix4x3& m);
 Matrix4x3 operator*(const Matrix4x3& a, const Matrix4x3& b);
 
-// ÔËËã·û*= ±£³ÖºÍc++±ê×¼Óï·¨µÄÒ»ÖÂĞÔ
+// è¿ç®—ç¬¦*= ä¿æŒå’Œc++æ ‡å‡†è¯­æ³•çš„ä¸€è‡´æ€§
 Vector3& operator*=(Vector3& p, const Matrix4x3& m);
 Matrix4x3& operator*=(Matrix4x3& a, const Matrix4x3& m);
 
 
-// ¼ÆËã3x3 ²¿·ÖµÄĞĞÁĞÊ½
+// è®¡ç®—3x3 éƒ¨åˆ†çš„è¡Œåˆ—å¼
 float determinant(const Matrix4x3& m);
 
-//¼ÆËã¾ØÕóµÄÄæ
+//è®¡ç®—çŸ©é˜µçš„é€†
 Matrix4x3 inverse(const Matrix4x3& m);
 
-// ÌáÈ¡¾ØÕóµÄÆ½ÒÆ²¿·Ö
+// æå–çŸ©é˜µçš„å¹³ç§»éƒ¨åˆ†
 Vector3 getTranslation(const Matrix4x3& m);
 
-// ´Ó¾Ö²¿¾ØÕó->¸¸¾ØÕó »ò ¸¸¾ØÕó->¾Ö²¿¾ØÕó È¡Î»ÖÃ/·½Î»
+// ä»å±€éƒ¨çŸ©é˜µ->çˆ¶çŸ©é˜µ æˆ– çˆ¶çŸ©é˜µ->å±€éƒ¨çŸ©é˜µ å–ä½ç½®/æ–¹ä½
 Vector3 getPositionFromParentToLocalMatrix(const Matrix4x3& m);
 Vector3 getPositionFromLocalToParentMatrix(const Matrix4x3& m);
