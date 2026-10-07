@@ -2,10 +2,16 @@
 
 LearnOpenGL 教程配套示例集，`src/` 下每个目录是一个独立可运行程序，逐章演示 OpenGL 4.6 core 的一个主题。
 
+示例分两部分：
+
+- `src/05_shader_class` … `src/47_deferred_shading`：自写简版，一章一个主题。
+- `src/1.getting_started` … `src/7.in_practice`：从官方 [LearnOpenGL 仓库](https://github.com/JoeyDeVries/LearnOpenGL) 移植的完整示例，目录名与官方编号一致（如 `src/5.advanced_lighting/9.ssao`）。官方仓库的 8.guest、7.in_practice/2.text_rendering、7.in_practice/3.2d_game 因缺少 irrKlang 等依赖未移植。
+
 ## 目录结构
 
 ```
-src/<章节>/         每个示例独立目录, 含 main.cpp 与 shader/
+src/<章节>/         自写示例, 含 main.cpp 与 shader/
+src/<章节组>/<示例>/  官方移植示例, 目录名与官方编号一致
 include/            第三方与自研头文件
   glad/             OpenGL 4.6 core 加载器 (glad.h + glad.c)
   GLFW/ KHR/        GLFW 与平台头
@@ -32,12 +38,13 @@ sudo apt-get install -y build-essential libglfw3-dev libglm-dev libassimp-dev
 
 ## 构建与运行
 
-单目录方式，`dir=` 指定示例目录名（默认 `05_shader_class`）：
+单目录方式，`dir=` 指定示例目录名（默认 `05_shader_class`），官方移植示例用官方相对路径：
 
 ```bash
-make dir=07_load_texture     # 编译到 output/main
-make dir=07_load_texture run # 编译并运行
-make dir=07_load_texture clean
+make dir=07_load_texture                        # 编译到 output/main
+make dir=07_load_texture run                    # 编译并运行
+make dir=1.getting_started/7.4.camera_class     # 官方移植示例
+make dir=5.advanced_lighting/9.ssao
 ```
 
 **必须在仓库根目录运行**，示例通过 `argv[1]` 拼接 `./shader/...` 路径，并以 `./static/...` 读取纹理与模型。
@@ -45,13 +52,13 @@ make dir=07_load_texture clean
 批量编译全部示例：
 
 ```bash
-for p in src/*/; do d=${p#src/}; make dir=${d%/}; done
+for f in $(find src -name main.cpp); do d=${f#src/}; make dir=${d%/main.cpp}; done
 ```
 
 ## 运行环境说明
 
 - 需要可用的 OpenGL 4.6 core 环境。WSL2 下依赖 WSLg；若 WSLg 无法创建窗口（`glfwCreateWindow` 卡死），可用 Xvfb 无头运行：`xvfb-run -a -s "-screen 0 1920x1200x24" ./output/main src/<章节>/`。屏幕至少 1600x1200，否则 41/42/45/46/47 等窗口会被裁剪。
-- 需要 GPU 或软件渲染；无 GPU 时可设 `LIBGL_ALWAYS_SOFTWARE=1` 走 llvmpipe。
+- 需要 GPU 或软件渲染；无 GPU 时可设 `LIBGL_ALWAYS_SOFTWARE=1` 走 llvmpipe。IBL 类示例（`src/6.pbr/2.*`）在 llvmpipe 下要花约 10 秒做 HDR 卷积与预滤波，启动后前几秒画面仍是清屏色属正常。
 
 ## 操作方式
 
@@ -69,3 +76,4 @@ for p in src/*/; do d=${p#src/}; make dir=${d%/}; done
 - `include/geometry/BufferGeometry.h` 与 `include/tools/mesh.h` 共用同一个 `Vertex` 结构，用宏 `TOOLS_VERTEX_DEFINED` 防止重复定义。
 - `47_deferred_shading` 的 G-buffer 用了 RGB16F 三通道附件；示例沿用其它章节的全局 `glEnable(GL_BLEND)`，在部分驱动（llvmpipe 等）下会丢弃这些附件的写入，导致画面只剩清屏色。已在几何阶段前 `glDisable(GL_BLEND)`、结束后恢复。
 - `-Wall -Wextra` 下存在大量 `unused parameter/variable` 警告，属教程代码遗留，不影响运行。
+- 官方移植示例带入的静态资源约 130M：`static/model/backpack/`（39M）、`static/texture/pbr/`（83M）、`static/texture/hdr/`（3.7M）。每个含 `stb_image` 的翻译单元各自 `#define STB_IMAGE_IMPLEMENTATION`，与自写示例一致。
