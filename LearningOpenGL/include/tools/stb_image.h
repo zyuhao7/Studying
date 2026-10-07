@@ -542,6 +542,9 @@ extern "C"
 #endif // STBI_INCLUDE_STB_IMAGE_H
 
 #ifdef STB_IMAGE_IMPLEMENTATION
+// 防止同一翻译单元内 (如 main.cpp 与 tools/model.h) 重复包含导致实现重定义
+#ifndef STBI_IMAGE_IMPLEMENTATION_GUARD
+#define STBI_IMAGE_IMPLEMENTATION_GUARD
 
 #if defined(STBI_ONLY_JPEG) || defined(STBI_ONLY_PNG) || defined(STBI_ONLY_BMP) || defined(STBI_ONLY_TGA) || defined(STBI_ONLY_GIF) || defined(STBI_ONLY_PSD) || defined(STBI_ONLY_HDR) || defined(STBI_ONLY_PIC) || defined(STBI_ONLY_PNM) || defined(STBI_ONLY_ZLIB)
 #ifndef STBI_ONLY_JPEG
@@ -9105,6 +9108,7 @@ STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const *c, void *user
     return stbi__is_16_main(&s);
 }
 
+#endif // STBI_IMAGE_IMPLEMENTATION_GUARD
 #endif // STB_IMAGE_IMPLEMENTATION
 
 /*

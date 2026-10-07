@@ -13,7 +13,9 @@ using namespace std;
 
 const float PI = glm::pi<float>();
 
-// mesh.h中也定义此属性
+// mesh.h中也定义此属性, 用同一宏避免同时包含时重复定义
+#ifndef TOOLS_VERTEX_DEFINED
+#define TOOLS_VERTEX_DEFINED
 struct Vertex
 {
     glm::vec3 Position;  // 顶点位置
@@ -23,6 +25,7 @@ struct Vertex
     glm::vec3 Tangent;   // 切线
     glm::vec3 Bitangent; // 副切线
 };
+#endif
 
 class BufferGeometry
 {

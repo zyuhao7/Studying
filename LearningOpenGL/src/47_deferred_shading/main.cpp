@@ -240,6 +240,8 @@ int main(int argc, char *argv[])
 
     glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // gPosition/gNormal 为 RGB16F 三通道附件, 开混合时部分驱动会丢弃写入
+    glDisable(GL_BLEND);
 
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view = camera.GetViewMatrix();
@@ -257,6 +259,7 @@ int main(int argc, char *argv[])
       drawMesh(objectGeometry);
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glEnable(GL_BLEND);
 
     // render
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

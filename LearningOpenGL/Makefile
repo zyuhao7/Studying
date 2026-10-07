@@ -17,6 +17,9 @@ LFLAGS =
 # define output directory
 OUTPUT	:= output
 
+# 示例目录, 可用 make dir=07_load_texture 覆盖
+dir ?= 05_shader_class
+
 # define source directory 运行时修改此处路径
 SRC		:= src/$(dir) #// 传递 var 变量定义执行文件目录
 CLEAN_SRC		:= src/$(dir)/*.o #// 删除所有.o文件
@@ -33,15 +36,18 @@ MAIN	:= main.exe
 SOURCEDIRS	:= $(SRC)
 INCLUDEDIRS	:= $(INCLUDE)
 LIBDIRS		:= $(LIB)
+GLAD_SRC	:=
 FIXPATH = $(subst /,/,$1)
 RM			:= del /q a/f
 MD	:= mkdir
 else
-LIBRARIES	:= -lglad -lglfw -ldl -lpthread
+# Linux: 使用系统 glfw3/assimp, lib/ 下的 .a 为 MinGW 产物不可用, 故不设 -Llib
+LIBRARIES	:= -lassimp -lglfw -ldl -lpthread
 MAIN	:= main
 SOURCEDIRS	:= $(shell find $(SRC) -type d)
 INCLUDEDIRS	:= $(shell find $(INCLUDE) -type d)
-LIBDIRS		:= $(shell find $(LIB) -type d)
+LIBDIRS		:=
+GLAD_SRC	:= include/glad/glad.c
 FIXPATH = $1
 RM = rm -f
 MD	:= mkdir -p
@@ -57,9 +63,11 @@ LIBS		:= $(patsubst %,-L%, $(LIBDIRS:%/=%))
 SOURCES		:= $(wildcard $(patsubst %,%/*.cpp, $(SOURCEDIRS)))
 SOURCES	+= include/imgui/imgui_impl_glfw.cpp include/imgui/imgui_impl_opengl3.cpp
 SOURCES	+= include/imgui/imgui.cpp include/imgui/imgui_draw.cpp include/imgui/imgui_widgets.cpp
+SOURCES	+= $(GLAD_SRC)
 
-# define the C object files 
+# define the C object files
 OBJECTS		:= $(SOURCES:.cpp=.o)
+OBJECTS		:= $(OBJECTS:.c=.o)
 
 #
 # The following part of the makefile is generic; it can be used to 
@@ -84,6 +92,10 @@ $(MAIN): $(OBJECTS)
 # (see the gnu make manual section about automatic variables)
 .cpp.o:
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $<  -o $@
+
+# glad.c 用 C++ 编译器编译, 已验证无警告
+.c.o:
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 .PHONY: clean
 clean:
