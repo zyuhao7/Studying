@@ -45,7 +45,7 @@ make dir=07_load_texture clean
 批量编译全部示例：
 
 ```bash
-for d in $(ls -d src/*/ | sed 's#src/##; s#/##'); do make dir=$d; done
+for p in src/*/; do d=${p#src/}; make dir=${d%/}; done
 ```
 
 ## 运行环境说明
