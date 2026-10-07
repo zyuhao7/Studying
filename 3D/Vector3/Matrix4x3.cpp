@@ -478,11 +478,11 @@ void Matrix4x3::setupReflect(const Vector3& n)
 
 Vector3 operator*(const Vector3& p, const Matrix4x3& m)
 {
-	//根据线性代数法则
+	//根据线性代数法则, 平移部分最后加上
 	return Vector3(
-		p.x * m.m11 + p.y * m.m21 + p.z * m.m31,
-		p.x * m.m12 + p.y * m.m22 + p.z * m.m32,
-		p.x * m.m13 + p.y * m.m23 + p.z * m.m33
+		p.x * m.m11 + p.y * m.m21 + p.z * m.m31 + m.tx,
+		p.x * m.m12 + p.y * m.m22 + p.z * m.m32 + m.ty,
+		p.x * m.m13 + p.y * m.m23 + p.z * m.m33 + m.tz
 	);
 }
 
