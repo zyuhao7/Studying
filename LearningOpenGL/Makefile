@@ -17,8 +17,8 @@ LFLAGS =
 # define output directory
 OUTPUT	:= output
 
-# 示例目录, 可用 make dir=07_load_texture 覆盖
-dir ?= 05_shader_class
+# 示例目录, 可用 make dir=1.getting_started/7.4.camera_class 覆盖
+dir ?= 1.getting_started/2.1.hello_triangle
 
 # define source directory 运行时修改此处路径
 SRC		:= src/$(dir) #// 传递 var 变量定义执行文件目录

@@ -10,8 +10,8 @@
 #include <string>
 #include <vector>
 
-// 顶点属性, 与 27_load_model 起的 model 系列着色器约定一致
-// 与 geometry/BufferGeometry.h 中的 Vertex 为同一结构, 用同一宏避免重复定义
+// 顶点属性, 与 model 系列着色器约定一致
+// 用 TOOLS_VERTEX_DEFINED 宏防止重复定义
 #ifndef TOOLS_VERTEX_DEFINED
 #define TOOLS_VERTEX_DEFINED
 struct Vertex
