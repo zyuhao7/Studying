@@ -36,7 +36,7 @@ namespace log
             {
                 std::unique_lock<std::mutex> lock(_mutex);
                 _push_cond.wait(lock, [&]
-                                { return _tasks_push.writeAbleSize() >= msg.size(); });
+                                { return _tasks_push.empty() || _tasks_push.writeAbleSize() >= msg.size(); });
                 _tasks_push.push(msg.c_str(), msg.size());
             }
             _pop_cond.notify_all();

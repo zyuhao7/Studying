@@ -52,7 +52,6 @@ namespace log
 
         void push(const char *data, size_t len)
         {
-            assert(len <= writeAbleSize());
             ensureEnoughSpace(len);
             std::copy(data, data + len, &_v[_write_idx]);
             _write_idx += len;
