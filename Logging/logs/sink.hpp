@@ -16,15 +16,27 @@ namespace log
         using ptr = std::shared_ptr<LogSink>;
         LogSink() {}
         virtual ~LogSink() {}
-        virtual void log(const char *data, size_t len) = 0;
+        // 加锁后调用子类 write 实现，保证多线程落地安全
+        void log(const char *data, size_t len)
+        {
+            std::lock_guard<std::mutex> lock(_mutex);
+            write(data, len);
+        }
+
+    protected:
+        virtual void write(const char *data, size_t len) = 0;
+
+    private:
+        std::mutex _mutex;
     };
 
     class StdoutSink : public LogSink
     {
     public:
         using ptr = std::shared_ptr<StdoutSink>;
-        StdoutSink() = default;
-        void log(const char *data, size_t len)
+
+    protected:
+        void write(const char *data, size_t len) override
         {
             std::cout.write(data, len);
         }
@@ -47,7 +59,8 @@ namespace log
             return _filename;
         }
 
-        void log(const char *data, size_t len)
+    protected:
+        void write(const char *data, size_t len) override
         {
             _ofs.write((const char *)data, len);
             if (_ofs.good() == false)
@@ -73,7 +86,8 @@ namespace log
             util::file::create_directory(util::file::path(basename));
         }
 
-        void log(const char *data, size_t len)
+    protected:
+        void write(const char *data, size_t len) override
         {
             initLogFile();
             _ofs.write(data, len);
