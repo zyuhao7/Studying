@@ -26,11 +26,6 @@ namespace log
               _ctime(util::data::now()),
               _tid(std::this_thread::get_id())
         {
-            std::cout << "构造 msg \n";
-        }
-        ~LogMsg()
-        {
-            std::cout << "析构 msg \n";
         }
     };
 }
