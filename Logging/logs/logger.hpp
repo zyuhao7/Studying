@@ -312,7 +312,11 @@ namespace log
                 std::cout << "日志器名称不能为空！！";
                 abort();
             }
-            assert(loggerManager::getInstance().hasLogger(_logger_name) == false);
+            if (loggerManager::getInstance().hasLogger(_logger_name))
+            {
+                std::cout << "日志器名称：" << _logger_name << " 已存在！\n";
+                abort();
+            }
 
             if (_formatter.get() == nullptr)
             {
