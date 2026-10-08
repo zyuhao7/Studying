@@ -59,7 +59,7 @@ for f in $(find src -name main.cpp); do d=${f#src/}; make dir=${d%/main.cpp}; do
 - 全部示例：`ESC` 退出。
 - 相机类示例（`1.getting_started/7.x` 起）：`W/A/S/D` 前后左右移动，鼠标拖动旋转视角、滚轮缩放。
 
-各示例的演示内容见 [docs/EXAMPLES.md](docs/EXAMPLES.md)。
+各示例的演示内容见 [docs/EXAMPLES.md](docs/EXAMPLES.md)；学习路线与"小型模型查看器"练习的实施方案见 [docs/MODEL_VIEWER.md](docs/MODEL_VIEWER.md)。
 
 ## 构建注意事项
 
