@@ -8,12 +8,9 @@
 #ifndef __M_UTIL_H__
 #define __M_UTIL_H__
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include <string>
 #include <ctime>
-#include <cassert>
+#include <cstddef>
 #include <sys/stat.h>
 
 namespace logging

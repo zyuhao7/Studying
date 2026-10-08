@@ -1,12 +1,17 @@
 #ifndef __M_FMT_H__
 #define __M_FMT_H__
 
-#include "util.hpp"
 #include "message.hpp"
 #include "level.hpp"
 #include <memory>
 #include <vector>
 #include <tuple>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <ctime>
+#include <cassert>
+#include <cctype>
 
 namespace logging
 {
@@ -218,7 +223,7 @@ namespace logging
             std::string format_val; // 存放格式化字符后边 {} 中的子格式字符串
             std::string string_row; // 存放原始的非格式化字符
             bool sub_format_error = false;
-            int pos = 0;
+            size_t pos = 0;
             while (pos < _pattern.size())
             {
                 if (_pattern[pos] != '%')

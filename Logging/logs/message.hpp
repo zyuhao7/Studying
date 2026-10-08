@@ -18,13 +18,13 @@ namespace logging
         std::string _payload;   // 日志消息
         LogLevel::value _level; // 日志等级
         LogMsg(std::string &name, std::string file, size_t line, std::string &&payload, LogLevel::value level)
-            : _name(name),
+            : _line(line),
+              _ctime(util::data::now()),
+              _tid(std::this_thread::get_id()),
+              _name(name),
               _file(file),
               _payload(std::move(payload)),
-              _level(level),
-              _line(line),
-              _ctime(util::data::now()),
-              _tid(std::this_thread::get_id())
+              _level(level)
         {
         }
     };

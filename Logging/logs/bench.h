@@ -2,10 +2,14 @@
 #define __M_BENCH_H__
 #include "bitlog.h"
 #include <chrono>
+#include <string>
+#include <vector>
+#include <thread>
+#include <iostream>
 
 namespace logging
 {
-    void bench(const std::string &loger_name, size_t thread_num, size_t msglen, size_t msg_count)
+    inline void bench(const std::string &loger_name, size_t thread_num, size_t msglen, size_t msg_count)
     {
         Logger::ptr lp = getLogger(loger_name);
         if (lp.get() == nullptr)
@@ -17,7 +21,7 @@ namespace logging
         std::cout << "输入线程数量: " << thread_num << std::endl;
         std::cout << "输出日志数量: " << msg_count << std::endl;
         std::cout << "输出日志大小: " << msglen * msg_count / 1024 << "KB" << std::endl;
-        for (int i = 0; i < thread_num; i++)
+        for (size_t i = 0; i < thread_num; i++)
         {
             threads.emplace_back([&, i]()
                                  {

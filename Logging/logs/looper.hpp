@@ -1,12 +1,12 @@
 #ifndef __M_LOOP_H__
 #define __M_LOOP_H__
-#include "util.hpp"
-#include <vector>
+#include <memory>
+#include <functional>
 #include <thread>
 #include <mutex>
 #include <atomic>
 #include <condition_variable>
-#include <functional>
+#include <string>
 #include "buffer.hpp"
 
 // 异步任务处理器(AsyncLooper)
@@ -17,8 +17,8 @@ namespace logging
     public:
         using Functor = std::function<void(Buffer &buffer)>;
         using ptr = std::shared_ptr<AsyncLooper>;
-        AsyncLooper(const Functor &cb) : _running(true),
-                                         _looper_callback(cb),
+        AsyncLooper(const Functor &cb) : _looper_callback(cb),
+                                         _running(true),
                                          _thread(std::thread(&AsyncLooper::worker_loop, this))
         {
         }

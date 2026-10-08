@@ -1,10 +1,14 @@
 #ifndef __M_SINK_H__
 #define __M_SINK_H__
 #include "util.hpp"
-#include "message.hpp"
-#include "formatter.hpp"
 #include <memory>
 #include <mutex>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <string>
+#include <cassert>
+#include <ctime>
 
 // 日志落地类
 

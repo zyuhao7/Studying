@@ -1,17 +1,23 @@
 #ifndef __M_LOG_H__
 #define __M_LOG_H__
-#include "util.hpp"
 #include "level.hpp"
 #include "message.hpp"
 #include "formatter.hpp"
 #include "sink.hpp"
 #include "looper.hpp"
 #include <vector>
-#include <list>
 #include <atomic>
 #include <unordered_map>
 #include <cstdarg>
-#include <type_traits>
+#include <string>
+#include <memory>
+#include <iostream>
+#include <sstream>
+#include <mutex>
+#include <functional>
+#include <utility>
+#include <cassert>
+#include <cstdlib>
 
 // ⽇志器类(Logger)设计（建造者模式）
 namespace logging
@@ -31,7 +37,7 @@ namespace logging
         Logger(const std::string &name,
                Formatter::ptr formatter,
                std::vector<LogSink::ptr> &sinks,
-               LogLevel::value level = LogLevel::value::DEBUG) : _name(name), _level(level), _formatter(formatter),
+               LogLevel::value level = LogLevel::value::DEBUG) : _name(name), _formatter(formatter), _level(level),
                                                                  _sinks(sinks.begin(), sinks.end())
         {
         }
@@ -92,8 +98,8 @@ namespace logging
         public:
             using ptr = std::shared_ptr<Builder>;
 
-            Builder() : _level(LogLevel::value::DEBUG),
-                        _logger_type(Logger::Type::LOGGER_SYNC) {}
+            Builder() : _logger_type(Logger::Type::LOGGER_SYNC),
+                        _level(LogLevel::value::DEBUG) {}
 
             void buildLoggerName(const std::string &name) { _logger_name = name; }
             void buildLoggerLevel(LogLevel::value level) { _level = level; }
