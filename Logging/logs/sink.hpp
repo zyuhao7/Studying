@@ -107,6 +107,7 @@ namespace log
                 std::string name = createFilename();
                 _ofs.open(name, std::ios::binary | std::ios::app);
                 assert(_ofs.is_open());
+                // createFilename 保证是全新文件，尺寸从 0 起算
                 _cur_fsize = 0;
                 return;
             }
@@ -126,8 +127,15 @@ namespace log
             ss << lt.tm_hour;
             ss << lt.tm_min;
             ss << lt.tm_sec;
-            ss << ".log";
-            return ss.str();
+            // 秒级时间戳同一秒内可能重复，追加序号保证文件名唯一
+            std::string base = ss.str();
+            std::string name = base + ".log";
+            int idx = 1;
+            while (util::file::exists(name))
+            {
+                name = base + "_" + std::to_string(idx++) + ".log";
+            }
+            return name;
         }
         std::string _basename;
         std::ofstream _ofs;
