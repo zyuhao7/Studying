@@ -5,11 +5,11 @@
 // ⽇志宏 & 全局接⼝设计
 namespace log
 {
-    Logger::ptr getLogger(const std::string &name)
+    inline Logger::ptr getLogger(const std::string &name)
     {
         return loggerManager::getInstance().getLogger(name);
     }
-    Logger::ptr rootLogger()
+    inline Logger::ptr rootLogger()
     {
         return loggerManager::getInstance().rootLogger();
     }
