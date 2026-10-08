@@ -1,7 +1,7 @@
 #ifndef __M_LEVEL_H__
 #define __M_LEVEL_H__
 
-namespace log
+namespace logging
 {
     class LogLevel
     {

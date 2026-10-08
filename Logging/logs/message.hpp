@@ -5,7 +5,7 @@
 #include <thread>
 #include <memory>
 
-namespace log
+namespace logging
 {
     struct LogMsg
     {

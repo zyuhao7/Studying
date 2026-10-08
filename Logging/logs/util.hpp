@@ -16,7 +16,7 @@
 #include <cassert>
 #include <sys/stat.h>
 
-namespace log
+namespace logging
 {
     namespace util
     {

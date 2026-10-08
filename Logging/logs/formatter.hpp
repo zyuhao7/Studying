@@ -8,7 +8,7 @@
 #include <vector>
 #include <tuple>
 
-namespace log
+namespace logging
 {
     class FormatItem
     {
@@ -239,7 +239,7 @@ namespace log
                 }
                 // 当前位置是 % 字符位置
                 pos += 1;
-                if (pos < _pattern.size() && isalpha(_pattern[pos]))
+                if (pos < _pattern.size() && isalpha((unsigned char)_pattern[pos]))
                 {
                     format_key = _pattern[pos]; // 保存格式化字符
                 }

@@ -9,29 +9,29 @@ int main()
 {
     // Log message to be used in all tests
     std::string logger_name = "myh";
-    log::LogMsg msg(logger_name, "main.cc", 27, "Formatted log message test!", log::LogLevel::value::INFO);
+    logging::LogMsg msg(logger_name, "main.cc", 27, "Formatted log message test!", logging::LogLevel::value::INFO);
 
     // Test 1 : Default Formatter and StdoutSink - lpthread
     {
-        log::Formatter fmt;
+        logging::Formatter fmt;
         string str = fmt.format(msg); // Format the log message
-        log::LogSink::ptr stdout_sink = log::SinkFactory::create<log::StdoutSink>();
+        logging::LogSink::ptr stdout_sink = logging::SinkFactory::create<logging::StdoutSink>();
         stdout_sink->log(str.c_str(), str.size()); // Write to stdout
     }
 
     // Test 2: Custom Formatter with file sink
     // {
-    //     log::Formatter fmt("[%d{%Y-%m-%d %H:%M:%S}]%T[%t][%p][%c] %m%n"); // Custom pattern
+    //     logging::Formatter fmt("[%d{%Y-%m-%d %H:%M:%S}]%T[%t][%p][%c] %m%n"); // Custom pattern
     //     string str = fmt.format(msg);                                     // Format the log message with the custom pattern
-    //     log::LogSink::ptr file_sink = log::SinkFactory::create<log::FileSink>("test_log.txt");
+    //     logging::LogSink::ptr file_sink = logging::SinkFactory::create<logging::FileSink>("test_log.txt");
     //     file_sink->log(str.c_str(), str.size()); // Write to file
     // }
 
     // Test 3: Rolling File Sink
     // {
-    //     log::Formatter fmt("[%d{%H:%M:%S}][%p] %m%n");                                                    // Another custom pattern
+    //     logging::Formatter fmt("[%d{%H:%M:%S}][%p] %m%n");                                                    // Another custom pattern
     //     string str = fmt.format(msg);                                                                     // Format the log message
-    //     log::LogSink::ptr roll_sink = log::SinkFactory::create<log::RollSink>("./logfile/roll_log_", 50); // Small max file size for testing
+    //     logging::LogSink::ptr roll_sink = logging::SinkFactory::create<logging::RollSink>("./logfile/roll_log_", 50); // Small max file size for testing
     //     for (int i = 0; i < 10086; ++i)
     //     {
     //         string test_str = "Log entry #" + std::to_string(i) + ": " + str;

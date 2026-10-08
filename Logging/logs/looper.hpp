@@ -10,7 +10,7 @@
 #include "buffer.hpp"
 
 // 异步任务处理器(AsyncLooper)
-namespace log
+namespace logging
 {
     class AsyncLooper
     {

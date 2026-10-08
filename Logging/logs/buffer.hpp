@@ -6,11 +6,12 @@
 #include <atomic>
 #include <condition_variable>
 #include <functional>
+#include <algorithm>
 #include <cassert>
 #ifndef __M_BUFF_H__
 #define __M_BUFF_H__
 // 缓冲区类
-namespace log
+namespace logging
 {
 
 #define BUFFER_DEFAULT_SIZE (1 * 1024 * 1024)

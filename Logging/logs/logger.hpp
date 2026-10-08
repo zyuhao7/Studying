@@ -14,7 +14,7 @@
 #include <type_traits>
 
 // ⽇志器类(Logger)设计（建造者模式）
-namespace log
+namespace logging
 {
     class SyncLogger;
     class AsyncLogger;
@@ -37,6 +37,7 @@ namespace log
         }
         std::string loggerName() { return _name; }
         LogLevel::value loggerLevel() { return _level; }
+        void setLevel(LogLevel::value level) { _level = level; }
         void debug(const char *file, size_t line, const char *fmt, ...)
         {
             if (shouldLog(LogLevel::value::DEBUG) == false)

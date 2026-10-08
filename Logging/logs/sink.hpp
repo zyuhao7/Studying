@@ -8,7 +8,7 @@
 
 // 日志落地类
 
-namespace log
+namespace logging
 {
     class LogSink
     {
@@ -46,8 +46,9 @@ namespace log
     {
     public:
         using ptr = std::shared_ptr<FileSink>;
-        FileSink(const std::string &filename)
-            : _filename(filename)
+        FileSink(const std::string &filename, bool flush = false)
+            : _filename(filename),
+              _flush(flush)
         {
             util::file::create_directory(util::file::path(filename));
             _ofs.open(_filename, std::ios::binary | std::ios::app);
@@ -63,6 +64,8 @@ namespace log
         void write(const char *data, size_t len) override
         {
             _ofs.write((const char *)data, len);
+            if (_flush)
+                _ofs.flush();
             if (_ofs.good() == false)
             {
                 std::cout << "日志输出文件失败! " << std::endl;
@@ -72,16 +75,18 @@ namespace log
     private:
         std::string _filename;
         std::ofstream _ofs;
+        bool _flush;
     };
 
     class RollSink : public LogSink
     {
     public:
         using ptr = std::shared_ptr<RollSink>;
-        RollSink(const std::string &basename, size_t max_fsize)
+        RollSink(const std::string &basename, size_t max_fsize, bool flush = false)
             : _basename(basename),
               _max_fsize(max_fsize),
-              _cur_fsize(0)
+              _cur_fsize(0),
+              _flush(flush)
         {
             util::file::create_directory(util::file::path(basename));
         }
@@ -91,6 +96,8 @@ namespace log
         {
             initLogFile();
             _ofs.write(data, len);
+            if (_flush)
+                _ofs.flush();
             if (_ofs.good() == false)
             {
                 std::cout << "日志输出文件失败! \n";
@@ -141,6 +148,7 @@ namespace log
         std::ofstream _ofs;
         size_t _max_fsize;
         size_t _cur_fsize;
+        bool _flush;
     };
 
     class SinkFactory

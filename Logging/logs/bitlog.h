@@ -3,7 +3,7 @@
 #include "logger.hpp"
 
 // ⽇志宏 & 全局接⼝设计
-namespace log
+namespace logging
 {
     inline Logger::ptr getLogger(const std::string &name)
     {
@@ -26,11 +26,11 @@ namespace log
 #define LOG_ERROR(logger, fmt, ...) (logger)->error(fmt, ##__VA_ARGS__)
 #define LOG_FATAL(logger, fmt, ...) (logger)->fatal(fmt, ##__VA_ARGS__)
 
-#define LOGD(fmt, ...) LOG_DEBUG(log::rootLogger(), fmt, ##__VA_ARGS__)
-#define LOGI(fmt, ...) LOG_INFO(log::rootLogger(), fmt, ##__VA_ARGS__)
-#define LOGW(fmt, ...) LOG_WARN(log::rootLogger(), fmt, ##__VA_ARGS__)
-#define LOGE(fmt, ...) LOG_ERROR(log::rootLogger(), fmt, ##__VA_ARGS__)
-#define LOGF(fmt, ...) LOG_FATAL(log::rootLogger(), fmt, ##__VA_ARGS__)
+#define LOGD(fmt, ...) LOG_DEBUG(logging::rootLogger(), fmt, ##__VA_ARGS__)
+#define LOGI(fmt, ...) LOG_INFO(logging::rootLogger(), fmt, ##__VA_ARGS__)
+#define LOGW(fmt, ...) LOG_WARN(logging::rootLogger(), fmt, ##__VA_ARGS__)
+#define LOGE(fmt, ...) LOG_ERROR(logging::rootLogger(), fmt, ##__VA_ARGS__)
+#define LOGF(fmt, ...) LOG_FATAL(logging::rootLogger(), fmt, ##__VA_ARGS__)
 
 }
 

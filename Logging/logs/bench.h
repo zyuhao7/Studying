@@ -3,7 +3,7 @@
 #include "bitlog.h"
 #include <chrono>
 
-namespace log
+namespace logging
 {
     void bench(const std::string &loger_name, size_t thread_num, size_t msglen, size_t msg_count)
     {

@@ -8,13 +8,13 @@ void sync_bench_thread_log(size_t thread_count, size_t msg_count, size_t msglen)
     LOGI("************************************************");
     LOGI("同步日志测试: %d threads, %d messages", thread_count, msg_count);
 
-    log::GlobalLoggerBuilder::ptr lbp(new log::GlobalLoggerBuilder);
+    logging::GlobalLoggerBuilder::ptr lbp(new logging::GlobalLoggerBuilder);
     lbp->buildLoggerName(logger_name);
     lbp->buildFormatter("%m");
-    lbp->buildSink<log::FileSink>("./logs/sync.log");
-    lbp->buildLoggerType(log::Logger::Type::LOGGER_SYNC);
+    lbp->buildSink<logging::FileSink>("./logs/sync.log");
+    lbp->buildLoggerType(logging::Logger::Type::LOGGER_SYNC);
     lbp->build();
-    log::bench(logger_name, thread_count, msglen, msg_count);
+    logging::bench(logger_name, thread_count, msglen, msg_count);
     LOGI("************************************************");
 }
 void async_bench_thread_log(size_t thread_count, size_t msg_count, size_t msglen)
@@ -24,13 +24,13 @@ void async_bench_thread_log(size_t thread_count, size_t msg_count, size_t msglen
     LOGI("************************************************");
     LOGI("异步日志测试: %d threads, %d messages", thread_count, msg_count);
 
-    log::GlobalLoggerBuilder::ptr lbp(new log::GlobalLoggerBuilder);
+    logging::GlobalLoggerBuilder::ptr lbp(new logging::GlobalLoggerBuilder);
     lbp->buildLoggerName(logger_name);
     lbp->buildFormatter("%m");
-    lbp->buildSink<log::FileSink>("./logs/async.log");
-    lbp->buildLoggerType(log::Logger::Type::LOGGER_ASYNC);
+    lbp->buildSink<logging::FileSink>("./logs/async.log");
+    lbp->buildLoggerType(logging::Logger::Type::LOGGER_ASYNC);
     lbp->build();
-    log::bench(logger_name, thread_count, msglen, msg_count);
+    logging::bench(logger_name, thread_count, msglen, msg_count);
     LOGI("************************************************");
 }
 void bench_test()
