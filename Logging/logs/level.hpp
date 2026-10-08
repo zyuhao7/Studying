@@ -18,7 +18,7 @@ namespace log
 
         static const char *toString(LogLevel::value v)
         {
-            switch ()
+            switch (v)
             {
 #define TOSTRING(name) #name
             case LogLevel::value::DEBUG:
