@@ -27,6 +27,7 @@ namespace log
             LOGGER_ASYNC
         };
         using ptr = std::shared_ptr<Logger>;
+        virtual ~Logger() {}
         Logger(const std::string &name,
                Formatter::ptr formatter,
                std::vector<LogSink::ptr> &sinks,
