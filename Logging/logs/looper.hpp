@@ -25,9 +25,11 @@ namespace log
         ~AsyncLooper() { stop(); }
         void stop()
         {
-            _running = false;
+            if (_running.exchange(false) == false)
+                return;
             _pop_cond.notify_all();
-            _thread.join();
+            if (_thread.joinable())
+                _thread.join();
         }
         void push(const std::string &msg)
         {
