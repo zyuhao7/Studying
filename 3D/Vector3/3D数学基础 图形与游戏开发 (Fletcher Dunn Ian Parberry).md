@@ -138,11 +138,11 @@ $\|a \times b\| = \|a\| \, \|b\| \sin \theta$
 
 - **点乘法（无方向，范围 $[0, \pi]$）**
 
-$\theta = \arccos \left( \dfrac{a \cdot b}{\|a\| \, \|b\|} \right)$
+$\theta = \arccos( \dfrac{a \cdot b}{\|a\| \, \|b\|} )$
 
 - **叉乘法（带方向，范围 $[-\pi/2, \pi/2]$）**
 
-$\theta = \arcsin \left( \dfrac{\|a \times b\|}{\|a\| \, \|b\|} \right)$
+$\theta = \arcsin( \dfrac{\|a \times b\|}{\|a\| \, \|b\|} )$
 
 实现上用 `safeAcos` 把入参夹到 $[-1, 1]$，避免浮点误差导致 `acos` 域非法。
 
@@ -281,7 +281,7 @@ $$
 ### 🔹 wrapPi
 
 $$
-\text{wrapPi}(\theta) = \theta - 2\pi \left\lfloor \dfrac{\theta + \pi}{2\pi} \right\rfloor
+\text{wrapPi}(\theta) = \theta - 2\pi \lfloor \dfrac{\theta + \pi}{2\pi} \rfloor
 $$
 
 把任意角折到 $[-\pi, \pi]$。
@@ -301,7 +301,7 @@ $q = [w, (x, y, z)] = w + x\mathbf{i} + y\mathbf{j} + z\mathbf{k}$
 
 绕单位轴 $n$、角度 $\theta$：
 
-$q = \left[\cos\dfrac{\theta}{2},\ \sin\dfrac{\theta}{2}\, n\right]$
+$q = [\cos\dfrac{\theta}{2},\ \sin\dfrac{\theta}{2}\, n]$
 
 ### 🔹 乘法
 
@@ -326,14 +326,14 @@ $v' = q \, v \, q^{-1}$
 ### 🔹 球面线性插值 (slerp)
 
 $$
-\text{slerp}(p, q, t) = \frac{\sin\big((1-t)\omega\big)}{\sin\omega}\, p + \frac{\sin(t\omega)}{\sin\omega}\, q
+\text{slerp}(p, q, t) = \frac{\sin((1-t)\omega)}{\sin\omega}\, p + \frac{\sin(t\omega)}{\sin\omega}\, q
 $$
 
 其中 $\cos\omega = p \cdot q$。插值前要检查点乘符号：若为负，取反其一，保证走「短弧」。
 
 ### 🔹 幂
 
-$q^{t} = \left[\cos(t\omega),\ \sin(t\omega)\, n\right]$，其中 $\omega = \arccos(w)$，$n = \dfrac{v}{\|v\|}$。
+$q^{t} = [\cos(t\omega),\ \sin(t\omega)\, n]$，其中 $\omega = \arccos(w)$，$n = \dfrac{v}{\|v\|}$。
 
 ------
 
@@ -343,7 +343,7 @@ $q^{t} = \left[\cos(t\omega),\ \sin(t\omega)\, n\right]$，其中 $\omega = \arc
 |---------------|--------|----------|--------|
 | **欧拉角** | — | 由 $sh,ch,sp,cp,sb,cb$ 组合出 3×3 各元素 | 先转矩阵再转四元数 |
 | **旋转矩阵** | $pitch = \arcsin(-m_{23})$，`heading`/`bank` 用 `atan2` 导出 | — | 用迹与对角线元素构造 |
-| **四元数** | $pitch = \arcsin\!\big(-2(yz - wx)\big)$ 等；万向锁时退化为仅 `heading` | 由 $w,x,y,z$ 二次式直接写出 3×3 | — |
+| **四元数** | $pitch = \arcsin(-2(yz - wx))$ 等；万向锁时退化为仅 `heading` | 由 $w,x,y,z$ 二次式直接写出 3×3 | — |
 
 万向锁统一处理：当 $|\sin(pitch)| \to 1$ 时，`bank` 置 0，全部旋转并入 `heading`。
 
