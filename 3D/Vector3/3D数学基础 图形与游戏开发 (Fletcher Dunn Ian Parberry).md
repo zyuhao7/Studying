@@ -104,7 +104,7 @@ $a \cdot b = \sum_{i=1}^{n} a_i b_i$
 
 - **几何定义**
 
-$a \cdot b = \|a\| \, \|b\| \cos \theta$
+$a \cdot b = \Vert a\Vert   \Vert b\Vert  \cos \theta$
 
 点乘满足交换律、分配律；结果是一个标量。
 
@@ -117,8 +117,8 @@ $a \cdot b = \|a\| \, \|b\| \cos \theta$
 $$
 a \times b =
 \begin{vmatrix}
-\mathbf{i} & \mathbf{j} & \mathbf{k} \\
-a_x & a_y & a_z \\
+\mathbf{i} & \mathbf{j} & \mathbf{k} \\\\
+a_x & a_y & a_z \\\\
 b_x & b_y & b_z
 \end{vmatrix}
 = (a_y b_z - a_z b_y)\mathbf{i} - (a_x b_z - a_z b_x)\mathbf{j} + (a_x b_y - a_y b_x)\mathbf{k}
@@ -126,9 +126,9 @@ $$
 
 - **几何意义**
 
-$\|a \times b\| = \|a\| \, \|b\| \sin \theta$
+$\Vert a \times b\Vert  = \Vert a\Vert   \Vert b\Vert  \sin \theta$
 
-结果向量方向由 **右手定则** 确定，垂直于 $a$、$b$ 张成的平面。
+结果向量方向由 **右手定则** 确定，垂直于 $a$、 $b$ 张成的平面。
 
 存在 $b \times a = -(a \times b)$，即叉乘不满足交换律。
 
@@ -138,11 +138,11 @@ $\|a \times b\| = \|a\| \, \|b\| \sin \theta$
 
 - **点乘法（无方向，范围 $[0, \pi]$）**
 
-$\theta = \arccos( \dfrac{a \cdot b}{\|a\| \, \|b\|} )$
+$\theta = \arccos( \dfrac{a \cdot b}{\Vert a\Vert   \Vert b\Vert } )$
 
 - **叉乘法（带方向，范围 $[-\pi/2, \pi/2]$）**
 
-$\theta = \arcsin( \dfrac{\|a \times b\|}{\|a\| \, \|b\|} )$
+$\theta = \arcsin( \dfrac{\Vert a \times b\Vert }{\Vert a\Vert   \Vert b\Vert } )$
 
 实现上用 `safeAcos` 把入参夹到 $[-1, 1]$，避免浮点误差导致 `acos` 域非法。
 
@@ -152,16 +152,16 @@ $\theta = \arcsin( \dfrac{\|a \times b\|}{\|a\| \, \|b\|} )$
 
 - **长度 (Norm)**
 
-$\|a\| = \sqrt{a_x^2 + a_y^2 + a_z^2}$
+$\Vert a\Vert  = \sqrt{a_x^2 + a_y^2 + a_z^2}$
 
 - **单位向量 (Normalization)**
 
-$\hat{a} = \dfrac{a}{\|a\|}$
+$\hat{a} = \dfrac{a}{\Vert a\Vert }$
 
 零向量归一化无意义，实现中先判断长度平方是否大于 0。
 
-- **加减、数乘、数除** 均按分量运算：$(a \pm b)_i = a_i \pm b_i$，$(ka)_i = k a_i$。
-- **距离**：$d(a,b) = \|a - b\|$。
+- **加减、数乘、数除** 均按分量运算： $(a \pm b)_i = a_i \pm b_i$， $(ka)_i = k a_i$。
+- **距离**： $d(a,b) = \Vert a - b\Vert $。
 
 ------
 
@@ -181,14 +181,14 @@ $\sin^2(x) + \cos^2(x) = 1$
 
 ## 矩阵
 
-矩阵用**行向量右乘**约定：$p' = p \, M$，因此复合变换 $M = M_1 M_2$ 的乘法顺序与变换执行顺序一致。变换作用于物体时，是「物体坐标系 → 惯性坐标系」的坐标变换矩阵。
+矩阵用**行向量右乘**约定： $p' = p  M$，因此复合变换 $M = M_1 M_2$ 的乘法顺序与变换执行顺序一致。变换作用于物体时，是「物体坐标系 → 惯性坐标系」的坐标变换矩阵。
 
 ### 🔹 3D 旋转 — Rodrigues 公式
 
 绕单位轴 $u$、角度 $\theta$ 旋转：
 
 $$
-R = I + \sin\theta \, [u]_\times + (1 - \cos\theta) \, [u]_\times^2
+R = I + \sin\theta  [u]_\times + (1 - \cos\theta)  [u]_\times^2
 $$
 
 其中 $[u]_\times$ 是叉乘的反对称矩阵。展开为具体 3×3 分量：
@@ -196,30 +196,30 @@ $$
 $$
 R =
 \begin{bmatrix}
-(1-c)u_x^2 + c & (1-c)u_x u_y - s u_z & (1-c)u_x u_z + s u_y \\
-(1-c)u_x u_y + s u_z & (1-c)u_y^2 + c & (1-c)u_y u_z - s u_x \\
+(1-c)u_x^2 + c & (1-c)u_x u_y - s u_z & (1-c)u_x u_z + s u_y \\\\
+(1-c)u_x u_y + s u_z & (1-c)u_y^2 + c & (1-c)u_y u_z - s u_x \\\\
 (1-c)u_x u_z - s u_y & (1-c)u_y u_z + s u_x & (1-c)u_z^2 + c
 \end{bmatrix}
 $$
 
-其中 $s = \sin\theta$，$c = \cos\theta$。
+其中 $s = \sin\theta$， $c = \cos\theta$。
 
 ### 🔹 缩放
 
 缩放矩阵是对角矩阵：
 
 $$
-S = \begin{bmatrix} s_x & 0 & 0 \\ 0 & s_y & 0 \\ 0 & 0 & s_z \end{bmatrix}
+S = \begin{bmatrix} s_x & 0 & 0 \\\\ 0 & s_y & 0 \\\\ 0 & 0 & s_z \end{bmatrix}
 $$
 
-沿任意轴 $n$（单位向量）缩放系数 $k$：$M = I + (k-1) n n^{\mathsf T}$。
+沿任意轴 $n$（单位向量）缩放系数 $k$： $M = I + (k-1) n n^{\mathsf T}$。
 
 ### 🔹 切变 (Shear)
 
-沿某轴切变，由两个切变系数 $s$、$t$ 描述。以沿 $y$ 轴切变为例：
+沿某轴切变，由两个切变系数 $s$、 $t$ 描述。以沿 $y$ 轴切变为例：
 
 $$
-H = \begin{bmatrix} 1 & 0 & 0 \\ s & 1 & t \\ 0 & 0 & 1 \end{bmatrix}
+H = \begin{bmatrix} 1 & 0 & 0 \\\\ s & 1 & t \\\\ 0 & 0 & 1 \end{bmatrix}
 $$
 
 ### 🔹 投影
@@ -232,9 +232,9 @@ $P = I - n n^{\mathsf T}$
 
 沿法线 $n$ 的平面镜像：
 
-$R = I - 2\, n n^{\mathsf T}$
+$R = I - 2 n n^{\mathsf T}$
 
-沿坐标轴镜像则直接取反对应分量（如绕 $x = k$ 平面：$x' = 2k - x$）。
+沿坐标轴镜像则直接取反对应分量（如绕 $x = k$ 平面： $x' = 2k - x$）。
 
 ------
 
@@ -245,14 +245,14 @@ $R = I - 2\, n n^{\mathsf T}$
 $$
 M =
 \begin{bmatrix}
-m_{11} & m_{12} & m_{13} \\
-m_{21} & m_{22} & m_{23} \\
-m_{31} & m_{32} & m_{33} \\
+m_{11} & m_{12} & m_{13} \\\\
+m_{21} & m_{22} & m_{23} \\\\
+m_{31} & m_{32} & m_{33} \\\\
 t_x & t_y & t_z
 \end{bmatrix}
 $$
 
-点变换：$p' = p \, M + t$。
+点变换： $p' = p  M + t$。
 
 - **局部 → 父空间** / **父空间 → 局部**：由位置 `pos` 与朝向 `orient` 构造。
 - 行列式取 3×3 部分；逆矩阵则先转置 3×3 部分，再对平移部分取负。
@@ -294,46 +294,46 @@ $$
 
 $q = [w, (x, y, z)] = w + x\mathbf{i} + y\mathbf{j} + z\mathbf{k}$
 
-- 单位四元数：$\|q\| = \sqrt{w^2 + x^2 + y^2 + z^2} = 1$
-- 「单位」四元数（无旋转）：$[1, (0,0,0)]$
+- 单位四元数： $\Vert q\Vert  = \sqrt{w^2 + x^2 + y^2 + z^2} = 1$
+- 「单位」四元数（无旋转）： $[1, (0,0,0)]$
 
 ### 🔹 绕轴旋转
 
 绕单位轴 $n$、角度 $\theta$：
 
-$q = [\cos\dfrac{\theta}{2},\ \sin\dfrac{\theta}{2}\, n]$
+$q = [\cos\dfrac{\theta}{2},\ \sin\dfrac{\theta}{2} n]$
 
 ### 🔹 乘法
 
 $$
-q_1 q_2 = [\,w_1 w_2 - v_1 \cdot v_2,\ \ w_1 v_2 + w_2 v_1 + v_1 \times v_2\,]
+q_1 q_2 = [w_1 w_2 - v_1 \cdot v_2,\ \ w_1 v_2 + w_2 v_1 + v_1 \times v_2]
 $$
 
 四元数乘法不满足交换律，且与矩阵乘法一样不满足。
 
 ### 🔹 共轭、模、逆
 
-- 共轭：$q^* = [\,w, -v\,]$
-- 模：$\|q\| = \sqrt{w^2 + \|v\|^2}$
-- 逆：$q^{-1} = \dfrac{q^*}{\|q\|^2}$，单位四元数下 $q^{-1} = q^*$
+- 共轭： $q^* = [w, -v]$
+- 模： $\Vert q\Vert  = \sqrt{w^2 + \Vert v\Vert ^2}$
+- 逆： $q^{-1} = \dfrac{q^*}{\Vert q\Vert ^2}$，单位四元数下 $q^{-1} = q^*$
 
 用四元数旋转向量时，先构造旋转四元数的逆，再左乘、右乘：
 
-$v' = q \, v \, q^{-1}$
+$v' = q  v  q^{-1}$
 
-（$v$ 写成标量部为 0 的四元数）。
+（ $v$ 写成标量部为 0 的四元数）。
 
 ### 🔹 球面线性插值 (slerp)
 
 $$
-\text{slerp}(p, q, t) = \frac{\sin((1-t)\omega)}{\sin\omega}\, p + \frac{\sin(t\omega)}{\sin\omega}\, q
+\text{slerp}(p, q, t) = \frac{\sin((1-t)\omega)}{\sin\omega} p + \frac{\sin(t\omega)}{\sin\omega} q
 $$
 
 其中 $\cos\omega = p \cdot q$。插值前要检查点乘符号：若为负，取反其一，保证走「短弧」。
 
 ### 🔹 幂
 
-$q^{t} = [\cos(t\omega),\ \sin(t\omega)\, n]$，其中 $\omega = \arccos(w)$，$n = \dfrac{v}{\|v\|}$。
+$q^{t} = [\cos(t\omega),\ \sin(t\omega) n]$，其中 $\omega = \arccos(w)$， $n = \dfrac{v}{\Vert v\Vert }$。
 
 ------
 
