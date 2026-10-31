@@ -21,9 +21,11 @@ const char *vertexShaderSource ="#version 330 core\n"
 const char *fragmentShaderSource = "#version 330 core\n"
     "out vec4 FragColor;\n"
     "uniform vec4 ourColor;\n"
+    "uniform float uTime;\n"
     "void main()\n"
     "{\n"
-    "   FragColor = ourColor;\n"
+    "   float pulse = sin(uTime * 3.0) / 2.0 + 0.5;\n"
+    "   FragColor = vec4(ourColor.rgb * (0.5 + 0.5 * pulse), 1.0);\n"
     "}\n\0";
 
 int main()
@@ -99,6 +101,12 @@ int main()
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
+    // uniform locations are fixed after linking; a misspelled name returns -1 and later glUniform calls fail silently
+    int ourColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+    int uTimeLocation = glGetUniformLocation(shaderProgram, "uTime");
+    if (ourColorLocation == -1 || uTimeLocation == -1)
+        std::cout << "WARNING::UNIFORM::NOT_FOUND" << std::endl;
+
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     float vertices[] = {
@@ -145,11 +153,11 @@ int main()
         // be sure to activate the shader before any calls to glUniform
         glUseProgram(shaderProgram);
 
-        // update shader uniform
-        double  timeValue = glfwGetTime();
-        float greenValue = static_cast<float>(sin(timeValue) / 2.0 + 0.5);
-        int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
-        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+        // update shader uniforms
+        double timeValue = glfwGetTime();
+        float t = static_cast<float>(sin(timeValue) / 2.0 + 0.5);
+        glUniform4f(ourColorLocation, t, 1.0f - t, 0.0f, 1.0f);
+        glUniform1f(uTimeLocation, static_cast<float>(timeValue));
 
         // render the triangle
         glDrawArrays(GL_TRIANGLES, 0, 3);
