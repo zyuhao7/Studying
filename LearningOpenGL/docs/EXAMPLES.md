@@ -25,8 +25,8 @@ make dir=<示例相对路径> run     # 在仓库根目录执行
 | `2.3.hello_triangle_exercise1` | 练习：给三个顶点加不同颜色。 |
 | `2.4.hello_triangle_exercise2` | 练习：用两个 VAO/VBO 画两个相邻三角形。 |
 | `2.5.hello_triangle_exercise3` | 练习：同一 VBO 配两个 VAO，用各自着色器渲染。 |
-| `3.1.shaders_uniform` | 通过 `uniform` 传入颜色，让三角形颜色随时间变化。 |
-| `3.2.shaders_interpolation` | 顶点属性输出插值到片段着色器，呈现渐变色三角形。 |
+| `3.1.shaders_uniform` | 通过 `uniform` 传入颜色与时间，三角形颜色在红绿间变化并带脉冲。 |
+| `3.2.shaders_interpolation` | 顶点颜色插值到片段着色器；已改为 6 顶点 `glDrawArrays` 画四边形，对角线两端顶点各给两种颜色，接缝处颜色突变。 |
 | `3.3.shaders_class` | 把着色器编译链接封装成类，在显存中存多个 VAO。 |
 | `4.1.textures` | 加载纹理贴到三角形上（stb_image）。 |
 | `4.2.textures_combined` | 两张纹理按比例混合（木箱 + 笑脸）。 |

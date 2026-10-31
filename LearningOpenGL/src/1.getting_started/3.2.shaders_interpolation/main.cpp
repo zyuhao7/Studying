@@ -103,12 +103,16 @@ int main()
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
+    // six vertices: two triangles, the shared diagonal (bottom-left <-> top-right) is duplicated
+    // and its two ends get different colors in each triangle, so the seam becomes visible
     float vertices[] = {
         // positions         // colors
-         0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
-         0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // top 
-
+        -0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom left  red
+         0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom right green
+         0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  // top right    blue (lower triangle)
+         0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 1.0f,  // top right    magenta (upper triangle)
+        -0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 0.0f,  // top left     yellow
+        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 1.0f   // bottom left  cyan (upper triangle)
     };
 
     unsigned int VBO, VAO;
@@ -127,8 +131,6 @@ int main()
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-    // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     // glBindVertexArray(0);
 
     // as we only have a single shader, we could also just activate our shader once beforehand if we want to 
@@ -147,9 +149,9 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // render the triangle
+        // render the quad
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
