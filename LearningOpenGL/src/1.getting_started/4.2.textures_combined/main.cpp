@@ -6,6 +6,7 @@
 #include <tools/shader.h>
 
 #include <iostream>
+#include <cmath>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -173,6 +174,7 @@ int main(int argc, char *argv[])
 
         // render container
         ourShader.use();
+        ourShader.setFloat("uMix", static_cast<float>(sin(glfwGetTime()) * 0.5 + 0.5));
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
